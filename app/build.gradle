@@ -8,8 +8,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 15
-        versionName "1.1.3"
+        versionCode 16
+        versionName "1.1.4"
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
         // dex突破65535的限制

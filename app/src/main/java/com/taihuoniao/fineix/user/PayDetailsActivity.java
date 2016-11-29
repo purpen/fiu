@@ -40,43 +40,10 @@ public class PayDetailsActivity extends BaseActivity {
     private String mRid, mPayway;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-//    private List<OrderDetails> orderDetailsList = new ArrayList<>();
+
     public PayDetailsActivity(){
         super(R.layout.activity_pay_details);
     }
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case DataConstants.PARSER_ORDER_DETAILS:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof List) {
-//                            orderDetailsList.clear();
-//                            orderDetailsList.addAll((Collection<? extends OrderDetails>) msg.obj);
-//                            for (int i = 0; i < orderDetailsList.size(); i++) {
-//                                if ("10".equals(orderDetailsList.get(i).getStatus())) {
-//                                    mSuccessOrFailed.setText("您的订单已支付成功");
-//                                    mImage.setImageResource(R.mipmap.success);
-//                                } else {
-//                                    mSuccessOrFailed.setText("支付异常，请联系客服");
-//                                    mImage.setImageResource(R.mipmap.fail);
-//                                }
-//                                if (mPayway.equals("alipay")) {
-//                                    mTvPayway.setText("支付宝");
-//                                } else {
-//                                    mTvPayway.setText("微信");
-//                                }
-//                                mOrderNum.setText(orderDetailsList.get(i).getRid());
-//                                mTradeTime.setText(orderDetailsList.get(i).getCreated_at());
-//                            }
-//                            mDialog.dismiss();
-//                        }
-//                    }
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     public void onBackPressed() {
@@ -99,18 +66,6 @@ public class PayDetailsActivity extends BaseActivity {
         dialog.show();
 
     }
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        StatusBarChange.initWindow(this);
-//        setContentView(R.layout.activity_pay_details);
-//        ActivityUtil.getInstance().addActivity(this);
-
-//        initView();
-//        initData();
-//    }
-
 
     @Override
     protected void getIntentData() {
@@ -141,7 +96,7 @@ public class PayDetailsActivity extends BaseActivity {
                 });
                 if (response.isSuccess()){
                     ShoppingDetailBean data = response.getData();
-                    if ("10".equals(data.getStatus())) {
+                    if (data.getStatus() == 10) {  // 10 代表支付成功
                         mSuccessOrFailed.setText("您的订单已支付成功");
                         mImage.setImageResource(R.mipmap.success);
                     } else {
@@ -171,13 +126,6 @@ public class PayDetailsActivity extends BaseActivity {
                 Util.makeToast("网络异常");
             }
         });
-    }
-
-    private void initData() {
-//        mDialog.show();
-//        mPayway = getIntent().getStringExtra("payway");
-//        mRid = getIntent().getStringExtra("rid");
-//        DataParser.orderPayDetailsParser(THNApplication.uuid,mRid, mHandler);
     }
 
     @Override

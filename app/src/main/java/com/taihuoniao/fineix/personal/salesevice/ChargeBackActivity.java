@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.taihuoniao.fineix.R.string.refund_reason;
+
 public class ChargeBackActivity extends BaseActivity {
 
     private CustomHeadView customHead;
@@ -80,7 +82,7 @@ public class ChargeBackActivity extends BaseActivity {
                 } else if (TextUtils.isEmpty(editText3.getText().toString().trim())) {
                     Toast.makeText(ChargeBackActivity.this, "退款说明不能为空！", Toast.LENGTH_SHORT).show();
                 } else {
-                    requestChargeBack(editText1.getText().toString(), editText2.getText().toString(), editText3.getText().toString());
+                    requestChargeBack(editText1.getText().toString(), String.valueOf(refundReasonEntity.getId()), editText3.getText().toString());
                 }
             }
         });
@@ -93,15 +95,18 @@ public class ChargeBackActivity extends BaseActivity {
         skuId = getIntent().getStringExtra(KEY.SKU_ID);
         requestGetChargeBackInfo();
     }
+    private List<ChargeBackBean.RefundReasonEntity> refund_reason;
+    private ChargeBackBean.RefundReasonEntity refundReasonEntity;
 
     private void showPopupWindow(View v){
         if (popupWindow != null) {
             popupWindow.showAsDropDown(v);
             return;
         }
+
         List<String> list = new ArrayList<>();
         if (chargeBackBean != null) {
-            List<ChargeBackBean.RefundReasonEntity> refund_reason = chargeBackBean.getRefund_reason();
+            refund_reason = chargeBackBean.getRefund_reason();
             for (int i = 0; i < refund_reason.size(); i++) {
                 list.add(refund_reason.get(i).getTitle());
             }
@@ -124,6 +129,7 @@ public class ChargeBackActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 editText2.setText(chargeBackCause[position]);
+                refundReasonEntity = refund_reason.get(position);
                 popupWindow.dismiss();
             }
         });

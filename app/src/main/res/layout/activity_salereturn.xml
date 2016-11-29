@@ -33,15 +33,15 @@
             android:clickable="false"
             android:focusableInTouchMode="false"
             android:focusable="false"
-            android:hint="¥288"
+            android:hint="¥0.00"
             android:paddingLeft="15dp"
-            android:textColor="#999999" />
+            android:textColor="#222222" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="退款原因"
+            android:text="退货原因"
             android:textColor="#999999" />
 
         <TextView
@@ -52,17 +52,17 @@
             android:background="@drawable/background_border_white"
             android:drawableRight="@mipmap/option_chargeback_cause"
             android:gravity="center_vertical"
-            android:hint="退款原因"
+            android:hint="退货原因"
             android:textSize="14sp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textColor="#999999" />
+            android:textColor="#222222" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="退款说明" />
+            android:text="退货说明" />
 
         <EditText
             android:id="@+id/editText3"
@@ -70,13 +70,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/background_border_white"
-            android:hint="请输入退款说明"
+            android:hint="请输入退货说明"
             android:paddingLeft="15dp"
             android:paddingTop="10dp"
             android:maxLength="200"
             android:minHeight="44dp"
             android:paddingBottom="10dp"
-            android:textColor="#999999" />
+            android:textColor="#222222" />
 
     </LinearLayout>
 

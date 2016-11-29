@@ -5,6 +5,11 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:id="@+id/linearLayout_container"
         android:layout_width="match_parent"
@@ -18,6 +23,7 @@
             android:gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/imageView_chargeBack_result_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -25,6 +31,7 @@
                 android:src="@mipmap/icon_chargeback_choice" />
 
             <TextView
+                android:id="@+id/textView_chargeBack_result_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#222222"
@@ -32,7 +39,62 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <include layout="@layout/layout_chargeback_goods_info" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#88cccccc" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="退货地址："
+                android:textColor="#222222"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_goods_district"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="北京 北京市 朝阳区"
+                android:textColor="#101010"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/textView_goods_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="酒仙桥街道酒仙桥路4号 北京时尚设计广场极地A9栋218"
+                android:textColor="#101010"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/textView_goods_phoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="13552968639"
+                android:textColor="#101010"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linerLayout_container_goods_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/layout_chargeback_goods_info" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -57,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="￥288"
+                android:text="￥0.00"
                 android:textColor="#222222" />
         </LinearLayout>
 
@@ -120,7 +182,6 @@
             android:layout_height="0.5dp"
             android:background="#88cccccc" />
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="44dp"
@@ -155,7 +216,7 @@
             android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/textView_chargeBack_requst_date"
+                android:id="@+id/textView_create_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -171,7 +232,6 @@
                 android:textColor="#222222" />
         </LinearLayout>
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -179,9 +239,5 @@
 
     </LinearLayout>
 
-    <com.taihuoniao.fineix.view.CustomHeadView
-        android:id="@+id/custom_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>

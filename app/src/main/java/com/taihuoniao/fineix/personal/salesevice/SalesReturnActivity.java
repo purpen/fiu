@@ -76,11 +76,11 @@ public class SalesReturnActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(editText2.getText().toString())) {
-                    Toast.makeText(SalesReturnActivity.this, "退款原因不能为空!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SalesReturnActivity.this, "退货原因不能为空!", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(editText3.getText().toString().trim())) {
-                    Toast.makeText(SalesReturnActivity.this, "退款说明不能为空！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SalesReturnActivity.this, "退货说明不能为空！", Toast.LENGTH_SHORT).show();
                 } else {
-                    requestChargeBack(editText1.getText().toString(), editText2.getText().toString(), editText3.getText().toString());
+                    requestChargeBack(editText1.getText().toString(), String.valueOf(refundReasonEntity.getId()), editText3.getText().toString());
                 }
             }
         });
@@ -93,13 +93,23 @@ public class SalesReturnActivity extends BaseActivity {
         requestGetChargeBackInfo();
     }
 
+    private List<ChargeBackBean.ReturnReasonEntity> refund_reason;
+    private ChargeBackBean.ReturnReasonEntity refundReasonEntity;
+
     private void showPopupWindow(View v){
         if (popupWindow != null) {
             popupWindow.showAsDropDown(v);
             return;
         }
         List<String> list = new ArrayList<>();
-        Collections.addAll(list, chargeBackCause);
+        if (chargeBackBean != null) {
+            refund_reason = chargeBackBean.getReturn_reason();
+            for (int i = 0; i < refund_reason.size(); i++) {
+                list.add(refund_reason.get(i).getTitle());
+            }
+        } else {
+            Collections.addAll(list, chargeBackCause);
+        }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SalesReturnActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
         ListView listView = new ListView(SalesReturnActivity.this);
         listView.setPadding(5,5,5,5);
@@ -117,6 +127,7 @@ public class SalesReturnActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 editText2.setText(chargeBackCause[position]);
+                refundReasonEntity = refund_reason.get(position);
                 popupWindow.dismiss();
             }
         });

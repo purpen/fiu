@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.personal.salesevice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,8 +51,14 @@ public class SalesReturnDetailsActivity extends BaseActivity {
     TextView textView2;
     @Bind(R.id.textView3)
     TextView textView3;
+    @Bind(R.id.textView4)
+    TextView textView4;
+    @Bind(R.id.textView5)
+    TextView textView5;
     @Bind(R.id.linearLayout_container)
     LinearLayout linearLayoutContainer;
+    @Bind(R.id.textView_chargeBack_requst_date)
+    TextView textViewChargeBackRequstDate;
 
     private static final String TITLE = "退货详情";
     private String chargeBackId;
@@ -113,13 +120,17 @@ public class SalesReturnDetailsActivity extends BaseActivity {
         ChargeBackResultDetailsBean.ProductEntity product = chargeBackResultDetailsBean.getProduct();
         GlideUtils.displayImage(product.getCover_url(), imageViewGoods);
         textViewGoodsDescription.setText(product.getTitle());
-        textViewSpecification.setText(product.getSku_name());
+        textViewSpecification.setText(product.getSku_name() + String.format(" * %s", chargeBackResultDetailsBean.getQuantity()));
         textViewPrice.setText(String.format("¥%s", product.getSale_price()));
 
         //chargeBackInfo
         textView1.setText(String.format("¥%s", chargeBackResultDetailsBean.getRefund_price()));
-        textView2.setText(String.valueOf(chargeBackResultDetailsBean.getReason()));
+        textView2.setText(String.valueOf(chargeBackResultDetailsBean.getReason_label()));
         textView3.setText(chargeBackResultDetailsBean.getContent());
+        textView4.setText(String.valueOf(chargeBackResultDetailsBean.get_id()));
+        String refund_at = chargeBackResultDetailsBean.getRefund_at();
+        textView5.setText(TextUtils.isEmpty(refund_at) ? chargeBackResultDetailsBean.getCreated_at() : refund_at);
+        textViewChargeBackRequstDate.setText(TextUtils.isEmpty(refund_at) ? "申请时间" : "退货时间");
     }
 
 

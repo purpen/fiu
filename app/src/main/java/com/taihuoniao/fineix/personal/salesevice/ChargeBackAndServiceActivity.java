@@ -38,11 +38,11 @@ public class ChargeBackAndServiceActivity extends BaseActivity {
         ReturnGoodsFragment shopOrderFragment = new ReturnGoodsFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.linearLayout_container, shopOrderFragment, "").commit();
 
-        requestService();
+//        requestService();
     }
 
     private void requestService(){
-        ClientDiscoverAPI.getRefundList(new RequestCallBack<String>() {
+        ClientDiscoverAPI.getRefundList("", "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) {

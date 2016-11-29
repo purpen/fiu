@@ -153,7 +153,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
             List<OrderDetailBean.SubOrdersBean> sub_orders = orderDetailBean.getSub_orders();
 
             View inflate = LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.layout_goods_details_up_sub, null);
-            ((TextView)inflate.findViewById(R.id.textView_suborder_number)).setText(orderDetailBean.getExpress_no());
+            ((TextView)inflate.findViewById(R.id.textView_suborder_number)).setText(orderDetailBean.getRid());
             mContainerLayout.addView(inflate);
 
             for (int m = 0; m < sub_orders.size(); m++) {
@@ -182,7 +182,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 }
 
                 TextView orderNumberTitle = (TextView) subOrderView.findViewById(R.id.textView_order_code_title);
-                orderNumberTitle.setText("子订单号:");
+                orderNumberTitle.setText("子订单号: ");
 
                 final List<OrderDetailBean.SubOrdersBean.ItemsBean> items = subOrdersEntity.getItems();
                 setSubOrderGoodsItem(linearLayoutContainerGoods, items);
@@ -310,7 +310,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
             if ("null".equals(itemsEntityList.get(k).getSku_name())) {
                 textViewSpecification.setVisibility(View.INVISIBLE);
             } else {
-                textViewSpecification.setText(itemsEntityList.get(k).getSku_name());
+                textViewSpecification.setText(itemsEntityList.get(k).getSku_name() + String.format(" * %s", itemsEntityList.get(k).getQuantity()));
             }
 
             String refund_label = itemsEntityList.get(k).getRefund_label();
@@ -326,7 +326,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
             switch (refund_button) { //退款行为：0.隐藏；1.退款；2.退货／款
                 case 0:
                     textView2.setVisibility(View.INVISIBLE);
-                    textViewStatus.setVisibility(View.GONE);
+//                    textViewStatus.setVisibility(View.GONE);
                     break;
                 case 1:
                     textView2.setText("退款");
@@ -388,7 +388,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
             if ("null".equals(items.get(k).getSku_name())) {
                 textViewSpecification.setVisibility(View.INVISIBLE);
             } else {
-                textViewSpecification.setText(items.get(k).getSku_name());
+                textViewSpecification.setText(items.get(k).getSku_name() + String.format(" * %s", items.get(k).getQuantity()));
             }
             textViewStatus.setText(items.get(k).getRefund_label());
             textViewPrice.setText(String.format("¥%s", items.get(k).getSale_price()));

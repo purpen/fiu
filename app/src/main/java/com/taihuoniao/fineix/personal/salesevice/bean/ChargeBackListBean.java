@@ -1,5 +1,8 @@
 package com.taihuoniao.fineix.personal.salesevice.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -123,7 +126,7 @@ public class ChargeBackListBean {
         this.rows = rows;
     }
 
-    public static class RowsBean {
+    public static class RowsBean implements Parcelable {
         private int _id;
         private String number;
         private int user_id;
@@ -368,7 +371,7 @@ public class ChargeBackListBean {
             this.created_at = created_at;
         }
 
-        public static class ProductBean {
+        public static class ProductBean implements Parcelable {
             private String title;
             private String short_title;
             private String cover_url;
@@ -423,6 +426,120 @@ public class ChargeBackListBean {
             public void setSku_name(String sku_name) {
                 this.sku_name = sku_name;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.title);
+                dest.writeString(this.short_title);
+                dest.writeString(this.cover_url);
+                dest.writeDouble(this.sale_price);
+                dest.writeInt(this.quantity);
+                dest.writeString(this.sku_name);
+            }
+
+            public ProductBean() {
+            }
+
+            protected ProductBean(Parcel in) {
+                this.title = in.readString();
+                this.short_title = in.readString();
+                this.cover_url = in.readString();
+                this.sale_price = in.readDouble();
+                this.quantity = in.readInt();
+                this.sku_name = in.readString();
+            }
+
+            public static final Creator<ProductBean> CREATOR = new Creator<ProductBean>() {
+                public ProductBean createFromParcel(Parcel source) {
+                    return new ProductBean(source);
+                }
+
+                public ProductBean[] newArray(int size) {
+                    return new ProductBean[size];
+                }
+            };
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this._id);
+            dest.writeString(this.number);
+            dest.writeInt(this.user_id);
+            dest.writeInt(this.target_id);
+            dest.writeInt(this.product_id);
+            dest.writeInt(this.target_type);
+            dest.writeString(this.stage_label);
+            dest.writeString(this.order_rid);
+            dest.writeString(this.sub_order_id);
+            dest.writeDouble(this.refund_price);
+            dest.writeInt(this.quantity);
+            dest.writeInt(this.type);
+            dest.writeString(this.type_label);
+            dest.writeInt(this.freight);
+            dest.writeInt(this.stage);
+            dest.writeInt(this.reason);
+            dest.writeString(this.reason_label);
+            dest.writeString(this.content);
+            dest.writeString(this.summary);
+            dest.writeInt(this.status);
+            dest.writeInt(this.deleted);
+            dest.writeInt(this.created_on);
+            dest.writeInt(this.updated_on);
+            dest.writeParcelable(this.product, flags);
+            dest.writeString(this.refund_at);
+            dest.writeString(this.created_at);
+        }
+
+        public RowsBean() {
+        }
+
+        protected RowsBean(Parcel in) {
+            this._id = in.readInt();
+            this.number = in.readString();
+            this.user_id = in.readInt();
+            this.target_id = in.readInt();
+            this.product_id = in.readInt();
+            this.target_type = in.readInt();
+            this.stage_label = in.readString();
+            this.order_rid = in.readString();
+            this.sub_order_id = in.readString();
+            this.refund_price = in.readDouble();
+            this.quantity = in.readInt();
+            this.type = in.readInt();
+            this.type_label = in.readString();
+            this.freight = in.readInt();
+            this.stage = in.readInt();
+            this.reason = in.readInt();
+            this.reason_label = in.readString();
+            this.content = in.readString();
+            this.summary = in.readString();
+            this.status = in.readInt();
+            this.deleted = in.readInt();
+            this.created_on = in.readInt();
+            this.updated_on = in.readInt();
+            this.product = in.readParcelable(ProductBean.class.getClassLoader());
+            this.refund_at = in.readString();
+            this.created_at = in.readString();
+        }
+
+        public static final Parcelable.Creator<RowsBean> CREATOR = new Parcelable.Creator<RowsBean>() {
+            public RowsBean createFromParcel(Parcel source) {
+                return new RowsBean(source);
+            }
+
+            public RowsBean[] newArray(int size) {
+                return new RowsBean[size];
+            }
+        };
     }
 }

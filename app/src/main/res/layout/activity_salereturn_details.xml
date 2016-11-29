@@ -32,6 +32,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#222222"
                 android:text="提款申请已提交，客服会尽快与您联系"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -140,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="退款原因"
+                android:text="退货原因"
                 android:textColor="#999999" />
 
             <TextView
@@ -167,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="退款说明"
+                android:text="退货说明"
                 android:textColor="#999999" />
 
             <TextView
@@ -218,10 +219,11 @@
             android:gravity="center_vertical">
 
             <TextView
+                android:id="@+id/textView_chargeBack_requst_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="退款时间"
+                android:text="退货时间"
                 android:textColor="#999999" />
 
             <TextView

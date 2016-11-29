@@ -7,35 +7,37 @@ package com.taihuoniao.fineix.personal.salesevice.bean;
 public class ChargeBackResultDetailsBean {
 
     /**
-     * _id : 1112500020
-     * number : 116112566835
+     * _id : 1112800040
+     * number : 116112853983
      * user_id : 20448
-     * target_id : 1120686901
+     * target_id : 1031789053
      * target_type : 1
-     * product_id : 1120686199
-     * order_rid : 116112506525
-     * sub_order_id : null
-     * refund_price : 0.1
-     * pay_type : 5
+     * product_id : 1011497002
+     * order_rid : 116112506532
+     * sub_order_id : 116112506532-2
+     * refund_price : 0.04
+     * pay_type : 1
      * freight : 0
-     * quantity : 1
-     * type : 2
+     * quantity : 2
+     * type : 1
      * stage : 1
      * reason : 0
-     * content : 咯哈我一下人在使用哦明眸哦弄哦我今年我们是朋友圈了，咯啦咯了起来家里家里人，咯啦咯了起来家里家里了。咯啦咯了起来家里家里，咯啦咯了起来家里吵架了讲两句咯啦咯了起来家里家里人多的身体啊。咯啦咯了起来家里吵架了咯啦咯了起来家里家里讲两句咯啦咯了起来家里家里讲两句讲两句咯啦咯了起来家里家里人是不是傻，咯啦咯了起来家里吵架了讲两句咯啦咯了起来家里家里讲两句讲两句咯啦咯了起来家里家里，咯啦咯了起来家里家里的
+     * content : 出么👄
      * summary : null
      * status : 1
      * deleted : 0
      * refund_on : 0
      * batch_no : null
-     * created_on : 1480056345
-     * updated_on : 1480056345
+     * created_on : 1480296464
+     * updated_on : 1480296464
      * reason_label : null
-     * type_label : 退货
-     * stage_label : 申请中
-     * pay_label : 京东
+     * type_label : 退款
+     * stage_label : 退款中
+     * pay_label : 支付宝
      * __extend__ : true
-     * product : {"title":"TORO儿童云手机 GPS定位低辐射女生男生手机","short_title":"TORO儿童云手机 GPS定位低辐射女生男生手机","cover_url":"http://frbird.qiniudn.com/product/141203/547eabfd621e1947648b5356-1-p500x500.jpg","sale_price":0.1,"sku_name":"黑色"}
+     * refund_at : 
+     * created_at : 2016-11-28 09:27
+     * product : {"title":"华米手环","short_title":"华米手环","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg","sale_price":0.02,"sku_name":"黑色"}
      * current_user_id : 20448
      */
 
@@ -67,6 +69,8 @@ public class ChargeBackResultDetailsBean {
     private String stage_label;
     private String pay_label;
     private boolean __extend__;
+    private String refund_at;
+    private String created_at;
     private ProductEntity product;
     private int current_user_id;
 
@@ -180,6 +184,14 @@ public class ChargeBackResultDetailsBean {
 
     public void set__extend__(boolean __extend__) {
         this.__extend__ = __extend__;
+    }
+
+    public void setRefund_at(String refund_at) {
+        this.refund_at = refund_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     public void setProduct(ProductEntity product) {
@@ -302,6 +314,14 @@ public class ChargeBackResultDetailsBean {
         return __extend__;
     }
 
+    public String getRefund_at() {
+        return refund_at;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
     public ProductEntity getProduct() {
         return product;
     }
@@ -312,10 +332,10 @@ public class ChargeBackResultDetailsBean {
 
     public static class ProductEntity {
         /**
-         * title : TORO儿童云手机 GPS定位低辐射女生男生手机
-         * short_title : TORO儿童云手机 GPS定位低辐射女生男生手机
-         * cover_url : http://frbird.qiniudn.com/product/141203/547eabfd621e1947648b5356-1-p500x500.jpg
-         * sale_price : 0.1
+         * title : 华米手环
+         * short_title : 华米手环
+         * cover_url : http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg
+         * sale_price : 0.02
          * sku_name : 黑色
          */
 

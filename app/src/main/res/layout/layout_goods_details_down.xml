@@ -11,24 +11,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="承运来源："
+        android:text="承运来源: "
         android:textColor="#666666"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textView_express"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:text="圆通速递"
         android:textColor="#666666"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="快递编号："
+        android:text="快递编号: "
         android:textColor="#666666"
         android:textSize="12sp" />
 

@@ -32,7 +32,7 @@ public class ShopOrderFragment extends Fragment {
 
     private PullToRefreshListView pullToRefreshListView;
     private ListView listView_show = null;
-    private ProgressBar progressBar_order;
+//    private ProgressBar progressBar_order;
     private WaittingDialog mDialog;
     private View footerView;
 
@@ -58,7 +58,7 @@ public class ShopOrderFragment extends Fragment {
                                 pullToRefreshListView.lastSavedFirstVisibleItem = -1;
                             }
                             mList.addAll((Collection<? extends OrderEntity>) msg.obj);
-                            progressBar_order.setVisibility(View.GONE);
+//                            progressBar_order.setVisibility(View.GONE);
                             pullToRefreshListView.onRefreshComplete();
                             pullToRefreshListView.setLoadingTime();
                             mAdapter.notifyDataSetChanged();
@@ -131,7 +131,7 @@ public class ShopOrderFragment extends Fragment {
 
     private void initView(View view) {
         pullToRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pullToRefreshListView_order);
-        progressBar_order = (ProgressBar) view.findViewById(R.id.order_progressBar);
+//        progressBar_order = (ProgressBar) view.findViewById(R.id.order_progressBar);
         TextView textView_empty = (TextView) view.findViewById(R.id.order_textView_empty);
         listView_show = pullToRefreshListView.getRefreshableView();
         listView_show.setEmptyView(textView_empty);
@@ -173,7 +173,7 @@ public class ShopOrderFragment extends Fragment {
         listView_show.setAdapter(mAdapter);
 
         // 加载网络数据，刷新ListView
-        progressBar_order.setVisibility(View.VISIBLE);
+//        progressBar_order.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -5,11 +5,6 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#88cccccc" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -22,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="订单号:"
+            android:text="订单号: "
             android:textColor="#666666"
             android:textSize="13sp" />
 
@@ -30,7 +25,6 @@
             android:id="@+id/textView_order_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="1238834938493"
             android:textColor="#101010"
@@ -76,10 +70,16 @@
 
 
         <TextView
-            android:id="@+id/textView_order_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:text="申请时间: "
+            android:textColor="#666666"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/textView_order_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:text="2016-10-19"
@@ -91,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="退款金额："
+            android:text="退款金额: "
             android:textColor="#666666"
             android:textSize="12sp" />
 
@@ -99,11 +99,15 @@
             android:id="@+id/textView_order_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:text="¥289.90"
             android:textColor="#BE8914"
             android:textSize="12sp" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#88cccccc" />
 </LinearLayout>

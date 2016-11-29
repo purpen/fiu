@@ -1823,9 +1823,11 @@ public class ClientDiscoverAPI {
      *
      * @param callBack
      */
-    public static HttpHandler<String> getRefundList(RequestCallBack<String> callBack) {
+    public static HttpHandler<String> getRefundList(String page, String size, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/shopping/refund_list";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
         return MD5Utils.sign(params, url, callBack);
     }
 

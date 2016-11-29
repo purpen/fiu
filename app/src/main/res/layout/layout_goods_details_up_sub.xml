@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="订单号:"
+            android:text="订单号: "
             android:textColor="#666666"
             android:textSize="14sp" />
 
@@ -23,7 +23,6 @@
             android:id="@+id/textView_suborder_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="1238834938493"
             android:textColor="#101010"
@@ -51,7 +50,7 @@
         android:background="#f7f7f7"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:text="您订单中的商品在不同商家,故拆分为一下订单分开配送"
+        android:text="您订单中的商品在不同库房，故拆分为以下订单分开配送"
         android:textColor="#999999" />
 
 </LinearLayout>

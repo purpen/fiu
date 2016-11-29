@@ -80,20 +80,20 @@ public class SaleAfterListAdapter extends BaseAdapter {
 
         ChargeBackListBean.RowsBean rowsEntity = list.get(position);
         if (rowsEntity != null) {
-            mHolder.textViewOrderCodeTitle.setText("退款编号：");
-            mHolder.textViewOrderNumber.setText(rowsEntity.getNumber());
+            mHolder.textViewOrderCodeTitle.setText("退款编号: ");
+            mHolder.textViewOrderNumber.setText(String.valueOf(rowsEntity.get_id()));
             mHolder.textViewOrderStatus.setText(rowsEntity.getStage_label());
             mHolder.textViewOrderDate.setText(rowsEntity.getCreated_at());
             mHolder.textViewOrderMoney.setText(String.format("¥%s", rowsEntity.getRefund_price()));
 
-            mHolder.relativeLayoutGoodsInfo.setOnClickListener(onClickListener);
-            mHolder.relativeLayoutGoodsInfo.setTag(R.id.relativeLayout_good_info, rowsEntity.getProduct_id());
+//            mHolder.relativeLayoutGoodsInfo.setOnClickListener(onClickListener);
+//            mHolder.relativeLayoutGoodsInfo.setTag(R.id.relativeLayout_good_info, rowsEntity.getProduct_id());
 
             ChargeBackListBean.RowsBean.ProductBean product = rowsEntity.getProduct();
             if (product != null) {
                 GlideUtils.displayImageFadein(product.getCover_url(), mHolder.imageViewGoods);
                 mHolder.textViewGoodsDescription.setText(product.getTitle());
-                mHolder.textViewSpecification.setText(product.getSku_name());
+                mHolder.textViewSpecification.setText(product.getSku_name() + String.format(" * %s", product.getQuantity()));
                 mHolder.textViewPrice.setText(String.format("¥%s", product.getSale_price()));
             }
         }

@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.personal.salesevice;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,15 +45,11 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
 
     private SaleAfterListAdapter mAdapter;
     private List<OrderEntity> mList = new ArrayList<>();
-    private String status = "8";
     private WaittingDialog mDialog;
 
     private int curPage = 1;
-    private int size = 10;
-
-    private ChargeBackListBean refundListData;
+    private String size = "8";
     private List<ChargeBackListBean.RowsBean> rows;
-
 
     @Override
     public void onResume() {
@@ -93,6 +90,16 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
         rows = new ArrayList<>();
         mAdapter = new SaleAfterListAdapter(rows, getActivity(), this);
         listView_show.setAdapter(mAdapter);
+
+        listView_show.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ChargeBackResultActivity.class);
+                intent.putExtra(KEY.CHARGEBACK_RESULT, rows.get(position));
+                getActivity().startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -115,12 +122,13 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
             mDialog.show();
         }
 
-        ClientDiscoverAPI.getRefundList(new RequestCallBack<String>() {
+        ClientDiscoverAPI.getRefundList(String.valueOf(curPage), size, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) {
                     return;
                 }
+                ChargeBackListBean refundListData = null;
                 try {
                     HttpResponse<ChargeBackListBean> refundList = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ChargeBackListBean>>() {
                     });
@@ -140,6 +148,8 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
                     }
                     rows.addAll(refundListData.getRows());
                     mAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError("没有数据了");
                 }
             }
 
