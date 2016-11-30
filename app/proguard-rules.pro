@@ -148,16 +148,16 @@ public static final int *;
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
+
+-keepclassmembers class * implements android.os.Parcelable {
+ public <fields>;
+ private <fields>;
+}
+
 #// natvie 方法不混淆
 -keepclasseswithmembernames class * {
     native <methods>;
 }
-
-#保持 Parcelable 不被混淆
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
-}
-
 #----------------------------------------------------------------------------
 
 #---------------------------------webview------------------------------------
@@ -352,10 +352,6 @@ public static final int *;
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
-
-
-
-
 
 ################gson##################
 -keep class com.google.gson.** {*;}
