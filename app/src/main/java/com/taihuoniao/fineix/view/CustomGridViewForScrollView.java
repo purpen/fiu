@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 /**
- *  临时解决 发现/好货界面 圆角图片不可点击的bug
+ *  The temporary solution to find/good interface The rounded images do not click on the bug
  *
- *  注意：不要随便用这个类，小心有坑
+ *  note: don't use this class, be careful with pit
  */
 public class CustomGridViewForScrollView extends GridViewForScrollView {
 
