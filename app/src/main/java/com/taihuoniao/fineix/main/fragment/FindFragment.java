@@ -58,6 +58,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -100,7 +101,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     //不能设置OnItemClickListener
     private ListView listView;
     //HeaderView中控件
-    private GridViewForScrollView gridView;
+    private CustomGridViewForScrollView gridView;
     private List<CategoryListBean.CategoryListItem> categoryList;//分类列表数据
     private FindRecyclerAdapter findRecyclerAdapter;//分类小图列表适配器
     private FindQJCategoryAdapter findQJCategoryAdapter;//分类列表适配器
@@ -121,7 +122,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         ButterKnife.bind(this, fragmentView);
         listView = pullRefreshView.getRefreshableView();
         View header = View.inflate(getActivity(), R.layout.header_find_fragment, null);
-        gridView = (GridViewForScrollView) header.findViewById(R.id.grid_view);
+        gridView = (CustomGridViewForScrollView ) header.findViewById(R.id.grid_view);
         listView.addHeaderView(header);
         pullRefreshView.animLayout();
         dialog = new WaittingDialog(getActivity());

@@ -53,6 +53,7 @@ import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -95,7 +96,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     ProgressBar progressBar;
 
     private ListView listView;
-    private GridViewForScrollView gridView;//商品分类
+    private CustomGridViewForScrollView gridView;//商品分类
     private RecyclerView productRecycler;
     private WaittingDialog dialog;
     private List<CategoryListBean.CategoryListItem> categoryList;//产品分类数据
@@ -114,7 +115,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         listView = pullRefreshView.getRefreshableView();
         pullRefreshView.animLayout();
         View header1 = View.inflate(getActivity(), R.layout.header1_wellgoods_fragment, null);
-        gridView = (GridViewForScrollView) header1.findViewById(R.id.grid_view);
+        gridView = (CustomGridViewForScrollView) header1.findViewById(R.id.grid_view);
         listView.addHeaderView(header1);
         productRecycler = (RecyclerView) header1.findViewById(R.id.product_recycler);
         dialog = new WaittingDialog(getActivity());
