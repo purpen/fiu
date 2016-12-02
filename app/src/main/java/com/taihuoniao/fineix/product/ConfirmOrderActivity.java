@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
+import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.DefaultAddressBean;
@@ -47,7 +50,7 @@ import java.text.DecimalFormat;
  * 确认订单界面
  * 商品详情ratingbar
  */
-public class ConfirmOrderActivity extends Activity implements View.OnClickListener {
+public class ConfirmOrderActivity extends Base2Activity implements View.OnClickListener {
     //商品详情界面传递过来的数据
     private NowBuyBean nowBuyBean;
     //购物车界面传递过来的数据
@@ -72,6 +75,11 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private TextView saveMoneyTv;
     private TextView payPriceTv;
     private Button payBtn;
+    private LinearLayout linearLayout_privilege;
+    private TextView textView_privilege;
+    private TextView transferTv;
+
+
     //网络请求dialog
     private WaittingDialog dialog;
     //网络请求返回值
@@ -87,6 +95,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     //返回数据 money  code
     private CustomDialogForPay mDialog;
     private String curAddressId;
+
+    private double privilegeprice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,10 +180,45 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             if (nowBuyBean.getData().getBonus().size() > 0) {
                 redBagTv.setText("选择红包");
             }
+            try {
+                String freight = nowBuyBean.getData().getOrder_info().getDict().getFreight();
+                transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(freight) ? "0" : freight));
+
+                // TODO: 2016/12/2 优惠立减
+                if ("5".equals(nowBuyBean.getData().getOrder_info().getKind())) {
+                    String coin_money = nowBuyBean.getData().getOrder_info().getDict().getCoin_money();
+                    privilegeprice = Double.valueOf(coin_money);
+                    textView_privilege.setText(String.format("¥ %s", coin_money));
+                    saveMoneyTv.setText(String.format(" ¥ %s", coin_money));
+                    linearLayout_privilege.setVisibility(View.VISIBLE);
+                } else {
+                    linearLayout_privilege.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (cartBean != null) {
             payPriceTv.setText("¥ " + df.format(Double.valueOf(cartBean.getPay_money())));
             if (cartBean.getBonus().size() > 0) {
                 redBagTv.setText("选择红包");
+            }
+
+            try {
+                String freight = cartBean.getDictBeen().get(0).getFreight();
+                transferTv.setText(TextUtils.isEmpty(freight) ? "0" : freight);
+
+                // TODO: 2016/12/2 优惠立减
+                if ("5".equals(cartBean.getKind())) {
+                    String coin_money = cartBean.getDictBeen().get(0).getCoin_money();
+                    privilegeprice = Double.valueOf(coin_money);
+                    textView_privilege.setText(String.format("¥ %s", coin_money));
+                    saveMoneyTv.setText(String.format(" ¥ %s", coin_money));
+                    linearLayout_privilege.setVisibility(View.VISIBLE);
+                } else {
+                    linearLayout_privilege.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         addressRelative.setFocusable(true);
@@ -198,7 +244,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         phoneTv = (TextView) findViewById(R.id.activity_confirmorder_phone);
         productsListView = (ListViewForScrollView) findViewById(R.id.activity_confirmorder_productlist);
         RelativeLayout transferRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_transferrelative);
-        TextView transferTv = (TextView) findViewById(R.id.activity_confirmorder_transfertv);
+        transferTv = (TextView) findViewById(R.id.activity_confirmorder_transfertv);
         timeRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_timerelative);
         timeTv = (TextView) findViewById(R.id.activity_confirmorder_timetv);
         redBagRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_redbagrelative);
@@ -211,6 +257,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         dialog = new WaittingDialog(ConfirmOrderActivity.this);
         redBagCancelTv = (TextView) findViewById(R.id.activity_confirmorder_redbag_cannot_cancel);
 
+        //立减优惠
+        linearLayout_privilege = (LinearLayout) this.findViewById(R.id.liearLayout_privilege);
+        textView_privilege = (TextView) this.findViewById(R.id.textView_privilege);
     }
 
     @Override
@@ -346,7 +395,11 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 if (money != null && bonus_code != null) {
                     saveTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setVisibility(View.VISIBLE);
-                    saveMoneyTv.setText("¥ " + df.format(Double.valueOf(money)));
+                    try {
+                        saveMoneyTv.setText(" ¥ " + df.format(Double.valueOf(money) + privilegeprice));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     redBagTv.setText("使用了" + money + "元红包");
                     redBagCancelTv.setText("您使用了一张" + money + "元红包，下单后将不可恢复");
                     if (nowBuyBean != null) {
@@ -363,7 +416,6 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                         } else {
                             payPriceTv.setText(String.format("¥ %s", df.format(Double.valueOf(cartBean.getPay_money()) - Double.valueOf(money))));
                         }
-
                     }
                 }
                 break;

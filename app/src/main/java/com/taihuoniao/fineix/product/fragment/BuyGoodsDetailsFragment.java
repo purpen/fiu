@@ -150,7 +150,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
             holder.marketPrice.setVisibility(View.VISIBLE);
             holder.marketPrice.setText("¥" + buyGoodDetailsBean.getData().getMarket_price());
         } else {
-            holder.marketPrice.setVisibility(View.GONE);
+            holder.marketPrice.setVisibility(View.INVISIBLE);
         }
         if (buyGoodDetailsBean.getData().getStage() != 9) {
             holder.marketPrice.setText("此产品为用户标记，暂未销售。浮游正在努力上架产品中ing...");
@@ -165,6 +165,11 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
             holder.brandName.setText(buyGoodDetailsBean.getData().getBrand().getTitle());
             ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getData().getBrand().getCover_url(), holder.brandImg);
             holder.brandContainer.setOnClickListener(this);
+            if ("1".equals(buyGoodDetailsBean.getData().getActive_summary().getOrder_reduce())) {
+                holder.marketPrice2.setVisibility(View.VISIBLE);
+            } else {
+                holder.marketPrice2.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             holder.brandContainer.setVisibility(View.GONE);
         }
@@ -279,6 +284,8 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         RoundedImageView brandImg;
         @Bind(R.id.brand_name)
         TextView brandName;
+        @Bind(R.id.market_price2)
+        TextView marketPrice2;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -9,7 +9,7 @@ import java.util.List;
 public class CartDoOrder implements Serializable {
     private String pay_money, is_nowbuy, rid, user_id, expired, is_cart, created_on, updated_on, _id, success, message, kind;
     private List<CartDoOrderBonus> bonus;
-    private List<CartOrderContent> cartOrderContents;
+    private List<DictBean> dictBeen;
     private List<CartOrderContentItem> cartOrderContentItems;
 
     public String getMessage() {
@@ -116,12 +116,12 @@ public class CartDoOrder implements Serializable {
         this.bonus = bonus;
     }
 
-    public List<CartOrderContent> getCartOrderContents() {
-        return cartOrderContents;
+    public List<DictBean> getDictBeen() {
+        return dictBeen;
     }
 
-    public void setCartOrderContents(List<CartOrderContent> cartOrderContents) {
-        this.cartOrderContents = cartOrderContents;
+    public void setDictBeen(List<DictBean> dictBeen) {
+        this.dictBeen = dictBeen;
     }
 
     public List<CartOrderContentItem> getCartOrderContentItems() {

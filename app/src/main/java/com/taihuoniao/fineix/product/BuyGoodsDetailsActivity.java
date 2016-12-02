@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -46,6 +47,7 @@ import com.taihuoniao.fineix.product.fragment.CommentFragment;
 import com.taihuoniao.fineix.product.fragment.WebFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -393,6 +395,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                         maxNumber = Integer.parseInt(buyGoodDetailsBean.getData().getSkus().get(j).getQuantity());
                         quantity.setText(maxNumber + "");
                         priceTv.setText("¥ " + buyGoodDetailsBean.getData().getSkus().get(j).getPrice());
+                        String cover_url = buyGoodDetailsBean.getData().getSkus().get(j).getCover_url();
+                        GlideUtils.displayImage(TextUtils.isEmpty(cover_url) ? buyGoodDetailsBean.getData().getCover_url() : cover_url, productsImg);
                     }
                 });
                 scrollLinear.addView(view);

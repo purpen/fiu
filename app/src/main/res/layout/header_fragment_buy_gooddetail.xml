@@ -71,9 +71,22 @@
             android:layout_below="@id/title"
             android:layout_toRightOf="@id/price"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_alignBaseline="@id/price"
-            android:visibility="gone"
+            android:visibility="visible"
             android:textColor="#999999"
+            android:textSize="11sp"/>
+        <TextView
+            android:id="@+id/market_price2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/market_price"
+            android:visibility="visible"
+            android:textColor="#999999"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="2dp"
+            android:layout_alignTop="@+id/market_price"
+            android:background="@mipmap/icon_buy_details_preferential"
             android:textSize="11sp"/>
     </RelativeLayout>
 

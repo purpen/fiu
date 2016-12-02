@@ -216,7 +216,7 @@
     <string name="confirm_order">确认订单</string>
     <string name="all_money">合计:</string>
     <string name="set_address">请设置收货地址</string>
-    <string name="shipping_method">配送方式：</string>
+    <string name="shipping_method">运费：</string>
     <string name="free_shipping">免费配送</string>
     <string name="shipping_time">送货时间：</string>
     <string name="any_time">任意时间</string>

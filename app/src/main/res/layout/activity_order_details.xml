@@ -171,24 +171,6 @@
             <RelativeLayout style="@style/order_details_layout">
 
                 <TextView
-                    android:id="@+id/tv_freight"
-                    style="@style/order_details_textview"
-                    android:text="@string/freight"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_freight_order_details"
-                    style="@style/order_details_textview"
-                    android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@+id/tv_freight"
-                    android:gravity="right"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/yellow_bd8913" />
-            </RelativeLayout>
-
-            <RelativeLayout style="@style/order_details_layout">
-
-                <TextView
                     android:id="@+id/tv_payway"
                     style="@style/order_details_textview"
                     android:text="@string/pay_method"
@@ -204,6 +186,45 @@
                     android:textColor="#333333" />
             </RelativeLayout>
 
+
+            <RelativeLayout style="@style/order_details_layout">
+
+                <LinearLayout
+
+                    android:id="@+id/linearLayout_freight"
+                    android:layout_width="80dp"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_freight"
+                        style="@style/order_details_textview"
+                        android:text="运"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+                    <TextView
+                        android:id="@+id/tv_freight2"
+                        style="@style/order_details_textview"
+                        android:text="费："
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_freight_order_details"
+                    style="@style/order_details_textview"
+                    android:gravity="right"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/yellow_bd8913"
+                    android:layout_alignBaseline="@+id/linearLayout_freight"
+                    android:layout_alignBottom="@+id/linearLayout_freight"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
             <RelativeLayout style="@style/order_details_layout">
 
                 <TextView
@@ -217,6 +238,24 @@
                     style="@style/order_details_textview"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@+id/tv_totalmoney"
+                    android:gravity="right"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/yellow_bd8913" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/order_details_layout">
+
+                <TextView
+                    android:id="@+id/tv_totalmoney2"
+                    style="@style/order_details_textview"
+                    android:text="优惠总额："
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_totalmoney_order_details2"
+                    style="@style/order_details_textview"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/tv_totalmoney2"
                     android:gravity="right"
                     android:paddingRight="10dp"
                     android:textColor="@color/yellow_bd8913" />

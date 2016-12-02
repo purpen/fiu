@@ -23,6 +23,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -43,7 +44,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class OrderDetailsActivity extends Activity implements View.OnClickListener {
+public class OrderDetailsActivity extends Base2Activity implements View.OnClickListener {
     private static final String TAG = "OrderDetailsActivity";
 
     private GlobalTitleLayout title;
@@ -62,6 +63,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private TextView mLeftButton;//最底部左侧按钮
     private RelativeLayout mBottomLayout;//放最底部那俩按钮的布局
     private LinearLayout mContainerLayout;//动态容纳商品item
+    private TextView mTotalMoney2;
 
     private String mRid;
     private String mOptFragmentFlag;//跳回碎片列表时，用该值选中跳来之前的那个碎片
@@ -255,6 +257,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         mRightButton = (TextView) findViewById(R.id.bt_right_order_details);
         mLeftButton = (TextView) findViewById(R.id.bt_left_order_details);
         mBottomLayout = (RelativeLayout) findViewById(R.id.layout_two_button_bottom_order_details);
+        mTotalMoney2 = (TextView) findViewById(R.id.tv_totalmoney_order_details2);
 
         mBottomLayout.setOnClickListener(this);
         mCall.setOnClickListener(this);

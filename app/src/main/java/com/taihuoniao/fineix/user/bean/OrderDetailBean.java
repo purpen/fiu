@@ -64,6 +64,7 @@ public class OrderDetailBean {
     private int user_id;
     private String addbook_id;
     private String addbook;
+    private String discount_money;
     /**
      * name : 田帅
      * phone : 15001120509
@@ -460,6 +461,14 @@ public class OrderDetailBean {
 
     public void setSub_orders(List<SubOrdersBean> sub_orders) {
         this.sub_orders = sub_orders;
+    }
+
+    public String getDiscount_money() {
+        return discount_money;
+    }
+
+    public void setDiscount_money(String discount_money) {
+        this.discount_money = discount_money;
     }
 
     public static class ExpressInfoBean {

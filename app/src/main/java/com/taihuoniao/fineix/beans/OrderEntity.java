@@ -7,7 +7,24 @@ import java.util.List;
  * Created by android on 2016/2/22.
  */
 public class OrderEntity implements Serializable {
-    private String items_count, rid, total_money, pay_money, freight, created_at, status_label,status;
+    private String items_count;
+    private String rid;
+    private String total_money;
+    private String pay_money;
+    private String freight;
+    private String created_at;
+    private String status_label;
+    private String status;
+
+    public String getDiscount_money() {
+        return discount_money;
+    }
+
+    public void setDiscount_money(String discount_money) {
+        this.discount_money = discount_money;
+    }
+
+    private String discount_money;
     private List<OrderItem> orderItem;
 
     @Override

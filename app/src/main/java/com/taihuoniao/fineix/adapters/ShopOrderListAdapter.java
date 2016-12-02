@@ -97,8 +97,9 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
         }
         mHolder.mTradeStatus.setText(list.get(position).getStatus_label());
         mHolder.mProductCounts.setText("共" + list.get(position).getItems_count() + "件好货");
-        double p  = Double.parseDouble(list.get(position).getTotal_money())-Double.parseDouble(list.get(position).getPay_money());
-        mHolder.mTotalMoney.setText("合计：¥" + list.get(position).getTotal_money()+" 优惠：¥"+p);
+        
+//        double p  = Double.parseDouble(list.get(position).getTotal_money())-Double.parseDouble(list.get(position).getPay_money());
+        mHolder.mTotalMoney.setText("合计：¥" + list.get(position).getTotal_money()+" 优惠：¥"+ list.get(position).getDiscount_money());
         mHolder.mPayMoney.setText("实付：¥" + list.get(position).getPay_money());
         mHolder.mFreight.setText("");
         mHolder.mDate.setText(list.get(position).getCreated_at());

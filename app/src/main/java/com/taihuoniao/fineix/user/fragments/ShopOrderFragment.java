@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShopOrderListAdapter;
+import com.taihuoniao.fineix.base.Base2Fragment;
+import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -28,7 +30,7 @@ import java.util.List;
 /**
  * Created by android on 2016/2/22.
  */
-public class ShopOrderFragment extends Fragment {
+public class ShopOrderFragment extends Base2Fragment {
 
     private PullToRefreshListView pullToRefreshListView;
     private ListView listView_show = null;

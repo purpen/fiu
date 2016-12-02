@@ -93,6 +93,37 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
 
         private List<SkusBean> skus;
         private List<RelationProductsBean> relation_products;
+        private ActiveSummary active_summary;
+
+        public ActiveSummary getActive_summary() {
+            return active_summary;
+        }
+
+        public void setActive_summary(ActiveSummary active_summary) {
+            this.active_summary = active_summary;
+        }
+
+        public static class ActiveSummary implements Serializable {
+            private String order_reduce;
+            private String other;
+
+            public String getOrder_reduce() {
+                return order_reduce;
+            }
+
+            public void setOrder_reduce(String order_reduce) {
+                this.order_reduce = order_reduce;
+            }
+
+            public String getOther() {
+                return other;
+            }
+
+            public void setOther(String other) {
+                this.other = other;
+            }
+        }
+
         public static class PngBean implements Serializable{
             private String url;
             private int width;
@@ -621,6 +652,19 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
             private int status;
             private int created_on;
             private int updated_on;
+
+            public String getCover_url() {
+                return cover_url;
+            }
+
+            public void setCover_url(String cover_url) {
+                this.cover_url = cover_url;
+            }
+
+            /**
+             * "cover_url" : "http://img_url"        //  sku封面图地址
+             */
+            private String cover_url;
 
             public String get_id() {
                 return _id;

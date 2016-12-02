@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by android on 2016/3/7.
  */
-public class CartOrderContent implements Serializable {
+public class DictBean implements Serializable {
     private String payment_method,transfer,transfer_time,
             summary,invoice_type,freight,card_money,
             coin_money,invoice_caty,invoice_content,total_money,items_count;
@@ -14,7 +14,7 @@ public class CartOrderContent implements Serializable {
 
     @Override
     public String toString() {
-        return "CartOrderContent{" +
+        return "DictBean{" +
                 "payment_method='" + payment_method + '\'' +
                 ", transfer='" + transfer + '\'' +
                 ", transfer_time='" + transfer_time + '\'' +
