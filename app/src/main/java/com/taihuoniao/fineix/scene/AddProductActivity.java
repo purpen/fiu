@@ -112,7 +112,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Intent intent = new Intent(DataConstants.BroadSearchFragment);
-                intent.putExtra("search", false);
+                intent.putExtra("SEARCH", false);
                 sendBroadcast(intent);
                 editText.setText("");
             }
@@ -150,7 +150,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void installListener() {
-//        search.setOnClickListener(this);
+//        SEARCH.setOnClickListener(this);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -186,7 +186,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                         Intent intent = new Intent(DataConstants.BroadSearchFragment);
                         intent.putExtra("pos", viewPager.getCurrentItem());
                         intent.putExtra("q", editText.getText().toString().trim());
-                        intent.putExtra("search", isSearch);
+                        intent.putExtra("SEARCH", isSearch);
                         sendBroadcast(intent);
                     }
                 }

@@ -10,7 +10,7 @@ import android.webkit.WebViewClient;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.pay.bean.JdPayParams;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -76,7 +76,7 @@ public class JDPayActivity extends BaseActivity {
             builder.append("&userType=" + Util.getEncodeStr(params.params.userType));
             builder.append("&userId=" + Util.getEncodeStr(params.params.userId));
             builder.append("&expireTime=" + Util.getEncodeStr(params.params.expireTime));
-            byte[] bytes = builder.toString().getBytes(NetworkConstance.CHARSET);
+            byte[] bytes = builder.toString().getBytes(ConstantCfg.CHARSET);
             webView.postUrl(params.url, bytes);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -119,7 +119,7 @@ public class JDPayActivity extends BaseActivity {
     private void toPayDetailsActivity() {
         Intent intent = new Intent(activity, PayDetailsActivity.class);
         intent.putExtra("rid", params.rid);
-        intent.putExtra("payway", NetworkConstance.JD_PAY);
+        intent.putExtra("payway", ConstantCfg.JD_PAY);
         startActivity(intent);
     }
 

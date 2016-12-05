@@ -38,8 +38,9 @@ public class NetworkManager {
         int size = networkList.size();
         for (int i = size - 1; i >= 0; i--) {
             HttpHandler<String> handler = networkList.get(i);
-            if (handler != null)
+            if (handler != null) {
                 handler.cancel();
+            }
             networkList.remove(i);
             tagList.remove(i);
         }
@@ -52,8 +53,8 @@ public class NetworkManager {
      * @param name 任务名
      */
     public void cancel(String name) {
-        if (tagList==null) return;
-        if (networkList==null) return;
+        if (tagList == null) return;
+        if (networkList == null) return;
         for (int i = 0; i < tagList.size(); i++) {
             if (tagList.get(i).equals(name)) {
                 networkList.get(i).cancel();
@@ -70,8 +71,8 @@ public class NetworkManager {
      * @param httpHandler 任务
      */
     public void add(String name, HttpHandler<String> httpHandler) {
-        if (tagList==null) return;
-        if (networkList==null) return;
+        if (tagList == null) return;
+        if (networkList == null) return;
         tagList.add(name);
         networkList.add(httpHandler);
     }

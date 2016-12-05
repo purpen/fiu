@@ -9,7 +9,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.pay.bean.WXPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -45,7 +45,7 @@ public class WXPay {
     }
 
     private static void getPayParams(String orderId) {
-        ClientDiscoverAPI.getPayParams(orderId, NetworkConstance.WX_PAY, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.WX_PAY, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) return;

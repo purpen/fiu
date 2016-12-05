@@ -14,23 +14,14 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.baidu.mapapi.SDKInitializer;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
+import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -180,14 +171,14 @@ public class MainApplication extends Application {
         if (TextUtils.isEmpty(json)) return false;
         if (clazz.equals(HttpResponse.class)) {
             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN, response.getStatus())) {//需要登录
+            if (TextUtils.equals(ConstantCfg.STATUS_NEED_LOGIN, response.getStatus())) {//需要登录
                 SPUtil.remove(DataConstants.LOGIN_INFO);
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;
             }
         } else {
             NetBean netBean = JsonUtil.fromJson(json, NetBean.class);
-            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN, netBean.getStatus())) {//需要登录
+            if (TextUtils.equals(ConstantCfg.STATUS_NEED_LOGIN, netBean.getStatus())) {//需要登录
                 SPUtil.remove(DataConstants.LOGIN_INFO);
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;

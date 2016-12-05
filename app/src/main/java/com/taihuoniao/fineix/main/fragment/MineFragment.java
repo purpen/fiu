@@ -344,9 +344,8 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
             case R.id.item_about_us:
-                String url = NetworkConstance.BASE_URL + "/view/about";
                 intent = new Intent(activity, AboutUsActivity.class);
-                intent.putExtra(AboutUsActivity.class.getSimpleName(), url);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), NetworkConstance.SETTINGS_ABOUTUS);
                 intent.putExtra(AboutUsActivity.class.getName(), "关于Fiu");
                 startActivity(intent);
                 break;

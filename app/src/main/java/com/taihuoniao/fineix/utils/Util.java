@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.mob.tools.network.BufferedByteArrayOutputStream;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.ConstantCfg;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -307,7 +307,7 @@ public class Util {
     }
 
     public static String getEncodeStr(String string) throws UnsupportedEncodingException {
-        return URLEncoder.encode(string, NetworkConstance.CHARSET);
+        return URLEncoder.encode(string, ConstantCfg.CHARSET);
     }
 
     /**

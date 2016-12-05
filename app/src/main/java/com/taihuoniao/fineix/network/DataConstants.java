@@ -26,7 +26,7 @@ public class DataConstants {
     public static final String BroadQJCategory = "com.taihuoniao.fiu.qjcategory";
     public static final String BroadBuyGoodDetails = "com.taihuoniao.fiu.buygooddetail";
     public static final String BroadQJDetail = "com.taihuoniao.fiu.qjdetail";
-    public static final String BroadSearch = "com.taihuoniao.fiu.search";
+    public static final String BroadSearch = "com.taihuoniao.fiu.SEARCH";
     public static final String BroadIndex = "com.taihuoniao.fiu.index";
     public static final String BroadFind = "com.taihuoniao.fiu.find";
     public static final String BroadWellGoods = "com.taihuoniao.fiu.wellgoods";

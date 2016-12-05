@@ -258,15 +258,15 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             //搜索接口
             int pos = intent.getIntExtra("pos", -1);
             q = intent.getStringExtra("q");
-//            Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",search=" + search);
-            if (q != null && intent.getBooleanExtra("search", false) && pos == position) {
-                search = intent.getBooleanExtra("search", false);
+//            Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",SEARCH=" + SEARCH);
+            if (q != null && intent.getBooleanExtra("SEARCH", false) && pos == position) {
+                search = intent.getBooleanExtra("SEARCH", false);
                 currentPage = 1;
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
                 search(q, "10", currentPage + "", null, null);
-            } else if (search && !intent.getBooleanExtra("search", true)) {
+            } else if (search && !intent.getBooleanExtra("SEARCH", true)) {
                 search = false;
                 currentPage = 1;
                 if (!dialog.isShowing()) {

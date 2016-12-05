@@ -10,7 +10,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.pay.bean.JdPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -29,7 +29,7 @@ public class JdPay {
     }
 
     private static void getPayParams(final String orderId) {
-        ClientDiscoverAPI.getPayParams(orderId, NetworkConstance.JD_PAY, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.JD_PAY, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;

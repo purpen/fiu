@@ -9,7 +9,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.ConstantCfg;
 
 import org.apache.http.NameValuePair;
 
@@ -89,7 +89,7 @@ public class MD5Utils {
         Log.e("<<<", params.getQueryStringParams().toString());
         params.addBodyParameter(list);
         params.getQueryStringParams().clear();
-        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
+        HttpUtils httpUtils = new HttpUtils(ConstantCfg.CONN_TIMEOUT);
         if (isPay) {
             httpUtils.configCurrentHttpCacheExpiry(1000);
         }

@@ -18,7 +18,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -104,11 +104,11 @@ public class PayDetailsActivity extends BaseActivity {
                         mImage.setImageResource(R.mipmap.fail);
                     }
 
-                    if (NetworkConstance.ALI_PAY.equals(mPayway)) {
+                    if (ConstantCfg.ALI_PAY.equals(mPayway)) {
                         mTvPayway.setText("支付宝");
-                    } else if (NetworkConstance.WX_PAY.equals(mPayway)) {
+                    } else if (ConstantCfg.WX_PAY.equals(mPayway)) {
                         mTvPayway.setText("微信");
-                    } else if (NetworkConstance.JD_PAY.equals(mPayway)) {
+                    } else if (ConstantCfg.JD_PAY.equals(mPayway)) {
                         mTvPayway.setText("京东");
                     } else {
                         mTvPayway.setText("无");

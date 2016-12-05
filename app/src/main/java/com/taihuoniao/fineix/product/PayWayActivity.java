@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.pay.alipay.AliPay;
 import com.taihuoniao.fineix.pay.jdpay.JdPay;
 import com.taihuoniao.fineix.pay.wxpay.WXPay;
@@ -59,7 +59,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private ImageView mImageWechat;
     private ImageView mImageJd;
     private String mTotalMoney, mRid;
-    private String mPayway = NetworkConstance.ALI_PAY;
+    private String mPayway = ConstantCfg.ALI_PAY;
     private TextView mPayMoney;
     private Button mPayNow;
     //    private WaittingDialog mWaittingDialog = null;
@@ -207,19 +207,19 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                 mImageAlipay.setImageResource(R.mipmap.checked);
                 mImageWechat.setImageResource(R.mipmap.check);
                 mImageJd.setImageResource(R.mipmap.check);
-                mPayway = NetworkConstance.ALI_PAY;
+                mPayway = ConstantCfg.ALI_PAY;
                 break;
             case R.id.linear_wechat:
                 mImageWechat.setImageResource(R.mipmap.checked);
                 mImageAlipay.setImageResource(R.mipmap.check);
                 mImageJd.setImageResource(R.mipmap.check);
-                mPayway = NetworkConstance.WX_PAY;
+                mPayway = ConstantCfg.WX_PAY;
                 break;
             case R.id.linear_jd:
                 mImageJd.setImageResource(R.mipmap.checked);
                 mImageAlipay.setImageResource(R.mipmap.check);
                 mImageWechat.setImageResource(R.mipmap.check);
-                mPayway = NetworkConstance.JD_PAY;
+                mPayway = ConstantCfg.JD_PAY;
                 break;
             case R.id.bt_paynow_payway:
 //                Toast.makeText(PayWayActivity.this, "支付", Toast.LENGTH_SHORT).show();
@@ -227,7 +227,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
 //                    mWaittingDialog.show();
 //                }
 //                DataParser.payParser(THNApplication.uuid, mRid, mPayway, mHandler);
-                if (TextUtils.equals(NetworkConstance.ALI_PAY, mPayway)) {
+                if (TextUtils.equals(ConstantCfg.ALI_PAY, mPayway)) {
                     AliPay.pay(orderId, PayWayActivity.this, new AliPay.AlipayListener() {
                         @Override
                         public void onSuccess() {
@@ -239,7 +239,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                             delayThreeSeconds();
                         }
                     });
-                } else if (TextUtils.equals(NetworkConstance.WX_PAY, mPayway)) {
+                } else if (TextUtils.equals(ConstantCfg.WX_PAY, mPayway)) {
                     WXPay.pay(orderId, PayWayActivity.this);
                     WXPayEntryActivity.setWXPayResultListener(new WXPayEntryActivity.WXPayResultListener() {
                         @Override
@@ -260,7 +260,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                             delayThreeSeconds();
                         }
                     });
-                } else if (TextUtils.equals(NetworkConstance.JD_PAY, mPayway)) {
+                } else if (TextUtils.equals(ConstantCfg.JD_PAY, mPayway)) {
                     JdPay.pay(orderId, PayWayActivity.this);
                 }
                 break;
