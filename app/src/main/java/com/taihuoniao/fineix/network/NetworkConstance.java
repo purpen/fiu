@@ -5,9 +5,9 @@ package com.taihuoniao.fineix.network;
  * 网络请求url封装
  */
 public class NetworkConstance {
-    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
+//    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
 //    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";//生产环境
-//    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
+    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     //产品
     //统计用户想购买的数量
@@ -312,5 +312,9 @@ public class NetworkConstance {
     public static final String AUTH_THIRD_REGISTER_WITH_PHONE = BASE_URL + "/auth/third_register_with_phone";
     public static final String SHOPPING_APPLY_REFUND = BASE_URL + "/shopping/apply_refund";
     public static final String SCENE_BRANDS_SUBMIT = BASE_URL + "/scene_brands/submit";
-    
+
+    public static final String FETCH_LATEST_VERSION = BASE_URL + "/gateway/fetch_version";
+    public static final String CHECK_VERSION_INFO = BASE_URL + "/gateway/check_version";
+
+
 }
