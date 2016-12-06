@@ -30,6 +30,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.NetWorkUtils;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -44,54 +45,29 @@ import java.util.TimerTask;
 import butterknife.Bind;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
-    @Bind(R.id.activity_main_container)
-    RelativeLayout container;
-    @Bind(R.id.ll_nav0)
-    LinearLayout ll_nav0;
-    @Bind(R.id.ll_nav1)
-    LinearLayout ll_nav1;
-    @Bind(R.id.ll_nav2)
-    LinearLayout ll_nav2;
-    @Bind(R.id.ll_nav3)
-    LinearLayout ll_nav3;
-    @Bind(R.id.ll_nav4)
-    LinearLayout ll_nav4;
-    @Bind(R.id.activity_main_fragment_group)
-    FrameLayout fragmetnContainer;
-    @Bind(R.id.activity_main_bottomlinear)
-    LinearLayout bottomLinear;
-//    @Bind(R.id.custom_head)
-//    CustomHeadView custom_head;
+    @Bind(R.id.activity_main_container)RelativeLayout container;
+    @Bind(R.id.ll_nav0)LinearLayout ll_nav0;
+    @Bind(R.id.ll_nav1)LinearLayout ll_nav1;
+    @Bind(R.id.ll_nav2)LinearLayout ll_nav2;
+    @Bind(R.id.ll_nav3)LinearLayout ll_nav3;
+    @Bind(R.id.ll_nav4)LinearLayout ll_nav4;
+    @Bind(R.id.activity_main_fragment_group)FrameLayout fragmetnContainer;
+    @Bind(R.id.activity_main_bottomlinear)LinearLayout bottomLinear;
+    @Bind(R.id.activity_main_homepagebtn)ImageView homepageImg;
+    @Bind(R.id.activity_main_findbtn)ImageView findImg;
+    @Bind(R.id.activity_main_shopbtn)ImageView shopImg;
+    @Bind(R.id.activity_main_minebtn)ImageView mineImg;
 
-    @Bind(R.id.activity_main_homepagebtn)
-    ImageView homepageImg;
-
-    @Bind(R.id.activity_main_findbtn)
-    ImageView findImg;
-
-    @Bind(R.id.activity_main_shopbtn)
-    ImageView shopImg;
-
-    @Bind(R.id.activity_main_minebtn)
-    ImageView mineImg;
-
-    @Bind(R.id.tv_nav0)
-    TextView tv_nav0;
-    @Bind(R.id.tv_nav1)
-    TextView tv_nav1;
-    @Bind(R.id.tv_nav3)
-    TextView tv_nav3;
-    @Bind(R.id.tv_nav4)
-    TextView tv_nav4;
+    @Bind(R.id.tv_nav0)TextView tv_nav0;
+    @Bind(R.id.tv_nav1)TextView tv_nav1;
+    @Bind(R.id.tv_nav3)TextView tv_nav3;
+    @Bind(R.id.tv_nav4)TextView tv_nav4;
     //用户第一次进入app会用到
-    @Bind(R.id.activity_main_first_relative)
-    RelativeLayout firstRelative;
-    @Bind(R.id.activity_main_first_left_img)
-    ImageView firstLeftImg;
-    @Bind(R.id.activity_main_first_right_img)
-    ImageView firstRightImg;
-    @Bind(R.id.tv_msg_indicator)
-    TextView tv_msg_indicator;
+    @Bind(R.id.activity_main_first_relative)RelativeLayout firstRelative;
+    @Bind(R.id.activity_main_first_left_img)ImageView firstLeftImg;
+    @Bind(R.id.activity_main_first_right_img)ImageView firstRightImg;
+    @Bind(R.id.tv_msg_indicator)TextView tv_msg_indicator;
+
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private ArrayList<Fragment> fragments;
@@ -336,6 +312,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         LogUtil.e(TAG, fragments.size() + "<<<<<<");
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NetWorkUtils netWorkUtils = new NetWorkUtils(this);
+        netWorkUtils.checkVersionInfo();
+//        netWorkUtils.updateToLatestVersion();
+    }
 
     private void resetUI() {
         if (fragments == null) {
@@ -639,5 +623,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             System.exit(0);
         }
     }
+
+
 
 }

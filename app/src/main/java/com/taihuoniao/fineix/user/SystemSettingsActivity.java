@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -18,6 +19,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.NetWorkUtils;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
 import com.taihuoniao.fineix.utils.FileUtils;
@@ -35,6 +37,7 @@ import com.umeng.message.MessageSharedPrefs;
 import com.umeng.message.PushAgent;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 
@@ -63,6 +66,9 @@ public class SystemSettingsActivity extends BaseActivity {
     CustomItemLayout item_about_us;
     @Bind(R.id.item_share)
     CustomItemLayout item_share;
+    @Bind(R.id.item_check_update)
+    CustomItemLayout itemCheckUpdate;
+
     private PushAgent mPushAgent;
 
     public SystemSettingsActivity() {
@@ -83,6 +89,7 @@ public class SystemSettingsActivity extends BaseActivity {
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
         item_share.setTVStyle(0, "分享给好友", R.color.color_333);
+        itemCheckUpdate.setTVStyle(0, "检查更新", R.color.color_333);
         setCacheSize();
 //        LogUtil.e("getCacheDir",getCacheDir().getAbsolutePath());
 //        LogUtil.e("getCacheDirLen",getCacheDir().length()+"");
@@ -93,7 +100,7 @@ public class SystemSettingsActivity extends BaseActivity {
         mPushAgent = PushAgent.getInstance(this);
     }
 
-    @OnClick({R.id.item_update_psd, R.id.item_push_setting, R.id.btn_logout, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_welcome_page, R.id.item_service, R.id.item_about_us, R.id.item_feedback, R.id.item_share, R.id.item_exit})
+    @OnClick({R.id.item_update_psd, R.id.item_push_setting, R.id.btn_logout, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_welcome_page, R.id.item_service, R.id.item_about_us, R.id.item_feedback, R.id.item_share, R.id.item_exit, R.id.item_check_update})
     void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -148,6 +155,10 @@ public class SystemSettingsActivity extends BaseActivity {
             case R.id.item_exit:
                 logout();
                 break;
+            case R.id.item_check_update:
+                NetWorkUtils netWorkUtils = new NetWorkUtils(this);
+                netWorkUtils.updateToLatestVersion();
+                break;
         }
     }
 
@@ -175,6 +186,13 @@ public class SystemSettingsActivity extends BaseActivity {
                 LogUtil.e(TAG, s);
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {

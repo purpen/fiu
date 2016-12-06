@@ -1809,4 +1809,27 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("id", chargebackId);
         return MD5Utils.sign(params, NetworkConstance.SHOPPING_REFUND_VIEW, callBack);
     }
+
+    /**
+     * 获取版本信息
+     *
+     * @param callBack
+     */
+    public static HttpHandler<String> updateToLatestVersion(RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("from_to", "2");
+        return MD5Utils.sign(params, NetworkConstance.FETCH_LATEST_VERSION, callBack);
+    }
+
+    /**
+     * 检查版本更新
+     *
+     * @param callBack
+     */
+    public static HttpHandler<String> checkVersionInfo(String versionName,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("from_to", "2");
+        params.addQueryStringParameter("version", versionName);
+        return MD5Utils.sign(params, NetworkConstance.CHECK_VERSION_INFO, callBack);
+    }
 }
