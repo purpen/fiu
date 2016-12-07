@@ -6,11 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -52,7 +55,9 @@ public class NetWorkUtils {
                     hintUpdate();
                     break;
                 case 2:
-                    downloadApkAndUpdate();
+                    if (isWifi(mContext)) {
+                        downloadApkAndUpdate(false);
+                    }
                     break;
                 case UPDATE_APK:
                     installApk();
@@ -65,47 +70,48 @@ public class NetWorkUtils {
         }
     });
     private File apkFile;
-    private ProgressDialog dialogUpdateApk;
 
     private void hintUpdate() {
         AlertDialog.Builder dialog = DialogHelp.getSelectDialog(mContext, "版本更新", new String[]{"确定", "取消"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                downloadApkAndUpdate();
+                if (which == 0) {
+                    downloadApkAndUpdate(true);
+                }
             }
         });
         dialog.create().show();
     }
 
-
-    private void downloadApkAndUpdate() {
-        dialogUpdateApk = new ProgressDialog(mContext);
-        dialogUpdateApk.setMessage("正在下载");
-        dialogUpdateApk.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);// 指定显示进度条
-        dialogUpdateApk.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String path = updateVersionInfo.getDownload();
-                String fileName = DownLoadUtil.getFilename(path);
-                apkFile = new File(Environment.getExternalStorageDirectory(), fileName);
-                apkFile = DownLoadUtil.getFile(path + "?timestamp=" + System.currentTimeMillis(), apkFile.getAbsolutePath(), dialogUpdateApk);
-                if (apkFile != null) {
-                    mHandler.sendEmptyMessage(UPDATE_APK);
-                }
-                if (dialogUpdateApk != null)
-                    dialogUpdateApk.dismiss();
+    /**
+     * 下载更新
+     * @param showProgressDialog 是否显示进度条
+     */
+    private void downloadApkAndUpdate(boolean showProgressDialog) {
+        if (TextUtils.isEmpty(downloadUrl)) {
+            if (showProgressDialog) {
+                ToastUtils.showInfo("下载链接无效！");
             }
-        }).start();
+            return;
+        }
+        String path = downloadUrl;
+        String fileName = getFilename(path);
+        if (!fileName.endsWith(".apk")) {
+            fileName = "fiu.apk";
+        }
+        apkFile = new File(Environment.getExternalStorageDirectory(), fileName);
+        new DownLoadTask(mContext,apkFile.getAbsolutePath(), mHandler, showProgressDialog).execute(path + "?timestamp=" + System.currentTimeMillis());
     }
 
     private void installApk() {
+        apkFile = new File(Environment.getExternalStorageDirectory(), "fiu.apk");
         try {
             if (!apkFile.exists()) {
                 return;
             }
             // 通过Intent安装APK文件
             Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.setDataAndType(Uri.parse("file://" + apkFile.toString()), "application/vnd.android.package-archive");
             mContext.startActivity(i);
         } catch (Exception e) {
@@ -128,9 +134,6 @@ public class NetWorkUtils {
         return versionName;
     }
 
-    private UpdateInfoBean updateVersionInfo;
-    private CheckVersionBean checkVersionBean;
-
     public void updateToLatestVersion() {
         ClientDiscoverAPI.updateToLatestVersion(new RequestCallBack<String>() {
             @Override
@@ -139,10 +142,12 @@ public class NetWorkUtils {
                     if (responseInfo == null) {
                         return;
                     }
-                    updateVersionInfo = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<UpdateInfoBean>>() {});
+                    UpdateInfoBean updateVersionInfo = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<UpdateInfoBean>>() {
+                    });
                     if (getAppVersionName(mContext).equals(updateVersionInfo.getVersion())) {
                         ToastUtils.showInfo("您当前已经是最新版本");
-                    }else{
+                    } else {
+                        downloadUrl = updateVersionInfo.getDownload();
                         mHandler.sendEmptyMessage(INSTALL_APK);
                     }
                 } catch (Exception e) {
@@ -157,6 +162,8 @@ public class NetWorkUtils {
         });
     }
 
+    private String downloadUrl;
+
     public void checkVersionInfo() {
         String appVersionName = getAppVersionName(mContext);
         ClientDiscoverAPI.checkVersionInfo(appVersionName, new RequestCallBack<String>() {
@@ -166,8 +173,12 @@ public class NetWorkUtils {
                     if (responseInfo == null) {
                         return;
                     }
-                    checkVersionBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<CheckVersionBean>>() {});
-                    mHandler.sendEmptyMessage(checkVersionBean.getCode());
+                    CheckVersionBean
+                            checkVersionBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<CheckVersionBean>>() {});
+                    if (checkVersionBean != null) {
+                        downloadUrl = checkVersionBean.getDownload();
+                        mHandler.sendEmptyMessage(checkVersionBean.getCode());
+                    }
                 } catch (Exception e) {
                     LogUtil.e(this.getClass().getSimpleName(), "<<<<< " + responseInfo.result);
                 }
@@ -178,5 +189,26 @@ public class NetWorkUtils {
 
             }
         });
+    }
+
+    /**
+     * 获取一个路径的文件名
+     *
+     * @param urlpath
+     * @return
+     */
+    public static String getFilename(String urlpath) {
+        return urlpath.substring(urlpath.lastIndexOf("/") + 1, urlpath.length());
+    }
+
+    /**
+     * make true current connect service is wifi
+     * @param mContext
+     * @return
+     */
+    private static boolean isWifi(Context mContext) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetInfo != null&& activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI;
     }
 }
