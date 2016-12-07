@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.base;
+package com.taihuoniao.fineix.beans;
 
 import java.io.Serializable;
 

@@ -15,7 +15,7 @@ import android.util.Log;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;

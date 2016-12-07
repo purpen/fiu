@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.tv_nav1)TextView tv_nav1;
     @Bind(R.id.tv_nav3)TextView tv_nav3;
     @Bind(R.id.tv_nav4)TextView tv_nav4;
+
     //用户第一次进入app会用到
     @Bind(R.id.activity_main_first_relative)RelativeLayout firstRelative;
     @Bind(R.id.activity_main_first_left_img)ImageView firstLeftImg;
@@ -90,7 +91,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             which = FindFragment.class.getSimpleName();
         }
         which2Switch();
-//        show();
         super.onNewIntent(intent);
     }
 
@@ -135,6 +135,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             WindowUtils.showStatusBar(this);
             firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
         }
+
+        NetWorkUtils netWorkUtils = new NetWorkUtils(this);
+        netWorkUtils.checkVersionInfo();
     }
 
     public void hint() {
@@ -155,7 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 .start();
     }
 
-    public int getStatusBarHeight() {
+    private int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -180,16 +183,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void addFragment2List(Fragment fragment) {
-        if (fragment == null) {
-            LogUtil.e(TAG, "addedFragment==null");
+        if (fragment == null || fragments.contains(fragment)) {
+            LogUtil.e(TAG, "addedFragment==null || addedFragment  contains");
             return;
         }
-
-        if (fragments.contains(fragment)) {
-            LogUtil.e(TAG, "addedFragment  contains");
-            return;
-        }
-
         fragments.add(fragment);
     }
 
@@ -221,11 +218,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tabList = new ArrayList<>();
         }
         initTabItem(homepageImg, tv_nav0, IndexFragment.class, R.mipmap.home_red, R.mipmap.home_gray);
-
         initTabItem(findImg, tv_nav1, FindFragment.class, R.mipmap.find_red, R.mipmap.find_gray);
-
         initTabItem(shopImg, tv_nav3, WellGoodsFragment.class, R.mipmap.shop_red, R.mipmap.shop_gray);
-
         initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.mine_red, R.mipmap.mine_gray);
     }
 
@@ -282,10 +276,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         try {
             switchImgAndTxtStyle(clazz);
             switchFragment(clazz);
-//            if (bottomLinear != null) {
-//                bottomLinear.setTranslationY(0);
-//                animFlag = 0;
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -312,27 +302,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         LogUtil.e(TAG, fragments.size() + "<<<<<<");
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        NetWorkUtils netWorkUtils = new NetWorkUtils(this);
-        netWorkUtils.checkVersionInfo();
-//        netWorkUtils.updateToLatestVersion();
-    }
-
     private void resetUI() {
-        if (fragments == null) {
+        if (fragments == null || fragments.size() == 0) {
             return;
         }
-        if (fragments.size() == 0) {
-            return;
-        }
-
         for (Fragment fragment : fragments) {
             fm.beginTransaction().hide(fragment).commitAllowingStateLoss();
         }
-
     }
 
     private void switchImgAndTxtStyle(Class clazz) {
@@ -350,7 +326,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         int size = fragments.size();
-        if (fragments != null && size > 0) {
+        if (size > 0) {
             for (int i = 0; i < size; i++) {
                 fm.putFragment(outState, fragments.get(i).getTag(), fragments.get(i));
             }
@@ -373,11 +349,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-//        unregisterReceiver(mainReceiver);
         MapUtil.destroyGeoCoder();
         super.onDestroy();
     }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -385,6 +359,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (hasFocus) {
             final SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
             if (showFragment instanceof IndexFragment) {
+
                 //判断是不是第一次进入情界面
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
                 if (isFirstIn) {
@@ -470,119 +445,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     editor.apply();
                 }
             }
-//            else if (showFragment instanceof MineFragment) {
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
-//                if (isFirstIn) {
-//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                    firstRelative.setVisibility(View.VISIBLE);
-//                    firstImg.setImageResource(R.mipmap.first_in_mine);
-//                    firstImg.setVisibility(View.VISIBLE);
-//                    firstRelative.setTag(11);
-//                    firstRelative.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            if ((int) (v.getTag()) == 11) {
-//                                firstImg.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                                firstLeftImg.setImageResource(R.mipmap.mine2);
-//                                firstLeftImg.setVisibility(View.VISIBLE);
-//                                firstRelative.setTag(12);
-//                            } else if ((int) (v.getTag()) == 12) {
-//                                firstLeftImg.setVisibility(View.GONE);
-//                                firstRelative.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.nothing);
-//                                firstRelative.setPadding(0, 0, 0, 0);
-//                            }
-//                        }
-//                    });
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_WO, false);
-//                    editor.apply();
-//                }
-//            }
         }
     }
-
-
-//    private BroadcastReceiver mainReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-////            Log.e("<<<", "接收到广播");
-//            if (1 == intent.getIntExtra("index", -1)) {
-//                moveToDown();
-//            } else if (2 == intent.getIntExtra("index", -1)) {
-////                WindowUtils.chenjin(MainActivity.this);
-//                moveToReset();
-//            }
-//        }
-//    };
-
-//    public void moveToDown() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            container.setSystemUiVisibility(View.INVISIBLE);
-//        }
-//        ObjectAnimator downAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", bottomLinear.getMeasuredHeight()).setDuration(300);
-//        downAnimator.addListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//                animFlag = 1;
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                animFlag = 2;
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        });
-//        if (animFlag == 0) {
-//            downAnimator.start();
-//        }
-//    }
-//
-//    public void moveToReset() {
-//        if (bottomLinear.getTranslationY() <= 0) {
-//            return;
-//        }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//        }
-//        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(300);
-//        upAnimator.addListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//                animFlag = 1;
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                animFlag = 0;
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        });
-//        if (animFlag == 2) {
-//            upAnimator.start();
-//        }
-//    }
-
-//    private int animFlag = 0;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -606,7 +470,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Boolean isExit = false;
 
     private void exitBy2Click() {
-        Timer tExit = null;
+        Timer tExit;
         if (!isExit) {
             isExit = true; // 准备退出
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -623,7 +487,4 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             System.exit(0);
         }
     }
-
-
-
 }

@@ -1,9 +1,7 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -25,12 +23,11 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.IsEditorBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ImageCrop.ClipZoomImageView;

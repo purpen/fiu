@@ -19,7 +19,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.AddressData;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;

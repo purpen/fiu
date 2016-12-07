@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,7 +23,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.Base2Activity;
-import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.personal.salesevice.ChargeBackActivity;

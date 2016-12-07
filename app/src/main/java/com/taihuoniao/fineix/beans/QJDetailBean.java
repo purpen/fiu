@@ -1,9 +1,5 @@
 package com.taihuoniao.fineix.beans;
 
-import com.taihuoniao.fineix.base.NetBean;
-
-import java.util.List;
-
 /**
  * Created by taihuoniao on 2016/8/25.
  */

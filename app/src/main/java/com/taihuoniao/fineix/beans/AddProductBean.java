@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.beans;
 
 import android.os.Parcel;
 
-import com.taihuoniao.fineix.base.NetBean;
-
 /**
  * Created by taihuoniao on 2016/5/6.
  */

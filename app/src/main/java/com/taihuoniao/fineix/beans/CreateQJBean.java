@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.beans;
 
-import com.taihuoniao.fineix.base.NetBean;
-
 /**
  * Created by taihuoniao on 2016/8/18.
  */

@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.beans;
 
-import com.taihuoniao.fineix.base.NetBean;
-
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
