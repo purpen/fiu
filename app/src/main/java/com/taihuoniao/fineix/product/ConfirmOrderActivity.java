@@ -26,13 +26,16 @@ import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.DefaultAddressBean;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.product.bean.FreightBean;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomDialogForPay;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -51,10 +54,7 @@ import java.text.DecimalFormat;
  * 商品详情ratingbar
  */
 public class ConfirmOrderActivity extends Base2Activity implements View.OnClickListener {
-    //商品详情界面传递过来的数据
-    private NowBuyBean nowBuyBean;
-    //购物车界面传递过来的数据
-    private CartDoOrder cartBean;
+
     //界面下的控件
     private GlobalTitleLayout titleLayout;
     private RelativeLayout addressRelative;
@@ -78,32 +78,31 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     private LinearLayout linearLayout_privilege;
     private TextView textView_privilege;
     private TextView transferTv;
-
-
-    //网络请求dialog
     private WaittingDialog dialog;
-    //网络请求返回值
-    private DefaultAddressBean addressDefaultBean;
-    //收货地址界面选择的返回值
-    private AddressListBean.RowsEntity addressListItem;
-    //收货时间界面选择的返回值
-    private String transfer_time = "a";
+
+    //商品详情界面传递过来的数据
+    private NowBuyBean nowBuyBean;
+    private CartDoOrder cartBean;   //购物车界面传递过来的数据
+    private DefaultAddressBean addressDefaultBean;  //网络请求返回值
+    private AddressListBean.RowsEntity addressListItem; //收货地址界面选择的返回值
+    private String transfer_time = "a"; //收货时间界面选择的返回值
     private String bonus_code;
     private DecimalFormat df = null;
+
     //跳转到红包界面
     //rid传递过去的临时订单编号
     //返回数据 money  code
     private CustomDialogForPay mDialog;
     private String curAddressId;
-
-    private double privilegeprice;
+    private double privilegeprice;      //节省
+    private String freight;     //邮费
+    private double sumPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmorder);
         initView();
-//        WindowUtils.chenjin(this);
         setData();
         if (!dialog.isShowing()) {
             dialog.show();
@@ -111,12 +110,18 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         getDefaultAddress();
     }
     private HttpHandler<String> addressHandler;
+
+    @Override
+    protected void onDestroy() {
+        cancelNet();
+        super.onDestroy();
+    }
+
     private void getDefaultAddress() {
-      addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
+        addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<默认收货地址", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 DefaultAddressBean defaultAddressBean = new DefaultAddressBean();
                 try {
                     Gson gson = new Gson();
@@ -146,12 +151,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        cancelNet();
-        super.onDestroy();
-    }
-
     private void setData() {
         nowBuyBean = (NowBuyBean) getIntent().getSerializableExtra("NowBuyBean");
         cartBean = (CartDoOrder) getIntent().getSerializableExtra("cartBean");
@@ -176,18 +175,19 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         }
         productsListView.setAdapter(productsAdapter);
         if (nowBuyBean != null) {
-            payPriceTv.setText("¥ " + df.format(nowBuyBean.getData().getPay_money()));
+            sumPrice = nowBuyBean.getData().getPay_money();
+            payPriceTv.setText(String.format("¥ %s" , sumPrice));
             if (nowBuyBean.getData().getBonus().size() > 0) {
                 redBagTv.setText("选择红包");
             }
             try {
-                String freight = nowBuyBean.getData().getOrder_info().getDict().getFreight();
+                freight = nowBuyBean.getData().getOrder_info().getDict().getFreight();
                 transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(freight) ? "0" : freight));
 
                 // TODO: 2016/12/2 优惠立减
                 if ("5".equals(nowBuyBean.getData().getOrder_info().getKind())) {
                     String coin_money = nowBuyBean.getData().getOrder_info().getDict().getCoin_money();
-                    privilegeprice = Double.valueOf(coin_money);
+                    privilegeprice = Double.parseDouble(coin_money);
                     textView_privilege.setText(String.format("¥ %s", coin_money));
                     saveMoneyTv.setText(String.format(" ¥ %s", coin_money));
                     linearLayout_privilege.setVisibility(View.VISIBLE);
@@ -198,19 +198,20 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 e.printStackTrace();
             }
         } else if (cartBean != null) {
-            payPriceTv.setText("¥ " + df.format(Double.valueOf(cartBean.getPay_money())));
+            sumPrice = Double.parseDouble(cartBean.getPay_money());
+            payPriceTv.setText(String.format("¥ %s" , sumPrice));
             if (cartBean.getBonus().size() > 0) {
                 redBagTv.setText("选择红包");
             }
 
             try {
-                String freight = cartBean.getDictBeen().get(0).getFreight();
-                transferTv.setText(TextUtils.isEmpty(freight) ? "0" : freight);
+                freight = cartBean.getDictBeen().get(0).getFreight();
+                transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(freight) ? "0" : freight));
 
                 // TODO: 2016/12/2 优惠立减
                 if ("5".equals(cartBean.getKind())) {
                     String coin_money = cartBean.getDictBeen().get(0).getCoin_money();
-                    privilegeprice = Double.valueOf(coin_money);
+                    privilegeprice = Double.parseDouble(coin_money);
                     textView_privilege.setText(String.format("¥ %s", coin_money));
                     saveMoneyTv.setText(String.format(" ¥ %s", coin_money));
                     linearLayout_privilege.setVisibility(View.VISIBLE);
@@ -333,6 +334,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                         case 1:// 等待付款
                             intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
                             intent.putExtra("paymoney", nowConfirmBean.getPay_money());
+                            sumPrice = Double.parseDouble(nowConfirmBean.getPay_money());
                             intent.putExtra("orderId", nowConfirmBean.getRid());
                             startActivity(intent);
                             finish();
@@ -396,25 +398,29 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                     saveTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setVisibility(View.VISIBLE);
                     try {
-                        saveMoneyTv.setText(" ¥ " + df.format(Double.valueOf(money) + privilegeprice));
+                        saveMoneyTv.setText(" ¥ " + df.format(Double.parseDouble(money) + privilegeprice));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     redBagTv.setText("使用了" + money + "元红包");
                     redBagCancelTv.setText("您使用了一张" + money + "元红包，下单后将不可恢复");
                     if (nowBuyBean != null) {
-                        double nowPrice = nowBuyBean.getData().getPay_money() - Double.valueOf(money);
+                        double nowPrice = nowBuyBean.getData().getPay_money() - Double.parseDouble(money);
                         if (nowPrice <= 0) {
                             payPriceTv.setText("¥ 0.00");
+                            sumPrice = 0D;
                         } else {
                             payPriceTv.setText("¥ " + df.format(nowPrice));
+                            sumPrice = nowPrice;
                         }
                     } else if (cartBean != null) {
                         double nowPrice = Double.valueOf(cartBean.getPay_money()) - Double.valueOf(money);
                         if (nowPrice <= 0) {
                             payPriceTv.setText("¥ 0.00");
+                            sumPrice = 0D;
                         } else {
-                            payPriceTv.setText(String.format("¥ %s", df.format(Double.valueOf(cartBean.getPay_money()) - Double.valueOf(money))));
+                            payPriceTv.setText(String.format("¥ %s", df.format(sumPrice)));
+                            sumPrice = nowPrice;
                         }
                     }
                 }
@@ -424,6 +430,8 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 if (addressListItem != null) {
                     curAddressId=addressListItem._id;
                     setAddressData(addressListItem);
+
+                    fetchFreight(curAddressId, null);
                 } else {
                     if (!dialog.isShowing()) {
                         dialog.show();
@@ -473,4 +481,36 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
             confirmHandler.cancel();
     }
 
+    // TODO: 2016/12/8 计算邮费
+    private void fetchFreight(String addbook_id, String rid){
+        String rid2 = nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getData().getOrder_info().getRid();
+        ClientDiscoverAPI.fetchFreight(addbook_id, rid2, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) {
+                    return;
+                }
+                HttpResponse<FreightBean> freightBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<FreightBean>>() {
+                });
+                if (freightBeanHttpResponse != null) {
+                    String newfreight = freightBeanHttpResponse.getData().getFreight();
+                    if (newfreight != null) {
+                        transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(newfreight) ? "0" : newfreight));
+                        sumPrice = sumPrice - Double.parseDouble(freight) + Double.parseDouble(newfreight);
+                        payPriceTv.setText(String.format("¥ %s", sumPrice));
+//                        try {
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
+    }
 }

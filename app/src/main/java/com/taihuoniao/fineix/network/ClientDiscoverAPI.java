@@ -1832,4 +1832,16 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("version", versionName);
         return MD5Utils.sign(params, NetworkConstance.CHECK_VERSION_INFO, callBack);
     }
+
+    /**
+     * 获取邮费接口
+     *
+     * @param callBack
+     */
+    public static HttpHandler<String> fetchFreight (String addbook_id, String rid, RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("addbook_id", addbook_id);
+        params.addQueryStringParameter("rid", rid);
+        return MD5Utils.sign(params, NetworkConstance.SHOPPING_FETCH_FREIGHT, callBack);
+    }
 }
