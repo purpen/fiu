@@ -1844,4 +1844,17 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("rid", rid);
         return MD5Utils.sign(params, NetworkConstance.SHOPPING_FETCH_FREIGHT, callBack);
     }
+
+    /**
+     * 获取邮费接口
+     *
+     * @param callBack
+     */
+    public static HttpHandler<String> shoppingTracking (String rid, String express_no, String express_caty, RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        params.addQueryStringParameter("express_no", express_no);
+        params.addQueryStringParameter("express_caty", express_caty);
+        return MD5Utils.sign(params, NetworkConstance.SHOPPING_TRACKING, callBack);
+    }
 }

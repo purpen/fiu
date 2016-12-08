@@ -164,7 +164,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 TextView textViewExpress = (TextView) subOrderView.findViewById(R.id.textView_express);
                 TextView textViewExpressCode = (TextView) subOrderView.findViewById(R.id.textView_express_code);
                 LinearLayout linearLayoutContainerGoods = (LinearLayout) subOrderView.findViewById(R.id.linearLayout_container_subOrder_details);
-
+                TextView textViewExpressTracking = (TextView) subOrderView.findViewById(R.id.textView_express_tracking);
                 OrderDetailBean.SubOrdersBean subOrdersEntity = sub_orders.get(m);
 
                 textView1.setText(subOrdersEntity.getId());
@@ -180,6 +180,17 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 } else {
                     textViewExpress.setText(subOrdersEntity.getExpress_company());
                     textViewExpressCode.setText(subOrdersEntity.getExpress_no());
+                    textViewExpressTracking.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // TODO: 2016/12/8 查看物流信息
+                            Intent intent = new Intent(OrderDetailsActivity.this, OrderTrackActivity.class);
+                            intent.putExtra("rid", orderDetailBean.getRid());
+                            intent.putExtra("express_no", orderDetailBean.getExpress_no());
+                            intent.putExtra("express_caty", orderDetailBean.getExpress_caty());
+                            startActivity(intent);
+                        }
+                    });
                 }
 
                 TextView orderNumberTitle = (TextView) subOrderView.findViewById(R.id.textView_order_code_title);
@@ -196,6 +207,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
             TextView textViewExpress = (TextView) subOrderView.findViewById(R.id.textView_express);
             TextView textViewExpressCode = (TextView) subOrderView.findViewById(R.id.textView_express_code);
             LinearLayout linearLayoutContainerGoods = (LinearLayout) subOrderView.findViewById(R.id.linearLayout_container_subOrder_details);
+            TextView textViewExpressTracking = (TextView) subOrderView.findViewById(R.id.textView_express_tracking);
 
             textView1.setText(orderDetailBean.getRid());
             textView2.setVisibility(View.INVISIBLE);
@@ -210,6 +222,17 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
             } else {
                 textViewExpress.setText(orderDetailBean.getExpress_company());
                 textViewExpressCode.setText(orderDetailBean.getExpress_no());
+                textViewExpressTracking.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO: 2016/12/8 查看物流信息
+                        Intent intent = new Intent(OrderDetailsActivity.this, OrderTrackActivity.class);
+                        intent.putExtra("rid", orderDetailBean.getRid());
+                        intent.putExtra("express_no", orderDetailBean.getExpress_no());
+                        intent.putExtra("express_caty", orderDetailBean.getExpress_caty());
+                        startActivity(intent);
+                    }
+                });
             }
 
             final List<OrderDetailBean.ItemsBean> itemsEntityList = orderDetailBean.getItems();

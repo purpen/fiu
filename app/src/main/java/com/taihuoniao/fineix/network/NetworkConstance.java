@@ -316,6 +316,7 @@ public class NetworkConstance {
     public static final String FETCH_LATEST_VERSION = BASE_URL + "/gateway/fetch_version";
     public static final String CHECK_VERSION_INFO = BASE_URL + "/gateway/check_version";
     public static final String SHOPPING_FETCH_FREIGHT = BASE_URL + "/shopping/fetch_freight";   //获取邮费接口
+    public static final String SHOPPING_TRACKING = BASE_URL + "/shopping/logistic_tracking";   //物流跟踪
 
 
 }

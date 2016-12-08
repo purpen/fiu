@@ -404,4 +404,6 @@
     <string name="warn_salesAfter_salesReturn_explain_error">退货说明不能为空！</string>
     <string name="title_salesAfter_salesReturn_details">退货详情</string>
 
+    <string name="title_orderTracking">物流跟踪</string>
+
 </resources>

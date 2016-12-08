@@ -13,7 +13,6 @@
 
     <include layout="@layout/layout_goods_details_up" />
 
-
     <LinearLayout
         android:id="@+id/linearLayout_container_subOrder_details"
         android:layout_width="match_parent"

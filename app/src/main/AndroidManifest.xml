@@ -479,6 +479,8 @@
         <activity android:name="com.taihuoniao.fineix.personal.salesevice.SalesReturnDetailsActivity" />
         <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackResultActivity" />
 
+        <activity android:name="com.taihuoniao.fineix.user.OrderTrackActivity" />
+
     </application>
 
 </manifest>
