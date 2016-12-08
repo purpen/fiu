@@ -405,5 +405,7 @@
     <string name="title_salesAfter_salesReturn_details">退货详情</string>
 
     <string name="title_orderTracking">物流跟踪</string>
+    <string name="text_order_track_shipperCode">快递公司：%s</string>
+    <string name="text_order_track_logisticCode">运单号：%s</string>
 
 </resources>
