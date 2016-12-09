@@ -14,7 +14,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.baidu.mapapi.common.EnvironmentUtilities;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -22,12 +24,15 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.bean.CheckVersionBean;
 import com.taihuoniao.fineix.network.bean.UpdateInfoBean;
+import com.taihuoniao.fineix.utils.DateUtils;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Stephen on 2016/12/6 15:05
@@ -72,7 +77,7 @@ public class NetWorkUtils {
     private File apkFile;
 
     private void hintUpdate() {
-        AlertDialog.Builder dialog = DialogHelp.getSelectDialog(mContext, "版本更新", new String[]{"确定", "取消"}, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder dialog = DialogHelp.getSelectDialog(mContext, "版本更新(" + getAppVersionName(mContext) + ")", new String[]{"确定"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
@@ -94,17 +99,18 @@ public class NetWorkUtils {
             }
             return;
         }
-        String path = downloadUrl;
-        String fileName = getFilename(path);
-        if (!fileName.endsWith(".apk")) {
-            fileName = "fiu.apk";
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() +  "/downLoad";
+        File folder = new File(path);
+        if (!folder.exists()) {
+            folder.mkdir();//If there is no folder it will be created.
         }
-        apkFile = new File(Environment.getExternalStorageDirectory(), fileName);
-        new DownLoadTask(mContext,apkFile.getAbsolutePath(), mHandler, showProgressDialog).execute(path + "?timestamp=" + System.currentTimeMillis());
+        String fileName = "fiu_" + System.currentTimeMillis() + ".apk";
+        apkFile = new File(path, fileName);
+        Log.e("TAG", "-------------> apkFile.getAbsolutePath(): " + apkFile.getAbsolutePath());
+        new DownLoadTask(mContext,apkFile.getAbsolutePath(), mHandler, showProgressDialog).execute(downloadUrl + "?timestamp=" + System.currentTimeMillis());
     }
 
     private void installApk() {
-        apkFile = new File(Environment.getExternalStorageDirectory(), "fiu.apk");
         try {
             if (!apkFile.exists()) {
                 return;
@@ -189,16 +195,6 @@ public class NetWorkUtils {
 
             }
         });
-    }
-
-    /**
-     * 获取一个路径的文件名
-     *
-     * @param urlpath
-     * @return
-     */
-    public static String getFilename(String urlpath) {
-        return urlpath.substring(urlpath.lastIndexOf("/") + 1, urlpath.length());
     }
 
     /**

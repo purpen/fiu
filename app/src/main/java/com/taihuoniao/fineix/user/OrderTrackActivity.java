@@ -1,24 +1,17 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.App;
@@ -29,7 +22,9 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +34,9 @@ import java.util.List;
 
 public class OrderTrackActivity extends BaseActivity {
 
+    private WaittingDialog mDialog;
     private OrderTrackAdapter orderTrackAdapter;
+    private String express_company;
 
     public OrderTrackActivity() {
         super(R.layout.activity_order_track);
@@ -55,6 +52,7 @@ public class OrderTrackActivity extends BaseActivity {
         String rid = intent.getStringExtra("rid");
         String express_no = intent.getStringExtra("express_no");
         String express_caty = intent.getStringExtra("express_caty");
+        express_company = intent.getStringExtra("express_company");
         requestOrderTrackInfo(rid, express_no, express_caty);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -71,9 +69,16 @@ public class OrderTrackActivity extends BaseActivity {
 
 
     private void requestOrderTrackInfo(String s1, String s2, String s3) {
+        if (mDialog == null) {
+            mDialog = new WaittingDialog(this);
+            mDialog.show();
+        }
         ClientDiscoverAPI.shoppingTracking(s1, s2, s3, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (mDialog != null && mDialog.isShowing()) {
+                    mDialog.dismiss();
+                }
                 if (responseInfo == null) {
                     return;
                 }
@@ -84,14 +89,17 @@ public class OrderTrackActivity extends BaseActivity {
                     ToastUtils.showError(orderTrackBeanHttpResponse.getMessage());
                     return;
                 }
-
-                textShipperCode.setText(String.format(App.getString(R.string.text_order_track_shipperCode), orderTrackBeanHttpResponse.getData().getShipperCode()));
+                textShipperCode.setText(String.format(App.getString(R.string.text_order_track_shipperCode), express_company));
                 textLogisticCode.setText(String.format(App.getString(R.string.text_order_track_logisticCode), orderTrackBeanHttpResponse.getData().getLogisticCode()));
 
                 List<OrderTrackBean.TracesEntity> traces = orderTrackBeanHttpResponse.getData().getTraces();
 
                 if (traces != null) {
-                    orderTrackAdapter.putAll(traces);
+                    List<OrderTrackBean.TracesEntity> newTraces = new ArrayList<OrderTrackBean.TracesEntity>();
+                    for(int i = traces.size() - 1; i>= 0; i--) {
+                        newTraces.add(traces.get(i));
+                    }
+                    orderTrackAdapter.putAll(newTraces);
                 }
             }
 

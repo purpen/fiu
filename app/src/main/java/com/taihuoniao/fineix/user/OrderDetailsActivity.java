@@ -188,6 +188,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             intent.putExtra("rid", orderDetailBean.getRid());
                             intent.putExtra("express_no", orderDetailBean.getExpress_no());
                             intent.putExtra("express_caty", orderDetailBean.getExpress_caty());
+                            intent.putExtra("express_company", orderDetailBean.getExpress_company());
                             startActivity(intent);
                         }
                     });
@@ -230,6 +231,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         intent.putExtra("rid", orderDetailBean.getRid());
                         intent.putExtra("express_no", orderDetailBean.getExpress_no());
                         intent.putExtra("express_caty", orderDetailBean.getExpress_caty());
+                        intent.putExtra("express_company", orderDetailBean.getExpress_company());
                         startActivity(intent);
                     }
                 });

@@ -101,6 +101,7 @@ public class DownLoadTask extends AsyncTask<String, Integer, File> {
         } else {
             if(isShow){
                 ToastUtils.showError("下载失败！");
+                progressDialog.cancel();
             }
         }
     }

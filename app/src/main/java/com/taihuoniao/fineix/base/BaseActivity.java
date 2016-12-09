@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.base;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
@@ -25,7 +26,7 @@ import cn.sharesdk.framework.ShareSDK;
  */
 public abstract class BaseActivity<T> extends AppCompatActivity {
     protected final String TAG = getClass().getSimpleName();
-    protected Activity activity;
+    protected FragmentActivity activity;
     private int layoutResID;
     protected DisplayImageOptions options;
     private List<HttpHandler<String>> handlerList;

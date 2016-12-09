@@ -8,8 +8,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 18
-        versionName "1.1.7"
+        versionCode 20
+        versionName "1.2.0"
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
 

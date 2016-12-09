@@ -26,7 +26,6 @@
         android:id="@+id/textView_express_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
         android:textColor="#666666"
         android:textSize="12sp" />
 
@@ -42,6 +41,7 @@
         android:id="@+id/textView_express_tracking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:background="@drawable/background_border_corner_white"
         android:text="查看物流"
         android:layout_marginRight="15dp"

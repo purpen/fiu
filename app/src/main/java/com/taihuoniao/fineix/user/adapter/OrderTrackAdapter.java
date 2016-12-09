@@ -76,11 +76,11 @@ public class OrderTrackAdapter extends RecyclerView.Adapter<OrderTrackAdapter.Vi
         holder.itemDate.setText(mTraces.get(realPosition).getAcceptTime());
         holder.itemDescription.setText(mTraces.get(realPosition).getAcceptStation());
         if (position == 1) {
-            holder.itemFlag.setImageResource(R.mipmap.checked);
+            holder.itemFlag.setImageResource(R.mipmap.icon_order_track_oval_current);
             holder.itemDate.setTextColor(Color.parseColor("#BE8914"));
             holder.itemDescription.setTextColor(Color.parseColor("#BE8914"));
         } else {
-            holder.itemFlag.setImageResource(R.mipmap.check);
+            holder.itemFlag.setImageResource(R.mipmap.icon_order_track_oval_normal);
             holder.itemDate.setTextColor(Color.parseColor("#999999"));
             holder.itemDescription.setTextColor(Color.parseColor("#666666"));
         }
