@@ -34,20 +34,19 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/26.
  */
 public class QJFragment extends SearchFragment {
-    private int pos;//判断位置 0，精选 1，最新
-    private String id;//情景分类id
     @Bind(R.id.pull_refresh_view)
     PullToRefreshGridView pullRefreshView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private WaittingDialog dialog;
+
+    private int pos;//判断位置 0，精选 1，最新
     private int page = 1;
+    private String id;//情景分类id
     private List<SceneList.DataBean.RowsBean> sceneList;
-//    private SubsListAdapter subsListAdapter;
     private QJCateogryAdapter qjCateogryAdapter;
 
     public static QJFragment newInstance(int position, String id) {
-
         Bundle args = new Bundle();
         args.putInt("pos", position);
         args.putString("id", id);

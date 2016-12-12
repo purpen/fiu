@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.beans.DataParticipateQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -78,8 +79,10 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
             holder.rlRight.setLayoutParams(params);
             holder.rlRight.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
-            imageLoader.displayImage(right_qj.cover_url, holder.ivCoverRight, options);
-            imageLoader.displayImage(right_qj.user_info.avatar_url, holder.rivRight, options);
+//            imageLoader.displayImage(right_qj.cover_url, holder.ivCoverRight, options);
+//            imageLoader.displayImage(right_qj.user_info.avatar_url, holder.rivRight, options);
+            GlideUtils.displayImageFadein(right_qj.cover_url, holder.ivCoverRight);
+            GlideUtils.displayImageFadein(right_qj.user_info.avatar_url, holder.rivRight);
             if (right_qj.is_love == 1) {
                 holder.ibtnRight.setImageResource(R.mipmap.zaned);
             } else {

@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -57,8 +58,11 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.user.avatar_url, holder.headImg, options);
-        ImageLoader.getInstance().displayImage(item.cover_url, holder.qjImg, options);
+//        ImageLoader.getInstance().displayImage(item.user.avatar_url, holder.headImg, options);
+//        ImageLoader.getInstance().displayImage(item.cover_url, holder.qjImg, options);
+
+        GlideUtils.displayImage(item.user.avatar_url, holder.headImg);
+        GlideUtils.displayImageFadein(item.cover_url, holder.qjImg);
         holder.publishTime.setText(item.created_at);
         if (TextUtils.isEmpty(item.city) && TextUtils.isEmpty(item.address)) {
             holder.locationTv.setVisibility(View.GONE);

@@ -29,6 +29,7 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ClickImageView;
@@ -85,8 +86,10 @@ public class QJCateogryAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.qjBackgroundImg);
-        ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.qjHeadImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.qjBackgroundImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.qjHeadImg);
+        GlideUtils.displayImageFadein(list.get(position).getCover_url(), holder.qjBackgroundImg);
+        GlideUtils.displayImage(list.get(position).getUser_info().getAvatar_url(), holder.qjHeadImg);
         if (list.get(position).getIs_love() == 1) {
             holder.qjLove.setImageResource(R.mipmap.find_has_love);
         } else {

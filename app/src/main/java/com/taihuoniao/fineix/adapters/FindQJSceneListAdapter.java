@@ -57,6 +57,7 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -250,7 +251,10 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         }
         //移除所有标签
         holder.labelContainer.removeAllViews();
-        ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
+//        ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
+//        ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
+        GlideUtils.displayImageFadein(sceneList.get(position).getCover_url(), holder.qjImg);
+        GlideUtils.displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
         if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
         } else {
@@ -286,7 +290,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
-        ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
         holder.qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -520,7 +523,8 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        ImageLoader.getInstance().displayImage(item.getUser_info().getAvatar_url(), riv);
+//        ImageLoader.getInstance().displayImage(item.getUser_info().getAvatar_url(), riv);
+        GlideUtils.displayImage(item.getUser_info().getAvatar_url(), riv);
         tv_take_photo.setText(String.format("取消关注" + " %s ?", item.getUser_info().getNickname()));
         tv_album.setText("取消关注");
         tv_album.setOnClickListener(new View.OnClickListener() {
