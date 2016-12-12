@@ -25,7 +25,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
 

@@ -23,7 +23,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.MyPopupWindow;
+import com.taihuoniao.fineix.view.popupwindow.MyPopupWindow;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;

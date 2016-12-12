@@ -31,7 +31,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ImageCrop.ClipZoomImageView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

@@ -35,7 +35,7 @@ import com.taihuoniao.fineix.scene.fragments.AddEnvirFragment;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

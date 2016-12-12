@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.view;
+package com.taihuoniao.fineix.view.popupwindow;
 
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;

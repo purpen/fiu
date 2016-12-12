@@ -51,7 +51,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.MyHighlightView;
 import com.taihuoniao.fineix.view.MyImageViewTouch;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.imageViewTouch.ImageViewTouch;
 
 import java.util.ArrayList;

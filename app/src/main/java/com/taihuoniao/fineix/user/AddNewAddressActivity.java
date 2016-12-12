@@ -30,7 +30,7 @@ import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.ArrayWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.OnWheelChangedListener;
 import com.taihuoniao.fineix.view.wheelview.WheelView;

@@ -29,7 +29,7 @@ import com.taihuoniao.fineix.pay.wxpay.WXPay;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
-import com.taihuoniao.fineix.view.CustomDialogForPay;
+import com.taihuoniao.fineix.view.dialog.CustomDialogForPay;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.wxapi.WXPayEntryActivity;
 

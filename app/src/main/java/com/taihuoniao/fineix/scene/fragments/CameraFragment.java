@@ -29,7 +29,7 @@ import com.taihuoniao.fineix.scene.PictureEditActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

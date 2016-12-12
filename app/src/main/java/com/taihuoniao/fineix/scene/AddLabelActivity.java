@@ -32,7 +32,7 @@ import com.taihuoniao.fineix.beans.SearchExpandBean;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

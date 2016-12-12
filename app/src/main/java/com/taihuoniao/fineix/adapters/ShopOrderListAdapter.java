@@ -33,7 +33,7 @@ import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
 import com.taihuoniao.fineix.user.ShopOrderListActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.List;

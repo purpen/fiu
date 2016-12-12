@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.view;
+package com.taihuoniao.fineix.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

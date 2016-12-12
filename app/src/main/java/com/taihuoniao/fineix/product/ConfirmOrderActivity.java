@@ -36,10 +36,10 @@ import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.CustomDialogForPay;
+import com.taihuoniao.fineix.view.dialog.CustomDialogForPay;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;

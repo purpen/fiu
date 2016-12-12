@@ -36,7 +36,7 @@ import com.taihuoniao.fineix.view.CustomAddressSelectView;
 import com.taihuoniao.fineix.view.CustomBirthdaySelectView;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 

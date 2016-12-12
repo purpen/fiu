@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 
 import com.taihuoniao.fineix.beans.ActivityPrizeData;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 /**
  * @author lilin

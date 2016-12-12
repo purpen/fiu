@@ -37,7 +37,7 @@ import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MaskedEditText;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.HashMap;
 
