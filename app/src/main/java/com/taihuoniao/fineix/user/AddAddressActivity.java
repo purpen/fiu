@@ -145,15 +145,14 @@ public class AddAddressActivity extends BaseActivity {
             });
             etConsigneeName.setText(addressBean.name);
             etPhone.setText(addressBean.phone);
-            StringBuilder builder = new StringBuilder();
-            builder.append(addressBean.province);
-            builder.append(" ");
-            builder.append(addressBean.city);
-            builder.append(" ");
-            builder.append(addressBean.county);
-            builder.append(" ");
-            builder.append(addressBean.town);
-            tvAddress.setText(builder.toString());
+            String builder = addressBean.province +
+                    " " +
+                    addressBean.city +
+                    " " +
+                    addressBean.county +
+                    " " +
+                    addressBean.town;
+            tvAddress.setText(builder);
 //            provinceId = addressBean.province_id;
 //            cityId = addressBean.city_id;
 //            townId = addressBean.town_id;

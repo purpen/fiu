@@ -66,7 +66,6 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     EditText etNickname;
     @Bind(R.id.rg)
     RadioGroup rg;
-    private UserCompleteData data;
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
@@ -85,7 +84,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            data = savedInstanceState.getParcelable("data");
+            UserCompleteData data = savedInstanceState.getParcelable("data");
         }
         super.onCreate(savedInstanceState);
         options = new DisplayImageOptions.Builder()
@@ -176,9 +175,11 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                         if (response.isSuccess()) {
 //                            User user = response.getData();
                             LoginInfo loginInfo = LoginInfo.getLoginInfo();
-                            loginInfo.setSex(gender);
-                            loginInfo.setNickname(nickName);
-                            SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            if (loginInfo != null) {
+                                loginInfo.setSex(gender);
+                                loginInfo.setNickname(nickName);
+                                SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            }
                             if (activity instanceof CompleteUserInfoActivity) {
                                 ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();
                                 if (null != viewPager) viewPager.setCurrentItem(1);

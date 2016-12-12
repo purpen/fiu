@@ -36,13 +36,9 @@ import java.util.List;
 public class PublishEvaluateActivity extends Activity {
     private static final String TAG = "PublishEvaluateActivity";
 
-    private ListViewForScrollView mListView;
     private EvaluateAdapter mAdapter;
     HashMap<Integer, String> mHashMapRatingBar = new HashMap<>();
     HashMap<Integer, String> mHashMap = new HashMap<>();
-//    private List<OrderDetails> mList = new ArrayList<>();
-//    private List<OrderDetailsProducts> mListProducts = new ArrayList<>();
-    private TextView mCommit;
     private String mRid;
     private String mEvaluateContent;
     private String mRatingBarNum;
@@ -69,7 +65,7 @@ public class PublishEvaluateActivity extends Activity {
         GlobalTitleLayout title = (GlobalTitleLayout) findViewById(R.id.title_evaluate);
         title.setTitle("发表评价");
         title.setContinueTvVisible(false);
-        mListView = (ListViewForScrollView) findViewById(R.id.lv_evaluate);
+        ListViewForScrollView mListView = (ListViewForScrollView) findViewById(R.id.lv_evaluate);
 
         mListProducts = new ArrayList<>();
         mAdapter = new EvaluateAdapter(mListProducts, this);
@@ -82,7 +78,7 @@ public class PublishEvaluateActivity extends Activity {
             }
         });
         dialog = new WaittingDialog(PublishEvaluateActivity.this);
-        mCommit = (TextView) findViewById(R.id.tv_commit_evaluate);
+        TextView mCommit = (TextView) findViewById(R.id.tv_commit_evaluate);
         mCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

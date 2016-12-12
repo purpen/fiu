@@ -320,19 +320,15 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             ArrayList<ActivityPrizeData.PrizeSightsEntity.DataEntity> dataBeenList = new ArrayList<>();
             for (ActivityPrizeData.PrizeSightsEntity prizeSights:detailData.prize_sights){
                 int size = prizeSights.data.size();
-                for (int i=0;i<size;i++){
-                    if (size>1){
-                        prizeSights.data.get(i).showBottom = i != size - 1;
-                    } else {
-                        prizeSights.data.get(i).showBottom=false;
-                    }
+                for (int i=0;i<size;i++) {
+                    prizeSights.data.get(i).showBottom = size > 1 && i != size - 1;
 
-                    if (i==0){
-                        prizeSights.data.get(i).prizeGrade=prizeSights.prize;
-                        prizeSights.data.get(i).prizeNum=size;
-                        prizeSights.data.get(i).flagHead=true;
-                    }else {
-                        prizeSights.data.get(i).flagHead=false;
+                    if (i == 0) {
+                        prizeSights.data.get(i).prizeGrade = prizeSights.prize;
+                        prizeSights.data.get(i).prizeNum = size;
+                        prizeSights.data.get(i).flagHead = true;
+                    } else {
+                        prizeSights.data.get(i).flagHead = false;
                     }
                 }
                 dataBeenList.addAll(prizeSights.data);

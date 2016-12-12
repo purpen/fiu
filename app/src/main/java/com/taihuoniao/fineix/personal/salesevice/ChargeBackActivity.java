@@ -108,7 +108,7 @@ public class ChargeBackActivity extends BaseActivity {
                 list.add(refund_reason.get(i).getTitle());
             }
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ChargeBackActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(ChargeBackActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
         ListView listView = new ListView(ChargeBackActivity.this);
         listView.setPadding(5,5,5,5);
         listView.setDividerHeight(0);

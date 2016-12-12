@@ -38,7 +38,6 @@ public class UserCommentsActivity extends BaseActivity {
     CustomHeadView custom_head;
     @Bind(R.id.lv)
     ListView lv;
-    private int curPage = 1;
     private int unread_count;
     private List<CommentsBean.CommentItem> list;
     private static final String pageSize = "9999";
@@ -87,6 +86,7 @@ public class UserCommentsActivity extends BaseActivity {
     private CommentsBean commentsBean = new CommentsBean();
     @Override
     protected void requestNet() {
+        int curPage = 1;
         ClientDiscoverAPI.mycommentsList(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE, new RequestCallBack<String>() {
             @Override
             public void onStart() {

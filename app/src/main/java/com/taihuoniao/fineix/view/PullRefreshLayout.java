@@ -536,10 +536,7 @@ public class PullRefreshLayout extends FrameLayout {
         if (mTargetAdapterView != null) {
             int first = mTargetAdapterView.getFirstVisiblePosition();
             View firstView;
-            if ((first == 0) && ((firstView = mTargetAdapterView.getChildAt(0)) != null)) {
-                return firstView.getTop() >= 0;
-            }
-            return false;
+            return (first == 0) && ((firstView = mTargetAdapterView.getChildAt(0)) != null) && firstView.getTop() >= 0;
         }
 
         return true;

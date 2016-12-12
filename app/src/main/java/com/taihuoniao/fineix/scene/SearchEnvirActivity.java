@@ -53,7 +53,6 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     ImageView searchDelete;
     @Bind(R.id.pull_refresh_view)
     PullToRefreshListView pullRefreshView;
-    private ListView listView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private WaittingDialog dialog;
@@ -113,7 +112,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
             }
         });
         searchDelete.setOnClickListener(this);
-        listView = pullRefreshView.getRefreshableView();
+        ListView listView = pullRefreshView.getRefreshableView();
         pullRefreshView.setPullToRefreshEnabled(false);
         pullRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override

@@ -48,8 +48,6 @@ public class FocusUserFragment extends MyBaseFragment {
     Button btnNext;
     @Bind(R.id.ll)
     LinearLayout ll;
-    private FocusInterestedUserViewPagerAdapter adapter;
-    private UserCompleteData data;
     private ArrayList<User> users;
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private int size;
@@ -66,7 +64,7 @@ public class FocusUserFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            data = savedInstanceState.getParcelable("data");
+            UserCompleteData data = savedInstanceState.getParcelable("data");
         }
         super.onCreate(savedInstanceState);
     }
@@ -158,7 +156,7 @@ public class FocusUserFragment extends MyBaseFragment {
                 users.get(i).is_love = 1;
             }
         }
-        adapter = new FocusInterestedUserViewPagerAdapter(users, activity);
+        FocusInterestedUserViewPagerAdapter adapter = new FocusInterestedUserViewPagerAdapter(users, activity);
         viewPager.setAdapter(adapter);
         showIndicators();
     }
@@ -206,7 +204,7 @@ public class FocusUserFragment extends MyBaseFragment {
                 }, 200);
                 StringBuilder builder = new StringBuilder();
                 for (User user : users) {
-                    if (user.is_love == 1) builder.append(user._id + ",");
+                    if (user.is_love == 1) builder.append(user._id).append(",");
                 }
                 if (TextUtils.isEmpty(builder)) return;
                 LogUtil.e(TAG, builder.deleteCharAt(builder.length() - 1).toString());

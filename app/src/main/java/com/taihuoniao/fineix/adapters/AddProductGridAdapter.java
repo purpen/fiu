@@ -24,12 +24,11 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/4/13.
  */
 public class AddProductGridAdapter extends BaseAdapter {
-    private Context context;
     private List<ProductBean.ProductListItem> list;
     private List<SearchBean.Data.SearchItem> searchList;
 
     public AddProductGridAdapter(Context context, List<ProductBean.ProductListItem> list, List<SearchBean.Data.SearchItem> searchList) {
-        this.context = context;
+        Context context1 = context;
         this.list = list;
         this.searchList = searchList;
     }

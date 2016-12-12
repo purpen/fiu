@@ -72,7 +72,6 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
     private static final String LOGIN_TYPE_QQ = "3"; //  QQ
     private String loginType = LOGIN_TYPE_WX;//1.微信；2.微博；3.ＱＱ
-    private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToLoginActivity instance = null;
     private WaittingDialog mDialog;
 
@@ -114,6 +113,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
     @Override
     public void finish() {
         super.finish();
+        Boolean mFinish = false;
         if (mFinish) {
             //关闭窗体动画显示
             overridePendingTransition(0, R.anim.down_register);
@@ -411,10 +411,10 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) return;
                 Log.e("<<<登录成功",responseInfo.result);
                 v.setEnabled(true);
                 mDialog.dismiss();
-                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
                 });

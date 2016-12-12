@@ -65,7 +65,6 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private int curZoomValue = 0;
     private Handler handler = new Handler();
     private Bundle bundle;//存储图片
-    private SurfaceCallback surfaceCallback;
 
     @Override
     protected void requestNet() {
@@ -108,7 +107,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         surfaceHolder.setKeepScreenOn(true);
         surfaceView.setFocusable(true);
         surfaceView.setBackgroundColor(android.content.ComponentCallbacks2.TRIM_MEMORY_BACKGROUND);
-        surfaceCallback = new SurfaceCallback();
+        SurfaceCallback surfaceCallback = new SurfaceCallback();
         surfaceView.getHolder().addCallback(surfaceCallback);
         dialog = new WaittingDialog(getActivity());
         return view;

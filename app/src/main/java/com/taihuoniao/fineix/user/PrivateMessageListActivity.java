@@ -39,7 +39,6 @@ public class PrivateMessageListActivity extends BaseActivity{
     CustomHeadView custom_head;
     @Bind(R.id.lv)
     ListView lv;
-    private int curPage=1;
     private static final String PAGE_SIZE="9999";
     private static final String TYPE_ALL="0"; //与全部用户私信列表
     private WaittingDialog dialog;
@@ -83,6 +82,7 @@ public class PrivateMessageListActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
+        int curPage = 1;
         ClientDiscoverAPI.getPrivateMessageList(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {

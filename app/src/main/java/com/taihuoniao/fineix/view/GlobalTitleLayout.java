@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;

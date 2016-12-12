@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.personal.salesevice.adapter;
 
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackListBean;
 import com.taihuoniao.fineix.utils.GlideUtils;
-import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -26,7 +24,6 @@ public class SaleAfterListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private List<ChargeBackListBean.RowsEntity> list;
-    private View.OnClickListener mOnClickListener;
 
     public SaleAfterListAdapter(List<ChargeBackListBean.RowsEntity> rows, Context context) {
         this(rows, context, null);
@@ -35,7 +32,7 @@ public class SaleAfterListAdapter extends BaseAdapter {
     public SaleAfterListAdapter(List<ChargeBackListBean.RowsEntity> rows, Context context, View.OnClickListener onClickListener) {
         mInflater = LayoutInflater.from(context);
         this.list = rows;
-        this.mOnClickListener = onClickListener;
+        View.OnClickListener mOnClickListener = onClickListener;
     }
 
     @Override

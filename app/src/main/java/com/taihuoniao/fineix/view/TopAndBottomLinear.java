@@ -18,7 +18,6 @@ public class TopAndBottomLinear extends LinearLayout {
     private LinearLayout topLinear;
     private LinearLayout bottomLinear;
     private PointF startP;
-    private PointF nowP;
     private ValueAnimator upAnimator;
 
     public TopAndBottomLinear(Context context, AttributeSet attrs) {
@@ -47,7 +46,7 @@ public class TopAndBottomLinear extends LinearLayout {
                 startP = new PointF(ev.getX(), ev.getY());
                 break;
             case MotionEvent.ACTION_MOVE:
-                nowP = new PointF(ev.getX(), ev.getY());
+                PointF nowP = new PointF(ev.getX(), ev.getY());
                 if (startP.y >= topLinear.getHeight() && nowP.y < startP.y && nowP.y <= topLinear.getHeight() && this.getPaddingTop() != -MainApplication.getContext().getScreenWidth()) {
                     this.setPadding(0, (int) (nowP.y - MainApplication.getContext().getScreenWidth()), 0, 0);
                     return true;

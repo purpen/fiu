@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.network;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.baidu.mapapi.common.EnvironmentUtilities;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -24,15 +22,12 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.bean.CheckVersionBean;
 import com.taihuoniao.fineix.network.bean.UpdateInfoBean;
-import com.taihuoniao.fineix.utils.DateUtils;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Stephen on 2016/12/6 15:05

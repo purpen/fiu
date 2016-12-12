@@ -18,7 +18,6 @@ import com.taihuoniao.fineix.utils.EffectUtil;
  * Created by taihuoniao on 2016/3/14.
  */
 public class SelectPhotoOrCameraActivity extends FragmentActivity implements View.OnClickListener {
-    private View activityView;
     private RelativeLayout photoRelative, cameraRelative;
     private TextView photoTv, cameraTv;
     private FragmentManager fm;
@@ -45,7 +44,7 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     }
 
     protected void initView() {
-        activityView = View.inflate(SelectPhotoOrCameraActivity.this, R.layout.activity_select, null);
+        View activityView = View.inflate(SelectPhotoOrCameraActivity.this, R.layout.activity_select, null);
         setContentView(activityView);
         photoRelative = (RelativeLayout) findViewById(R.id.activity_select_photorelative);
         cameraRelative = (RelativeLayout) findViewById(R.id.activity_select_camerarelative);

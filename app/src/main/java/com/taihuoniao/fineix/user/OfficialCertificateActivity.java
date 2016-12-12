@@ -69,7 +69,6 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private Bitmap bitmap_id;
     private Bitmap bitmap_card;
     private WaittingDialog dialog;
-    private WaittingDialog svProgressHUD;
     @Bind(R.id.iv_clear)
     ImageButton iv_clear;
     @Bind(R.id.btn)
@@ -77,7 +76,6 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
-    private List<Uri> mSelected;
     private AuthData authData;
     private CertificateStatusActivity certificateStatusActivity;
     public OfficialCertificateActivity() {
@@ -97,7 +95,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"官方认证");
         dialog=new WaittingDialog(this);
-        svProgressHUD=new WaittingDialog(this);
+        WaittingDialog svProgressHUD = new WaittingDialog(this);
         String[] stringArray = getResources().getStringArray(R.array.official_tags);
         for (String aStringArray : stringArray) {
             label_view.addLabel(aStringArray);
@@ -314,8 +312,8 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
 //                    } else {
 //                        Util.makeToast("抱歉，从相册获取图片失败");
 //                    }
-                    mSelected = PicturePickerUtils.obtainResult(data);
-                    if (mSelected==null) return;
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    if (mSelected ==null) return;
                     if (mSelected.size()==0) return;
                     toCropActivity(mSelected.get(0));
                     break;

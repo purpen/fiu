@@ -26,7 +26,7 @@ public class ThemeQJData implements Parcelable {
     }
 
     protected ThemeQJData(Parcel in) {
-        this.rows = new ArrayList<ThemeQJ>();
+        this.rows = new ArrayList<>();
         in.readList(this.rows, ThemeQJ.class.getClassLoader());
     }
 

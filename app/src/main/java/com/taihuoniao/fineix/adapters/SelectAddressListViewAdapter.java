@@ -91,15 +91,14 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
             hold.isDefaultTv.setVisibility(View.VISIBLE);
         }
 
-        StringBuilder builder = new StringBuilder();
-        builder.append(item.province);
-        builder.append(" ");
-        builder.append(item.city);
-        builder.append(" ");
-        builder.append(item.county);
-        builder.append(" ");
-        builder.append(item.town);
-        hold.addressTv.setText(builder.toString());
+        String builder = item.province +
+                " " +
+                item.city +
+                " " +
+                item.county +
+                " " +
+                item.town;
+        hold.addressTv.setText(builder);
         hold.detailsAddressTv.setText(item.address);
         hold.phoneTv.setText(item.phone);
 
@@ -112,12 +111,8 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         hold.llBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (AddressListBean.RowsEntity row:list){
-                    if (row.isSelected){
-                        row.isSelected=false;
-                    }else {
-                        row.isSelected = TextUtils.equals(item._id, row._id);
-                    }
+                for (AddressListBean.RowsEntity row:list) {
+                    row.isSelected = !row.isSelected && TextUtils.equals(item._id, row._id);
                 }
                 if (!TextUtils.equals(item._id,addressId)){
                     addressId="";

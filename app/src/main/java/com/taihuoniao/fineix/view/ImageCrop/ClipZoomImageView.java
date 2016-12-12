@@ -91,8 +91,88 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
         a.recycle();
         setScaleType(ScaleType.MATRIX);
 
+        SimpleOnGestureListener onDoubleListener = new SimpleOnGestureListener() {
+            @Override
+            public void onLongPress(MotionEvent e) {
+                if (onLongClickListener != null) {
+                    onLongClickListener.onLongClick(ClipZoomImageView.this);
+                }
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                if (onClickListener != null) {
+                    onClickListener.onClick(ClipZoomImageView.this);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                if (isAutoScale)
+                    return true;
+
+                float x = e.getX();
+                float y = e.getY();
+                if (getScale() < SCALE_MID) {
+                    ClipZoomImageView.this.postDelayed(
+                            new AutoScaleRunnable(SCALE_MID, x, y), 16);
+                    isAutoScale = true;
+                } else {
+                    ClipZoomImageView.this.postDelayed(
+                            new AutoScaleRunnable(initScale, x, y), 16);
+                    isAutoScale = true;
+                }
+
+                return true;
+            }
+        };
         mGestureDetector = new GestureDetector(context, onDoubleListener);
 
+        OnScaleGestureListener mOnScaleListener = new OnScaleGestureListener() {
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+                float scale = getScale();
+                float scaleFactor = detector.getScaleFactor();
+
+                if (getDrawable() == null)
+                    return true;
+                /**
+                 * 缩放的范围控制
+                 */
+                if ((scale < SCALE_MAX && scaleFactor > 1.0f)
+                        || (scale > initScale && scaleFactor < 1.0f)) {
+                    /**
+                     * 最大值最小值判断
+                     */
+                    if (scaleFactor * scale < initScale) {
+                        scaleFactor = initScale / scale;
+                    }
+                    if (scaleFactor * scale > SCALE_MAX) {
+                        scaleFactor = SCALE_MAX / scale;
+                    }
+                    /**
+                     * 设置缩放比例
+                     */
+                    mScaleMatrix.postScale(scaleFactor, scaleFactor,
+                            detector.getFocusX(), detector.getFocusY());
+                    checkBorder();
+                    setImageMatrix(mScaleMatrix);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onScaleBegin(ScaleGestureDetector detector) {
+                return true;
+            }
+
+            @Override
+            public void onScaleEnd(ScaleGestureDetector detector) {
+
+            }
+        };
         mScaleGestureDetector = new ScaleGestureDetector(context, mOnScaleListener);
         this.setOnTouchListener(this);
         getViewTreeObserver().addOnGlobalLayoutListener(onLayoutListener);
@@ -110,88 +190,6 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
     public void setOnLongClickListener(OnLongClickListener l) {
         onLongClickListener = l;
     }
-
-    private SimpleOnGestureListener onDoubleListener = new SimpleOnGestureListener() {
-        @Override
-        public void onLongPress(MotionEvent e) {
-            if (onLongClickListener != null) {
-                onLongClickListener.onLongClick(ClipZoomImageView.this);
-            }
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            if (onClickListener != null) {
-                onClickListener.onClick(ClipZoomImageView.this);
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            if (isAutoScale)
-                return true;
-
-            float x = e.getX();
-            float y = e.getY();
-            if (getScale() < SCALE_MID) {
-                ClipZoomImageView.this.postDelayed(
-                        new AutoScaleRunnable(SCALE_MID, x, y), 16);
-                isAutoScale = true;
-            } else {
-                ClipZoomImageView.this.postDelayed(
-                        new AutoScaleRunnable(initScale, x, y), 16);
-                isAutoScale = true;
-            }
-
-            return true;
-        }
-    };
-
-    private OnScaleGestureListener mOnScaleListener = new OnScaleGestureListener() {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            float scale = getScale();
-            float scaleFactor = detector.getScaleFactor();
-
-            if (getDrawable() == null)
-                return true;
-            /**
-             * 缩放的范围控制
-             */
-            if ((scale < SCALE_MAX && scaleFactor > 1.0f)
-                    || (scale > initScale && scaleFactor < 1.0f)) {
-                /**
-                 * 最大值最小值判断
-                 */
-                if (scaleFactor * scale < initScale) {
-                    scaleFactor = initScale / scale;
-                }
-                if (scaleFactor * scale > SCALE_MAX) {
-                    scaleFactor = SCALE_MAX / scale;
-                }
-                /**
-                 * 设置缩放比例
-                 */
-                mScaleMatrix.postScale(scaleFactor, scaleFactor,
-                        detector.getFocusX(), detector.getFocusY());
-                checkBorder();
-                setImageMatrix(mScaleMatrix);
-            }
-            return true;
-        }
-
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
-            return true;
-        }
-
-        @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
-
-        }
-    };
 
     private ViewTreeObserver.OnGlobalLayoutListener onLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override

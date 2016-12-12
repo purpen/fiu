@@ -272,11 +272,7 @@ public class HeaderGridView extends GridView {
 
         @Override
         public boolean areAllItemsEnabled() {
-            if (mAdapter != null) {
-                return mAreAllFixedViewsSelectable && mAdapter.areAllItemsEnabled();
-            } else {
-                return true;
-            }
+            return mAdapter == null || mAreAllFixedViewsSelectable && mAdapter.areAllItemsEnabled();
         }
 
         @Override
@@ -336,10 +332,7 @@ public class HeaderGridView extends GridView {
 
         @Override
         public boolean hasStableIds() {
-            if (mAdapter != null) {
-                return mAdapter.hasStableIds();
-            }
-            return false;
+            return mAdapter != null && mAdapter.hasStableIds();
         }
 
         @Override

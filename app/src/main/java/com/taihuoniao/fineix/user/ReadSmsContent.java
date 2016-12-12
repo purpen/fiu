@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
  * 2016/1/19.
  */
 public class ReadSmsContent extends ContentObserver {
-    private Cursor cursor = null;
     private Activity mActivity;
     private EditText mEditText;
 
@@ -33,7 +32,7 @@ public class ReadSmsContent extends ContentObserver {
         super.onChange(selfChange);
 //        Log.e("tag", "onChange");
         // 读取收件箱中指定号码的短信
-        cursor = mActivity.managedQuery(Uri.parse("content://sms/inbox"), new String[]{"_id", "address", "body", "read"}, null, null, "_id desc");
+        Cursor cursor = mActivity.managedQuery(Uri.parse("content://sms/inbox"), new String[]{"_id", "address", "body", "read"}, null, null, "_id desc");
 
         if (cursor != null && cursor.getCount() > 0) {
             ContentValues values = new ContentValues();

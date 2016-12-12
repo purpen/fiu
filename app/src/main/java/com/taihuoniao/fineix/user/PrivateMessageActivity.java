@@ -210,10 +210,7 @@ public class PrivateMessageActivity extends BaseActivity{
             return super.dispatchTouchEvent(ev);
         }
         // 必不可少，否则所有的组件都不会有TouchEvent了
-        if (getWindow().superDispatchTouchEvent(ev)) {
-            return true;
-        }
-        return onTouchEvent(ev);
+        return getWindow().superDispatchTouchEvent(ev) || onTouchEvent(ev);
     }
 
     public  boolean isShouldHideInput(View v, MotionEvent event) {

@@ -201,12 +201,7 @@ public class TDevice {
 
     public static boolean hasHardwareMenuKey(Context context) {
         boolean flag;
-        if (PRE_HC)
-            flag = true;
-        else if (GTE_ICS) {
-            flag = ViewConfiguration.get(context).hasPermanentMenuKey();
-        } else
-            flag = false;
+        flag = PRE_HC || GTE_ICS && ViewConfiguration.get(context).hasPermanentMenuKey();
         return flag;
     }
 

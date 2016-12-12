@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,9 +27,6 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -268,10 +264,8 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         double b = (double) container.getWidth() / MainApplication.getContext().getScreenWidth();
         view = testShareUtils.selectStyle(this, position, netScene, b, container.getHeight(), container.getWidth());
         container.addView(view);
-        currentPosition = position;
+        int currentPosition = position;
     }
-
-    private int currentPosition = 0;
 
     //    private Bitmap inflateView() {
 //        int layout;

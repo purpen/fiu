@@ -136,11 +136,6 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
 
                     rows.addAll(refundListData.getRows());
                     mAdapter.notifyDataSetChanged();
-                    try {
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 } else {
                     ToastUtils.showError(App.getString(R.string.hint_load_without_data));
                 }

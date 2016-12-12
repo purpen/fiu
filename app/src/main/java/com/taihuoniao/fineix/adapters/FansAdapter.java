@@ -42,14 +42,13 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
     public static final int LOVE = 1;
     private long userId;
-    private boolean flag;//判断是不是消息页面跳转过来的。只有消息页面跳转过来。并且id为本人时显示点
     private int fansCount;//新添加的粉丝数量
     private MyPopupWindow myPopupWindow;
     public FansAdapter(List<FocusFansItem> list, Activity activity, long userId, boolean flag, int fansCount) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
         this.userId = userId;
-        this.flag = flag;
+        boolean flag1 = flag;
         this.fansCount = fansCount;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_focus_head)

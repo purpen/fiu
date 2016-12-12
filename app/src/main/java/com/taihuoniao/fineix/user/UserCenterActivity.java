@@ -73,7 +73,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private List<SceneListBean> mSceneList = new ArrayList<>();
     private List<QingJingListBean.QingJingItem> mQJList = new ArrayList<>();
     private LinearLayout ll_box;
-    private LinearLayout ll_btn_box;
     @Bind(R.id.tv_title)
     TextView tv_title;
     @Bind(R.id.ll_tips)
@@ -101,7 +100,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private LinearLayout ll_fans;
     private RelativeLayout rl_qj;
     private User user;
-    private List<Uri> mSelected;
     private int which = MineFragment.REQUEST_CJ;
     private long userId = LoginInfo.getUserId();
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
@@ -179,7 +177,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         tv_lv = ButterKnife.findById(headView, R.id.tv_lv);
         iv_label = ButterKnife.findById(headView, R.id.iv_label);
         tv_auth = ButterKnife.findById(headView, R.id.tv_auth);
-        ll_btn_box = ButterKnife.findById(headView, R.id.ll_btn_box);
+        LinearLayout ll_btn_box = ButterKnife.findById(headView, R.id.ll_btn_box);
         tv_qj = ButterKnife.findById(headView, R.id.tv_qj);
         tv_focus = ButterKnife.findById(headView, R.id.tv_focus);
         tv_fans = ButterKnife.findById(headView, R.id.tv_fans);
@@ -732,7 +730,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
 //                    Uri uri = data.getData();
-                    mSelected = PicturePickerUtils.obtainResult(data);
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     if (mSelected == null) return;
                     if (mSelected.size() == 0) return;
 //                    if (uri != null) {

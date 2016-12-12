@@ -20,13 +20,11 @@ import com.taihuoniao.fineix.view.WaittingDialog;
  */
 public class RuleContentAdapter extends BaseAdapter {
     private ActivityPrizeData data;
-    private Activity activity;
-    private WaittingDialog dialog;
 
     public RuleContentAdapter(ActivityPrizeData data, Activity activity) {
         this.data = data;
-        this.activity = activity;
-        dialog = new WaittingDialog(activity);
+        Activity activity1 = activity;
+        WaittingDialog dialog = new WaittingDialog(activity);
     }
 
     @Override

@@ -49,7 +49,6 @@ import butterknife.ButterKnife;
 public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListView.OnScrollListener, View.OnClickListener {
     //商品id
     private String id;
-    private View fragmentView;
     @Bind(R.id.pull_refresh_view)
     ListView listView;
     @Bind(R.id.progress_bar)
@@ -81,7 +80,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
 
     @Override
     protected View initView() {
-        fragmentView = View.inflate(getActivity(), R.layout.fragment_buy_goods_details, null);
+        View fragmentView = View.inflate(getActivity(), R.layout.fragment_buy_goods_details, null);
         ButterKnife.bind(this, fragmentView);
         View header = View.inflate(getActivity(), R.layout.header_fragment_buy_gooddetail, null);
         holder = new ViewHolder(header);
@@ -135,7 +134,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
             holder.marketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter<String>(activity, buyGoodDetailsBean.getData().getAsset());
+            viewPagerAdapter = new ViewPagerAdapter<>(activity, buyGoodDetailsBean.getData().getAsset());
             holder.scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
             holder.scrollableView.setAutoScrollDurationFactor(8);
             holder.scrollableView.setInterval(4000);

@@ -63,7 +63,7 @@ public class ItemSubscribedQJ implements Parcelable {
 
         protected LocationBean(Parcel in) {
             this.type = in.readString();
-            this.coordinates = new ArrayList<Double>();
+            this.coordinates = new ArrayList<>();
             in.readList(this.coordinates, Double.class.getClassLoader());
         }
 
@@ -287,10 +287,10 @@ public class ItemSubscribedQJ implements Parcelable {
         this.scene_title = in.readString();
         this.user_info = in.readParcelable(UserInfoBean.class.getClassLoader());
         this.is_love = in.readInt();
-        this.category_ids = new ArrayList<Integer>();
+        this.category_ids = new ArrayList<>();
         in.readList(this.category_ids, Integer.class.getClassLoader());
         this.tags = in.createStringArrayList();
-        this.product = new ArrayList<ProductBean>();
+        this.product = new ArrayList<>();
         in.readList(this.product, ProductBean.class.getClassLoader());
     }
 

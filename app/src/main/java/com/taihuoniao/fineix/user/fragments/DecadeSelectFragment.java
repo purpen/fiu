@@ -38,7 +38,6 @@ public class DecadeSelectFragment extends MyBaseFragment {
 
     @Bind(R.id.rg_consume)
     RadioGroup rgConsume;
-    private UserCompleteData data;
     private String age_group = Constants.DECADE_00;
     private String assets = Constants.YG;
 
@@ -53,7 +52,7 @@ public class DecadeSelectFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            data = savedInstanceState.getParcelable("data");
+            UserCompleteData data = savedInstanceState.getParcelable("data");
         }
         super.onCreate(savedInstanceState);
     }

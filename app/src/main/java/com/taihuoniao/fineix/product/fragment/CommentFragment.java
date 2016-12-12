@@ -39,7 +39,6 @@ public class CommentFragment extends SearchFragment {
     TextView emptyView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
-    private ListView listView;
     private int page = 1;
     private GoodsDetailsCommentListsAdapter commentListsAdapter;
     private List<TryCommentsBean> commentsList;
@@ -64,7 +63,7 @@ public class CommentFragment extends SearchFragment {
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_buy_gooddetail_comment, null);
         ButterKnife.bind(this, view);
-        listView = pullRefreshView.getRefreshableView();
+        ListView listView = pullRefreshView.getRefreshableView();
         pullRefreshView.setPullToRefreshEnabled(false);
         pullRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override

@@ -56,8 +56,6 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
     private TextView jingxuanTv;
     private TextView tuijianTv;
     private TextView pingbiTv;
-    private TextView saveTv;
-    private TextView cancelTv;
 
 
     public QJPictureActivity() {
@@ -118,8 +116,8 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
         jingxuanTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more1);
         tuijianTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_bianji);
         pingbiTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_shoucang);
-        saveTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
-        cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        TextView saveTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
+        TextView cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
         pingbiTv.setTextColor(getResources().getColor(R.color.black));
         saveTv.setTextColor(getResources().getColor(R.color.black));
         saveTv.setText("保存图片到本地");

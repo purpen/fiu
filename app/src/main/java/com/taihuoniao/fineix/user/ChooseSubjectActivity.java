@@ -34,7 +34,6 @@ public class ChooseSubjectActivity extends BaseActivity<ItemQJCollect> {
     TabLayout tabLayout;
     @Bind(R.id.viewPager)
     ViewPager viewPager;
-    private CollectViewPagerAdapter adapter;
 
     public ChooseSubjectActivity() {
         super(R.layout.activity_choose_subject);
@@ -53,7 +52,7 @@ public class ChooseSubjectActivity extends BaseActivity<ItemQJCollect> {
         }
 
         Fragment[] fragments = {ArticleFragment.newInstance(), ActivityFragment.newInstance(), NewProductFragment.newInstance(), SalePromotionFragment.newInstance()};
-        adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
+        CollectViewPagerAdapter adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);

@@ -38,7 +38,6 @@ public class QJFragment extends SearchFragment {
     private String id;//情景分类id
     @Bind(R.id.pull_refresh_view)
     PullToRefreshGridView pullRefreshView;
-    private GridView gridView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private WaittingDialog dialog;
@@ -68,7 +67,7 @@ public class QJFragment extends SearchFragment {
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_qj_category, null);
         ButterKnife.bind(this, view);
-        gridView = pullRefreshView.getRefreshableView();
+        GridView gridView = pullRefreshView.getRefreshableView();
         pullRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {

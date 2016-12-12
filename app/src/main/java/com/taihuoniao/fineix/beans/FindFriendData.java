@@ -48,7 +48,7 @@ public class FindFriendData implements Parcelable {
             this.sex = in.readString();
             this.medium_avatar_url = in.readString();
             this.is_love = in.readInt();
-            this.scene_sight = new ArrayList<CJItem>();
+            this.scene_sight = new ArrayList<>();
             in.readList(this.scene_sight, CJItem.class.getClassLoader());
             this.summary = in.readString();
             this.areas = in.createStringArrayList();
@@ -123,7 +123,7 @@ public class FindFriendData implements Parcelable {
     }
 
     protected FindFriendData(Parcel in) {
-        this.users = new ArrayList<User>();
+        this.users = new ArrayList<>();
         in.readList(this.users, User.class.getClassLoader());
     }
 

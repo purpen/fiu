@@ -10,8 +10,6 @@ import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,7 +64,6 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
     GridView gridView;
     @Bind(R.id.list_view)
     ListView listView;
-    private AlbumListAdapter albumListAdapter;
     private AlbumGridAdapter albumGridAdapter;
     private Map<String, AlbumBean> albumList;
     private List<String> albumPaths;
@@ -112,7 +109,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
                 albumGridAdapter = new AlbumGridAdapter(getActivity(), albumList.get(albumPaths.get(0)).getPhotos());
             }
         }
-        albumListAdapter = new AlbumListAdapter(getActivity(), albumPaths, albumList);
+        AlbumListAdapter albumListAdapter = new AlbumListAdapter(getActivity(), albumPaths, albumList);
         listView.setAdapter(albumListAdapter);
         listView.setOnItemClickListener(this);
         gridView.setAdapter(albumGridAdapter);

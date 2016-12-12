@@ -95,7 +95,7 @@ public class OrderTrackActivity extends BaseActivity {
                 List<OrderTrackBean.TracesEntity> traces = orderTrackBeanHttpResponse.getData().getTraces();
 
                 if (traces != null) {
-                    List<OrderTrackBean.TracesEntity> newTraces = new ArrayList<OrderTrackBean.TracesEntity>();
+                    List<OrderTrackBean.TracesEntity> newTraces = new ArrayList<>();
                     for(int i = traces.size() - 1; i>= 0; i--) {
                         newTraces.add(traces.get(i));
                     }

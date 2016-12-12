@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,7 +31,6 @@ import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.ToLoginActivity;
 import com.taihuoniao.fineix.user.ToRegisterActivity;
-import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
@@ -265,7 +263,6 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 //                            registerActivity.getRegisterInfo().mobile = phone;
 //                        }
 //                    }
-                    return;
                 }
 //                ToastUtils.showError(response.getMessage());
             }
@@ -336,12 +333,12 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) return;
                 Log.e("<<<登录成功",responseInfo.result);
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
                 btnWechat.setEnabled(true);
-                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });

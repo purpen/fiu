@@ -52,9 +52,6 @@ public class AlbumBean implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o != null && (o instanceof AlbumBean)) {
-            return (albumUri == null ? ((AlbumBean) o).getAlbumUri() == null : albumUri.equals(((AlbumBean) o).getAlbumUri()));
-        }
-        return false;
+        return o != null && (o instanceof AlbumBean) && (albumUri == null ? ((AlbumBean) o).getAlbumUri() == null : albumUri.equals(((AlbumBean) o).getAlbumUri()));
     }
 }

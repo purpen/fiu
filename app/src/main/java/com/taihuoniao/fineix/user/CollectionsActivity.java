@@ -34,8 +34,6 @@ public class CollectionsActivity extends BaseActivity<ItemQJCollect> {
     @Bind(R.id.viewPager)
     ViewPager viewPager;
 
-    private CollectViewPagerAdapter adapter;
-
     public CollectionsActivity() {
         super(R.layout.activity_collect);
     }
@@ -53,7 +51,7 @@ public class CollectionsActivity extends BaseActivity<ItemQJCollect> {
         }
 
         Fragment[] fragments = {FavoriteQJFragment.newInstance(), FavoriteProductFragment.newInstance()};
-        adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
+        CollectViewPagerAdapter adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
         viewPager.setAdapter(adapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);

@@ -19,7 +19,7 @@ public class EllipsizingTextView extends TextView {
         void ellipsizeStateChanged(boolean ellipsized);
     }
 
-    private final List<EllipsizeListener> ellipsizeListeners = new ArrayList<EllipsizeListener>();
+    private final List<EllipsizeListener> ellipsizeListeners = new ArrayList<>();
     private boolean isEllipsized;
     private boolean isStale;
     private boolean programmaticChange;

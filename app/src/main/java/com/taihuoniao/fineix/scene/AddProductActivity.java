@@ -45,7 +45,6 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     private TabLayout slidingTab;
     private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
-    private RelativeLayout search;
     private EditText editText;
     private ImageView deleteImg;
     private TextView cancelTv;
@@ -135,7 +134,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_add_product_title);
         slidingTab = (TabLayout) findViewById(R.id.activity_add_product_slidingtab);
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
-        search = (RelativeLayout) findViewById(R.id.rl);
+        RelativeLayout search = (RelativeLayout) findViewById(R.id.rl);
         editText = (EditText) findViewById(R.id.activity_add_product_edit);
         deleteImg = (ImageView) findViewById(R.id.activity_add_product_delete);
         cancelTv = (TextView) findViewById(R.id.activity_add_product_cancel);

@@ -49,7 +49,6 @@ public class UserGuideActivity extends BaseActivity {
     @Bind(R.id.ibn_volume)
     ImageButton ibnVolume;
     private Intent intent;
-    private boolean isGuide = false;
     private List<Integer> list;
     private boolean flag = false;
     public static String fromPage;
@@ -182,7 +181,7 @@ public class UserGuideActivity extends BaseActivity {
         activityVideoView = null;
         scrollableView.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(fromPage)) {
-            isGuide = true;
+            boolean isGuide = true;
         }
         list = new ArrayList<>();
         list.add(R.mipmap.guide0);

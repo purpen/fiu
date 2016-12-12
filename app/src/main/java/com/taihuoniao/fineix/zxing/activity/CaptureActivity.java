@@ -41,7 +41,6 @@ import android.widget.TextView;
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.BarCode;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;

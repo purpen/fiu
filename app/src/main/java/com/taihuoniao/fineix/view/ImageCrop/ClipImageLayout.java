@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 public class ClipImageLayout extends RelativeLayout {
 
     private ClipZoomImageView mZoomImageView;
-    private ClipImageBorderView mClipImageView;
 
 
     public void setImage(Bitmap bitmap) {
@@ -35,7 +34,7 @@ public class ClipImageLayout extends RelativeLayout {
         super(context, attrs);
 
         mZoomImageView = new ClipZoomImageView(context);
-        mClipImageView = new ClipImageBorderView(context);
+        ClipImageBorderView mClipImageView = new ClipImageBorderView(context);
 
         android.view.ViewGroup.LayoutParams lp = new LayoutParams(
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT,

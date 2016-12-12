@@ -270,9 +270,7 @@ public class ImageViewTouch extends ImageViewTouchBase {
                 return false;
             if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1)
                 return false;
-            if (mScaleDetector.isInProgress())
-                return false;
-            return ImageViewTouch.this.onScroll(e1, e2, distanceX, distanceY);
+            return !mScaleDetector.isInProgress() && ImageViewTouch.this.onScroll(e1, e2, distanceX, distanceY);
         }
 
         @Override
@@ -283,9 +281,7 @@ public class ImageViewTouch extends ImageViewTouchBase {
                 return false;
             if (mScaleDetector.isInProgress())
                 return false;
-            if (getScale() == 1f)
-                return false;
-            return ImageViewTouch.this.onFling(e1, e2, velocityX, velocityY);
+            return getScale() != 1f && ImageViewTouch.this.onFling(e1, e2, velocityX, velocityY);
         }
 
         @Override

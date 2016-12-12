@@ -93,11 +93,13 @@ public class AddressSelectFragment extends DialogFragment {
             Window window = dialog.getWindow();
             dialog.setContentView(R.layout.view_bottom_list);
             dialog.setCanceledOnTouchOutside(true);
-            WindowManager.LayoutParams wlp = window.getAttributes();
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            wlp.height= getResources().getDimensionPixelSize(R.dimen.dp300);
-            window.setAttributes(wlp);
+            if (window != null) {
+                WindowManager.LayoutParams wlp = window.getAttributes();
+                wlp.gravity = Gravity.BOTTOM;
+                wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                wlp.height= getResources().getDimensionPixelSize(R.dimen.dp300);
+                window.setAttributes(wlp);
+            }
             ButterKnife.bind(this, dialog);
             initData();
             installListener();

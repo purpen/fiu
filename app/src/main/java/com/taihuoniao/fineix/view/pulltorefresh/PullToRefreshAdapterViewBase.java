@@ -23,7 +23,6 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView>
     private OnLastItemVisibleListener onLastItemVisibleListener;
     private View emptyView;
     private FrameLayout refreshableViewHolder;
-    private ImageView mTopImageView;
 
     public PullToRefreshAdapterViewBase(Context context) {
         super(context);
@@ -85,7 +84,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView>
     }
 
     public void setBackToTopView(ImageView mTopImageView) {
-        this.mTopImageView = mTopImageView;
+        ImageView mTopImageView1 = mTopImageView;
         mTopImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,10 +13,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.NoticeBean;
-import com.taihuoniao.fineix.beans.NoticeData;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
-import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;

@@ -50,7 +50,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
     private Context context;
     private AlertDialog.Builder alertDialog;
     private WaittingDialog mdialog;
-    private View mView;
 
     private BitmapUtils bitmapUtils_listview = null;
     private List<OrderEntity> list;
@@ -449,7 +448,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             mHolder.mItem.removeAllViews();
         }
         for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
-            mView = View.inflate(context, R.layout.item_order_content, null);
+            View mView = View.inflate(context, R.layout.item_order_content, null);
             ImageView mImageView = (ImageView) mView.findViewById(R.id.image_order_inner);
             TextView mTitle = (TextView) mView.findViewById(R.id.tv_title_order_inner);
             TextView mColor = (TextView) mView.findViewById(R.id.tv_color_order_inner);

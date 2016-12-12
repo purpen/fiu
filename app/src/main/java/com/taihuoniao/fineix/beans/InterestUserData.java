@@ -26,7 +26,7 @@ public class InterestUserData implements Parcelable {
     }
 
     protected InterestUserData(Parcel in) {
-        this.users = new ArrayList<User>();
+        this.users = new ArrayList<>();
         in.readList(this.users, User.class.getClassLoader());
     }
 

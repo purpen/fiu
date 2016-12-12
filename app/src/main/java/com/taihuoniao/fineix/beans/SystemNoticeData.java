@@ -88,7 +88,7 @@ public class SystemNoticeData implements Parcelable {
 
     protected SystemNoticeData(Parcel in) {
         this.total_rows = in.readInt();
-        this.rows = new ArrayList<SystemNoticeItem>();
+        this.rows = new ArrayList<>();
         in.readList(this.rows, SystemNoticeItem.class.getClassLoader());
         this.current_user_id = in.readLong();
     }

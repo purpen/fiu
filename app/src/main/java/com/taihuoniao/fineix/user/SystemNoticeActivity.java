@@ -46,7 +46,6 @@ public class SystemNoticeActivity extends BaseActivity {
     ListView lv;
     private SystemNoticeAdapter adapter;
     private static final String PAGE_SIZE = "9999";
-    private int curPage = 1;
     private WaittingDialog dialog;
     private ArrayList<SystemNoticeData.SystemNoticeItem> list;
     private int unread_count;
@@ -118,6 +117,7 @@ public class SystemNoticeActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
+        int curPage = 1;
         ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {
             @Override
             public void onStart() {

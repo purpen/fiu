@@ -39,7 +39,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.ActiveTagsBean;
 import com.taihuoniao.fineix.beans.CreateQJBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
@@ -51,7 +50,6 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.EffectUtil;
@@ -97,7 +95,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     private WaittingDialog dialog;
     private float pointWidth;//LabelView动画点的宽高
     private float labelMargin;//LabelView动画点左间距
-    private View activityView;
     private StringBuilder tags;//用来存储标签
 
     public CreateQJActivity() {
@@ -106,7 +103,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void setContenttView() {
-        activityView = View.inflate(this, R.layout.activity_create_qj, null);
+        View activityView = View.inflate(this, R.layout.activity_create_qj, null);
         setContentView(activityView);
     }
 

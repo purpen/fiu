@@ -34,13 +34,10 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
     private TextView mFoldName;
     private View mListViewGroup;
     private ListView mListView;
-    private GridView mGridView;
     public static final int REQUEST_CODE_CAPTURE = 3;
     private MediaStoreCompat mMediaStoreCompat;
     private Button commit;
     private ImageView galleryTip;
-    private SelectionSpec selectionSpec;
-    private ImageView btnBack;
     private AlbumCollection albumCollection =new AlbumCollection();
     private final PictureCollection mPhotoCollection = new PictureCollection();
     private final SelectedUriCollection mCollection = new SelectedUriCollection(this);
@@ -51,7 +48,7 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_select);
         mCapturePhotoUriHolder = savedInstanceState != null ? savedInstanceState.getString(STATE_CAPTURE_PHOTO_URI) : "";
-        selectionSpec = getIntent().getParcelableExtra(ImageSelectActivity.EXTRA_SELECTION_SPEC);
+        SelectionSpec selectionSpec = getIntent().getParcelableExtra(ImageSelectActivity.EXTRA_SELECTION_SPEC);
         mMediaStoreCompat = new MediaStoreCompat(this, new Handler(Looper.getMainLooper()));
 
         mCollection.onCreate(savedInstanceState);
@@ -64,26 +61,26 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
             }
         });
 
-        mGridView = (GridView) findViewById(R.id.gridView);
+        GridView mGridView = (GridView) findViewById(R.id.gridView);
 
         mListView = (ListView) findViewById(R.id.listView);
-        btnBack = (ImageView) findViewById(R.id.btn_back);
+        ImageView btnBack = (ImageView) findViewById(R.id.btn_back);
         mListViewGroup = findViewById(R.id.listViewParent);
         mListViewGroup.setOnClickListener(mOnClickFoldName);
         mFoldName = (TextView) findViewById(R.id.foldName);
         galleryTip = (ImageView) findViewById(R.id.gallery_tip);
         LinearLayout selectFold = (LinearLayout) findViewById(R.id.selectFold);
         commit = (Button) findViewById(R.id.commit);
-        commit.setText("确定(0/"+selectionSpec.getMaxSelectable()+")");
+        commit.setText("确定(0/"+ selectionSpec.getMaxSelectable()+")");
         if (selectionSpec.isSingleChoose()){
             commit.setVisibility(View.GONE);
         }
         mFoldName.setText("最近图片");
         selectFold.setOnClickListener(mOnClickFoldName);
 
-        albumCollection.onCreate(ImageSelectActivity.this,this,selectionSpec,mListView);
+        albumCollection.onCreate(ImageSelectActivity.this,this, selectionSpec,mListView);
         albumCollection.loadAlbums();
-        mPhotoCollection.onCreate(ImageSelectActivity.this,mGridView,mCollection,selectionSpec);
+        mPhotoCollection.onCreate(ImageSelectActivity.this, mGridView,mCollection, selectionSpec);
         mPhotoCollection.loadAllPhoto();
 
         commit.setOnClickListener(new View.OnClickListener() {

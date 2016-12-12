@@ -61,8 +61,6 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
     private int isSubs;//判断是否已经订阅 0,请求失败 1，没有订阅 2，已订阅
     private WaittingDialog dialog;
     private List<SearchFragment> fragmentList;
-    private List<String> titleList;
-    private SearchViewPagerAdapter searchViewPagerAdapter;
 
     @Override
     protected void getIntentData() {
@@ -92,13 +90,13 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void initList() {
         fragmentList = new ArrayList<>();
-        titleList = new ArrayList<>();
+        List<String> titleList = new ArrayList<>();
         fragmentList.add(QJFragment.newInstance(0, id));
         titleList.add("精选");
         fragmentList.add(QJFragment.newInstance(1, id));
         titleList.add("最新");
         //设置适配器
-        searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+        SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
         viewPager.setAdapter(searchViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(fragmentList.size());

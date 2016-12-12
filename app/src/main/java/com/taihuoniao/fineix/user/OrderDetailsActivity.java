@@ -46,7 +46,6 @@ import java.util.List;
 public class OrderDetailsActivity extends Base2Activity implements View.OnClickListener {
     private static final String TAG = "OrderDetailsActivity";
 
-    private GlobalTitleLayout title;
     private TextView mDeliverMan;
     private TextView mCity;
     private TextView mProvince;
@@ -57,12 +56,10 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     private TextView mTotalMoney;
     private TextView mPayMoney;
     private TextView mFreight;
-    private TextView mCall;//联系客服
     private TextView mRightButton;//最底部右侧按钮
     private TextView mLeftButton;//最底部左侧按钮
     private RelativeLayout mBottomLayout;//放最底部那俩按钮的布局
     private LinearLayout mContainerLayout;//动态容纳商品item
-    private TextView mTotalMoney2;
 
     private String mRid;
     private String mOptFragmentFlag;//跳回碎片列表时，用该值选中跳来之前的那个碎片
@@ -255,7 +252,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     }
 
     private void initView() {
-        title = (GlobalTitleLayout) findViewById(R.id.title_order_details);
+        GlobalTitleLayout title = (GlobalTitleLayout) findViewById(R.id.title_order_details);
         title.setContinueTvVisible(false);
         title.setTitle("订单详情");
         mDialog = new WaittingDialog(this);
@@ -277,11 +274,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
         mTotalMoney = (TextView) findViewById(R.id.tv_totalmoney_order_details);
         mFreight = (TextView) findViewById(R.id.tv_freight_order_details);
         mPayMoney = (TextView) findViewById(R.id.tv_paymoney_order_details);
-        mCall = (TextView) findViewById(R.id.bt_call_order_details);
+        TextView mCall = (TextView) findViewById(R.id.bt_call_order_details);
         mRightButton = (TextView) findViewById(R.id.bt_right_order_details);
         mLeftButton = (TextView) findViewById(R.id.bt_left_order_details);
         mBottomLayout = (RelativeLayout) findViewById(R.id.layout_two_button_bottom_order_details);
-        mTotalMoney2 = (TextView) findViewById(R.id.tv_totalmoney_order_details2);
+        TextView mTotalMoney2 = (TextView) findViewById(R.id.tv_totalmoney_order_details2);
 
         mBottomLayout.setOnClickListener(this);
         mCall.setOnClickListener(this);

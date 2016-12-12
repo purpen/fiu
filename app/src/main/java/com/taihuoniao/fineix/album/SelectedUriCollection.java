@@ -29,13 +29,12 @@ import java.util.Set;
 public class SelectedUriCollection {
     private static final String STATE_SELECTION = BundleUtils.buildKey(SelectedUriCollection.class, "STATE_SELECTION");
     private static final String STATE_SELECTION_POSITION = BundleUtils.buildKey(SelectedUriCollection.class, "STATE_SELECTION_POSITION");
-    private final WeakReference<Context> mContext;
     private Set<Uri> mUris;
     private SelectionSpec mSpec;
     private OnSelectionChange onSelectionChange;
 
     public SelectedUriCollection(Context context) {
-        mContext = new WeakReference<>(context);
+        WeakReference<Context> mContext = new WeakReference<>(context);
     }
 
     public void onCreate(Bundle savedInstanceState) {

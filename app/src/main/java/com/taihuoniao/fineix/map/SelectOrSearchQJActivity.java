@@ -71,7 +71,6 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     private BaiduMap mBDMap;
     private int page; //默认查看第一页
     private int pageSize;//本界面只展示三条
-    private int radius = 5000; //搜索半径
     private boolean isFirstLoc = true;
     private BitmapDescriptor bitmapDescripter;
     private static final String STICK_ALL = "0"; //所有情境
@@ -138,6 +137,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     private void getNearByData(LatLng ll) {//附近的情境
         page=1;
         pageSize=3;
+        int radius = 5000;
         ClientDiscoverAPI.getQJData(ll, radius,String.valueOf(page),String.valueOf(pageSize),STICK_ALL,new RequestCallBack<String>() {
             @Override
             public void onStart() {

@@ -69,7 +69,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private SearchSubjectFragment searchSubjectFragment;
     private List<SearchFragment> fragmentList;
     private List<String> titleList;
-    private SearchViewPagerAdapter searchViewPagerAdapter;
 
     public SearchActivity() {
         super(R.layout.activity_search1);
@@ -166,7 +165,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void requestNet() {
         //设置适配器
-        searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+        SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
         viewPager.setAdapter(searchViewPagerAdapter);
         viewPager.addOnPageChangeListener(this);
         tabLayout.setupWithViewPager(viewPager);

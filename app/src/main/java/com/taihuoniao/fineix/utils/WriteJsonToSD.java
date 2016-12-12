@@ -1,11 +1,5 @@
 package com.taihuoniao.fineix.utils;
 
-import android.os.Environment;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 /**
  * Created by taihuoniao on 2016/1/14.
  */

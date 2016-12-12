@@ -139,11 +139,13 @@ public class MediaStoreCompat {
     public static long copyFileStream(FileInputStream is, FileOutputStream os) throws IOException {
         FileChannel srcChannel = null;
         FileChannel destChannel = null;
-        long length;
+        long length = 0;
         try {
             srcChannel = is.getChannel();
             destChannel = os.getChannel();
             length = srcChannel.transferTo(0L, srcChannel.size(), destChannel);
+        }catch(IOException e){
+            e.printStackTrace();
         } finally {
             if(srcChannel != null) {
                 srcChannel.close();

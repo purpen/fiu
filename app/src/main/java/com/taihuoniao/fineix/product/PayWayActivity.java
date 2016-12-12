@@ -52,20 +52,14 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     //支付宝
 //    private static final int SDK_PAY_FLAG = 1;
 
-    private LinearLayout mLinearAlipay;
-    private LinearLayout mLinearWechat;
-    private LinearLayout mLinearJd;
     private ImageView mImageAlipay;
     private ImageView mImageWechat;
     private ImageView mImageJd;
     private String mTotalMoney, mRid;
     private String mPayway = ConstantCfg.ALI_PAY;
-    private TextView mPayMoney;
-    private Button mPayNow;
     //    private WaittingDialog mWaittingDialog = null;
     private CustomDialogForPay mDialog;
     private boolean mBack = true;//判断是否让返回键生效
-    private DecimalFormat df = null;
     private String orderId;
     private Handler mHandler = new Handler();
 
@@ -178,19 +172,19 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         GlobalTitleLayout title = (GlobalTitleLayout) findViewById(R.id.title_payway);
         title.setTitle("订单支付");
         title.setContinueTvVisible(false);
-        mLinearAlipay = (LinearLayout) findViewById(R.id.linear_alipay);
+        LinearLayout mLinearAlipay = (LinearLayout) findViewById(R.id.linear_alipay);
         mLinearAlipay.setOnClickListener(this);
-        mLinearWechat = (LinearLayout) findViewById(R.id.linear_wechat);
+        LinearLayout mLinearWechat = (LinearLayout) findViewById(R.id.linear_wechat);
         mLinearWechat.setOnClickListener(this);
-        mLinearJd = (LinearLayout) findViewById(R.id.linear_jd);
+        LinearLayout mLinearJd = (LinearLayout) findViewById(R.id.linear_jd);
         mLinearJd.setOnClickListener(this);
         mImageAlipay = (ImageView) findViewById(R.id.image_alipay);
         mImageWechat = (ImageView) findViewById(R.id.image_wechat);
         mImageJd = (ImageView) findViewById(R.id.image_jd);
-        mPayMoney = (TextView) findViewById(R.id.tv_paymoney_payway);
-        df = new DecimalFormat("######0.00");
+        TextView mPayMoney = (TextView) findViewById(R.id.tv_paymoney_payway);
+        DecimalFormat df = new DecimalFormat("######0.00");
         mPayMoney.setText("¥" + df.format(Double.valueOf(mTotalMoney)));
-        mPayNow = (Button) findViewById(R.id.bt_paynow_payway);
+        Button mPayNow = (Button) findViewById(R.id.bt_paynow_payway);
         mPayNow.setOnClickListener(this);
 
         IntentFilter filter = new IntentFilter();

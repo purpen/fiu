@@ -121,7 +121,7 @@ public class OrderQJActivity extends BaseActivity {
         if (subscribedIds.size() == 0) return;
         StringBuilder builder = new StringBuilder();
         for (String id : subscribedIds) {
-            builder.append(id + ",");
+            builder.append(id).append(",");
         }
         if (TextUtils.isEmpty(builder)) return;
         ClientDiscoverAPI.getQJList(String.valueOf(curPage), builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {

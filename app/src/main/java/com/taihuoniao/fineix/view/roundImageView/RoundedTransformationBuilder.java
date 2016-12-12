@@ -31,11 +31,9 @@ public final class RoundedTransformationBuilder {
 
   private float[] mCornerRadii = new float[] { 0, 0, 0, 0 };
 
-  private boolean mOval = false;
   private float mBorderWidth = 0;
   private ColorStateList mBorderColor =
       ColorStateList.valueOf(RoundedDrawable.DEFAULT_BORDER_COLOR);
-  private ImageView.ScaleType mScaleType = ImageView.ScaleType.FIT_CENTER;
 
   public RoundedTransformationBuilder() {
 
@@ -43,7 +41,7 @@ public final class RoundedTransformationBuilder {
   }
 
   public RoundedTransformationBuilder scaleType(ImageView.ScaleType scaleType) {
-    mScaleType = scaleType;
+    ImageView.ScaleType mScaleType = scaleType;
     return this;
   }
 
@@ -147,7 +145,7 @@ public final class RoundedTransformationBuilder {
    * @return the builder for chaining.
    */
   public RoundedTransformationBuilder oval(boolean oval) {
-    mOval = oval;
+    boolean mOval = oval;
     return this;
   }
 

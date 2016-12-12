@@ -87,11 +87,8 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     private View activity_view;
     //添加产品popwindow
     private PopupWindow productPop;
-    private BlurView blurView;
-    private RelativeLayout addProductRelative;
     private EditText brandTv, productName;
     private ImageView deleteBrand, deleteProduct;
-    private TextView cancel, confirm;
     private WaittingDialog dialog;
     private List<LabelView> labels = new ArrayList<>();//添加的产品信息
     //当前获取焦点的labelview
@@ -422,14 +419,14 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
 
     private void initProductPop() {
         productPopView = View.inflate(this, R.layout.pop_add_product, null);
-        blurView = (BlurView) productPopView.findViewById(R.id.blur_view);
-        addProductRelative = (RelativeLayout) productPopView.findViewById(R.id.add_product_relative);
+        BlurView blurView = (BlurView) productPopView.findViewById(R.id.blur_view);
+        RelativeLayout addProductRelative = (RelativeLayout) productPopView.findViewById(R.id.add_product_relative);
         brandTv = (EditText) productPopView.findViewById(R.id.brand_tv);
         productName = (EditText) productPopView.findViewById(R.id.product_tv);
         deleteBrand = (ImageView) productPopView.findViewById(R.id.delete_brand);
         deleteProduct = (ImageView) productPopView.findViewById(R.id.delete_product);
-        cancel = (TextView) productPopView.findViewById(R.id.cancel);
-        confirm = (TextView) productPopView.findViewById(R.id.confirm);
+        TextView cancel = (TextView) productPopView.findViewById(R.id.cancel);
+        TextView confirm = (TextView) productPopView.findViewById(R.id.confirm);
         productPop = new PopupWindow(productPopView, ViewGroup.LayoutParams.MATCH_PARENT, MainApplication.getContext().getScreenHeight(), true);
         productPop.setAnimationStyle(R.style.alpha);
         productPop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);

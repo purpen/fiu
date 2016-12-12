@@ -50,7 +50,6 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
     PullToRefreshGridView pullRefreshView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
-    private GridView gridView;
     private WaittingDialog dialog;
 
     private int page = 1;//订阅情景列表页码
@@ -87,7 +86,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                 getSubsQJ();
             }
         });
-        gridView = pullRefreshView.getRefreshableView();
+        GridView gridView = pullRefreshView.getRefreshableView();
         gridView.setSelector(R.color.nothing);
         gridView.setNumColumns(2);
         gridView.setHorizontalSpacing(DensityUtils.dp2px(this, 15));
@@ -186,7 +185,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                 }
                 if (userInfo.isSuccess()) {
                     hasSubsCountTv.setText("已订阅" + userInfo.getData().getInterest_scene_cate().size() + "个情境主题");
-                    subsId = new ArrayList<String>();
+                    subsId = new ArrayList<>();
                     subsId.addAll(userInfo.getData().getInterest_scene_cate());
                     StringBuilder ids = new StringBuilder();
                     for (String id : userInfo.getData().getInterest_scene_cate()) {

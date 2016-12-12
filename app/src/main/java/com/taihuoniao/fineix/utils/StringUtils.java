@@ -360,9 +360,7 @@ public class StringUtils {
      * @return
      */
     public static boolean isEmail(String email) {
-        if (email == null || email.trim().length() == 0)
-            return false;
-        return emailer.matcher(email).matches();
+        return !(email == null || email.trim().length() == 0) && emailer.matcher(email).matches();
     }
 
     /**
@@ -372,9 +370,7 @@ public class StringUtils {
      * @return
      */
     public static boolean isImgUrl(String url) {
-        if (url == null || url.trim().length() == 0)
-            return false;
-        return IMG_URL.matcher(url).matches();
+        return !(url == null || url.trim().length() == 0) && IMG_URL.matcher(url).matches();
     }
 
     /**
@@ -384,9 +380,7 @@ public class StringUtils {
      * @return
      */
     public static boolean isUrl(String str) {
-        if (str == null || str.trim().length() == 0)
-            return false;
-        return URL.matcher(str).matches();
+        return !(str == null || str.trim().length() == 0) && URL.matcher(str).matches();
     }
 
     /**

@@ -49,11 +49,10 @@ public class Picture implements Parcelable {
     public static final long ITEM_ID_CAPTURE = -1;
     public static final String ITEM_DISPLAY_NAME_CAPTURE = "Capture";
     private final long mId;
-    private String mDisplayName;
 
     /* package */ Picture(long id, String displayName) {
         mId = id;
-        mDisplayName = displayName;
+        String mDisplayName = displayName;
     }
 
     /* package */ Picture(Parcel source) {

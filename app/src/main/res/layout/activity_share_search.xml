@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/nothing"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nothing">
 
     <com.taihuoniao.fineix.blurview.BlurView
         android:id="@+id/blur_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="45dp"/>
+        android:layout_height="45dp" />
 
     <LinearLayout
         android:id="@+id/linear1"
@@ -37,10 +35,9 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:src="@mipmap/cancel_gray"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <EditText
-                android:textColor="@color/white"
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -50,8 +47,9 @@
                 android:paddingLeft="17dp"
                 android:paddingRight="15dp"
                 android:singleLine="true"
+                android:textColor="@color/white"
                 android:textColorHint="#cccccc"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -68,7 +66,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:src="@mipmap/cancel_gray"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <EditText
                 android:id="@+id/des"
@@ -81,7 +79,7 @@
                 android:paddingRight="15dp"
                 android:textColor="@color/white"
                 android:textColorHint="#cccccc"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -98,7 +96,7 @@
                 android:layout_height="13dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
-                android:src="@mipmap/search_title"/>
+                android:src="@mipmap/search_title" />
 
             <ImageView
                 android:id="@+id/search_delete"
@@ -108,7 +106,7 @@
                 android:layout_centerVertical="true"
                 android:paddingRight="5dp"
                 android:src="@mipmap/cancel_gray"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/edit_text"
@@ -120,23 +118,23 @@
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="@string/search_text"
-                android:textColor="@color/white"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
+                android:textColor="@color/white"
                 android:textColorHint="#cccccc"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="45dp"/>
+            android:layout_height="45dp" />
 
         <TextView
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#999999"/>
+            android:background="#999999" />
 
     </LinearLayout>
 
@@ -149,17 +147,16 @@
         android:background="#cc222222"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:paddingLeft="17dp"
-        />
+        android:paddingLeft="17dp" />
 
 
     <RelativeLayout
         android:id="@+id/gone_linear"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:visibility="gone"
         android:layout_alignParentBottom="true"
-        android:background="#f8f8f8">
+        android:background="#f8f8f8"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/gone_label"
@@ -170,7 +167,7 @@
             android:paddingRight="15dp"
             android:text="@string/jinghao"
             android:textColor="#666666"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/gone_demo_label"
@@ -181,18 +178,18 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:textColor="#666666"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#cccccc"/>
+            android:background="#cccccc" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:background="#cccccc"/>
+            android:background="#cccccc" />
     </RelativeLayout>
 
     <ProgressBar
@@ -200,5 +197,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

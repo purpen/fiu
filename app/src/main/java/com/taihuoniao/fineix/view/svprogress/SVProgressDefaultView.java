@@ -19,9 +19,6 @@ import com.taihuoniao.fineix.R;
 public class SVProgressDefaultView extends LinearLayout {
 //    private int resBigLoading = R.drawable.ic_svstatus_loading;
     private int resBigLoading = R.drawable.ic_sv_loading;
-    private int resInfo = R.drawable.ic_svstatus_info;
-    private int resSuccess = R.drawable.ic_svstatus_success;
-    private int resError = R.drawable.ic_svstatus_error;
     private ImageView ivBigLoading, ivSmallLoading;
     private SVCircleProgressBar circleProgressBar;
     private TextView tvMsg;
@@ -73,14 +70,17 @@ public class SVProgressDefaultView extends LinearLayout {
     }
 
     public void showInfoWithStatus(String string) {
+        int resInfo = R.drawable.ic_svstatus_info;
         showBaseStatus(resInfo, string);
     }
 
     public void showSuccessWithStatus(String string) {
+        int resSuccess = R.drawable.ic_svstatus_success;
         showBaseStatus(resSuccess, string);
     }
 
     public void showErrorWithStatus(String string) {
+        int resError = R.drawable.ic_svstatus_error;
         showBaseStatus(resError, string);
     }
     public void showWithProgress(String string) {

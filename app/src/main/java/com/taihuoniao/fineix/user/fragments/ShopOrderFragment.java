@@ -3,19 +3,16 @@ package com.taihuoniao.fineix.user.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShopOrderListAdapter;
 import com.taihuoniao.fineix.base.Base2Fragment;
-import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -33,8 +30,7 @@ import java.util.List;
 public class ShopOrderFragment extends Base2Fragment {
 
     private PullToRefreshListView pullToRefreshListView;
-    private ListView listView_show = null;
-//    private ProgressBar progressBar_order;
+    //    private ProgressBar progressBar_order;
     private WaittingDialog mDialog;
     private View footerView;
 
@@ -135,7 +131,7 @@ public class ShopOrderFragment extends Base2Fragment {
         pullToRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pullToRefreshListView_order);
 //        progressBar_order = (ProgressBar) view.findViewById(R.id.order_progressBar);
         TextView textView_empty = (TextView) view.findViewById(R.id.order_textView_empty);
-        listView_show = pullToRefreshListView.getRefreshableView();
+        ListView listView_show = pullToRefreshListView.getRefreshableView();
         listView_show.setEmptyView(textView_empty);
         listView_show.setCacheColorHint(0);
 

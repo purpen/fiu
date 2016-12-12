@@ -21,7 +21,6 @@ import com.taihuoniao.fineix.R;
 public class SVProgressHUD {
     private Context context;
     private static final long DISMISSDELAYED = 1000;
-    private SVProgressHUDMaskType mSVProgressHUDMaskType;
 
     public enum SVProgressHUDMaskType {
         None,  // 允许遮罩下面控件点击
@@ -179,7 +178,7 @@ public class SVProgressHUD {
     }
 
     private void setMaskType(SVProgressHUDMaskType maskType) {
-        mSVProgressHUDMaskType = maskType;
+        SVProgressHUDMaskType mSVProgressHUDMaskType = maskType;
         switch (mSVProgressHUDMaskType) {
             case None:
                 configMaskType(android.R.color.transparent, false, false);

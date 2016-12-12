@@ -472,9 +472,7 @@ public class MyImageViewTouch extends ImageViewTouch {
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         Log.i(LOG_TAG, "onFling");
 
-        if (mOverlayView != null && mOverlayView.getMode() != MyHighlightView.NONE)
-            return false;
-        return super.onFling(e1, e2, velocityX, velocityY);
+        return !(mOverlayView != null && mOverlayView.getMode() != MyHighlightView.NONE) && super.onFling(e1, e2, velocityX, velocityY);
     }
 
     @Override

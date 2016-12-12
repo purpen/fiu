@@ -28,7 +28,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     ImageButton ibtn_back;
     @Bind(R.id.viewPager)
     CustomViewPager viewPager;
-    private UserCompleteData data;
+
     public CompleteUserInfoActivity() {
         super(R.layout.activity_complete_user_info);
     }
@@ -37,7 +37,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     protected void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         viewPager.setPagingEnabled(false);
-        data = new UserCompleteData();
+        UserCompleteData data = new UserCompleteData();
         Fragment[] fragments = {CompleteAvatarNickNameFragment.newInstance(data), DecadeSelectFragment.newInstance(data), SubscribeThemeFragment.newInstance(data), FocusUserFragment.newInstance(data)};
         viewPager.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

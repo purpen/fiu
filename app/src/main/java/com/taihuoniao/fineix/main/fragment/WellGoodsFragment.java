@@ -54,7 +54,6 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
-import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -133,11 +132,9 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         return result;
     }
 
-    private int goneTranslation;
-
     @Override
     protected void initList() {
-        goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
+        int goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + getStatusBarHeight() / 2,
                     recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());

@@ -4,12 +4,11 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.interfaces.BaseViewInterface;
@@ -24,37 +23,23 @@ import butterknife.ButterKnife;
 /**
  * baseActionBar Activity
  */
-public abstract class BaseActivity extends ActionBarActivity implements
-        DialogControl, View.OnClickListener, BaseViewInterface {
+public abstract class BaseActivity extends AppCompatActivity implements DialogControl, View.OnClickListener, BaseViewInterface {
     protected final String TAG = getClass().getSimpleName();
-    public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
-    private boolean _isVisible;
-    private ProgressDialog _waitDialog;
-
     protected LayoutInflater mInflater;
     protected ActionBar mActionBar;
-    private TextView mTvActionTitle;
+    private ProgressDialog _waitDialog;
+    private boolean _isVisible;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         TDevice.hideSoftKeyboard(getCurrentFocus());
-//        ButterKnife.reset(this);
         ButterKnife.unbind(this);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (AppContext.getNightModeSwitch()) {
-//            setTheme(R.style.AppBaseTheme_Night);
-//        } else {
-//            setTheme(R.style.AppBaseTheme_Light);
-//        }
-//        AppManager.getAppManager().addActivity(this);
-//        if (!hasActionBar()) {
-//            // supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-//        }
         onBeforeSetContentLayout();
         if (getLayoutId() != 0) {
             setContentView(getLayoutId());
@@ -125,9 +110,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
             title = getString(R.string.app_name);
         }
         if (hasActionBar() && mActionBar != null) {
-            if (mTvActionTitle != null) {
-                mTvActionTitle.setText(title);
-            }
             mActionBar.setTitle(title);
         }
     }
@@ -137,9 +119,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
         switch (item.getItemId()) {
         case android.R.id.home:
             onBackPressed();
-            break;
-
-        default:
             break;
         }
         return super.onOptionsItemSelected(item);
@@ -206,12 +185,5 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 ex.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-
-        // setOverflowIconVisible(featureId, menu);
-        return super.onMenuOpened(featureId, menu);
     }
 }

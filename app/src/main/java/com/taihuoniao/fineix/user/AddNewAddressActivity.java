@@ -85,8 +85,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
     private WheelView cityView;
     private String provinceId = "0";
     private String cityId = "0";
-    private String countyId = "0";
-    private String townId = "0";
     private boolean isdefault = true;//设置此地址是否为默认地址
     private WaittingDialog dialog;
 
@@ -215,7 +213,7 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
                         provinceBean.set_id(pro.optString("_id"));
                         provinceBean.setName(pro.optString("city"));
                         JSONArray cities = pro.getJSONArray("cities");
-                        List<CityBean> cityBeanList = new ArrayList<CityBean>();
+                        List<CityBean> cityBeanList = new ArrayList<>();
                         for (int j = 0; j < cities.length(); j++) {
                             JSONObject city = cities.getJSONObject(j);
                             CityBean cityBean = new CityBean();
@@ -362,6 +360,8 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         if (!dialog.isShowing()) {
             dialog.show();
         }
+        String townId = "0";
+        String countyId = "0";
         HttpHandler<String> httpHandler = ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean._id, nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, countyId, townId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -414,6 +414,7 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         }
         //*/
         provinceNames = new String[provinceList != null ? provinceList.size() : 0];
+        assert provinceList != null;
         for (int i = 0; i < provinceList.size(); i++) {
             // 遍历所有省的数据
             provinceNames[i] = provinceList.get(i).getName();

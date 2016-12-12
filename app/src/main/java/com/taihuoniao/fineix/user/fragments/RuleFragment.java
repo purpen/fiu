@@ -64,7 +64,7 @@ public class RuleFragment extends MyBaseFragment {
 
     @OnClick(R.id.btn)
     void onClick() {
-        if (TextUtils.isEmpty(id)) return;
+
         //TODO 跳转参加活动界面
 
 //        ClientDiscoverAPI.participateActivity(id, new RequestCallBack<String>() {

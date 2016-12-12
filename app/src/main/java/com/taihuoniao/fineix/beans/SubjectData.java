@@ -133,7 +133,7 @@ public class SubjectData implements Parcelable {
                 protected LocationBean(Parcel in) {
                     this.type = in.readString();
                     this.prize = in.readString();
-                    this.coordinates = new ArrayList<Double>();
+                    this.coordinates = new ArrayList<>();
                     in.readList(this.coordinates, Double.class.getClassLoader());
                 }
 

@@ -47,7 +47,6 @@ public class SubscribeThemeFragment extends MyBaseFragment {
     @Bind(R.id.btn_next)
     Button btnNext;
     private SubscribeThemeAdapter adapter;
-    private UserCompleteData data;
     private ArrayList<ThemeQJ> mList;
 
     public static SubscribeThemeFragment newInstance(UserCompleteData data) {
@@ -61,7 +60,7 @@ public class SubscribeThemeFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            data = savedInstanceState.getParcelable("data");
+            UserCompleteData data = savedInstanceState.getParcelable("data");
         }
         super.onCreate(savedInstanceState);
     }
@@ -148,7 +147,7 @@ public class SubscribeThemeFragment extends MyBaseFragment {
                 StringBuilder builder = new StringBuilder();
                 for (ThemeQJ item : mList) {
                     if (item.stick == 1) {
-                        builder.append(item._id + ",");
+                        builder.append(item._id).append(",");
                     }
                 }
                 if (TextUtils.isEmpty(builder)) return;

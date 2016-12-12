@@ -50,7 +50,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     public WaittingDialog dialog;
-    private List<CategoryLabelListBean.CategoryTagItem> categoryList;
     private List<SearchFragment> fragmentList;
     private List<String> titleList;
 
@@ -78,7 +77,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initList() {
-        categoryList = new ArrayList<>();
+        List<CategoryLabelListBean.CategoryTagItem> categoryList = new ArrayList<>();
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
     }

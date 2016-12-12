@@ -18,7 +18,6 @@ public class ToastUtils {
     private static int resError = R.drawable.ic_svstatus_error;
 
     private static Toast toast;
-    private static ImageView imageView;
     private static ImageView smallImg;
     private static TextView textView;
 
@@ -28,7 +27,7 @@ public class ToastUtils {
         }
         View view = View.inflate(MainApplication.getContext(), R.layout.view_svprogressdefault, null);
         toast.setView(view);
-        imageView = (ImageView) view.findViewById(R.id.ivBigLoading);
+        ImageView imageView = (ImageView) view.findViewById(R.id.ivBigLoading);
         imageView.setVisibility(View.GONE);
         smallImg = (ImageView) view.findViewById(R.id.ivSmallLoading);
         smallImg.setVisibility(View.VISIBLE);

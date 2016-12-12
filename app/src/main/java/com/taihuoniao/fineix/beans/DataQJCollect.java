@@ -27,7 +27,7 @@ public class DataQJCollect implements Parcelable {
     }
 
     protected DataQJCollect(Parcel in) {
-        this.rows = new ArrayList<ItemQJCollect>();
+        this.rows = new ArrayList<>();
         in.readList(this.rows, ItemQJCollect.class.getClassLoader());
     }
 

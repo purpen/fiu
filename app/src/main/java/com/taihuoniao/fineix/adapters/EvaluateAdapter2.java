@@ -29,7 +29,6 @@ public class EvaluateAdapter2 extends THNBaseAdapter {
     //定义一个HashMap，用来存放EditText的值，Key是position
     HashMap<Integer, String> hashMap = new HashMap<>();
     HashMap<Integer, String> hashMapRatingBar = new HashMap<>();
-    private Context context = null;
     private LayoutInflater inflater = null;
     public BitmapUtils bitmapUtils_listview = null;
     private List<ShoppingDetailBean.ItemsEntity> list = null;
@@ -48,7 +47,7 @@ public class EvaluateAdapter2 extends THNBaseAdapter {
     public EvaluateAdapter2(List<ShoppingDetailBean.ItemsEntity> list, Context context) {
         super(list, context);
         this.list = list;
-        this.context = context;
+        Context context1 = context;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();

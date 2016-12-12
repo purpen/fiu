@@ -239,10 +239,10 @@ public class EditUserInfoActivity extends BaseActivity {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
-                LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
                 }
+                LogUtil.e("result", responseInfo.result);
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
                 }

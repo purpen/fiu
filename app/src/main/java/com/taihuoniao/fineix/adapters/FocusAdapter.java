@@ -38,7 +38,6 @@ import butterknife.ButterKnife;
  *         created at 2016/4/22 19:00
  */
 public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements View.OnClickListener {
-    private ImageLoader imageLoader;
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
     public static final int LOVE = 1;
     private long userId;
@@ -46,7 +45,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 
     public FocusAdapter(List<FocusFansItem> list, Activity activity, long userId) {
         super(list, activity);
-        this.imageLoader = ImageLoader.getInstance();
+        ImageLoader imageLoader = ImageLoader.getInstance();
         this.userId = userId;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_focus_head)

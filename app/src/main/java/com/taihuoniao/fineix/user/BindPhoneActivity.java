@@ -48,8 +48,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     private String type;//来源: 1.微信；2.微博；3.ＱＱ
     private String unionId;//微信的联合id
     private String openId;
-    private BindPhonePagerAdapter adapter;
-    private ArrayList<View> viewList;
     private Button bt_login;
     private TextView tv_bind;
     private TextView tv_login;
@@ -71,14 +69,14 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initView() {
-        viewList = new ArrayList<>();
+        ArrayList<View> viewList = new ArrayList<>();
         mDialog = new WaittingDialog(this);
         viewPager.setPagingEnabled(false);
         View viewSkip = Util.inflateView(R.layout.view_bindphone_skip, null);
         View viewBindPhone = Util.inflateView(R.layout.view_bindphone_bind, null);
         viewList.add(viewSkip);
         viewList.add(viewBindPhone);
-        adapter = new BindPhonePagerAdapter(viewList);
+        BindPhonePagerAdapter adapter = new BindPhonePagerAdapter(viewList);
         viewPager.setAdapter(adapter);
         bt_login = ButterKnife.findById(viewSkip, R.id.bt_login); //跳过绑定
         tv_bind = ButterKnife.findById(viewSkip, R.id.tv_bind); //切换到绑定界面
@@ -200,10 +198,10 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        if (responseInfo == null) return;
                         Log.e("<<<登录成功", responseInfo.result);
                         v.setEnabled(true);
                         mDialog.dismiss();
-                        if (responseInfo == null) return;
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
                         });

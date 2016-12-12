@@ -44,7 +44,6 @@ public class FansActivity extends BaseActivity {
     TextView tv_tips;
     @Bind(R.id.ll_tips)
     LinearLayout ll_tips;
-    private int curPage = 1;
     private static final String PAGE_SIZE = "9999";  //分页大小
     public static final String FANS_TYPE = "2";  //粉丝列表
     private ArrayList<FocusFansItem> list;
@@ -106,6 +105,7 @@ public class FansActivity extends BaseActivity {
     protected void requestNet() {
         LogUtil.e(TAG, "requestNet==" + userId);
         if (!activity.isFinishing() && dialog != null) dialog.show();
+        int curPage = 1;
         ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FANS_TYPE,
                 flag ? "1" : null,
                 new RequestCallBack<String>() {

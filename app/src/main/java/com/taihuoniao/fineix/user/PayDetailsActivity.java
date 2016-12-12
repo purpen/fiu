@@ -36,7 +36,6 @@ public class PayDetailsActivity extends BaseActivity {
     private TextView mOrderNum;
     private TextView mTvPayway;
     private TextView mTradeTime;
-    private Button mLookDetails;
     private String mRid, mPayway;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
@@ -136,7 +135,7 @@ public class PayDetailsActivity extends BaseActivity {
 
         mSuccessOrFailed = (TextView) findViewById(R.id.tv_success_or_failed_pay_detail);
         mImage = (ImageView) findViewById(R.id.image_paydetails);
-        mLookDetails = (Button) findViewById(R.id.bt_look_order_pay_details);
+        Button mLookDetails = (Button) findViewById(R.id.bt_look_order_pay_details);
         mOrderNum = (TextView) findViewById(R.id.tv_number_order_details);
         mTvPayway = (TextView) findViewById(R.id.tv_payway_order_details);
         mTradeTime = (TextView) findViewById(R.id.tv_time_order_details);

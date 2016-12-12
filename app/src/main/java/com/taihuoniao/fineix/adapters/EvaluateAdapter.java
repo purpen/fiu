@@ -17,7 +17,6 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
-import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ public class EvaluateAdapter extends THNBaseAdapter {
     //定义一个HashMap，用来存放EditText的值，Key是position
     HashMap<Integer, String> hashMap = new HashMap<>();
     HashMap<Integer, String> hashMapRatingBar = new HashMap<>();
-    private Context context = null;
     private LayoutInflater inflater = null;
     public BitmapUtils bitmapUtils_listview = null;
     private List<OrderDetailBean.ItemsBean> list = null;
@@ -49,7 +47,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
     public EvaluateAdapter(List<OrderDetailBean.ItemsBean> list, Context context) {
         super(list, context);
         this.list = list;
-        this.context = context;
+        Context context1 = context;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();

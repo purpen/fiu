@@ -12,7 +12,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
-import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.BadgeView;
 

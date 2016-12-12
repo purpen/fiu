@@ -52,7 +52,6 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
     private List<Map<String, Object>> list_delete = new ArrayList<>();
     HashMap<Integer, String> hashMap = new HashMap<>();
     private ShopCartAdapter adapter;
-    private int mCarNum = 0;
     //该变量是为了切换购物车标题右边的“编缉”和“完成”二字所在的button
     private int change = 0;
     Map<String, Object> map;
@@ -64,7 +63,6 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
     private Button mDeleteCalculate;//底部删除和结算相切换的按钮
     private List<CartDoOrder> doOrderList = new ArrayList<>();//购物车结算向确认订单界面传值
 
-    private Button mStroll;//列表为空时，“去逛逛”那个按钮
     private RelativeLayout mEmptyLayout;
     private RelativeLayout mFullLayout;
     private DecimalFormat df = null;
@@ -173,15 +171,12 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
         super(R.layout.activity_shop_cart);
     }
 
-    private HttpHandler<String> cartHandler;
-    private HttpHandler<String> numHandler;
-
     @Override
     protected void onResume() {
         super.onResume();
         initView();
-        cartHandler = DataPaser.shopCartParser(mHandler);
-        numHandler = DataPaser.shopCartNumberParser(mHandler);
+        HttpHandler<String> cartHandler = DataPaser.shopCartParser(mHandler);
+        HttpHandler<String> numHandler = DataPaser.shopCartNumberParser(mHandler);
     }
 
     protected void initView() {
@@ -196,7 +191,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
         mAllCheck.setOnClickListener(this);
         mAllPrice = (TextView) findViewById(R.id.tv_totalprice_shopcart_item);
         mEmptyLayout = (RelativeLayout) findViewById(R.id.relative_stroll_shopcart);
-        mStroll = (Button) findViewById(R.id.bt_stroll_shopcart_empty);
+        Button mStroll = (Button) findViewById(R.id.bt_stroll_shopcart_empty);
         mStroll.setOnClickListener(this);
         mFullLayout = (RelativeLayout) findViewById(R.id.relative_full_shopcart);
         adapter = new ShopCartAdapter(totalList, ShopCartActivity.this, this);
@@ -207,6 +202,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                 ShopCartActivity.this.hashMap = hashMap;
             }
         });
+        int mCarNum = 0;
         if (mCarNum > 0) {
             customHead.setHeadCenterTxtShow(true, "购物车（" + mCarNum + "）");
         } else {

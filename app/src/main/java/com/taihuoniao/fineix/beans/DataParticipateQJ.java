@@ -66,7 +66,7 @@ public class DataParticipateQJ implements Parcelable {
 
             protected LocationBean(Parcel in) {
                 this.type = in.readString();
-                this.coordinates = new ArrayList<Double>();
+                this.coordinates = new ArrayList<>();
                 in.readList(this.coordinates, Double.class.getClassLoader());
             }
 
@@ -304,9 +304,9 @@ public class DataParticipateQJ implements Parcelable {
             this.is_love = in.readInt();
             this.is_favorite = in.readInt();
             this.tags = in.createStringArrayList();
-            this.product = new ArrayList<ProductBean>();
+            this.product = new ArrayList<>();
             in.readList(this.product, ProductBean.class.getClassLoader());
-            this.subject_ids = new ArrayList<Integer>();
+            this.subject_ids = new ArrayList<>();
             in.readList(this.subject_ids, Integer.class.getClassLoader());
         }
 
@@ -337,7 +337,7 @@ public class DataParticipateQJ implements Parcelable {
     }
 
     protected DataParticipateQJ(Parcel in) {
-        this.rows = new ArrayList<ItemParticipateQJ>();
+        this.rows = new ArrayList<>();
         in.readList(this.rows, ItemParticipateQJ.class.getClassLoader());
     }
 

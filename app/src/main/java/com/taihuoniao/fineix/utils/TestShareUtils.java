@@ -36,7 +36,7 @@ public class TestShareUtils {
         ImageLoader.getInstance().displayImage(sceneDetails.getData().getCover_url(), holder.backgroundImg);
         SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneDetails.getData().getTitle());
         holder.userName.setText(sceneDetails.getData().getUser_info().getNickname());
-        CharSequence date = DateFormat.format("yyyy-MM-dd", sceneDetails.getData().getCreated_on()*1000l);
+        CharSequence date = DateFormat.format("yyyy-MM-dd", sceneDetails.getData().getCreated_on()* 1000L);
         holder.publishTime.setText(date);
         holder.locationTv.setText(sceneDetails.getData().getAddress());
         if (TextUtils.isEmpty(sceneDetails.getData().getAddress())) {

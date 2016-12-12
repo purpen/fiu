@@ -58,9 +58,6 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 //    @Bind(R.id.ibtn)
 //    ImageButton ibtn;
     private BaiduMap mBDMap;
-    private int page; //默认查看第一页
-    private int pageSize;//本界面只展示三条
-    private int radius = 5000; //搜索半径
     private boolean isFirstLoc = true;
     private static final String STICK_ALL = "0"; //所有情境
     private static final String STICK_SELECT = "1"; //精选情境
@@ -183,8 +180,9 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     }
 
     private void getNearByData(LatLng ll) {//附近的所有情境
-        page = 1;
-        pageSize = 1000;
+        int page = 1;
+        int pageSize = 1000;
+        int radius = 5000;
         ClientDiscoverAPI.getSceneList(ll, String.valueOf(page), String.valueOf(pageSize), String.valueOf(radius), new RequestCallBack<String>() {
             @Override
             public void onStart() {

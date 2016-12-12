@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
  */
 
 public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolder> {
-    private Activity activity;
     private List<AddressData.RowsEntity> list;
     private boolean clickable=true;
     public interface OnItemClickListener {
@@ -37,7 +36,7 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
     }
 
     public SimpleTextAdapter(Activity activity, List<AddressData.RowsEntity> list) {
-        this.activity = activity;
+        Activity activity1 = activity;
         this.list = list;
     }
 

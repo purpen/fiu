@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -64,8 +63,6 @@ import java.util.List;
 
 import butterknife.Bind;
 
-import static android.R.attr.handle;
-
 /**
  * Created by taihuoniao on 2016/8/9.
  */
@@ -83,8 +80,6 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     ImageView subsImg;
 
     private ScrollableView scrollableView;
-    private ImageView moreThemeImg;
-    private RecyclerView recyclerView;
 
     private WaittingDialog dialog;//网络请求对话框
     private int currentPage = 1;//网络请求页码
@@ -113,8 +108,8 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         listView = pullRefreshView.getRefreshableView();
         View headerView = View.inflate(getActivity(), R.layout.header_index, null);
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
-        moreThemeImg = (ImageView) headerView.findViewById(R.id.more_theme_img);
-        recyclerView = (RecyclerView) headerView.findViewById(R.id.recycler_view);
+        ImageView moreThemeImg = (ImageView) headerView.findViewById(R.id.more_theme_img);
+        RecyclerView recyclerView = (RecyclerView) headerView.findViewById(R.id.recycler_view);
         listView.addHeaderView(headerView);
 
         pullRefreshView.animLayout();

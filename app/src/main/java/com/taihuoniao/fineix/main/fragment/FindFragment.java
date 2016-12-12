@@ -8,14 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +57,6 @@ import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
-import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -175,11 +172,9 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         return result;
     }
 
-    private int goneTranslation;
-
     @Override
     protected void initList() {
-        goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
+        int goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + getStatusBarHeight() / 2,
                     recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());

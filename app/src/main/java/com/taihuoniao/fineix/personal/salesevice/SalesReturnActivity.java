@@ -106,7 +106,7 @@ public class SalesReturnActivity extends BaseActivity {
                 list.add(refund_reason.get(i).getTitle());
             }
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SalesReturnActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(SalesReturnActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
         ListView listView = new ListView(SalesReturnActivity.this);
         listView.setPadding(5,5,5,5);
         listView.setDividerHeight(0);

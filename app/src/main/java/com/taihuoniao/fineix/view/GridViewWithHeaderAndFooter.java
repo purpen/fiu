@@ -74,8 +74,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
     //log tag can be at most 23 characters
     private static final String LOG_TAG = "GridViewHeaderAndFooter";
 
-    private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
-    private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
+    private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<>();
+    private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<>();
     private ListAdapter mOriginalAdapter;
     private ItemClickHandler mItemClickHandler;
 
@@ -486,7 +486,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         private final DataSetObservable mDataSetObservable = new DataSetObservable();
         private final ListAdapter mAdapter;
         static final ArrayList<FixedViewInfo> EMPTY_INFO_LIST =
-                new ArrayList<FixedViewInfo>();
+                new ArrayList<>();
 
         // This ArrayList is assumed to NOT be null.
         ArrayList<FixedViewInfo> mHeaderViewInfos;

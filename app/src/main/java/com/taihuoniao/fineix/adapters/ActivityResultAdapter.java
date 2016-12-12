@@ -41,10 +41,9 @@ import butterknife.ButterKnife;
  *         created at 2016/8/17 15:29
  */
 public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.PrizeSightsEntity.DataEntity> {
-    private ArrayList<ActivityPrizeData.PrizeSightsEntity> prizeSights;
     public ActivityResultAdapter(ArrayList<ActivityPrizeData.PrizeSightsEntity> prizeSights, ArrayList list, Activity activity) {
         super(list, activity);
-        this.prizeSights=prizeSights;
+        ArrayList<ActivityPrizeData.PrizeSightsEntity> prizeSights1 = prizeSights;
     }
 
     @Override

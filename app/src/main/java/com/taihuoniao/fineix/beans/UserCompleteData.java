@@ -40,9 +40,9 @@ public class UserCompleteData implements Parcelable {
         this.gender = in.readInt();
         this.decade = in.readInt();
         this.consume = in.readInt();
-        this.theme = new ArrayList<Integer>();
+        this.theme = new ArrayList<>();
         in.readList(this.theme, Integer.class.getClassLoader());
-        this.focus = new ArrayList<Integer>();
+        this.focus = new ArrayList<>();
         in.readList(this.focus, Integer.class.getClassLoader());
     }
 

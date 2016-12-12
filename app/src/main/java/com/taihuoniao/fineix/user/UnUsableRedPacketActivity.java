@@ -45,8 +45,6 @@ public class UnUsableRedPacketActivity extends BaseActivity{
     private int curPage=1;
     private boolean mInLoading = false;
     private List<RedBagUntimeout> mUntimeoutList = new ArrayList<>();
-    private View mUntimeoutView;
-    private View mTimeoutView;
     private LinearLayout mUntimeoutLinear;
     private LinearLayout mTimeoutLinear;
     private TextView mLook;
@@ -102,7 +100,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
                                 mUntimeoutLinear.removeAllViews();
                             }
                             for (int i = 0; i < mUntimeoutList.size(); i++) {
-                                mUntimeoutView = LayoutInflater.from(UnUsableRedPacketActivity.this).inflate(R.layout.account_redbag_untimeout, null);
+                                View mUntimeoutView = LayoutInflater.from(UnUsableRedPacketActivity.this).inflate(R.layout.account_redbag_untimeout, null);
 
                                 TextView mRedbagCode = (TextView) mUntimeoutView
                                         .findViewById(R.id.tv_redbag_code);
@@ -142,7 +140,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
                                 mTimeoutLinear.removeAllViews();
                             }
                             for (int i = 0; i < mUntimeoutList.size(); i++) {
-                                mTimeoutView = LayoutInflater.from(UnUsableRedPacketActivity.this).inflate(R.layout.account_redbag_timeout, null);
+                                View mTimeoutView = LayoutInflater.from(UnUsableRedPacketActivity.this).inflate(R.layout.account_redbag_timeout, null);
                                 TextView mRedbagCode = (TextView) mTimeoutView
                                         .findViewById(R.id.tv_redbag_code);
                                 TextView mMinMoney = (TextView) mTimeoutView

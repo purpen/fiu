@@ -226,12 +226,12 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) return;
                 Log.e("<<<登录成功",responseInfo.result);
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
                 btnWechat.setEnabled(true);
-                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
