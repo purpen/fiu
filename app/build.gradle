@@ -10,13 +10,9 @@ android {
         targetSdkVersion 22
         versionCode 20
         versionName "1.2.0"
+        multiDexEnabled true
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
-
-        // dex突破65535的限制
-        multiDexEnabled true
-
-        // AndroidManifest.xml 里面UMENG_CHANNEL的value为 ${UMENG_CHANNEL_VALUE}
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
     }
     signingConfigs {
@@ -29,13 +25,9 @@ android {
     }
     buildTypes {
         release {
-            // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
-            //混淆
             minifyEnabled true
-            //Zipalign优化
             zipAlignEnabled true
-            //移除无用的resource文件
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -57,17 +49,17 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile project(':PushSDK')
+    compile project(':Gpu-Image')
+    compile project(':pullrefreshlib')
+    compile 'com.google.zxing:core:3.2.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
-    compile project(':Gpu-Image')
-    compile 'com.google.zxing:core:3.2.0'
-    compile project(':pullrefreshlib')
-    compile 'com.android.support:design:22.2.1'
-    compile 'com.umeng.analytics:analytics:latest.integration'
-    compile project(':PushSDK')
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
 }
