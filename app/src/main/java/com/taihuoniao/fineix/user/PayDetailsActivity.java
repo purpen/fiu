@@ -24,6 +24,8 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.dialog.ConfirmDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogOnClickListener;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import butterknife.Bind;
@@ -47,22 +49,32 @@ public class PayDetailsActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(PayDetailsActivity.this);
-        dialog.setTitle("您确定要回到主界面吗？");
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        new ConfirmDialog(this, "您确定要回到主界面吗？", "", new String[]{"取消", "确定"}, new IDialogOnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void click(View view, int index) {
+                if (index == 1) {
+                    startActivity(new Intent(PayDetailsActivity.this, MainActivity.class));
+                    finish();
+                }
+            }
+        });
 
-            }
-        });
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(PayDetailsActivity.this, MainActivity.class));
-                finish();
-            }
-        });
-        dialog.show();
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(PayDetailsActivity.this);
+//        dialog.setTitle("您确定要回到主界面吗？");
+//        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
+//        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                startActivity(new Intent(PayDetailsActivity.this, MainActivity.class));
+//                finish();
+//            }
+//        });
+//        dialog.show();
 
     }
 

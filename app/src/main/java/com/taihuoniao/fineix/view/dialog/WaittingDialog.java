@@ -44,8 +44,7 @@ public class WaittingDialog extends Dialog {
     }
 
     private void init() {
-        mRotateAnimation = new RotateAnimation(0f, 359f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        mRotateAnimation = new RotateAnimation(0f, 359f,Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         mRotateAnimation.setDuration(1000L);
         mRotateAnimation.setInterpolator(new LinearInterpolator());
         mRotateAnimation.setRepeatCount(-1);
