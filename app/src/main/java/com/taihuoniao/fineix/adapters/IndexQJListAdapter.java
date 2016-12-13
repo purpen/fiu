@@ -261,153 +261,25 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        //移除所有标签
-        holder.labelContainer.removeAllViews();
-        if (userList.size() > 0) {
-            if (position == 6) {
-                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
-                holder.userRecycler.setVisibility(View.VISIBLE);
-            } else if (position == 17) {
-                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
-                holder.userRecycler.setVisibility(View.VISIBLE);
-            } else {
-                holder.userRecycler.setAdapter(null);
-                holder.userRecycler.setVisibility(View.GONE);
-            }
-        } else {
-            holder.userRecycler.setAdapter(null);
-            holder.userRecycler.setVisibility(View.GONE);
-        }
-//        //停止商品动画
-//        for (int i = 0; i < holder.labelContainer.getChildCount(); i++) {
-//            LabelView view = (LabelView) holder.labelContainer.getChildAt(i);
-//            view.stopAnim();
-//        }
 
 //        ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
-        GlideUtils.displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
-
-        if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
-            holder.vImg.setVisibility(View.VISIBLE);
-        } else {
-            holder.vImg.setVisibility(View.GONE);
-        }
-        holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
-        holder.publishTime.setText(sceneList.get(position).getCreated_at());
-        if (TextUtils.isEmpty(sceneList.get(position).getAddress())) {
-            holder.locationImg.setVisibility(View.GONE);
-            holder.locationTv.setVisibility(View.GONE);
-        } else {
-            holder.locationTv.setText(sceneList.get(position).getCity() + " " + sceneList.get(position).getAddress());
-            holder.locationImg.setVisibility(View.VISIBLE);
-            holder.locationTv.setVisibility(View.VISIBLE);
-        }
-        Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
-        if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
-            //自己的话隐藏关注按钮
-            holder.attentionBtn.setVisibility(View.GONE);
-        } else {
-            holder.attentionBtn.setVisibility(View.VISIBLE);
-            if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
-//                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                holder.attentionBtn.setText("已关注");
-                holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
-                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
-                holder.attentionBtn.setTextColor(activity.getResources().getColor(R.color.white));
-            } else {
-                holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
-                holder.attentionBtn.setText("");
-                holder.attentionBtn.setPadding(0, 0, 0, 0);
-                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
-        }
         GlideUtils.displayImageFadein(sceneList.get(position).getCover_url(), holder.qjImg);
-        holder.qjImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, QJPictureActivity.class);
-                intent.putExtra("img", sceneList.get(position).getCover_url());
-                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
-                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
-                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
-                intent.putExtra("id",sceneList.get(position).get_id());
-                activity.startActivity(intent);
-            }
-        });
-        holder.viewCount.setText(sceneList.get(position).getView_count());
-        holder.loveCount.setText(sceneList.get(position).getLove_count());
-        if (sceneList.get(position).getIs_love() == 1) {
-            holder.loveImg.setImageResource(R.mipmap.index_has_love);
-        } else {
-            holder.loveImg.setImageResource(R.mipmap.index_love);
-        }
-        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity);
-        holder.qjDesTv.setText(spannableStringBuilder);
-        holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
-        holder.qjDesTv.setMaxLines(3);
-        holder.qjDesTv.post(new Runnable() {
-            @Override
-            public void run() {
-                if (holder.qjDesTv.getLineCount() > 3) {
-                    Layout layout = holder.qjDesTv.getLayout();
-                    String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
-                    holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
-                }
-            }
-        });
-        holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
-        if (sceneList.get(position).getComment_count() > 0) {
-            holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
-            holder.moreComment.setVisibility(View.GONE);
-        } else {
-            holder.moreComment.setVisibility(View.GONE);
-        }
+        GlideUtils.displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
+        holder.labelContainer.setVisibility(View.VISIBLE);
+
         //设置情景标题
         SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
-        for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
-            final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            final LabelView labelView = new LabelView(activity);
-            labelView.nameTv.setText(productBean.getTitle());
-            labelView.setLayoutParams(layoutParams);
-            if (productBean.getLoc() == 2) {
-                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
-                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
-                layoutParams1.leftMargin = (int) labelView.labelMargin;
-                labelView.pointContainer.setLayoutParams(layoutParams1);
-            }
-            labelView.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (productBean.getLoc() == 2) {
-                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
-                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
-                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
-                        labelView.setLayoutParams(lp);
-                    } else {
-                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
-                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
-                        layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
-                        labelView.pointContainer.setLayoutParams(layoutParams1);
-                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
-                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
-                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
-                        labelView.setLayoutParams(lp);
-                    }
-                }
-            });
-            holder.labelContainer.addView(labelView);
-            labelView.wave();
-            labelView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                    intent.putExtra("id", productBean.getId());
-                    parent.getContext().startActivity(intent);
-                }
-            });
+        List<SceneList.DataBean.RowsBean.ProductBean> productBeanList = sceneList.get(position).getProduct();
+        if (productBeanList != null && compareble(productBeanList, (List<SceneList.DataBean.RowsBean.ProductBean>) holder.labelContainer.getTag(R.id.label_container))) {
+            holder.labelContainer.setTag(R.id.label_container, productBeanList);
+        } else {
+            stopAnimate(holder); //停止商品动画 移除所有标签
+            method1(position, holder);
+            addGoodsTag(position, parent, holder); //添加商品标签
+            holder.labelContainer.setTag(R.id.label_container, productBeanList);
         }
+
         //跳转个人中心
         holder.headImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -545,6 +417,162 @@ public class IndexQJListAdapter extends BaseAdapter {
             }
         });
         return convertView;
+    }
+
+    /**
+     * 添加商品标签
+     * @param position
+     * @param parent
+     * @param holder
+     */
+    private void addGoodsTag(int position, final ViewGroup parent, ViewHolder holder) {
+        for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
+            final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            final LabelView labelView = new LabelView(activity);
+            labelView.nameTv.setText(productBean.getTitle());
+            labelView.setLayoutParams(layoutParams);
+            if (productBean.getLoc() == 2) {
+                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
+                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
+                layoutParams1.leftMargin = (int) labelView.labelMargin;
+                labelView.pointContainer.setLayoutParams(layoutParams1);
+            }
+            labelView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (productBean.getLoc() == 2) {
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
+                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                        labelView.setLayoutParams(lp);
+                    } else {
+                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
+                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
+                        layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
+                        labelView.pointContainer.setLayoutParams(layoutParams1);
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
+                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                        labelView.setLayoutParams(lp);
+                    }
+                }
+            });
+            holder.labelContainer.addView(labelView);
+//            Log.e("<<<", "开启动画" + holder.qjTitleTv.getText() + ",现在位置=" + position);
+            labelView.wave();
+            labelView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+                    intent.putExtra("id", productBean.getId());
+                    parent.getContext().startActivity(intent);
+                }
+            });
+        }
+    }
+
+    private void method1(final int position, final ViewHolder holder) {
+        if (userList.size() > 0) {
+            if (position == 6) {
+                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
+                holder.userRecycler.setVisibility(View.VISIBLE);
+            } else if (position == 17) {
+                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
+                holder.userRecycler.setVisibility(View.VISIBLE);
+            } else {
+                holder.userRecycler.setAdapter(null);
+                holder.userRecycler.setVisibility(View.GONE);
+            }
+        } else {
+            holder.userRecycler.setAdapter(null);
+            holder.userRecycler.setVisibility(View.GONE);
+        }
+
+        if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
+            holder.vImg.setVisibility(View.VISIBLE);
+        } else {
+            holder.vImg.setVisibility(View.GONE);
+        }
+        holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
+        holder.publishTime.setText(sceneList.get(position).getCreated_at());
+        if (TextUtils.isEmpty(sceneList.get(position).getAddress())) {
+            holder.locationImg.setVisibility(View.GONE);
+            holder.locationTv.setVisibility(View.GONE);
+        } else {
+            holder.locationTv.setText(sceneList.get(position).getCity() + " " + sceneList.get(position).getAddress());
+            holder.locationImg.setVisibility(View.VISIBLE);
+            holder.locationTv.setVisibility(View.VISIBLE);
+        }
+        Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
+        if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
+            //自己的话隐藏关注按钮
+            holder.attentionBtn.setVisibility(View.GONE);
+        } else {
+            holder.attentionBtn.setVisibility(View.VISIBLE);
+            if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
+//                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
+                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                holder.attentionBtn.setText("已关注");
+                holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
+                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
+                holder.attentionBtn.setTextColor(activity.getResources().getColor(R.color.white));
+            } else {
+                holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+                holder.attentionBtn.setText("");
+                holder.attentionBtn.setPadding(0, 0, 0, 0);
+                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+        }
+        holder.qjImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, QJPictureActivity.class);
+                intent.putExtra("img", sceneList.get(position).getCover_url());
+                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
+                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
+                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
+                intent.putExtra("id",sceneList.get(position).get_id());
+                activity.startActivity(intent);
+            }
+        });
+        holder.viewCount.setText(sceneList.get(position).getView_count());
+        holder.loveCount.setText(sceneList.get(position).getLove_count());
+        if (sceneList.get(position).getIs_love() == 1) {
+            holder.loveImg.setImageResource(R.mipmap.index_has_love);
+        } else {
+            holder.loveImg.setImageResource(R.mipmap.index_love);
+        }
+        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity);
+        holder.qjDesTv.setText(spannableStringBuilder);
+        holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.qjDesTv.setMaxLines(3);
+        holder.qjDesTv.post(new Runnable() {
+            @Override
+            public void run() {
+                if (holder.qjDesTv.getLineCount() > 3) {
+                    Layout layout = holder.qjDesTv.getLayout();
+                    String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                    holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
+                }
+            }
+        });
+        holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
+        if (sceneList.get(position).getComment_count() > 0) {
+            holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
+            holder.moreComment.setVisibility(View.GONE);
+        } else {
+            holder.moreComment.setVisibility(View.GONE);
+        }
+    }
+
+    private void stopAnimate(ViewHolder holder) {
+        //停止商品动画
+        for (int i = 0; i < holder.labelContainer.getChildCount(); i++) {
+            LabelView view = (LabelView) holder.labelContainer.getChildAt(i);
+            view.stopAnim();
+        }
+        //移除所有标签
+        holder.labelContainer.removeAllViews();
     }
 
     class ViewHolder {
@@ -1165,7 +1193,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
     }
 
-    class IndexCommentAdapter extends BaseAdapter {
+    static class IndexCommentAdapter extends BaseAdapter {
         private List<SceneList.DataBean.RowsBean.CommentsBean> commentList;
 
         public IndexCommentAdapter(List<SceneList.DataBean.RowsBean.CommentsBean> commentList) {
@@ -1215,7 +1243,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             return convertView;
         }
 
-        class ViewHolder {
+        static class ViewHolder {
             @Bind(R.id.head_img)
             RoundedImageView headImg;
             @Bind(R.id.content_tv)
@@ -1225,5 +1253,9 @@ public class IndexQJListAdapter extends BaseAdapter {
                 ButterKnife.bind(this, view);
             }
         }
+    }
+
+    private boolean compareble(List<SceneList.DataBean.RowsBean.ProductBean> list1, List<SceneList.DataBean.RowsBean.ProductBean> list2){
+        return list1.equals(list2);
     }
 }

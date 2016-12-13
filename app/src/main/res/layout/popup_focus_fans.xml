@@ -11,7 +11,6 @@
         android:id="@+id/riv"
         android:layout_width="@dimen/dp50"
         android:layout_height="@dimen/dp50"
-        android:src="@mipmap/default_background_750_1334"
         app:riv_corner_radius="@dimen/dp100"
         android:layout_gravity="center_horizontal"
         />

@@ -230,15 +230,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                 try {
                     BannerData bannerData = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<BannerData>>() {
                     });
-                    if (bannerData == null) {
-                        return;
-                    }
-
-                    if (bannerData.rows == null) {
-                        return;
-                    }
-
-                    if (bannerData.rows.size() == 0) {
+                    if (bannerData == null || bannerData.rows == null ||bannerData.rows.size() == 0) {
                         return;
                     }
                     refreshUI(bannerData.rows);

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.taihuoniao.fineix.base.Base2Fragment;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
  * @author lilin
  * created at 2016/4/11 20:05
  */
-public abstract class MyBaseFragment<T> extends Fragment {
+public abstract class MyBaseFragment<T> extends Base2Fragment {
     protected View view;
     protected final String TAG = getClass().getSimpleName();
     protected Activity activity;

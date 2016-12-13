@@ -48,6 +48,7 @@ import com.taihuoniao.fineix.user.ShopOrderListActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -178,7 +179,7 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void initParams() {
-        dialog = new WaittingDialog(activity);
+//        dialog = new WaittingDialog(activity);
     }
 
     @Override
@@ -191,12 +192,12 @@ public class MineFragment extends MyBaseFragment {
         ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing() && dialog != null) dialog.show();
+//                if (!activity.isFinishing() && dialog != null) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
+//                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 try {
                     HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
                     });
@@ -214,7 +215,7 @@ public class MineFragment extends MyBaseFragment {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
+//                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -270,7 +271,8 @@ public class MineFragment extends MyBaseFragment {
         }
 
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
-            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
+//            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
+            GlideUtils.displayImage(user.medium_avatar_url, riv);
         }
         ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg, options);
 
