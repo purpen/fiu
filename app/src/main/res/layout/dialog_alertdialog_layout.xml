@@ -1,36 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
-    android:background="#88ff00ff"
+    android:layout_height="110dp"
+    android:background="@drawable/bg_corner_white_10dp"
     android:orientation="vertical">
-    <!--android:background="@drawable/bg_corner_white_10dp"-->
 
     <TextView
         android:id="@+id/textView_dialog_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="15dp"
-        android:layout_marginBottom="18dp"
-        android:text="放弃当前付款?"
-        android:textColor="#000000"
-        android:textSize="20sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:layout_weight="1"
-        android:background="#f0f00f">
-
-        <TextView
-            android:id="@+id/textView_dialog_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:lineSpacingExtra="1dp"
-            android:text="订单提交成功，如未支付，该订单会在72小时内自动演变，请尽快付款" />
-    </LinearLayout>
+        android:text="放弃当前付款?"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="15sp" />
 
     <View
         android:layout_width="match_parent"
@@ -40,7 +25,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="#88ff00f0"
         android:orientation="horizontal">
 
         <Button
@@ -50,7 +34,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:text="取消"
-            android:textColor="#CCCCCC"
+            android:textColor="#666460"
             android:textSize="15sp" />
 
         <View

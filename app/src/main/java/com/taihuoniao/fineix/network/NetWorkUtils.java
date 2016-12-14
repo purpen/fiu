@@ -19,13 +19,17 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.bean.CheckVersionBean;
 import com.taihuoniao.fineix.network.bean.UpdateInfoBean;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.dialog.DefaultDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 
 import java.io.File;
 
@@ -52,7 +56,7 @@ public class NetWorkUtils {
                 case 0:
                     break;
                 case 1:
-                    hintUpdate();
+                    hintUpdate(null);
                     break;
                 case 2:
                     if (isWifi(mContext)) {
@@ -63,7 +67,7 @@ public class NetWorkUtils {
                     installApk();
                     break;
                 case INSTALL_APK:
-                    hintUpdate();
+                    hintUpdate(versionName);
                     break;
             }
             return false;
@@ -71,16 +75,17 @@ public class NetWorkUtils {
     });
     private File apkFile;
 
-    private void hintUpdate() {
-        AlertDialog.Builder dialog = DialogHelp.getSelectDialog(mContext, "版本更新(" + getAppVersionName(mContext) + ")", new String[]{"确定"}, new DialogInterface.OnClickListener() {
+    private void hintUpdate(String versionName) {
+        String title = App.getString(R.string.hint_dialog_new_version_title);
+        if (!TextUtils.isEmpty(versionName)) {
+            title = TextUtils.replace(App.getString(R.string.hint_dialog_new_version_title2), new String[] {"$"}, new CharSequence[]{versionName}).toString();
+        }
+        new DefaultDialog(mContext, title, App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    downloadApkAndUpdate(true);
-                }
+            public void clickRight() {
+                downloadApkAndUpdate(true);
             }
         });
-        dialog.create().show();
     }
 
     /**
@@ -101,7 +106,6 @@ public class NetWorkUtils {
         }
         String fileName = "fiu_" + System.currentTimeMillis() + ".apk";
         apkFile = new File(path, fileName);
-        Log.e("TAG", "-------------> apkFile.getAbsolutePath(): " + apkFile.getAbsolutePath());
         new DownLoadTask(mContext,apkFile.getAbsolutePath(), mHandler, showProgressDialog).execute(downloadUrl + "?timestamp=" + System.currentTimeMillis());
     }
 
@@ -149,6 +153,7 @@ public class NetWorkUtils {
                         ToastUtils.showInfo("您当前已经是最新版本");
                     } else {
                         downloadUrl = updateVersionInfo.getDownload();
+                        versionName = updateVersionInfo.getVersion();
                         mHandler.sendEmptyMessage(INSTALL_APK);
                     }
                 } catch (Exception e) {
@@ -164,6 +169,7 @@ public class NetWorkUtils {
     }
 
     private String downloadUrl;
+    private String versionName;
 
     public void checkVersionInfo() {
         String appVersionName = getAppVersionName(mContext);

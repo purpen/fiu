@@ -15,9 +15,7 @@
  */
 package com.taihuoniao.fineix.zxing.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -41,17 +39,19 @@ import android.widget.TextView;
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.BarCode;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.MyBarCodeActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
-import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.dialog.DefaultDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogListener;
 import com.taihuoniao.fineix.zxing.camera.CameraManager;
 import com.taihuoniao.fineix.zxing.utils.BeepManager;
 import com.taihuoniao.fineix.zxing.utils.CaptureActivityHandler;
@@ -343,18 +343,29 @@ public final class CaptureActivity extends BaseActivity implements
 //            showLogin();
 //            return;
 //        }
-        DialogHelp.getConfirmDialog(this, "扫描成功，是否进行网页登陆", new DialogInterface.OnClickListener() {
+        new DefaultDialog(this, App.getString(R.string.hint_dialog_scan_success_title), App.getStringArray(R.array.text_dialog_button), new IDialogListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                handleScanLogin(url);
-                finish();
+            public void click(View view, int index) {
+                if (index == 1) {
+                    handleScanLogin(url);
+                    finish();
+                } else if (index == 0) {
+                    finish();
+                }
             }
-        }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        }).show();
+        });
+//        DialogHelp.getConfirmDialog(this, "扫描成功，是否进行网页登陆", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                handleScanLogin(url);
+//                finish();
+//            }
+//        }, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                finish();
+//            }
+//        }).show();
     }
 
     private void handleScanLogin(final String url) {
@@ -469,20 +480,33 @@ public final class CaptureActivity extends BaseActivity implements
 //    }
 
     private void showCopyTextOption(final String text) {
-        DialogHelp.getConfirmDialog(this, text, new DialogInterface.OnClickListener() {
+        new DefaultDialog(this, text, App.getStringArray(R.array.text_dialog_button), new IDialogListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                cbm.setText(text);
-                Util.makeToast("复制成功");
-                finish();
+            public void click(View view, int index) {
+                if (index == 1) {
+                    ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    cbm.setText(text);
+                    Util.makeToast("复制成功");
+                    finish();
+                } else if (index == 0) {
+                    finish();
+                }
             }
-        }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        }).show();
+        });
+//        DialogHelp.getConfirmDialog(this, text, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//                cbm.setText(text);
+//                Util.makeToast("复制成功");
+//                finish();
+//            }
+//        }, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                finish();
+//            }
+//        }).show();
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -514,26 +538,32 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void displayFrameworkBugMessageAndExit() {
-        // camera error
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name));
-        builder.setMessage("相机打开出错，请稍后重试");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
+        new DefaultDialog(CaptureActivity.this, App.getString(R.string.app_name), App.getString(R.string.hint_dialog_open_camera_fail_content), App.getStringArray(R.array.text_dialog_button), new IDialogListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-
-        });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
+            public void click(View view, int index) {
                 finish();
             }
         });
-        builder.show();
+//        // camera error
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(getString(R.string.app_name));
+//        builder.setMessage("相机打开出错，请稍后重试");
+//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                finish();
+//            }
+//
+//        });
+//        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                finish();
+//            }
+//        });
+//        builder.show();
     }
 
     public void restartPreviewAfterDelay(long delayMS) {

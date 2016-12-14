@@ -408,4 +408,15 @@
     <string name="text_order_track_shipperCode">快递公司：%s</string>
     <string name="text_order_track_logisticCode">运单号：%s</string>
 
+    <string name="hint_dialog_delete_order_title">您确定要删除订单吗？</string>
+    <string name="hint_dialog_cancel_order_title">您确定要取消订单吗？</string>
+    <string name="hint_dialog_confirm_receipt_title">您要确认收货吗？</string>
+    <string name="hint_dialog_goBack_mainPage_title">您确定要回到主界面吗？</string>
+    <string name="hint_dialog_delete_address_title">确认删除此收货地址吗？</string>
+    <string name="hint_dialog_goBack_title">返回上一步？</string>
+    <string name="hint_dialog_open_camera_fail_content">相机打开出错，请稍后重试</string>
+    <string name="hint_dialog_scan_success_title">扫描成功，是否进行网页登陆</string>
+    <string name="hint_dialog_new_version_title">您有一个新版本，是否立即更新？</string>
+    <string name="hint_dialog_new_version_title2">新版本(V $), 是否立即更新？</string>
+
 </resources>

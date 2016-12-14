@@ -22,6 +22,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.AddressData;
 import com.taihuoniao.fineix.beans.AddressListBean;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.fragments.AddressSelectFragment;
@@ -29,6 +30,8 @@ import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.dialog.DefaultDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
@@ -92,11 +95,9 @@ public class AddAddressActivity extends BaseActivity {
             customHead.getHeadRightTV().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setMessage("确认删除此收货地址吗？");
-                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    new DefaultDialog(AddAddressActivity.this, App.getString(R.string.hint_dialog_delete_address_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                         @Override
-                        public void onClick(final DialogInterface dialog1, int which) {
+                        public void clickRight() {
                             HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean._id, new RequestCallBack<String>() {
                                 @Override
                                 public void onStart() {
@@ -134,13 +135,55 @@ public class AddAddressActivity extends BaseActivity {
                             addNet(httpHandler);
                         }
                     });
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.create().show();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+//                    builder.setMessage("确认删除此收货地址吗？");
+//                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(final DialogInterface dialog1, int which) {
+//                            HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean._id, new RequestCallBack<String>() {
+//                                @Override
+//                                public void onStart() {
+//                                    if (dialog != null && !activity.isFinishing()) dialog.show();
+//                                }
+//
+//                                @Override
+//                                public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                    NetBean netBean = new NetBean();
+//                                    try {
+//                                        Gson gson = new Gson();
+//                                        Type type = new TypeToken<NetBean>() {
+//                                        }.getType();
+//                                        netBean = gson.fromJson(responseInfo.result, type);
+//                                    } catch (JsonSyntaxException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    if (netBean.isSuccess()) {
+//                                        ToastUtils.showSuccess("删除成功");
+//                                        Intent intent = new Intent();
+//                                        intent.putExtra("address", 1);
+//                                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
+//                                        finish();
+//                                    } else {
+//                                        ToastUtils.showError(netBean.getMessage());
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(HttpException error, String msg) {
+//                                    dialog.dismiss();
+//                                    ToastUtils.showError(R.string.network_err);
+//                                }
+//                            });
+//                            addNet(httpHandler);
+//                        }
+//                    });
+//                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//                    builder.create().show();
                 }
             });
             etConsigneeName.setText(addressBean.name);

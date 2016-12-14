@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,6 +14,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.ConstantCfg;
@@ -24,8 +23,8 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.dialog.ConfirmDialog;
-import com.taihuoniao.fineix.view.dialog.IDialogOnClickListener;
+import com.taihuoniao.fineix.view.dialog.DefaultDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import butterknife.Bind;
@@ -49,13 +48,11 @@ public class PayDetailsActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
 
-        new ConfirmDialog(this, "您确定要回到主界面吗？", "", new String[]{"取消", "确定"}, new IDialogOnClickListener() {
+        new DefaultDialog(this, App.getString(R.string.hint_dialog_goBack_mainPage_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
             @Override
-            public void click(View view, int index) {
-                if (index == 1) {
-                    startActivity(new Intent(PayDetailsActivity.this, MainActivity.class));
-                    finish();
-                }
+            public void clickRight() {
+                startActivity(new Intent(PayDetailsActivity.this, MainActivity.class));
+                finish();
             }
         });
 

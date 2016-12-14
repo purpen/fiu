@@ -1,10 +1,8 @@
 package com.taihuoniao.fineix.user;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +23,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.personal.salesevice.ChargeBackActivity;
 import com.taihuoniao.fineix.personal.salesevice.KEY;
@@ -38,6 +37,8 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.dialog.DefaultDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
@@ -68,7 +69,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     private TextView mLogisticsNumber, mLogisticsCompany;
 
     private WaittingDialog mDialog;
-    private AlertDialog.Builder alertDialog;
+//    private AlertDialog.Builder alertDialog;
     private TextView mCounty;
     private TextView mTown;
     private OrderDetailBean orderDetailBean;
@@ -256,7 +257,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
         title.setContinueTvVisible(false);
         title.setTitle("订单详情");
         mDialog = new WaittingDialog(this);
-        alertDialog = new AlertDialog.Builder(this);
+//        alertDialog = new AlertDialog.Builder(this);
         mLogisticsCompany = (TextView) findViewById(R.id.tv_logistics_company_number_order_details);
         mLogisticsNumber = (TextView) findViewById(R.id.tv_logistics_number_order_details);
         mLogisticsCompanyLayout = (RelativeLayout) findViewById(R.id.layout_logistics_company);
@@ -290,23 +291,31 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_call_order_details:
-                alertDialog.setTitle("联系客服：400-879-8751");
-                alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
+                new DefaultDialog(OrderDetailsActivity.this, "联系客服：400-879-8751", App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void clickRight() {
                         Intent intent = new Intent(Intent.ACTION_DIAL);
                         intent.setData(Uri.parse("tel:4008798751"));
                         startActivity(intent);
                     }
                 });
-                alertDialog.show();
+//                alertDialog.setTitle("联系客服：400-879-8751");
+//                alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//                alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent intent = new Intent(Intent.ACTION_DIAL);
+//                        intent.setData(Uri.parse("tel:4008798751"));
+//                        startActivity(intent);
+//                    }
+//                });
+//                alertDialog.show();
                 break;
         }
     }
@@ -495,17 +504,9 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.setTitle("您确定要删除订单吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -519,7 +520,31 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-                        alertDialog.show();
+//                        alertDialog.setTitle("您确定要删除订单吗？");
+//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+//                                    @Override
+//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                        toShopOrderListActivity();
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(HttpException e, String s) {
+//
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        alertDialog.show();
                     }
                 });
                 break;
@@ -540,17 +565,9 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mLeftButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.setTitle("您确定要取消订单吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void clickRight() {
                                 ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -563,7 +580,30 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-                        alertDialog.show();
+//                        alertDialog.setTitle("您确定要取消订单吗？");
+//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
+//                                    @Override
+//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                        toShopOrderListActivity();
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(HttpException e, String s) {
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        alertDialog.show();
 
                     }
                 });
@@ -617,17 +657,9 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.setTitle("您确定要删除订单吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -641,7 +673,31 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-                        alertDialog.show();
+//                        alertDialog.setTitle("您确定要删除订单吗？");
+//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+//                                    @Override
+//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                        toShopOrderListActivity();
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(HttpException e, String s) {
+//
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        alertDialog.show();
 
                     }
                 });
@@ -652,17 +708,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.setTitle("您要确认收货吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
+                        String title = App.getString(R.string.hint_dialog_confirm_receipt_title);
+                        String[] textButtons = App.getStringArray(R.array.text_dialog_button2);
+                        new DefaultDialog(OrderDetailsActivity.this, title, textButtons, new IDialogListenerConfirmBack() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void clickRight() {
                                 ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -676,7 +726,31 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-                        alertDialog.show();
+//                        alertDialog.setTitle("您要确认收货吗？");
+//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                        alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
+//                                    @Override
+//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                        toShopOrderListActivity();
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(HttpException e, String s) {
+//
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        alertDialog.show();
 
                     }
                 });
@@ -688,17 +762,9 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mLeftButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.setTitle("您确定要删除订单吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -707,11 +773,35 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
 
                                     @Override
                                     public void onFailure(HttpException e, String s) {
+
                                     }
                                 });
                             }
                         });
-                        alertDialog.show();
+//                        alertDialog.setTitle("您确定要删除订单吗？");
+//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+//                                    @Override
+//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                        toShopOrderListActivity();
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(HttpException e, String s) {
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        alertDialog.show();
 
                     }
                 });
@@ -730,17 +820,10 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.setTitle("您确定要删除订单吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
 
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -754,7 +837,31 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-                        alertDialog.show();
+//                        alertDialog.setTitle("您确定要删除订单吗？");
+//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+//                                    @Override
+//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                        toShopOrderListActivity();
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(HttpException e, String s) {
+//
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        alertDialog.show();
 
                     }
                 });
@@ -765,17 +872,9 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.setTitle("您确定要删除订单吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -789,7 +888,31 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-                        alertDialog.show();
+//                        alertDialog.setTitle("您确定要删除订单吗？");
+//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+//                                    @Override
+//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                        toShopOrderListActivity();
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(HttpException e, String s) {
+//
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        alertDialog.show();
 
                     }
                 });

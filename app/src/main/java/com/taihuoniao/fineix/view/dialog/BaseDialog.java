@@ -20,6 +20,10 @@ public class BaseDialog extends Dialog{
     protected Context mContext;
     protected LinearLayout mRootLinearLayout;
 
+    public BaseDialog(Context context) {
+        this(context, 0);
+    }
+
     public BaseDialog(Context context, int theme) {
         super(context, R.style.AlertDialog);
         this.mContext = context;
@@ -27,7 +31,7 @@ public class BaseDialog extends Dialog{
         initView();
     }
 
-     protected void initView(){
+    protected void initView(){
 //        this.setContentView(mRootLinearLayout);
 //        WindowManager.LayoutParams lp = getWindow().getAttributes();
 //        lp.gravity = Gravity.CENTER;

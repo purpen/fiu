@@ -10,15 +10,15 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.scene.AddProductActivity;
 
 /**
  * Created by Stephen on 2016/12/13 15:48
  * Email: 895745843@qq.com
  */
 
-public class ConfirmDialog extends BaseDialog implements View.OnClickListener {
-    private IDialogOnClickListener mIDialogOnClickListener;
+class THNAlertDialog2 extends BaseDialog implements View.OnClickListener {
+    private IDialogListener mIDialogListener;
+    private IDialogListenerConfirmBack iDialogListenerConfirmBack;
     private TextView textViewDialogTitle;
     private TextView textViewDialogContent;
     private Button buttonDialogCancel;
@@ -28,20 +28,24 @@ public class ConfirmDialog extends BaseDialog implements View.OnClickListener {
     private String mContent;
     private String[] mOperationTexts;
 
-    public ConfirmDialog(Context context) {
-        this(context, 0);
-    }
-
-    public ConfirmDialog(Context context, int theme) {
-        super(context, theme);
-    }
-
-    public ConfirmDialog(Context context, String title, String content, String[] operationTexts, IDialogOnClickListener dialogOnClickListener) {
-        this(context);
+    THNAlertDialog2(Context context, String title, String content, String[] operationTexts, IDialogListener dialogOnClickListener) {
+        super(context, 0);
         this.mTitle = title;
         this.mContent = content;
         this.mOperationTexts = operationTexts;
-        this.mIDialogOnClickListener = dialogOnClickListener;
+        this.mIDialogListener = dialogOnClickListener;
+
+        setValues();
+        setOnListener();
+        this.show();
+    }
+
+    THNAlertDialog2(Context context, String title, String content, String[] operationTexts, IDialogListenerConfirmBack iDialogListenerConfirmBack) {
+        super(context, 0);
+        this.mTitle = title;
+        this.mContent = content;
+        this.mOperationTexts = operationTexts;
+        this.iDialogListenerConfirmBack = iDialogListenerConfirmBack;
 
         setValues();
         setOnListener();
@@ -49,11 +53,10 @@ public class ConfirmDialog extends BaseDialog implements View.OnClickListener {
     }
 
     protected void initView(){
-        this.setContentView(R.layout.dialog_confirm_layout);
+        this.setContentView(R.layout.dialog_alertdialog_layout2);
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.gravity = Gravity.CENTER;
-
-        lp.width = (int) (MainApplication.getContext().getScreenWidth() * 0.87); // 设置宽度
+        lp.width = (int) (MainApplication.getContext().getScreenWidth() * 0.87);
         getWindow().setAttributes(lp);
         this.setCanceledOnTouchOutside(false);
 
@@ -64,14 +67,16 @@ public class ConfirmDialog extends BaseDialog implements View.OnClickListener {
     }
 
     private void setValues() {
-        if (mTitle != null) {
+        if (!TextUtils.isEmpty(mTitle)) {
             textViewDialogTitle.setText(mTitle);
         }
         if (!TextUtils.isEmpty(mContent)) {
             textViewDialogContent.setText(mContent);
         }
-        buttonDialogCancel.setText(mOperationTexts[0]);
-        buttonDialogConfirm.setText(mOperationTexts[1]);
+        if (mOperationTexts != null && mOperationTexts.length >= 2) {
+            buttonDialogCancel.setText(mOperationTexts[0]);
+            buttonDialogConfirm.setText(mOperationTexts[1]);
+        }
     }
 
     private void setOnListener() {
@@ -83,13 +88,17 @@ public class ConfirmDialog extends BaseDialog implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.button_dialog_cancel) {
             this.dismiss();
-            if (mIDialogOnClickListener != null) {
-                mIDialogOnClickListener.click(v, 0);
+            if (mIDialogListener != null) {
+                mIDialogListener.click(v, 0);
             }
         } else if (v.getId() == R.id.button_dialog_confirm){
             this.dismiss();
-            if (mIDialogOnClickListener != null) {
-                mIDialogOnClickListener.click(v,1);
+            if (iDialogListenerConfirmBack != null) {
+                iDialogListenerConfirmBack.clickRight();
+                return;
+            }
+            if (mIDialogListener != null) {
+                mIDialogListener.click(v,1);
             }
         }
     }

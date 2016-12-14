@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.zxing.activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,8 +26,8 @@ public abstract class BaseActivity extends AppCompatActivity implements DialogCo
     protected final String TAG = getClass().getSimpleName();
     protected LayoutInflater mInflater;
     protected ActionBar mActionBar;
-    private ProgressDialog _waitDialog;
-    private boolean _isVisible;
+    private ProgressDialog waitDialog;
+    private boolean isVisible;
 
     @Override
     protected void onDestroy() {
@@ -56,7 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity implements DialogCo
         init(savedInstanceState);
         initView();
         initData();
-        _isVisible = true;
+        isVisible = true;
     }
 
     protected void onBeforeSetContentLayout() {}
@@ -162,25 +161,25 @@ public abstract class BaseActivity extends AppCompatActivity implements DialogCo
 
     @Override
     public ProgressDialog showWaitDialog(String message) {
-        if (_isVisible) {
-            if (_waitDialog == null) {
-                _waitDialog = DialogHelp.getWaitDialog(this, message);
+        if (isVisible) {
+            if (waitDialog == null) {
+                waitDialog = DialogHelp.getWaitDialog(this, message);
             }
-            if (_waitDialog != null) {
-                _waitDialog.setMessage(message);
-                _waitDialog.show();
+            if (waitDialog != null) {
+                waitDialog.setMessage(message);
+                waitDialog.show();
             }
-            return _waitDialog;
+            return waitDialog;
         }
         return null;
     }
 
     @Override
     public void hideWaitDialog() {
-        if (_isVisible && _waitDialog != null) {
+        if (isVisible && waitDialog != null) {
             try {
-                _waitDialog.dismiss();
-                _waitDialog = null;
+                waitDialog.dismiss();
+                waitDialog = null;
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

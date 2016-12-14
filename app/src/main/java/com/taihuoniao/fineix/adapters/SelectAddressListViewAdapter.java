@@ -1,8 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,9 +14,12 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.AddressListBean;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.AddAddressActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
+import com.taihuoniao.fineix.view.dialog.DefaultDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 
 import java.util.List;
 
@@ -168,22 +169,28 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //删除某收货地址
-                android.support.v7.app.AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage("确认删除此收货地址吗？");
-                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                new DefaultDialog(activity, App.getString(R.string.hint_dialog_delete_address_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack(){
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                    public void clickRight() {
                         activity.deleteAddress(item._id);
                     }
                 });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
+//                android.support.v7.app.AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+//                builder.setMessage(App.getString(R.string.hint_dialog_delete_address));
+//                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                        activity.deleteAddress(item._id);
+//                    }
+//                });
+//                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                builder.create().show();
             }
         });
         // 设置监听事件

@@ -43,6 +43,7 @@ import com.taihuoniao.fineix.beans.CreateQJBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
@@ -57,6 +58,8 @@ import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
+import com.taihuoniao.fineix.view.dialog.DefaultDialog;
+import com.taihuoniao.fineix.view.dialog.IDialogListener;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.ByteArrayOutputStream;
@@ -549,28 +552,44 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onBackPressed() {
         if (getIntent().hasExtra(PictureEditActivity.class.getSimpleName())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CreateQJActivity.this);
-            builder.setMessage("返回上一步？");
-            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            new DefaultDialog(CreateQJActivity.this, App.getString(R.string.hint_dialog_goBack_title), App.getStringArray(R.array.text_dialog_button3), new IDialogListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    CreateQJActivity.this.finish();
+                public void click(View view, int index) {
+                    if (index == 0) {
+                        dialog.dismiss();
+                        EffectUtil.clear();
+                        MainApplication.blurBitmap = null;
+                        MainApplication.cropBitmap = null;
+                        MainApplication.editBitmap = null;
+                        MainApplication.subjectId = null;
+                        startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
+                    } else if (index == 1) {
+                        CreateQJActivity.this.finish();
+                    }
                 }
             });
-            builder.setNegativeButton("取消创建", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    EffectUtil.clear();
-                    MainApplication.blurBitmap = null;
-                    MainApplication.cropBitmap = null;
-                    MainApplication.editBitmap = null;
-                    MainApplication.subjectId = null;
-                    startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
-                }
-            });
-            builder.create().show();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(CreateQJActivity.this);
+//            builder.setMessage("返回上一步？");
+//            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                    CreateQJActivity.this.finish();
+//                }
+//            });
+//            builder.setNegativeButton("取消创建", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                    EffectUtil.clear();
+//                    MainApplication.blurBitmap = null;
+//                    MainApplication.cropBitmap = null;
+//                    MainApplication.editBitmap = null;
+//                    MainApplication.subjectId = null;
+//                    startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
+//                }
+//            });
+//            builder.create().show();
         } else {
             super.onBackPressed();
         }

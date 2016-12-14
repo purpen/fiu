@@ -79,4 +79,19 @@
         <item>退款成功</item>
         <item>商家已拒绝，请与客服联系。</item>
     </string-array>
+
+    <string-array name="text_dialog_button">
+        <item>取消</item>
+        <item>确定</item>
+    </string-array>
+
+    <string-array name="text_dialog_button2">
+        <item>不了</item>
+        <item>确定</item>
+    </string-array>
+
+    <string-array name="text_dialog_button3">
+        <item>不了</item>
+        <item>确定</item>
+    </string-array>
 </resources>

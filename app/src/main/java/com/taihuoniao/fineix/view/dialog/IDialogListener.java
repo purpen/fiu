@@ -7,6 +7,6 @@ import android.view.View;
  * Email: 895745843@qq.com
  */
 
-public interface IDialogOnClickListener {
+public interface IDialogListener {
     public void click(View view, int index);
 }
