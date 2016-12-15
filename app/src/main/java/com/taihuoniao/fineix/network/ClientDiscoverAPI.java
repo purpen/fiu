@@ -319,6 +319,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("dis", 10000 + "");
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("lat", lat);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         return httpHandler;
     }
@@ -341,6 +342,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
         params.addQueryStringParameter("category_ids", category_ids);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -356,6 +358,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
         params.addQueryStringParameter("subject_id", subject_id);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -374,6 +377,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("user_id", userId);
         params.addQueryStringParameter("show_all", show_all);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -539,6 +543,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", 300 + "");
         params.addQueryStringParameter("show_all", show_all);
         params.addQueryStringParameter("domain", domain);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         return httpHandler;
     }
@@ -555,6 +560,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", "1");
         params.addQueryStringParameter("size", "10");
         params.addQueryStringParameter("domain", "13");//情景主题
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -829,6 +835,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", String.valueOf(1));
         params.addQueryStringParameter("size", String.valueOf(5));
         params.addQueryStringParameter("name", page_name);
+        params.addQueryStringParameter("use_cache", "1");
         return MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }
 
@@ -1330,6 +1337,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", "1"); //过滤已关注
         params.addQueryStringParameter("sight_count", sight_count); //场景数量
         params.addQueryStringParameter("sort", sort); //0是最新 1是随机
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FIND_FRIENDS, callBack);
     }
 
@@ -1622,6 +1630,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("sort", sort);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_SUBJECT_GETLIST, callBack);
         return httpHandler;
     }
@@ -1629,6 +1638,7 @@ public class ClientDiscoverAPI {
     //最新好货推荐
     public static HttpHandler<String> firstProducts(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.PRODUCCT_INDEX_NEW, callBack);
         return httpHandler;
     }
@@ -1647,6 +1657,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("type", pageType);
         params.addQueryStringParameter("sort", sort);
+        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.CHOOSEN_SUBJECT_URL, callBack);
         NetworkManager.getInstance().add(MD5Utils.getMD5(NetworkConstance.CHOOSEN_SUBJECT_URL),httpHandler);
     }
@@ -1754,6 +1765,7 @@ public class ClientDiscoverAPI {
      */
     public static HttpHandler<String> getIndexChosenSubject(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("use_cache", "1");
         return MD5Utils.sign(params, NetworkConstance.SCENE_SUBJECT_INDEX_SUJECT_STICK, callBack);
     }
 

@@ -2,9 +2,11 @@ package com.taihuoniao.fineix.network;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 
+import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.io.File;

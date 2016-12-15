@@ -116,7 +116,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
@@ -183,7 +183,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 mHolder.mLeftButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(context, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(context, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
@@ -335,7 +335,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(context, App.getString(R.string.hint_dialog_confirm_receipt_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(context, App.getString(R.string.hint_dialog_confirm_receipt_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
@@ -392,7 +392,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 mHolder.mLeftButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
@@ -457,7 +457,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {

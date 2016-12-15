@@ -85,13 +85,8 @@
         <item>确定</item>
     </string-array>
 
-    <string-array name="text_dialog_button2">
-        <item>不了</item>
-        <item>确定</item>
-    </string-array>
-
     <string-array name="text_dialog_button3">
-        <item>不了</item>
+        <item>取消创建</item>
         <item>确定</item>
     </string-array>
 </resources>

@@ -504,7 +504,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
@@ -565,7 +565,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mLeftButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
@@ -657,7 +657,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
@@ -709,7 +709,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                     @Override
                     public void onClick(View v) {
                         String title = App.getString(R.string.hint_dialog_confirm_receipt_title);
-                        String[] textButtons = App.getStringArray(R.array.text_dialog_button2);
+                        String[] textButtons = App.getStringArray(R.array.text_dialog_button);
                         new DefaultDialog(OrderDetailsActivity.this, title, textButtons, new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
@@ -762,7 +762,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mLeftButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
@@ -821,7 +821,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                     @Override
                     public void onClick(View v) {
 
-                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
@@ -872,7 +872,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button2), new IDialogListenerConfirmBack() {
+                        new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
