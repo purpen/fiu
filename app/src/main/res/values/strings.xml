@@ -37,6 +37,7 @@
     <string name="tools">工具</string>
     <string name="biaoji_chanpin">标记产品</string>
     <string name="filter">滤镜</string>
+    <string name="title_edit_picture_aJust">调整</string>
     <string name="more_three_products">您最多可以添加三个商品</string>
     <string name="more_three_chaining">您最多可以添加三个链接</string>
     <!-- SelectStoreActivity -->

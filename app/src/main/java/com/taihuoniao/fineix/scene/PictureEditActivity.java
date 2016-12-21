@@ -195,7 +195,9 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     private void setAjustRecyclerAdapter(final float s) {
         final EditRecyclerAjustAdapter ajustAdapter = new EditRecyclerAjustAdapter(PictureEditActivity.this, new EditRecyclerAjustAdapter.ItemClick() {
             @Override
-            public void click(int postion) {
+            public void click(int postion, String filterName) {
+
+                setAjustTitileStatus(true, filterName); //设置标题栏文字
 
                 // TODO: 2016/12/21 弹框
                 View view = LayoutInflater.from(PictureEditActivity.this).inflate(R.layout.popup_editpicture_adjust_seek, null, false);
@@ -218,17 +220,17 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     case 2: //饱和度
                         ajustGPUImageFilter = new GPUImageSaturationFilter();
                         textView.setText(String.valueOf(50));
-                        seekBar1.setProgress(currentPosition);
+                        seekBar1.setProgress(50);
                         break;
                     case 3: //锐度
                         ajustGPUImageFilter = new GPUImageSharpenFilter();
                         textView.setText(String.valueOf(0));
-                        seekBar1.setProgress(currentPosition);
+                        seekBar1.setProgress(50);
                         break;
                     case 4: //色温
                         ajustGPUImageFilter = new GPUImageWhiteBalanceFilter();
                         textView.setText(String.valueOf(50));
-                        seekBar1.setProgress(currentPosition);
+                        seekBar1.setProgress(50);
                         break;
                 }
 
@@ -237,23 +239,24 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (ajustGPUImageFilter instanceof GPUImageBrightnessFilter) {
-                            textView.setText(String.valueOf(progress - 50));
+                            textView.setText(String.valueOf((progress - 50) * 2));
                             ((GPUImageBrightnessFilter)ajustGPUImageFilter).setBrightness((progress - 50) /100f);
                         } else if (ajustGPUImageFilter instanceof GPUImageContrastFilter) {
-                            //总大小 1.2/25 * 100
+                            // 比例值　1.2/25
                             textView.setText(String.valueOf(progress));
-                            ((GPUImageContrastFilter)ajustGPUImageFilter).setContrast((1.2f/25f * 100f) * progress );
+                            ((GPUImageContrastFilter)ajustGPUImageFilter).setContrast((1.2f/25f ) * progress );
                         } else if (ajustGPUImageFilter instanceof GPUImageSaturationFilter) {
-                            //总大小 1.0 * 50
+                            // 比例值　1.0 /50
                             textView.setText(String.valueOf(progress));
-                            ((GPUImageSaturationFilter)ajustGPUImageFilter).setSaturation(progress);
+                            ((GPUImageSaturationFilter)ajustGPUImageFilter).setSaturation((1.0f/50f ) * progress );
                         }  else if (ajustGPUImageFilter instanceof GPUImageSharpenFilter) {
-                            ((GPUImageSharpenFilter)ajustGPUImageFilter).setSharpness(progress);
-                            textView.setText(String.valueOf(progress));
+                            textView.setText(String.valueOf((progress - 50) * 2));
+                            ((GPUImageSharpenFilter)ajustGPUImageFilter).setSharpness((progress - 50) /100f * 2);
+
                         } else if (ajustGPUImageFilter instanceof GPUImageWhiteBalanceFilter) {
-                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress);
-//                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint(progress);
                             textView.setText(String.valueOf(progress));
+                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress * 100f);
+                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint((progress - 50) /100f);
                         } else {
                             // TODO: 2016/12/21
                         }
@@ -278,6 +281,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                         mGPUImageView.setFilter(currentFilter);
                         mGPUImageView.requestRender();
                         popupWindow.dismiss();
+                        setAjustTitileStatus(false, null); //设置标题栏文字
                     }
                 });
                 imageButtonAjustComplete.setOnClickListener(new View.OnClickListener() {
@@ -287,6 +291,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                         mGPUImageView.setFilter(currentFilter);
                         mGPUImageView.requestRender();
                         popupWindow.dismiss();
+                        setAjustTitileStatus(false, null); //设置标题栏文字
                     }
                 });
                 popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -942,5 +947,13 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             }
         });
         objectAnimator.start();
+    }
+
+    private void setAjustTitileStatus(boolean b, String title){
+        titleLayout.setTitle(b ? title : App.getString(R.string.biaoji_chanpin));
+        titleLayout.setCancelImgVisible(b);  // titleLayout bug
+        titleLayout.setCancelImgVisible(!b);
+        titleLayout.setContinueTvVisible(!b);
+        titleLayout.setEnabled(b);
     }
 }

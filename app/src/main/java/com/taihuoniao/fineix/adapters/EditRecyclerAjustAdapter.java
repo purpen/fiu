@@ -42,7 +42,7 @@ public class EditRecyclerAjustAdapter extends RecyclerView.Adapter<EditRecyclerA
             @Override
             public void onClick(View v) {
                 if (itemClick != null) {
-                    itemClick.click(position);
+                    itemClick.click(position, strs[position]);
                 }
             }
         });
@@ -67,7 +67,7 @@ public class EditRecyclerAjustAdapter extends RecyclerView.Adapter<EditRecyclerA
     }
 
     public interface ItemClick {
-        void click(int postion);
+        void click(int postion, String filterName);
     }
 
     public interface FilterClick {
