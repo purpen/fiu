@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ShopCartActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -160,7 +161,7 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
             mHolder.tvTips.setVisibility(View.GONE);
         }
         mHolder.mCheckBox.setChecked((Boolean) list.get(position).get("status"));
-        ImageLoader.getInstance().displayImage(list.get(position).get("keyImage") + "", mHolder.mImageGoods);
+        GlideUtils.displayImage(list.get(position).get("keyImage") + "", mHolder.mImageGoods);
         listener.onLetterCliced(hashMap);
         return convertView;
     }

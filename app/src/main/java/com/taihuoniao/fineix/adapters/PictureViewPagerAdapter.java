@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.view.ImageCrop.ClipZoomImageView;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class PictureViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View view = View.inflate(activity, R.layout.item_pic_view_pager, null);
         ClipZoomImageView clipSquareImageView = (ClipZoomImageView) view.findViewById(R.id.clip_img);
-        ImageLoader.getInstance().displayImage(picList.get(position), clipSquareImageView);
+        GlideUtils.displayImage(picList.get(position), clipSquareImageView);
         view.setTag(position);
         container.addView(view);
         return view;

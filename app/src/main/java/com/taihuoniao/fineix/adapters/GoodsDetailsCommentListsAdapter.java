@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.TryCommentsBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -75,7 +76,8 @@ public class GoodsDetailsCommentListsAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        imageLoader.displayImage(commentsList.get(position).getUser().getSmall_avatar_url(), holder.img, optionsAvater);
+//        imageLoader.displayImage(commentsList.get(position).getUser().getSmall_avatar_url(), holder.img, optionsAvater);
+        GlideUtils.displayImage(commentsList.get(position).getUser().getSmall_avatar_url(), holder.img);
         holder.nameTv.setText(commentsList.get(position).getUser().getNickname());
         holder.timeTv.setText(commentsList.get(position).getCreated_at());
         switch (commentsList.get(position).getStar()) {

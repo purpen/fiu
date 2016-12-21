@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -36,7 +37,8 @@ public class ArticleAdapter extends CommonBaseAdapter<DataChooseSubject.ItemChoo
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
+//        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
+        GlideUtils.displayImage(item.cover_url, holder.imageView);
         holder.tvTitle.setText(item.title);
         holder.tvCount.setText(String.format("%s人浏览", item.view_count));
         return convertView;

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectListBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -42,7 +43,8 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
                 itemClick.click(holder.getAdapterPosition());
             }
         });
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+        GlideUtils.displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         holder.title.setText(list.get(position).getTitle());
         switch (list.get(position).getType()) {
             case 2:

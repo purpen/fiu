@@ -13,6 +13,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -77,6 +78,7 @@ public class AlbumGridAdapter extends BaseAdapter {
         }
         if (hold.img.getTag() == null || !hold.img.getTag().equals(photoList.get(position).getImageUri())) {
             ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
+//            GlideUtils.displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
             hold.img.setTag(photoList.get(position).getImageUri());
         }
         return convertView;

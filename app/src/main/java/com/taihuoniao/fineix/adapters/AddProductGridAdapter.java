@@ -14,6 +14,7 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -73,11 +74,13 @@ public class AddProductGridAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if (list.size() != 0) {
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.productImg);
+//            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.productImg);
+            GlideUtils.displayImage(list.get(position).getCover_url(), holder.productImg);
             holder.name.setText(list.get(position).getTitle());
             holder.price.setText("¥" + list.get(position).getSale_price());
         } else if (searchList.size() != 0) {
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.productImg);
+//            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.productImg);
+            GlideUtils.displayImage(searchList.get(position).getCover_url(), holder.productImg);
             holder.name.setText(searchList.get(position).getTitle());
             holder.price.setText("¥" + searchList.get(position).getSale_price());
         }

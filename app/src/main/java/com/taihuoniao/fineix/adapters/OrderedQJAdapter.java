@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemSubscribedQJ;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -52,8 +53,8 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
-        ImageLoader.getInstance().displayImage(item.user_info.avatar_url, holder.riv, options);
+        GlideUtils.displayImage(item.cover_url, holder.imageView);
+        GlideUtils.displayImage(item.user_info.avatar_url, holder.riv);
         holder.tvName.setText(item.user_info.nickname);
         if (!TextUtils.isEmpty(item.title)) {
             holder.tv_title.setVisibility(View.VISIBLE);

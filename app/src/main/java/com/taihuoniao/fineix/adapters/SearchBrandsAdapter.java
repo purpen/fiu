@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class SearchBrandsAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.brandImg);
+        GlideUtils.displayImage(list.get(position).getCover_url(), holder.brandImg);
         holder.name.setText(list.get(position).getTitle());
         holder.content.setText(list.get(position).getContent());
         return convertView;

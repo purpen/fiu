@@ -15,6 +15,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.NoticeBean;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class NoticeAdapter extends CommonBaseAdapter<NoticeBean.DataBean.RowsBea
         } else {
             holder.dot.setVisibility(View.VISIBLE);
         }
-        imageLoader.displayImage(item.getSend_user().getAvatar_url(), holder.riv, options);
+        GlideUtils.displayImage(item.getSend_user().getAvatar_url(), holder.riv);
         SpannableStringBuilder spannableStringBuilder;
         if (item.getComment_target_obj() != null) {
             spannableStringBuilder = new SpannableStringBuilder(item.getSend_user().getNickname() + item.getInfo() + item.getKind_str() + ":" + item.getTarget_obj().getContent());

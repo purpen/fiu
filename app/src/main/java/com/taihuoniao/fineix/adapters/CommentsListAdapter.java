@@ -8,10 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -66,7 +66,8 @@ public class CommentsListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getUser().getSmall_avatar_url(), holder.headImg, options);
+//        ImageLoader.getInstance().displayImage(list.get(position).getUser().getSmall_avatar_url(), holder.headImg, options);
+        GlideUtils.displayImage(list.get(position).getUser().getSmall_avatar_url(), holder.headImg);
         holder.name.setText(list.get(position).getUser().getNickname());
 
         holder.time.setText(list.get(position).getCreated_at());

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingItem;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class QJRecommonedAdapter extends CommonBaseAdapter<QingJingItem> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.cover_url,holder.iv,options);
+        GlideUtils.displayImage(item.cover_url,holder.iv);
         holder.tv_desc.setText(item.title);
         holder.tv_location.setText(item.address);
         return convertView;

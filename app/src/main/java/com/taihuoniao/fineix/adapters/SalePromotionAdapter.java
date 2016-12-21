@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -41,7 +42,8 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
+//        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
+        GlideUtils.displayImage(item.cover_url, holder.imageView);
         if (!TextUtils.isEmpty(item.title)) {
             holder.tvTitle.setText(item.title);
             holder.tvTitle.setBackgroundColor(activity.getResources().getColor(android.R.color.black));

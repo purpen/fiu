@@ -11,6 +11,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.MessageDetailData;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 
@@ -66,9 +67,9 @@ public class PrivateMessageItemAdapter extends CommonBaseAdapter<MessageDetailDa
             holder = (ViewHolder) convertView.getTag();
         }
         if (getItemViewType(position)==MESSAGE_OTHERS){
-            imageLoader.displayImage(user.avatar,holder.iv,options);
+            GlideUtils.displayImage(user.avatar,holder.iv);
         }else {
-            imageLoader.displayImage(LoginInfo.getHeadPicUrl(),holder.iv,options);
+            GlideUtils.displayImage(LoginInfo.getHeadPicUrl(),holder.iv);
         }
         holder.tv_msg.setText(item.content);
         holder.tv_time.setText(item.created_at);

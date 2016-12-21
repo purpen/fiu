@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.beans.DataSupportQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -52,9 +53,9 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.sight.cover_url, holder.imageView, options);
+        GlideUtils.displayImage(item.sight.cover_url, holder.imageView);
         if (item.sight.user_info != null) {
-            ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
+            GlideUtils.displayImage(item.sight.user_info.avatar_url, holder.riv);
             holder.tvName.setText(item.sight.user_info.nickname);
         }
         if (!TextUtils.isEmpty(item.sight.title)) {

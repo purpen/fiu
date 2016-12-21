@@ -22,30 +22,40 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
+import com.taihuoniao.fineix.adapters.EditRecyclerAjustAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.blurview.BlurView;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
@@ -58,8 +68,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import jp.co.cyberagent.android.gpuimage.GPUImageBrightnessFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageContrastFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageSaturationFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageSharpenFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
+import jp.co.cyberagent.android.gpuimage.GPUImageWhiteBalanceFilter;
 
 /**
  * Created by taihuoniao on 2016/8/12.
@@ -67,13 +82,13 @@ import jp.co.cyberagent.android.gpuimage.GPUImageView;
  */
 public class PictureEditActivity extends BaseActivity implements View.OnClickListener, GPUImageFilterTools.OnGpuImageFilterChosenListener {
     @Bind(R.id.img)
-    GPUImageView img;
+    GPUImageView mGPUImageView;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.add_product)
-    TextView addProduct;
-    @Bind(R.id.filter)
-    TextView filter;
+    TextView textViewAddProduct;
+    @Bind(R.id.textView_filter)
+    TextView textViewFilter;
     @Bind(R.id.image_view_touch)
     MyImageViewTouch imageViewTouch;
     @Bind(R.id.container)
@@ -84,17 +99,23 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     TextView hintTv;
     @Bind(R.id.filter_recycler)
     RecyclerView filterRecycler;
+    @Bind(R.id.ajust_recycler)
+    RecyclerView ajustRecycler;
+    @Bind(R.id.textView_adjust)
+    TextView textViewAdjust;
+
     private View activity_view;
-    //添加产品popwindow
-    private PopupWindow productPop;
-    private EditText brandTv, productName;
+    private EditText brandTv,productName;
     private ImageView deleteBrand, deleteProduct;
+    private LabelView labelView;    //当前获取焦点的labelview
+    private PopupWindow productPop; //添加产品popwindow
     private WaittingDialog dialog;
-    private List<LabelView> labels = new ArrayList<>();//添加的产品信息
-    //当前获取焦点的labelview
-    private LabelView labelView;
-    private GPUImageFilter currentFilter;//当前滤镜
+
     private int currentPosition;//滤镜位置
+    private GPUImageFilter currentFilter;//当前滤镜
+    private List<LabelView> labels = new ArrayList<>();//添加的产品信息
+
+    private int index;  //当前位置\滤镜\调整
 
     public PictureEditActivity() {
         super(0);
@@ -108,13 +129,13 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) img.getLayoutParams();
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mGPUImageView.getLayoutParams();
         lp.height = MainApplication.getContext().getScreenWidth();
-        img.setLayoutParams(lp);
+        mGPUImageView.setLayoutParams(lp);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imageViewTouch.getLayoutParams();
         layoutParams.height = lp.height;
         imageViewTouch.setLayoutParams(layoutParams);
-        img.setImage(MainApplication.cropBitmap);
+        mGPUImageView.setImage(MainApplication.cropBitmap);
         initProductPop();
         dialog = new WaittingDialog(this);
     }
@@ -125,53 +146,27 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     protected void initList() {
         titleLayout.setContinueListener(this);
         titleLayout.setTitle(R.string.biaoji_chanpin, getResources().getColor(R.color.white));
-        imageViewTouch.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
-            @Override
-            public void onSingleTapConfirmed() {
-                if (isClick) {
-                    isClick = false;
-                    return;
-                }
-                if (bottomRelative.getTranslationY() > 0) {
-                    return;
-                }
-                showProductPop();
-            }
-        });
-        imageViewTouch.setOnDrawableEventListener(new MyImageViewTouch.OnDrawableEventListener() {
-            @Override
-            public void onFocusChange(MyHighlightView newFocus, MyHighlightView oldFocus) {
-                Log.e("<<<图片编辑", "onFocusChange");
-            }
 
-            @Override
-            public void onDown(MyHighlightView view) {
-                Log.e("<<<图片编辑", "onDown");
-            }
-
-            @Override
-            public void onMove(MyHighlightView view) {
-                Log.e("<<<图片编辑", "onMove");
-            }
-
-            @Override
-            public void onClick(MyHighlightView view) {
-                Log.e("<<<图片编辑", "onClick");
-                isClick = true;
-            }
-
-            @Override
-            public void onClick(final LabelView label) {
-                Log.e("<<<标签", "onClick");
-                labelView = label;
-                labelView.setLeftOrRight();
-            }
-
-        });
-        addProduct.setOnClickListener(this);
-        filter.setOnClickListener(this);
+        imageViewTouch.setSingleTapListener(new TouchSingleTapImage());
+        imageViewTouch.setOnDrawableEventListener(new TouchDrawbleEventImage());
+        textViewAddProduct.setOnClickListener(this);
+        textViewFilter.setOnClickListener(this);
+        textViewAdjust.setOnClickListener(this);
         filterRecycler.setHasFixedSize(true);
         filterRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        final float s = App.getContext().getResources().getDimension(R.dimen.filter_height) + getResources().getDimension(R.dimen.top_margin) + getResources().getDimension(R.dimen.filter_size);
+        setFilterRecyclerAdapter(s);
+
+        ajustRecycler.setHasFixedSize(true);
+        ajustRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        final float s1 = App.getContext().getResources().getDimension(R.dimen.ajust_height) + getResources().getDimension(R.dimen.top_margin) + getResources().getDimension(R.dimen.filter_size);
+        setAjustRecyclerAdapter(s1);
+        currentFilter = new GPUImageFilter();
+        currentPosition = 0;
+        index = 0;
+    }
+
+    private void setFilterRecyclerAdapter(final float s) {
         EditRecyclerAdapter recyclerAdapter = new EditRecyclerAdapter(this, this, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
@@ -179,41 +174,149 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             }
         });
         filterRecycler.setAdapter(recyclerAdapter);
-        final float s = getResources().getDimension(R.dimen.filter_height) + getResources().getDimension(R.dimen.top_margin)
-                + getResources().getDimension(R.dimen.filter_size);
         filterRecycler.post(new Runnable() {
             @Override
             public void run() {
                 filterRecycler.setTranslationY(bottomRelative.getMeasuredHeight());
                 filterRecycler.setVisibility(View.VISIBLE);
                 double t = (bottomRelative.getMeasuredHeight() - s) / 2;
-                filterRecycler.setPadding(filterRecycler.getPaddingLeft(), (int) (t + filterRecycler.getPaddingTop()),
-                        filterRecycler.getPaddingRight(), filterRecycler.getPaddingBottom());
-//                Log.e("<<<底部高度", bottomRelative.getMeasuredHeight() + "");
+                filterRecycler.setPadding(filterRecycler.getPaddingLeft(), (int) (t + filterRecycler.getPaddingTop()), filterRecycler.getPaddingRight(), filterRecycler.getPaddingBottom());
             }
         });
-        currentFilter = new GPUImageFilter();
-        currentPosition = 0;
+    }
+
+    private PopupWindow popupWindow;
+    private TextView textView;
+    private SeekBar seekBar1;
+    private ImageButton imageButtonAjustCancel;
+    private ImageButton imageButtonAjustComplete;
+    private GPUImageFilter ajustGPUImageFilter;
+
+    private void setAjustRecyclerAdapter(final float s) {
+        final EditRecyclerAjustAdapter ajustAdapter = new EditRecyclerAjustAdapter(PictureEditActivity.this, new EditRecyclerAjustAdapter.ItemClick() {
+            @Override
+            public void click(int postion) {
+
+                // TODO: 2016/12/21 弹框
+                View view = LayoutInflater.from(PictureEditActivity.this).inflate(R.layout.popup_editpicture_adjust_seek, null, false);
+                textView = (TextView)view. findViewById(R.id.textView1);
+                seekBar1 = (SeekBar)view. findViewById(R.id.seekBar1);
+                imageButtonAjustCancel = (ImageButton)view. findViewById(R.id.imageButton_ajust_cancel);
+                imageButtonAjustComplete = (ImageButton) view.findViewById(R.id.imageButton_ajust_complete);
+
+                switch (postion) {
+                    case 0: //亮度
+                        ajustGPUImageFilter = new GPUImageBrightnessFilter();
+                        textView.setText(String.valueOf(0));
+                        seekBar1.setProgress(50);
+                        break;
+                    case 1: //对比度
+                        ajustGPUImageFilter = new GPUImageContrastFilter();
+                        textView.setText(String.valueOf(25));
+                        seekBar1.setProgress(25);
+                        break;
+                    case 2: //饱和度
+                        ajustGPUImageFilter = new GPUImageSaturationFilter();
+                        textView.setText(String.valueOf(50));
+                        seekBar1.setProgress(currentPosition);
+                        break;
+                    case 3: //锐度
+                        ajustGPUImageFilter = new GPUImageSharpenFilter();
+                        textView.setText(String.valueOf(0));
+                        seekBar1.setProgress(currentPosition);
+                        break;
+                    case 4: //色温
+                        ajustGPUImageFilter = new GPUImageWhiteBalanceFilter();
+                        textView.setText(String.valueOf(50));
+                        seekBar1.setProgress(currentPosition);
+                        break;
+                }
+
+
+                seekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if (ajustGPUImageFilter instanceof GPUImageBrightnessFilter) {
+                            textView.setText(String.valueOf(progress - 50));
+                            ((GPUImageBrightnessFilter)ajustGPUImageFilter).setBrightness((progress - 50) /100f);
+                        } else if (ajustGPUImageFilter instanceof GPUImageContrastFilter) {
+                            //总大小 1.2/25 * 100
+                            textView.setText(String.valueOf(progress));
+                            ((GPUImageContrastFilter)ajustGPUImageFilter).setContrast((1.2f/25f * 100f) * progress );
+                        } else if (ajustGPUImageFilter instanceof GPUImageSaturationFilter) {
+                            //总大小 1.0 * 50
+                            textView.setText(String.valueOf(progress));
+                            ((GPUImageSaturationFilter)ajustGPUImageFilter).setSaturation(progress);
+                        }  else if (ajustGPUImageFilter instanceof GPUImageSharpenFilter) {
+                            ((GPUImageSharpenFilter)ajustGPUImageFilter).setSharpness(progress);
+                            textView.setText(String.valueOf(progress));
+                        } else if (ajustGPUImageFilter instanceof GPUImageWhiteBalanceFilter) {
+                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress);
+//                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint(progress);
+                            textView.setText(String.valueOf(progress));
+                        } else {
+                            // TODO: 2016/12/21
+                        }
+                        mGPUImageView.setFilter(ajustGPUImageFilter);
+                        mGPUImageView.requestRender();
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+                imageButtonAjustCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(activity, "cancel", Toast.LENGTH_SHORT).show();
+                        mGPUImageView.setFilter(currentFilter);
+                        mGPUImageView.requestRender();
+                        popupWindow.dismiss();
+                    }
+                });
+                imageButtonAjustComplete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(activity, "confirm", Toast.LENGTH_SHORT).show();
+                        mGPUImageView.setFilter(currentFilter);
+                        mGPUImageView.requestRender();
+                        popupWindow.dismiss();
+                    }
+                });
+                popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                PopupWindowUtil.show(PictureEditActivity.this, view);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.showAtLocation(activity_view, Gravity.BOTTOM, 0, 0);
+            }
+        });
+        ajustRecycler.setAdapter(ajustAdapter);
+        ajustRecycler.post(new Runnable() {
+            @Override
+            public void run() {
+                ajustRecycler.setTranslationY(bottomRelative.getMeasuredHeight());
+                ajustRecycler.setVisibility(View.VISIBLE);
+                double t = (bottomRelative.getMeasuredHeight() - s) / 2;
+                ajustRecycler.setPadding(ajustRecycler.getPaddingLeft(), (int) (t + ajustRecycler.getPaddingTop()), ajustRecycler.getPaddingRight(), ajustRecycler.getPaddingBottom());
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (labels != null && labels.size() > 0) {
-            for (LabelView labelView : labels) {
-                labelView.wave();
-            }
-        }
+        startAnimate();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (labels != null && labels.size() > 0) {
-            for (LabelView labelView : labels) {
-                labelView.stopAnim();
-            }
-        }
+        stopAnimate();
     }
 
     @Override
@@ -223,89 +326,25 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 if (bottomRelative.getTranslationY() == 0) {
                     return;
                 }
-                addProduct.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-                filter.setTextColor(getResources().getColor(R.color.white));
-                bottomRelative.setTranslationY(bottomRelative.getMeasuredHeight());
-                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(filterRecycler, "translationY", filterRecycler.getMeasuredHeight());
-                final ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(bottomRelative, "translationY", 0);
-                objectAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        objectAnimator1.start();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                objectAnimator1.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        try {
-                            blur(myShot(), 25f);
-                        } catch (Exception e) {
-                            productPopView.setBackgroundResource(R.color.black_blur);
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                objectAnimator.start();
+                selectedChageStatusColor(0);
+                popAddProductWidow();
+                index = 0;
                 break;
-            case R.id.filter:
+            case R.id.textView_filter:
                 if (filterRecycler.getVisibility() == View.VISIBLE && filterRecycler.getTranslationY() == 0) {
                     return;
                 }
-                filter.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-                addProduct.setTextColor(getResources().getColor(R.color.white));
-                ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(bottomRelative, "translationY", bottomRelative.getMeasuredHeight());
-                final ObjectAnimator objectAnimator3 = ObjectAnimator.ofFloat(filterRecycler, "translationY", 0);
-                objectAnimator2.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        objectAnimator3.start();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                objectAnimator2.start();
+                selectedChageStatusColor(1);
+                popFilterWidow();
+                index = 1;
+                break;
+            case R.id.textView_adjust:
+                if (ajustRecycler.getVisibility() == View.VISIBLE && ajustRecycler.getTranslationY() == 0) {
+                    return;
+                }
+                selectedChageStatusColor(2);
+                popAjustWindow();
+                index = 2;
                 break;
             case R.id.cancel:
                 productPop.dismiss();
@@ -368,34 +407,33 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void savePicture() {
-        if (img.getWidth() <= 0 || img.getHeight() <= 0) {
+        if (mGPUImageView.getWidth() <= 0 || mGPUImageView.getHeight() <= 0) {
             dialog.dismiss();
             ToastUtils.showError("图片信息错误，请重试");
             return;
         }
         int w = MainApplication.cropBitmap.getWidth();
         //加滤镜
-        final Bitmap newBitmap = Bitmap.createBitmap(w, w,
-                Bitmap.Config.ARGB_8888);
+        final Bitmap newBitmap = Bitmap.createBitmap(w, w, Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(newBitmap);
         RectF dst = new RectF(0, 0, w, w);
         cv.drawBitmap(MainApplication.cropBitmap, null, dst, null);
         //加商品
         EffectUtil.applyOnSave(cv, imageViewTouch);
         Log.e("<<<", "屏幕宽度=" + w + ",图片尺寸=width=" + MainApplication.cropBitmap.getWidth() + ",height=" + MainApplication.cropBitmap.getHeight());
-        img.setImage(newBitmap);
+        mGPUImageView.setImage(newBitmap);
         onGpuImageFilterChosenListener(currentFilter, currentPosition);
         Bitmap bitmap = null;
         try {
-            bitmap = img.capture();
+            bitmap = mGPUImageView.capture();
         } catch (InterruptedException e) {
-            img.setImage(MainApplication.cropBitmap);
+            mGPUImageView.setImage(MainApplication.cropBitmap);
             dialog.dismiss();
             ToastUtils.showError("图片信息错误，请重试");
             return;
         }
         if (bitmap == null) {
-            img.setImage(MainApplication.cropBitmap);
+            mGPUImageView.setImage(MainApplication.cropBitmap);
             dialog.dismiss();
             ToastUtils.showError("图片信息错误，请重试");
             return;
@@ -408,7 +446,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         }
         MainApplication.tagInfoList = tagInfoList;
         Log.e("<<<上传之前", tagInfoList.toString());
-        img.setImage(MainApplication.cropBitmap);
+        mGPUImageView.setImage(MainApplication.cropBitmap);
         dialog.dismiss();
         Intent intent = new Intent(this, CreateQJActivity.class);
         intent.putExtra(PictureEditActivity.class.getSimpleName(), false);
@@ -430,8 +468,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         productPop = new PopupWindow(productPopView, ViewGroup.LayoutParams.MATCH_PARENT, MainApplication.getContext().getScreenHeight(), true);
         productPop.setAnimationStyle(R.style.alpha);
         productPop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        productPop.setBackgroundDrawable(ContextCompat.getDrawable(this,
-                R.color.nothing));
+        productPop.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.nothing));
         productPop.setTouchInterceptor(new View.OnTouchListener() {
 
             @Override
@@ -510,10 +547,9 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         // 允许当前窗口保存缓存信息
         view.setDrawingCacheEnabled(true);
         // 去掉状态栏
-        Bitmap bmp = Bitmap.createBitmap(view.getDrawingCache(), 0,
-                0, widths, heights);
+        Bitmap bmp = Bitmap.createBitmap(view.getDrawingCache(), 0, 0, widths, heights);
         Canvas canvas = new Canvas(bmp);
-        canvas.drawBitmap(img.capture(), 0, titleLayout.getMeasuredHeight(), new Paint());
+        canvas.drawBitmap(mGPUImageView.capture(), 0, titleLayout.getMeasuredHeight(), new Paint());
         // 销毁缓存信息
         view.destroyDrawingCache();
         return bmp;
@@ -578,11 +614,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             }
         });
         labels.add(label);
-        if (labels != null && labels.size() > 0) {
-            for (LabelView labelView : labels) {
-                labelView.wave();
-            }
-        }
+        startAnimate();
         setHint();
     }
 
@@ -688,7 +720,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     public void onGpuImageFilterChosenListener(GPUImageFilter filter, int position) {
         currentFilter = filter;
         currentPosition = position;
-        img.setFilter(filter);
+        mGPUImageView.setFilter(filter);
         GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
         switch (position) {
             //        原图、都市、摩登、日光、摩卡、佳人、 候鸟、夏日、午茶、戏剧、流年、暮光
@@ -720,12 +752,195 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 filterAdjuster.adjust(60);//午茶
                 break;
         }
-        img.requestRender();
+        mGPUImageView.requestRender();
     }
 
     @Override
     public void onBackPressed() {
         EffectUtil.clear();
         super.onBackPressed();
+    }
+
+    class TouchSingleTapImage implements ImageViewTouch.OnImageViewTouchSingleTapListener {
+
+        @Override
+        public void onSingleTapConfirmed() {
+            if (isClick) {
+                isClick = false;
+                return;
+            }
+            if (bottomRelative.getTranslationY() > 0) {
+                return;
+            }
+            showProductPop();
+        }
+    }
+
+    class TouchDrawbleEventImage implements MyImageViewTouch.OnDrawableEventListener {
+
+        @Override
+        public void onFocusChange(MyHighlightView newFocus, MyHighlightView oldFocus) {
+            Log.e("<<<图片编辑", "onFocusChange");
+        }
+
+        @Override
+        public void onDown(MyHighlightView view) {
+            Log.e("<<<图片编辑", "onDown");
+        }
+
+        @Override
+        public void onMove(MyHighlightView view) {
+            Log.e("<<<图片编辑", "onMove");
+        }
+
+        @Override
+        public void onClick(MyHighlightView view) {
+            Log.e("<<<图片编辑", "onClick");
+            isClick = true;
+        }
+
+        @Override
+        public void onClick(final LabelView label) {
+            Log.e("<<<标签", "onClick");
+            labelView = label;
+            labelView.setLeftOrRight();
+        }
+    }
+
+    private void startAnimate() {
+        if (labels != null && labels.size() > 0) {
+            for (LabelView labelView : labels) {
+                labelView.wave();
+            }
+        }
+    }
+
+    private void stopAnimate() {
+        if (labels != null && labels.size() > 0) {
+            for (LabelView labelView : labels) {
+                labelView.stopAnim();
+            }
+        }
+    }
+
+    class A implements Animator.AnimatorListener{
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+    }
+
+    /**
+     * 返回当前显示的View 标记产品\滤镜\调整
+     */
+    private View getCurrentShowView() {
+        if (index == 0) {
+            return bottomRelative;
+        } else if (index == 1) {
+            return filterRecycler;
+        } else {
+            return ajustRecycler;
+        }
+    }
+
+    /**
+     * 改变选中文字颜色状态
+     * @param current 下标位置
+     */
+    private void selectedChageStatusColor(int current) {
+        LinearLayout linearLayout = (LinearLayout) textViewAddProduct.getParent();
+        for(int i = 0 ; i < linearLayout.getChildCount(); i++) {
+            TextView childAt = (TextView) linearLayout.getChildAt(i);
+            if (i == current) {
+                childAt.setTextColor(getResources().getColor(R.color.yellow_bd8913));
+            } else {
+                childAt.setTextColor(getResources().getColor(R.color.white));
+            }
+        }
+    }
+
+    /**
+     * 获取当前 ObjectAnimator
+     * @return ObjectAnimator
+     */
+    private ObjectAnimator getObjectAnimator() {
+        View currentShowView = getCurrentShowView();
+        return ObjectAnimator.ofFloat(currentShowView, "translationY", currentShowView.getMeasuredHeight());
+    }
+
+    /**
+     * 弹出标记产品弹框
+     */
+    private void popAddProductWidow() {
+        bottomRelative.setTranslationY(bottomRelative.getMeasuredHeight());
+        ObjectAnimator objectAnimator = getObjectAnimator();
+        final ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(bottomRelative, "translationY", 0);
+        objectAnimator.addListener(new A(){
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                objectAnimator1.start();
+            }
+        });
+        objectAnimator1.addListener(new A(){
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                try {
+                    blur(myShot(), 25f);
+                } catch (Exception e) {
+                    productPopView.setBackgroundResource(R.color.black_blur);
+                }
+            }
+        });
+        objectAnimator.start();
+    }
+
+    /**
+     * 弹出滤镜弹框
+     */
+    private void popFilterWidow() {
+        ObjectAnimator objectAnimator = getObjectAnimator();
+        final ObjectAnimator objectAnimator3 = ObjectAnimator.ofFloat(filterRecycler, "translationY", 0);
+        objectAnimator.addListener(new A() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                objectAnimator3.start();
+            }
+        });
+        objectAnimator.start();
+    }
+
+    /**
+     * 弹出调整弹框
+     */
+    private void popAjustWindow() {
+        ObjectAnimator objectAnimator = getObjectAnimator();
+        final ObjectAnimator objectAnimator33 = ObjectAnimator.ofFloat(ajustRecycler, "translationY", 0);
+        objectAnimator.addListener(new A(){
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                objectAnimator33.start();
+            }
+        });
+        objectAnimator.start();
     }
 }

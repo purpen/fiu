@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FiuUserListBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 /**
@@ -86,7 +87,8 @@ public class AllFiuerAdapter extends BaseAdapter {
                 holder.rankTv.setText(position + 1 + "");
                 break;
         }
-        ImageLoader.getInstance().displayImage(fiuUserListBean.getData().getRows().get(position).getAvatar_url(), holder.headImg);
+//        ImageLoader.getInstance().displayImage(fiuUserListBean.getData().getRows().get(position).getAvatar_url(), holder.headImg);
+        GlideUtils.displayImage(fiuUserListBean.getData().getRows().get(position).getAvatar_url(), holder.headImg);
         holder.nameTv.setText(fiuUserListBean.getData().getRows().get(position).getNickname());
         holder.rank.setText("LV" + fiuUserListBean.getData().getRows().get(position).getRank_id());
         if (fiuUserListBean.getData().getRows().get(position).getIs_expert() == 1) {

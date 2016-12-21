@@ -12,6 +12,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -57,7 +58,8 @@ public class GoodListFragmentAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.productImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.productImg);
+        GlideUtils.displayImage(list.get(position).getCover_url(), holder.productImg);
         holder.name.setText(list.get(position).getTitle());
         holder.price.setText("¥" + list.get(position).getSale_price());
         return convertView;

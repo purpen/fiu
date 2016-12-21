@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -38,7 +39,8 @@ public class FocusInterestAdapter extends CommonBaseAdapter<User> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.medium_avatar_url, holder.riv);
+//        ImageLoader.getInstance().displayImage(item.medium_avatar_url, holder.riv);
+        GlideUtils.displayImage(item.medium_avatar_url, holder.riv);
         if (item.identify.is_expert == 1) {
             holder.v.setVisibility(View.VISIBLE);
         } else {

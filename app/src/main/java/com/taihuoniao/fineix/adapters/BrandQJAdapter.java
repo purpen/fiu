@@ -30,6 +30,7 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ClickImageView;
@@ -94,10 +95,12 @@ public class BrandQJAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final int qjPosition = 2 * position;
-        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getCover_url(), holder.qjBackgroundImg1);
+//        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getCover_url(), holder.qjBackgroundImg1);
+        GlideUtils.displayImage(sceneList.get(qjPosition).getSight().getCover_url(), holder.qjBackgroundImg1);
         //设置情景标题
         SceneTitleSetUtils.setTitle(holder.qjTitle1Tv1, holder.qjTitle1Tv2, sceneList.get(qjPosition).getSight().getTitle());
-        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg1);
+//        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg1);
+        GlideUtils.displayImage(sceneList.get(qjPosition).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg1);
         holder.qjName1.setText(sceneList.get(qjPosition).getSight().getUser_info().getNickname());
         if (sceneList.get(qjPosition).getSight().getIs_love() == 1) {
             holder.qjLove1.setImageResource(R.mipmap.find_has_love);
@@ -159,10 +162,12 @@ public class BrandQJAdapter extends BaseAdapter {
             holder.qjItem2.setVisibility(View.GONE);
         } else {
             holder.qjItem2.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
+//            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
+            GlideUtils.displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
             //设置情景标题
             SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1, holder.qjTitle2Tv2, sceneList.get(qjPosition + 1).getSight().getTitle());
-            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
+//            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
+            GlideUtils.displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
             holder.qjName2.setText(sceneList.get(qjPosition + 1).getSight().getUser_info().getNickname());
             if (sceneList.get(qjPosition + 1).getSight().getIs_love() == 1) {
                 holder.qjLove2.setImageResource(R.mipmap.find_has_love);

@@ -319,7 +319,6 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("dis", 10000 + "");
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("lat", lat);
-        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         return httpHandler;
     }
@@ -342,11 +341,11 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
         params.addQueryStringParameter("category_ids", category_ids);
-        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
     /**
+     * 首页精选情境
      * 参与的情境
      *
      * @param subject_id
@@ -377,7 +376,6 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("user_id", userId);
         params.addQueryStringParameter("show_all", show_all);
-        params.addQueryStringParameter("use_cache", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.ArrayList;
 
@@ -79,7 +80,8 @@ public class SalePromotionRecycleViewAdapter extends RecyclerView.Adapter<SalePr
                 }
             });
         }
-        ImageLoader.getInstance().displayImage(item.banner_url, holder.imageView, options);
+//        ImageLoader.getInstance().displayImage(item.banner_url, holder.imageView, options);
+        GlideUtils.displayImage(item.banner_url, holder.imageView);
         holder.tvName.setText(item.title);
         holder.tvPrice.setText("￥" + item.sale_price);
     }

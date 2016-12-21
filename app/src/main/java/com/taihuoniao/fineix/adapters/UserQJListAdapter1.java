@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             holder.rl_right.setLayoutParams(params);
             holder.rl_right.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
-            imageLoader.displayImage(right_qj.getCover_url(), holder.iv_cover_right, options);
+            GlideUtils.displayImage(right_qj.getCover_url(), holder.iv_cover_right);
 //            if (!TextUtils.isEmpty(left_qj.getTitle())) {
 //                holder.tv_title_right.setText(right_qj.getTitle());
 //                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));

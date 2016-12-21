@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ItemProductCollect;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -37,7 +38,8 @@ public class FavoriteProductGVAdapter extends CommonBaseAdapter<ItemProductColle
             holder = (ViewHolder) convertView.getTag();
         }
         if (item.product != null) {
-            ImageLoader.getInstance().displayImage(item.product.cover_url, holder.imageView, options);
+//            ImageLoader.getInstance().displayImage(item.product.cover_url, holder.imageView, options);
+            GlideUtils.displayImage(item.product.cover_url, holder.imageView);
             holder.tvName.setText(item.product.title);
             if (item.product.stage==9){
                 holder.tvPrice.setVisibility(View.VISIBLE);

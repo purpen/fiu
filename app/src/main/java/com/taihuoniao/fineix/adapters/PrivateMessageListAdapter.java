@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.PrivateMessageListData;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
             holder=(ViewHolder)convertView.getTag();
         }
 
-        imageLoader.displayImage(item.users.from_user.big_avatar_url,holder.riv,options);
+        GlideUtils.displayImage(item.users.from_user.big_avatar_url,holder.riv);
         holder.tv_name.setText(item.users.from_user.nickname);
         holder.tv_desc.setText(item.last_content.content);
 //        holder.tv_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);

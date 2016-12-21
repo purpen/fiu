@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FindFriendData;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -83,7 +84,8 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         }
         RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(Util.getScreenWidth() / 3, ViewGroup.LayoutParams.MATCH_PARENT);
         holder.rl_box.setLayoutParams(params);
-        imageLoader.displayImage(item.cover_url, holder.iv_cover);
+//        imageLoader.displayImage(item.cover_url, holder.iv_cover);
+        GlideUtils.displayImage(item.cover_url, holder.iv_cover);
 //        if (!TextUtils.isEmpty(item.title)) {
 //            holder.tv_title.setText(item.title);
 //            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));

@@ -12,6 +12,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
             holder=(ViewHolder)convertView.getTag();
         }
 
-        imageLoader.displayImage(item.getUser().getSmall_avatar_url(),holder.riv,options);
+        GlideUtils.displayImage(item.getUser().getSmall_avatar_url(),holder.riv);
         holder.tv_name.setText(item.getUser().getNickname());
         holder.tv_desc.setText(item.getContent());
         holder.tv_time.setText(item.getCreated_at());

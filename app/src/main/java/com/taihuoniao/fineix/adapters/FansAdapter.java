@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -78,7 +79,8 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 
         if (item != null) {
             if (item.follows != null) {
-                imageLoader.displayImage(item.follows.avatar_url, holder.riv, options);
+//                imageLoader.displayImage(item.follows.avatar_url, holder.riv, options);
+                GlideUtils.displayImage(item.follows.avatar_url, holder.riv);
                 if (item.follows.is_expert == 1) {
                     holder.riv_auth.setVisibility(View.VISIBLE);
                 } else {
@@ -173,7 +175,8 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        ImageLoader.getInstance().displayImage(item.follows.avatar_url, riv, options);
+//        ImageLoader.getInstance().displayImage(item.follows.avatar_url, riv, options);
+        GlideUtils.displayImage(item.follows.avatar_url, riv);
         tv_take_photo.setText(String.format(tips + " %s ?", item.follows.nickname));
         tv_album.setText(tips);
         tv_album.setOnClickListener(this);

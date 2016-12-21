@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -70,7 +71,8 @@ public class BrandProductAdapter extends BaseAdapter {
         Log.e("<<<品牌下的产品", "list.size=" + list.size());
         final int leftPosition = position * 2;
         final int rightPosition = leftPosition + 1;
-        ImageLoader.getInstance().displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
+//        ImageLoader.getInstance().displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
+        GlideUtils.displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
         holder.nameLeft.setText(list.get(leftPosition).getTitle());
         holder.priceLeft.setText("¥" + list.get(leftPosition).getSale_price());
         if(list.get(leftPosition).getStage()==9){
@@ -80,7 +82,8 @@ public class BrandProductAdapter extends BaseAdapter {
         }
         if (rightPosition < list.size()) {
             holder.rightContainer.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(list.get(rightPosition).getCover_url(), holder.productImgRight);
+//            ImageLoader.getInstance().displayImage(list.get(rightPosition).getCover_url(), holder.productImgRight);
+            GlideUtils.displayImage(list.get(rightPosition).getCover_url(), holder.productImgRight);
             holder.nameRight.setText(list.get(rightPosition).getTitle());
             holder.priceRight.setText("¥" + list.get(rightPosition).getSale_price());
             if(list.get(rightPosition).getStage()==9){

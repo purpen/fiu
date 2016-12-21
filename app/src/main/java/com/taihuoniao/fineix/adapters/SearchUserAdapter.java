@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ItemUserSearch;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -37,7 +38,7 @@ public class SearchUserAdapter extends CommonBaseAdapter<ItemUserSearch> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.avatar_url, holder.riv, options);
+        GlideUtils.displayImage(item.avatar_url, holder.riv);
         holder.tvName.setText(item.nickname);
         holder.tvSummary.setText(item.summary);
         return convertView;

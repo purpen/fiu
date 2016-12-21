@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ThemeQJ;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class SubscribeThemeAdapter extends CommonBaseAdapter<ThemeQJ> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.back_url, holder.iv, options);
+        GlideUtils.displayImage(item.back_url, holder.iv);
         holder.tv.setText(item.title);
         holder.tv_count.setText(String.format("已有%s人订阅", item.sub_count));
         if (activity instanceof CompleteUserInfoActivity) {

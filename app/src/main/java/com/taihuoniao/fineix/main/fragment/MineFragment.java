@@ -274,7 +274,7 @@ public class MineFragment extends MyBaseFragment {
 //            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
             GlideUtils.displayImage(user.medium_avatar_url, riv);
         }
-        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg, options);
+        GlideUtils.displayImage(user.head_pic_url, iv_bg);
 
         if (user.identify.is_expert == 1) {
             riv_auth.setVisibility(View.VISIBLE);

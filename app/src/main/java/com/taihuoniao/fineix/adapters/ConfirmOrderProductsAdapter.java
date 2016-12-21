@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CartOrderContentItem;
 import com.taihuoniao.fineix.beans.NowBuyBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -71,7 +72,8 @@ public class ConfirmOrderProductsAdapter extends BaseAdapter {
             hold = (ViewHolder) convertView.getTag();
         }
         if (list != null) {
-            imageLoader.displayImage(list.get(position).getCover(), hold.img, options);
+//            imageLoader.displayImage(list.get(position).getCover(), hold.img, options);
+            GlideUtils.displayImage(list.get(position).getCover(), hold.img);
             hold.titleTv.setText(list.get(position).getTitle());
             if (list.get(position).getType().equals("1")) {
                 hold.skuNameTv.setText("默认");

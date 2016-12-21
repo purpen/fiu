@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.AlbumBean;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 import java.util.Map;

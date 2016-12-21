@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class SearchSubjectAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(),holder.subjectImg);
+        GlideUtils.displayImage(list.get(position).getCover_url(),holder.subjectImg);
         holder.subjectName.setText(list.get(position).getTitle());
         holder.subjectName2.setText(list.get(position).getShort_title());
         switch (list.get(position).getType()) {

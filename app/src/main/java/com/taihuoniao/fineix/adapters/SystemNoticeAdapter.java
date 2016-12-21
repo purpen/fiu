@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -50,7 +51,7 @@ public class SystemNoticeAdapter extends CommonBaseAdapter<SystemNoticeData.Syst
         }
         if (!TextUtils.isEmpty(item.cover_url)){
             holder.riv.setVisibility(View.VISIBLE);
-            imageLoader.displayImage(item.cover_url,holder.riv,options);
+            GlideUtils.displayImage(item.cover_url,holder.riv);
         }else {
             holder.riv.setVisibility(View.GONE);
         }

@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -57,7 +58,8 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             holder=(ViewHolder)convertView.getTag();
         }
 
-        imageLoader.displayImage(item.medium_avatar_url,holder.riv,options);
+//        imageLoader.displayImage(item.medium_avatar_url,holder.riv,options);
+        GlideUtils.displayImage(item.medium_avatar_url,holder.riv);
         holder.tv_name.setText(item.nickname);
 
         if (!TextUtils.isEmpty(item.summary)){

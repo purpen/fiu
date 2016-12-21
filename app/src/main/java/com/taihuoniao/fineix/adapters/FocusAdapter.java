@@ -154,7 +154,8 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        ImageLoader.getInstance().displayImage(item.follows.avatar_url, riv, options);
+//        ImageLoader.getInstance().displayImage(item.follows.avatar_url, riv, options);
+        GlideUtils.displayImage(item.follows.avatar_url, riv);
         tv_take_photo.setText(String.format(tips + " %s ?", item.follows.nickname));
         tv_album.setText(tips);
         tv_album.setOnClickListener(this);

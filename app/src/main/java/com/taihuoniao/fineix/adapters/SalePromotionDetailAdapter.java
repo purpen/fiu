@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -41,7 +42,8 @@ public class SalePromotionDetailAdapter extends CommonBaseAdapter<SubjectData.Pr
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.banner_url, holder.imageView, options);
+//        ImageLoader.getInstance().displayImage(item.banner_url, holder.imageView, options);
+        GlideUtils.displayImage(item.banner_url, holder.imageView);
         holder.tvTitle.setText(String.format("%s. %s", position + 1, item.title));
         holder.tvDesc.setText(item.summary);
         holder.tvSalePrice.setText(String.format("￥%s", item.sale_price));

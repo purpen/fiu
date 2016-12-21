@@ -67,6 +67,7 @@
     <dimen name="gone_height">60dp</dimen>
     <!-- PictureEidtActivity -->
     <dimen name="filter_height">70dp</dimen>
+    <dimen name="ajust_height">25dp</dimen>
     <dimen name="top_margin">10dp</dimen>
     <dimen name="filter_size">12sp</dimen>
 
