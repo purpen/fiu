@@ -277,7 +277,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 imageButtonAjustCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(activity, "cancel", Toast.LENGTH_SHORT).show();
                         mGPUImageView.setFilter(currentFilter);
                         mGPUImageView.requestRender();
                         popupWindow.dismiss();
@@ -287,7 +286,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 imageButtonAjustComplete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(activity, "confirm", Toast.LENGTH_SHORT).show();
                         mGPUImageView.setFilter(currentFilter);
                         mGPUImageView.requestRender();
                         popupWindow.dismiss();

@@ -23,10 +23,13 @@
 
         <SeekBar
             android:id="@+id/seekBar1"
+            android:indeterminateTint="#BE8914"
             android:layout_width="match_parent"
+            android:thumbTint="#ffffff"
+            android:progressTint="#BE8914"
+            android:progressBackgroundTint="@color/white40"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp" />
-
     </LinearLayout>
 
     <LinearLayout
