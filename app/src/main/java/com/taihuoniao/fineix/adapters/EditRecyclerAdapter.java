@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
 
+import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+
 /**
  * Created by taihuoniao on 2016/3/21.
  */
@@ -43,7 +45,9 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
             public void onClick(View v) {
                 if (holder.getAdapterPosition() != lastClick) {
                     filterList.selectFilter(holder.getAdapterPosition());
-                    listener.onGpuImageFilterChosenListener(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(holder.getAdapterPosition())), holder.getAdapterPosition());
+                    GPUImageFilterTools.FilterType filterType = filterList.filters.get(holder.getAdapterPosition());
+                    GPUImageFilter gpuImageFilter = GPUImageFilterTools.createFilterForType(context, filterType);
+                    listener.onGpuImageFilterChosenListener(gpuImageFilter, holder.getAdapterPosition());
                     notifyDataSetChanged();
                     lastClick = holder.getAdapterPosition();
                 } else {

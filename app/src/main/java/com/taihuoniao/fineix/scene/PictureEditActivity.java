@@ -167,7 +167,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setFilterRecyclerAdapter(final float s) {
-        EditRecyclerAdapter recyclerAdapter = new EditRecyclerAdapter(this, this, new EditRecyclerAdapter.ItemClick() {
+        EditRecyclerAdapter recyclerAdapter = new EditRecyclerAdapter(PictureEditActivity.this, this, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
                 //当点击同一滤镜时，做滤镜调节时使用
@@ -191,6 +191,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     private ImageButton imageButtonAjustCancel;
     private ImageButton imageButtonAjustComplete;
     private GPUImageFilter ajustGPUImageFilter;
+    private Bitmap ajustBitmap;
 
     private void setAjustRecyclerAdapter(final float s) {
         final EditRecyclerAjustAdapter ajustAdapter = new EditRecyclerAjustAdapter(PictureEditActivity.this, new EditRecyclerAjustAdapter.ItemClick() {
@@ -205,6 +206,10 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 seekBar1 = (SeekBar)view. findViewById(R.id.seekBar1);
                 imageButtonAjustCancel = (ImageButton)view. findViewById(R.id.imageButton_ajust_cancel);
                 imageButtonAjustComplete = (ImageButton) view.findViewById(R.id.imageButton_ajust_complete);
+
+                if (ajustBitmap != null) {
+                    mGPUImageView.setImage(ajustBitmap);
+                }
 
                 switch (postion) {
                     case 0: //亮度
@@ -234,33 +239,42 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                         break;
                 }
 
+                if (ajustGPUImageFilter != null) {
+                    mGPUImageView.setFilter(ajustGPUImageFilter);
+                    filterAdjuster = new GPUImageFilterTools.FilterAdjuster(ajustGPUImageFilter);
+                }
 
                 seekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (ajustGPUImageFilter instanceof GPUImageBrightnessFilter) {
                             textView.setText(String.valueOf((progress - 50) * 2));
-                            ((GPUImageBrightnessFilter)ajustGPUImageFilter).setBrightness((progress - 50) /100f);
+                            filterAdjuster.adjust((progress));
+//                            ((GPUImageBrightnessFilter)ajustGPUImageFilter).setBrightness((progress - 50) /100f);
                         } else if (ajustGPUImageFilter instanceof GPUImageContrastFilter) {
                             // 比例值　1.2/25
                             textView.setText(String.valueOf(progress));
-                            ((GPUImageContrastFilter)ajustGPUImageFilter).setContrast((1.2f/25f ) * progress );
+                            filterAdjuster.adjust((progress));
+//                            ((GPUImageContrastFilter)ajustGPUImageFilter).setContrast((1.2f/25f ) * progress );
                         } else if (ajustGPUImageFilter instanceof GPUImageSaturationFilter) {
                             // 比例值　1.0 /50
                             textView.setText(String.valueOf(progress));
-                            ((GPUImageSaturationFilter)ajustGPUImageFilter).setSaturation((1.0f/50f ) * progress );
+                            filterAdjuster.adjust((progress));
+//                            ((GPUImageSaturationFilter)ajustGPUImageFilter).setSaturation((1.0f/50f ) * progress );
                         }  else if (ajustGPUImageFilter instanceof GPUImageSharpenFilter) {
                             textView.setText(String.valueOf((progress - 50) * 2));
-                            ((GPUImageSharpenFilter)ajustGPUImageFilter).setSharpness((progress - 50) /100f * 2);
+                            filterAdjuster.adjust((progress));
+//                            ((GPUImageSharpenFilter)ajustGPUImageFilter).setSharpness((progress - 50) /100f * 2);
 
                         } else if (ajustGPUImageFilter instanceof GPUImageWhiteBalanceFilter) {
                             textView.setText(String.valueOf(progress));
-                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress * 100f);
-                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint((progress - 50) /100f);
+                            filterAdjuster.adjust((progress + 50));
+//                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress * 100f);
+//                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint((progress - 50) /100f);
                         } else {
                             // TODO: 2016/12/21
                         }
-                        mGPUImageView.setFilter(ajustGPUImageFilter);
+//                        mGPUImageView.setFilter(ajustGPUImageFilter);
                         mGPUImageView.requestRender();
                     }
 
@@ -286,8 +300,21 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 imageButtonAjustComplete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mGPUImageView.setFilter(currentFilter);
-                        mGPUImageView.requestRender();
+
+                        try {
+                            ajustBitmap = mGPUImageView.capture();
+//                            mGPUImageView.setImage(ajustBitmap);
+//                            currentFilter = new GPUImageFilter();
+//                            mGPUImageView.requestRender();
+                            if (ajustBitmap != null) {
+                                mGPUImageView.setImage(ajustBitmap);
+                                currentFilter = new GPUImageFilter();
+                                mGPUImageView.setFilter(currentFilter);
+                                mGPUImageView.requestRender();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         popupWindow.dismiss();
                         setAjustTitileStatus(false, null); //设置标题栏文字
                     }
@@ -420,12 +447,12 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         final Bitmap newBitmap = Bitmap.createBitmap(w, w, Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(newBitmap);
         RectF dst = new RectF(0, 0, w, w);
-        cv.drawBitmap(MainApplication.cropBitmap, null, dst, null);
+        cv.drawBitmap(ajustBitmap == null ? MainApplication.cropBitmap : ajustBitmap, null, dst, null);
         //加商品
         EffectUtil.applyOnSave(cv, imageViewTouch);
         Log.e("<<<", "屏幕宽度=" + w + ",图片尺寸=width=" + MainApplication.cropBitmap.getWidth() + ",height=" + MainApplication.cropBitmap.getHeight());
         mGPUImageView.setImage(newBitmap);
-        onGpuImageFilterChosenListener(currentFilter, currentPosition);
+//        onGpuImageFilterChosenListener(currentFilter, currentPosition);
         Bitmap bitmap = null;
         try {
             bitmap = mGPUImageView.capture();
@@ -441,6 +468,10 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             ToastUtils.showError("图片信息错误，请重试");
             return;
         }
+
+        if (ajustBitmap != null) {
+            bitmap = ajustBitmap;
+        }
         MainApplication.editBitmap = bitmap;
         //保存标签信息
         List<TagItem> tagInfoList = new ArrayList<>();
@@ -449,7 +480,10 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         }
         MainApplication.tagInfoList = tagInfoList;
         Log.e("<<<上传之前", tagInfoList.toString());
-        mGPUImageView.setImage(MainApplication.cropBitmap);
+        if (ajustBitmap != null) {
+            mGPUImageView.setImage(ajustBitmap);
+        }
+//        mGPUImageView.setImage(ajustBitmap == null ? MainApplication.cropBitmap : ajustBitmap);
         dialog.dismiss();
         Intent intent = new Intent(this, CreateQJActivity.class);
         intent.putExtra(PictureEditActivity.class.getSimpleName(), false);
@@ -719,43 +753,57 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    private GPUImageFilterTools.FilterAdjuster filterAdjuster;
+
     @Override
     public void onGpuImageFilterChosenListener(GPUImageFilter filter, int position) {
         currentFilter = filter;
         currentPosition = position;
+        mGPUImageView.setImage(MainApplication.cropBitmap);
         mGPUImageView.setFilter(filter);
-        GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
-        switch (position) {
-            //        原图、都市、摩登、日光、摩卡、佳人、 候鸟、夏日、午茶、戏剧、流年、暮光
-            case 4:
-                filterAdjuster.adjust(97);//摩卡
-                break;
-            case 11:
-                filterAdjuster.adjust(45);//暮光
-                break;
-            case 6:
-                filterAdjuster.adjust(0);//候鸟
-                break;
-            case 7:
-                filterAdjuster.adjust(40);//夏日
-                break;
-            case 1:
-                filterAdjuster.adjust(100);//都市
-                break;
-            case 5:
-                filterAdjuster.adjust(25);//佳人
-                break;
-            case 10:
-                filterAdjuster.adjust(55);//流年
-                break;
-            case 3:
-                filterAdjuster.adjust(53);//日光
-                break;
-            case 8:
-                filterAdjuster.adjust(60);//午茶
-                break;
-        }
+
+//        filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
+//        GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
+//        switch (position) {
+//            //        原图、都市、摩登、日光、摩卡、佳人、 候鸟、夏日、午茶、戏剧、流年、暮光
+//            case 4:
+//                filterAdjuster.adjust(97);//摩卡
+//                break;
+//            case 11:
+//                filterAdjuster.adjust(45);//暮光
+//                break;
+//            case 6:
+//                filterAdjuster.adjust(0);//候鸟
+//                break;
+//            case 7:
+//                filterAdjuster.adjust(40);//夏日
+//                break;
+//            case 1:
+//                filterAdjuster.adjust(100);//都市
+//                break;
+//            case 5:
+//                filterAdjuster.adjust(25);//佳人
+//                break;
+//            case 10:
+//                filterAdjuster.adjust(55);//流年
+//                break;
+//            case 3:
+//                filterAdjuster.adjust(53);//日光
+//                break;
+//            case 8:
+//                filterAdjuster.adjust(60);//午茶
+//                break;
+//        }
         mGPUImageView.requestRender();
+        try {
+            ajustBitmap = mGPUImageView.capture();
+            mGPUImageView.setImage(ajustBitmap);
+            mGPUImageView.requestRender();
+            Toast.makeText(activity, "复制成功 ajustBitmap: " + ajustBitmap, Toast.LENGTH_SHORT).show();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(activity, "复制失败 ajustBitmap: ", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
