@@ -117,6 +117,30 @@
                     android:orientation="vertical" />
             </ScrollView>
 
+            <LinearLayout
+                android:id="@+id/linearLayout_sumary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="5dp"
+                    android:text="备注：" />
+
+                <TextView
+                    android:id="@+id/textView_sumary"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
             <RelativeLayout
                 style="@style/order_details_layout"
                 android:visibility="gone">
@@ -193,8 +217,9 @@
 
                     android:id="@+id/linearLayout_freight"
                     android:layout_width="80dp"
-                    android:layout_centerVertical="true"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+
                     <TextView
                         android:id="@+id/tv_freight"
                         style="@style/order_details_textview"
@@ -203,8 +228,9 @@
 
                     <View
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="0dp" />
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
                     <TextView
                         android:id="@+id/tv_freight2"
                         style="@style/order_details_textview"
@@ -216,13 +242,13 @@
                 <TextView
                     android:id="@+id/tv_freight_order_details"
                     style="@style/order_details_textview"
-                    android:gravity="right"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/yellow_bd8913"
                     android:layout_alignBaseline="@+id/linearLayout_freight"
                     android:layout_alignBottom="@+id/linearLayout_freight"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:gravity="right"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/yellow_bd8913" />
             </RelativeLayout>
 
             <RelativeLayout style="@style/order_details_layout">

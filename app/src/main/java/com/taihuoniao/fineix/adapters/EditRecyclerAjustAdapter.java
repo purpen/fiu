@@ -15,8 +15,8 @@ import com.taihuoniao.fineix.R;
  * Email: 895745843@qq.com
  */
 public class EditRecyclerAjustAdapter extends RecyclerView.Adapter<EditRecyclerAjustAdapter.VH> {
-    private int[] imgs = new int[]{R.mipmap.icon_ajust_01,R.mipmap.icon_ajust_02,R.mipmap.icon_ajust_03,R.mipmap.icon_ajust_04,R.mipmap.icon_ajust_05};
-    private String[] strs = new String[]{"亮度","对比度","饱和度","锐度","色温"};
+    private int[] imgs = new int[]{R.mipmap.icon_ajust_00,R.mipmap.icon_ajust_01,R.mipmap.icon_ajust_02,R.mipmap.icon_ajust_03,R.mipmap.icon_ajust_04,R.mipmap.icon_ajust_05};
+    private String[] strs = new String[]{"还原", "亮度","对比度","饱和度","锐度","色温"};
 
     private Context context;
     private ItemClick itemClick;

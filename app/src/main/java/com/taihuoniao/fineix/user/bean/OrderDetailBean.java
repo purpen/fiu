@@ -80,6 +80,7 @@ public class OrderDetailBean {
      * city_id : 72
      * county_id : 2839
      * town_id : 0
+     * "summary": "请注意发顺风",    // 备注
      */
 
     private ExpressInfoBean express_info;
@@ -88,6 +89,7 @@ public class OrderDetailBean {
     private String invoice_title;
     private String invoice_content;
     private String trade_site_name;
+    private String summary;
     private String payment_method;
     private String express_caty;
     private String express_company;
@@ -469,6 +471,14 @@ public class OrderDetailBean {
 
     public void setDiscount_money(String discount_money) {
         this.discount_money = discount_money;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public static class ExpressInfoBean {

@@ -21,8 +21,8 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.Base2Activity;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.personal.salesevice.ChargeBackActivity;
@@ -44,8 +44,15 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class OrderDetailsActivity extends Base2Activity implements View.OnClickListener {
     private static final String TAG = "OrderDetailsActivity";
+    @Bind(R.id.textView_sumary)
+    TextView textViewSumary;
+    @Bind(R.id.linearLayout_sumary)
+    LinearLayout linearLayoutSumary;
 
     private TextView mDeliverMan;
     private TextView mCity;
@@ -69,7 +76,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     private TextView mLogisticsNumber, mLogisticsCompany;
 
     private WaittingDialog mDialog;
-//    private AlertDialog.Builder alertDialog;
+    //    private AlertDialog.Builder alertDialog;
     private TextView mCounty;
     private TextView mTown;
     private OrderDetailBean orderDetailBean;
@@ -85,6 +92,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
+        ButterKnife.bind(this);
         initView();
         WindowUtils.chenjin(this);
     }
@@ -110,7 +118,8 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 try {
-                    HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() { });
+                    HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() {
+                    });
                     if (response.isError()) {
                         LogUtil.e(TAG, "---------> responseInfo: " + responseInfo.reasonPhrase);
                         return;
@@ -152,7 +161,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
             List<OrderDetailBean.SubOrdersBean> sub_orders = orderDetailBean.getSub_orders();
 
             View inflate = LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.layout_goods_details_up_sub, null);
-            ((TextView)inflate.findViewById(R.id.textView_suborder_number)).setText(orderDetailBean.getRid());
+            ((TextView) inflate.findViewById(R.id.textView_suborder_number)).setText(orderDetailBean.getRid());
             mContainerLayout.addView(inflate);
 
             for (int m = 0; m < sub_orders.size(); m++) {
@@ -479,6 +488,13 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
             ((RelativeLayout) mPayway.getParent()).setVisibility(View.GONE);
         } else {
             mPayway.setText(payment_method);
+        }
+
+        String summary = orderDetailBean.getSummary();
+        if (TextUtils.isEmpty(summary)) {
+            linearLayoutSumary.setVisibility(View.GONE);
+        } else {
+            textViewSumary.setText(summary);
         }
 
         mTotalMoney.setText("¥" + orderDetailBean.getTotal_money());//商品总额

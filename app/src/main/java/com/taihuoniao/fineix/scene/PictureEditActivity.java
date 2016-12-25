@@ -212,27 +212,34 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 }
 
                 switch (postion) {
-                    case 0: //亮度
+                    case 0:
+                        mGPUImageView.setImage(MainApplication.cropBitmap);
+                        currentFilter = new GPUImageFilter();
+                        mGPUImageView.setFilter(currentFilter);
+                        mGPUImageView.requestRender();
+                        ajustBitmap = null;
+                        return;
+                    case 1: //亮度
                         ajustGPUImageFilter = new GPUImageBrightnessFilter();
                         textView.setText(String.valueOf(0));
                         seekBar1.setProgress(50);
                         break;
-                    case 1: //对比度
+                    case 2: //对比度
                         ajustGPUImageFilter = new GPUImageContrastFilter();
                         textView.setText(String.valueOf(25));
                         seekBar1.setProgress(25);
                         break;
-                    case 2: //饱和度
+                    case 3: //饱和度
                         ajustGPUImageFilter = new GPUImageSaturationFilter();
                         textView.setText(String.valueOf(50));
                         seekBar1.setProgress(50);
                         break;
-                    case 3: //锐度
+                    case 4: //锐度
                         ajustGPUImageFilter = new GPUImageSharpenFilter();
                         textView.setText(String.valueOf(0));
                         seekBar1.setProgress(50);
                         break;
-                    case 4: //色温
+                    case 5: //色温
                         ajustGPUImageFilter = new GPUImageWhiteBalanceFilter();
                         textView.setText(String.valueOf(50));
                         seekBar1.setProgress(50);
@@ -241,7 +248,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
 
                 if (ajustGPUImageFilter != null) {
                     mGPUImageView.setFilter(ajustGPUImageFilter);
-                    filterAdjuster = new GPUImageFilterTools.FilterAdjuster(ajustGPUImageFilter);
+//                    filterAdjuster = new GPUImageFilterTools.FilterAdjuster(ajustGPUImageFilter);
                 }
 
                 seekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -249,28 +256,28 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (ajustGPUImageFilter instanceof GPUImageBrightnessFilter) {
                             textView.setText(String.valueOf((progress - 50) * 2));
-                            filterAdjuster.adjust((progress));
-//                            ((GPUImageBrightnessFilter)ajustGPUImageFilter).setBrightness((progress - 50) /100f);
+//                            filterAdjuster.adjust((progress));
+                            ((GPUImageBrightnessFilter)ajustGPUImageFilter).setBrightness((progress - 50) /100f);
                         } else if (ajustGPUImageFilter instanceof GPUImageContrastFilter) {
                             // 比例值　1.2/25
                             textView.setText(String.valueOf(progress));
-                            filterAdjuster.adjust((progress));
-//                            ((GPUImageContrastFilter)ajustGPUImageFilter).setContrast((1.2f/25f ) * progress );
+//                            filterAdjuster.adjust((progress));
+                            ((GPUImageContrastFilter)ajustGPUImageFilter).setContrast((1.2f/25f ) * progress );
                         } else if (ajustGPUImageFilter instanceof GPUImageSaturationFilter) {
                             // 比例值　1.0 /50
                             textView.setText(String.valueOf(progress));
-                            filterAdjuster.adjust((progress));
-//                            ((GPUImageSaturationFilter)ajustGPUImageFilter).setSaturation((1.0f/50f ) * progress );
+//                            filterAdjuster.adjust((progress));
+                            ((GPUImageSaturationFilter)ajustGPUImageFilter).setSaturation((1.0f/50f ) * progress );
                         }  else if (ajustGPUImageFilter instanceof GPUImageSharpenFilter) {
                             textView.setText(String.valueOf((progress - 50) * 2));
-                            filterAdjuster.adjust((progress));
-//                            ((GPUImageSharpenFilter)ajustGPUImageFilter).setSharpness((progress - 50) /100f * 2);
+//                            filterAdjuster.adjust((progress));
+                            ((GPUImageSharpenFilter)ajustGPUImageFilter).setSharpness((progress - 50) /100f * 2);
 
                         } else if (ajustGPUImageFilter instanceof GPUImageWhiteBalanceFilter) {
                             textView.setText(String.valueOf(progress));
-                            filterAdjuster.adjust((progress + 50));
-//                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress * 100f);
-//                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint((progress - 50) /100f);
+//                            filterAdjuster.adjust((progress + 50));
+                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress * 100f);
+                            ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint((progress - 50) /100f);
                         } else {
                             // TODO: 2016/12/21
                         }
@@ -300,17 +307,18 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 imageButtonAjustComplete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         try {
                             ajustBitmap = mGPUImageView.capture();
-//                            mGPUImageView.setImage(ajustBitmap);
-//                            currentFilter = new GPUImageFilter();
-//                            mGPUImageView.requestRender();
                             if (ajustBitmap != null) {
-                                mGPUImageView.setImage(ajustBitmap);
-                                currentFilter = new GPUImageFilter();
-                                mGPUImageView.setFilter(currentFilter);
-                                mGPUImageView.requestRender();
+                                titleLayout.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mGPUImageView.setImage(ajustBitmap);
+                                        currentFilter = new GPUImageFilter();
+                                        mGPUImageView.setFilter(currentFilter);
+                                        mGPUImageView.requestRender();
+                                    }
+                                }, 300);
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -753,7 +761,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private GPUImageFilterTools.FilterAdjuster filterAdjuster;
+//    private GPUImageFilterTools.FilterAdjuster filterAdjuster;
 
     @Override
     public void onGpuImageFilterChosenListener(GPUImageFilter filter, int position) {
@@ -799,10 +807,8 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             ajustBitmap = mGPUImageView.capture();
             mGPUImageView.setImage(ajustBitmap);
             mGPUImageView.requestRender();
-            Toast.makeText(activity, "复制成功 ajustBitmap: " + ajustBitmap, Toast.LENGTH_SHORT).show();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            Toast.makeText(activity, "复制失败 ajustBitmap: ", Toast.LENGTH_SHORT).show();
         }
     }
 
