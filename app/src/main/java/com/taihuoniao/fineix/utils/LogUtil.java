@@ -7,6 +7,7 @@ import android.util.Log;
  *         created at 2016/3/24 14:58
  */
 public class LogUtil {
+    private static final String TAG = "com.taihuoniao.fineix";
     private static final boolean DEV_MODE = true;
 
     public static void i(String tag, String msg) {
@@ -32,5 +33,9 @@ public class LogUtil {
             Log.e(tag, msg);
         }
     }
-
+     public static void e(String msg) {
+            if (DEV_MODE) {
+                Log.e(TAG, msg);
+            }
+        }
 }

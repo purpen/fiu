@@ -6,6 +6,7 @@ import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.Constants;
@@ -25,7 +26,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.WANT_BUY;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -58,7 +59,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.DELETE_PRODUCT;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //产品
@@ -79,7 +80,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("stage", stage);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -98,7 +99,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("link", link);
         params.addQueryStringParameter("cover_url", cover_url);
         params.addQueryStringParameter("banners_url", banners_url);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //产品
@@ -108,7 +109,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("title", title);
         params.addQueryStringParameter("brand_id", brand_id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -118,7 +119,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.GOOD_DETAILS;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -128,7 +129,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.URLSTRING_JD_PRODUCTSDATA;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("ids", ids);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //产品
@@ -137,7 +138,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.URLSTRING_TB_PRODUCTSDATA;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("ids", ids);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //情景
@@ -151,7 +152,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("user_id", user_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("event", event);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
 
@@ -170,7 +171,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("user_id", LoginInfo.getUserId() + "");
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("event", event);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FAVORITE_GET_NEW_LIST, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.FAVORITE_GET_NEW_LIST, callBack);
     }
 
     //情景
@@ -179,7 +180,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.SUBS_QINGJING;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //情景
@@ -188,7 +189,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.CANCEL_SUBS_QINGJING;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //情景
@@ -204,7 +205,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("tmp", tmp);
         params.addQueryStringParameter("lat", lat);
         params.addQueryStringParameter("lng", lng);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //情景
@@ -213,7 +214,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.DELETE_QINGJING;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //情景
@@ -222,7 +223,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.QINGJING_DETAILS;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
 
@@ -239,7 +240,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("dis", 10000 + "");
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("lat", lat);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //场景
@@ -261,7 +262,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("lat", lat);
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("subject_ids", subject_ids);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -271,7 +272,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.DELETE_SCENE;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -281,7 +282,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.LOVE_SCENE;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -291,7 +292,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.CANCEL_LOVE_SCENE;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -301,7 +302,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.SCENE_DETAILS;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -319,7 +320,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("dis", 10000 + "");
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("lat", lat);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -341,7 +342,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
         params.addQueryStringParameter("category_ids", category_ids);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     /**
@@ -358,7 +359,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
         params.addQueryStringParameter("subject_id", subject_id);
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     /**
@@ -376,7 +377,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("user_id", userId);
         params.addQueryStringParameter("show_all", show_all);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //个人中心
@@ -388,7 +389,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("has_scene", has_scene);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //标签
@@ -397,7 +398,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.USED_LABEL_LIST;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("type", 1 + "");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -411,7 +412,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sort", sort + "");
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("is_hot", is_hot + "");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //标签
@@ -424,7 +425,7 @@ public class ClientDiscoverAPI {
             url = NetworkConstance.PRODUCT_HOT_LABEL;
         }
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //标签
@@ -433,7 +434,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.HOT_LABEL_LIST;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //收货地址
@@ -441,7 +442,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> getProvinceList(RequestCallBack<String> callBack) {
         String url = NetworkConstance.URLSTRING_PROVINCE_CITIES;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -449,7 +450,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> getDefaultAddressNet(RequestCallBack<String> callBack) {
         String url = NetworkConstance.URLSTRING_DEFAULT_ADDRESS;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -459,7 +460,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.URLSTRING_ADDRESS_LISTS;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
 //        NetworkManager.getInstance().add("getAddressList", httpHandler);
     }
 
@@ -478,7 +479,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("address", address);
         params.addQueryStringParameter("zip", zip);
         params.addQueryStringParameter("is_default", is_default);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -488,7 +489,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.URLSTRING_DELETE_ADDRESS;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
 //        NetworkManager.getInstance().add("deleteAddress", httpHandler);
     }
@@ -503,7 +504,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("evt", evt);
         params.addQueryStringParameter("application", 3 + "");
         params.addQueryStringParameter("from_to", 4 + "");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -519,7 +520,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("self_run", self_run);
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("title", title);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //公共
@@ -528,7 +529,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BRAND_DETAIL;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -542,7 +543,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("show_all", show_all);
         params.addQueryStringParameter("domain", domain);
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -559,7 +560,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", "10");
         params.addQueryStringParameter("domain", "13");//情景主题
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //公共
@@ -574,7 +575,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("evt", evt);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("size", size);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -585,7 +586,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("t", "14"); //14.用户
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //公共
@@ -598,7 +599,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sight_id", sight_id);
         params.addQueryStringParameter("product_id", product_id);
         params.addQueryStringParameter("brand_id", brand_id);
-        return MD5Utils.sign(params, url, callBack);
+        return HttpRequest.sign(params, url, callBack);
     }
 
     //购物车
@@ -606,7 +607,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> cartNum(RequestCallBack<String> callBack) {
         String url = NetworkConstance.CART_NUMBER;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -623,7 +624,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("reply_user_id", reply_user_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("from_site", 4 + "");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -638,7 +639,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("target_user_id", target_user_id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -652,7 +653,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("target_user_id", target_user_id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //评论
@@ -661,7 +662,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.DELETE_COMMENT;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -673,7 +674,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", "4");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -683,7 +684,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.CATEGORY_LABEL;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("tag_id", tag_id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     //点击注册按钮
@@ -693,7 +694,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("verify_code", code);
         params.addQueryStringParameter("password", password);
         params.addQueryStringParameter("from_to", "2");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_REGISTER, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_REGISTER, callBack, false);
     }
 
     //点击登录按钮
@@ -702,7 +703,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("mobile", phone);
         params.addQueryStringParameter("from_to", "2");     //登录渠道
         params.addQueryStringParameter("password", password);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_LOGIN, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_LOGIN, callBack, false);
     }
 
     //第三方登录
@@ -712,14 +713,14 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("access_token", access_token);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("from_to", "2");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_THIRD_SIGN, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_THIRD_SIGN, callBack, false);
     }
 
     //注册及找回密码中的获取验证码
     public static void getVerifyCodeNet(RequestCallBack<String> callBack, String phone) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("mobile", phone);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_VERIFY_CODE, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_VERIFY_CODE, callBack, false);
     }
 
     //第三方登录之快捷注册(绑定手机号)
@@ -733,7 +734,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("access_token", access_token);
         params.addQueryStringParameter("third_source", type);
         params.addQueryStringParameter("from_to", "2"); //Android
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_THIRD_REGISTER_WITH_PHONE, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_THIRD_REGISTER_WITH_PHONE, callBack, false);
     }
 
     //第三方登录之快捷注册(不绑定手机号)
@@ -747,7 +748,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("access_token", access_token);
         params.addQueryStringParameter("third_source", type);
         params.addQueryStringParameter("from_to", "2");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_THIRD_REGISTER_WITHOUT_PHONE, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_THIRD_REGISTER_WITHOUT_PHONE, callBack, false);
     }
 
     //stick
@@ -766,7 +767,7 @@ public class ClientDiscoverAPI {
         }
 //        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
 //        HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.QING_JING, params, callBack);
-        MD5Utils.sign(params, NetworkConstance.QING_JING, callBack);
+        HttpRequest.sign(params, NetworkConstance.QING_JING, callBack);
     }
 
     //订阅
@@ -776,7 +777,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", pageSize);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("stick", stick);
-        MD5Utils.sign(params, NetworkConstance.QING_JING, callBack);
+        HttpRequest.sign(params, NetworkConstance.QING_JING, callBack);
     }
 
     /**
@@ -794,7 +795,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sort", "0");
         params.addQueryStringParameter("stick", "0");
         params.addQueryStringParameter("user_id", userId);
-        MD5Utils.sign(params, NetworkConstance.QING_JING, callBack);
+        HttpRequest.sign(params, NetworkConstance.QING_JING, callBack);
     }
 
     //找回忘记的密码
@@ -803,7 +804,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("mobile", phone);
         params.addQueryStringParameter("password", newpassword);
         params.addQueryStringParameter("verify_code", code);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_FIND_PWD, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_FIND_PWD, callBack, false);
     }
 
 
@@ -812,13 +813,13 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("user_id", userId);
         LogUtil.e("getMineInfo", userId);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MINE_INFO, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.MINE_INFO, callBack, false);
     }
 
     //获取个人中心
     public static HttpHandler<String> getUserCenterData(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_CENTER, callBack, false);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_CENTER, callBack, false);
         return httpHandler;
     }
 
@@ -834,7 +835,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", String.valueOf(5));
         params.addQueryStringParameter("name", page_name);
         params.addQueryStringParameter("use_cache", "1");
-        return MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
+        return HttpRequest.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }
 
     /**
@@ -848,7 +849,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", String.valueOf(page));
         params.addQueryStringParameter("size", String.valueOf(10));
 //        params.addBodyParameter("state",String.valueOf(1));
-        MD5Utils.sign(params, NetworkConstance.PRODUCTS_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.PRODUCTS_URL, callBack, false);
     }
 
     /**
@@ -868,7 +869,7 @@ public class ClientDiscoverAPI {
 //        LogUtil.e("userId",LoginInfo.getInstance().getId()+"");
         params.addQueryStringParameter("find_type", find_type);
         params.addQueryStringParameter("clean_remind", clean_remind);
-        MD5Utils.sign(params, NetworkConstance.FOCUS_FAVORITE_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.FOCUS_FAVORITE_URL, callBack, false);
     }
 
     /**
@@ -880,7 +881,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> focusOperate(String follow_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("follow_id", follow_id);
-        return MD5Utils.sign(params, NetworkConstance.FOCUS_OPRATE_URL, callBack, false);
+        return HttpRequest.sign(params, NetworkConstance.FOCUS_OPRATE_URL, callBack, false);
     }
 
     /**
@@ -892,7 +893,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> cancelFocusOperate(String follow_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("follow_id", follow_id);
-        return MD5Utils.sign(params, NetworkConstance.CANCEL_FOCUS_URL, callBack, false);
+        return HttpRequest.sign(params, NetworkConstance.CANCEL_FOCUS_URL, callBack, false);
     }
 
     /**
@@ -908,7 +909,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("contact", contact);
         params.addQueryStringParameter("from_to", "2"); //1.ios;2.android;3.ipad;4.win;5.web;6.wap
         params.addQueryStringParameter("kind", "3");   //1.网页版; 2.商城app; 3.Fiu
-        MD5Utils.sign(params, NetworkConstance.SUGGESTION_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.SUGGESTION_URL, callBack, false);
     }
 
     /**
@@ -926,7 +927,7 @@ public class ClientDiscoverAPI {
         } else {
             params.addQueryStringParameter(key, value);
         }
-        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
     /**
@@ -940,7 +941,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("nickname", nickname);
         params.addQueryStringParameter("sex", sex);
-        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
     /**
@@ -954,7 +955,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("age_group", age_group);
         params.addQueryStringParameter("assets", assets);
-        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
     /**
@@ -966,7 +967,7 @@ public class ClientDiscoverAPI {
     public static void subscribeTheme(String interest_scene_cate, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("interest_scene_cate", interest_scene_cate);
-        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
     /**
@@ -980,7 +981,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("label", label);
         params.addQueryStringParameter("summary", summary);
-        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
     /**
@@ -990,7 +991,7 @@ public class ClientDiscoverAPI {
      */
     public static void getAllCities(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        MD5Utils.sign(params, NetworkConstance.ALL_CITY_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.ALL_CITY_URL, callBack, false);
     }
 
     /**
@@ -1002,7 +1003,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("tmp", tmp);
         params.addQueryStringParameter("type", type);
-        MD5Utils.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
     }
 
     /**
@@ -1013,7 +1014,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> uploadBgImg(String tmp, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("tmp", tmp);
-        HttpHandler<String> handler = MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
+        HttpHandler<String> handler = HttpRequest.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
         NetworkManager.getInstance().add(NetworkConstance.UPLOAD_BG_URL, handler);
         return handler;
     }
@@ -1029,7 +1030,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", pageSize);
-        MD5Utils.sign(params, NetworkConstance.SYSTEM_NOTICE, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.SYSTEM_NOTICE, callBack, false);
     }
 
     /**
@@ -1045,7 +1046,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", pageSize);
         params.addQueryStringParameter("type", type);
-        MD5Utils.sign(params, NetworkConstance.MESSAGE_RECORD, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.MESSAGE_RECORD, callBack, false);
     }
 
     /**
@@ -1059,7 +1060,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("to_user_id", to_user_id);
         params.addQueryStringParameter("content", content);
-        MD5Utils.sign(params, NetworkConstance.SEND_MESSAGE, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.SEND_MESSAGE, callBack, false);
     }
 
     /**
@@ -1071,7 +1072,7 @@ public class ClientDiscoverAPI {
     public static void messageDetailList(String to_user_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("to_user_id", to_user_id);
-        MD5Utils.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);
     }
 
     //验证红包是否可用
@@ -1080,7 +1081,7 @@ public class ClientDiscoverAPI {
 //        params.addQueryStringParameter("uuid", uuid);
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("code", code);
-        MD5Utils.sign(params, NetworkConstance.SHOPPING_USE_BONUS, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.SHOPPING_USE_BONUS, callBack, false);
     }
 
 
@@ -1091,7 +1092,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("used", used);
         params.addQueryStringParameter("is_expired", time);
-        MD5Utils.sign(params, NetworkConstance.MY_BONUS, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.MY_BONUS, callBack, false);
     }
 
     /**
@@ -1105,7 +1106,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("password", password);
         params.addQueryStringParameter("new_password", new_password);
-        MD5Utils.sign(params, NetworkConstance.MY_MODIFY_PASSWORD, callBack, false);
+        HttpRequest.sign(params, NetworkConstance.MY_MODIFY_PASSWORD, callBack, false);
     }
 
     //立即下单
@@ -1119,7 +1120,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("summary", summary);
         params.addQueryStringParameter("transfer_time", transfer_time);
         params.addQueryStringParameter("bonus_code", bonus_code);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
 //        NetworkManager.getInstance().add("nowConfirmOrder", httpHandler);
         return httpHandler;
     }
@@ -1127,14 +1128,14 @@ public class ClientDiscoverAPI {
     //购物车
     public static HttpHandler<String> shopCartNet(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_FETCH_CART, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_FETCH_CART, callBack);
         return httpHandler;
     }
 
     //购物车数量
     public static HttpHandler<String> shopCartNumberNet(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_FETCH_CART_COUNT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_FETCH_CART_COUNT, callBack);
         return httpHandler;
     }
 
@@ -1143,14 +1144,14 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("array", array);
         params.addQueryStringParameter("referral_code", SPUtil.read("referral_code" ));
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPING_CHECKOUT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPING_CHECKOUT, callBack);
     }
 
     //删除购物车
     public static void deletShopCartNet(String array, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("array", array);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_REMOVE_CART, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_REMOVE_CART, callBack);
     }
 
     //取消点赞
@@ -1159,7 +1160,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -1169,7 +1170,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -1180,7 +1181,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("n", n);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -1192,7 +1193,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("n", n);
         params.addQueryStringParameter("referral_code", SPUtil.read("referral_code" ));
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -1200,21 +1201,21 @@ public class ClientDiscoverAPI {
     public static void deleteOrderNet(String rid, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MY_DELETE_ORDER, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.MY_DELETE_ORDER, callBack);
     }
 
     //取消订单
     public static void cancelOrderNet(String rid, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MY_CANCEL_ORDER, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.MY_CANCEL_ORDER, callBack);
     }
 
     //订单支付详情和订单详情都是这,发表评价界面的产品图片也从这获取
     public static HttpHandler<String> OrderPayNet(String rid, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
-        return MD5Utils.sign(params, NetworkConstance.SHOPPING_DETAILS, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SHOPPING_DETAILS, callBack);
     }
 
     //申请退款
@@ -1223,7 +1224,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("option", option);
         params.addQueryStringParameter("content", content);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_APPLY_REFUND, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_APPLY_REFUND, callBack);
         return httpHandler;
     }
 
@@ -1231,7 +1232,7 @@ public class ClientDiscoverAPI {
     public static void confirmReceiveNet(String rid, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_TAKE_DELIVERY, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_TAKE_DELIVERY, callBack);
     }
 
     //发表评价
@@ -1240,7 +1241,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("array", array);
         params.addQueryStringParameter("from_site", "4");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.PRODUCT_AJAX_COMMENT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.PRODUCT_AJAX_COMMENT, callBack);
     }
 
     //账户处的订单列表
@@ -1249,26 +1250,26 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("status", status);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_ORDERS, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_ORDERS, callBack);
     }
 
     //账户处的用户个人信息
     public static void userInfoNet(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_USER, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_USER, callBack);
     }
 
     //购物车中单个商品的库存（即最大加减数）
     public static void shopcartInventoryNet(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_FETCH_CART_PRODUCT_COUUNT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_FETCH_CART_PRODUCT_COUUNT, callBack);
     }
 
     //购物车中商品加减数量
     public static void shopcartAddSubtractNet(String array, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("array", array);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPINGN_EDIT_CART, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPINGN_EDIT_CART, callBack);
     }
 
     //最fiu伙伴
@@ -1278,7 +1279,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("sort", sort);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -1289,7 +1290,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("sort", sort);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     /**
@@ -1302,7 +1303,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.UPDATE_USER_IDENTIFY;
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     /**
@@ -1319,7 +1320,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
 
@@ -1336,7 +1337,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sight_count", sight_count); //场景数量
         params.addQueryStringParameter("sort", sort); //0是最新 1是随机
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FIND_FRIENDS, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.FIND_FRIENDS, callBack);
     }
 
     /**
@@ -1347,7 +1348,7 @@ public class ClientDiscoverAPI {
     public static void logout(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("from_to", "2"); // 1.ios;2.android;3.win;4.ipad;
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.LOGOUT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.LOGOUT, callBack);
     }
 
     /**
@@ -1359,7 +1360,7 @@ public class ClientDiscoverAPI {
     public static void getPhoneState(String account, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("account", account);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.GET_REGIST_STATE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.GET_REGIST_STATE, callBack);
     }
 
     /**
@@ -1373,7 +1374,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("payaway", payaway);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.PAY_URL, callBack, true);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.PAY_URL, callBack, true);
     }
 
     /**
@@ -1381,7 +1382,7 @@ public class ClientDiscoverAPI {
      */
     public static void getLoginStatus(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.CHECK_LOGIN_URL, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.CHECK_LOGIN_URL, callBack);
     }
 
 
@@ -1393,21 +1394,21 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("contact", contact);
         params.addQueryStringParameter("id_card_a_tmp", id_card_a_tmp);
         params.addQueryStringParameter("business_card_tmp", business_card_tmp);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.UPLOAD_IDENTIFY_URL, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.UPLOAD_IDENTIFY_URL, callBack);
         NetworkManager.getInstance().add(NetworkConstance.UPLOAD_IDENTIFY_URL, httpHandler);
     }
 
     public static void tixingFahuo(String rid, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_ALERT_SEND_GOODS, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_ALERT_SEND_GOODS, callBack);
     }
 
     //分享场景语境次数
     public static void commitShareCJ(String id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_SIGHT_ADD_SHARE_CONTEXT_NUM, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_SIGHT_ADD_SHARE_CONTEXT_NUM, callBack);
     }
 
     /**
@@ -1417,7 +1418,7 @@ public class ClientDiscoverAPI {
      */
     public static void getAuthStatus(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MY_FETCH_TALENT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.MY_FETCH_TALENT, callBack);
     }
 
     //送积分
@@ -1427,7 +1428,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("evt", evt);
         params.addQueryStringParameter("target_id", target_id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
         return httpHandler;
     }
 
@@ -1440,7 +1441,7 @@ public class ClientDiscoverAPI {
     public static void getSubjectData(String id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_SUBJECT_VIEW, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_SUBJECT_VIEW, callBack);
     }
 
 
@@ -1450,7 +1451,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
     public static void cancelFavorite(String id, String type, RequestCallBack<String> callBack) {
@@ -1458,26 +1459,26 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
     }
 
 
     public static void isInvited(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.GATEWAY_IS_INVITED, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.GATEWAY_IS_INVITED, callBack);
     }
 
 
     public static void submitInviteCode(String code, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("code", code);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.GATEWAY_VALIDE_INVITE_CODE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.GATEWAY_VALIDE_INVITE_CODE, callBack);
     }
 
     public static void updateInviteCodeStatus(String code, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("code", code);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.GATEWAY_DEL_INVITE_CODE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.GATEWAY_DEL_INVITE_CODE, callBack);
     }
 
     /**
@@ -1494,7 +1495,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("user_id", String.valueOf(LoginInfo.getUserId()));
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("event", event);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FAVORITE_GET_NEW_LIST, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.FAVORITE_GET_NEW_LIST, callBack);
     }
 
     //创建情景时，根据标题和描述搜索标签
@@ -1503,7 +1504,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("title", title);
         params.addQueryStringParameter("size", 10 + "");
         params.addQueryStringParameter("content", content);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.GATEWAY_FETCH_CHINESE_WORD, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.GATEWAY_FETCH_CHINESE_WORD, callBack);
     }
 
     //语境列表
@@ -1514,14 +1515,14 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("category_id", category_id);
         params.addQueryStringParameter("stick", stick);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_CONTEXT_GETLIST, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_CONTEXT_GETLIST, callBack);
         return httpHandler;
     }
 
     //用户激活状态
     public static void activeStatus(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.GATEWAY_RECORD_FIU_USER_ACTIVE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.GATEWAY_RECORD_FIU_USER_ACTIVE, callBack);
     }
 
     //验证验证码
@@ -1529,7 +1530,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("phone", phone);
         params.addQueryStringParameter("code", code);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_CHECK_VERIFY_CODE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_CHECK_VERIFY_CODE, callBack);
     }
 
     //注册用户
@@ -1539,7 +1540,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("password", password);
         params.addQueryStringParameter("verify_code", verify_code);
         params.addQueryStringParameter("from_to", "2"); //1.ios;2.android;3.win;
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.AUTH_REGISTER, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.AUTH_REGISTER, callBack);
     }
 
     //完善资料--->关注感兴趣的人
@@ -1549,20 +1550,20 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", "18");
         params.addQueryStringParameter("type", "1");
         params.addQueryStringParameter("edit_stick", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_FIND_USER, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_FIND_USER, callBack);
     }
 
     //开始关注感兴趣的人
     public static void focusUsers(String follow_ids, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("follow_ids", follow_ids);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FOLLOW_BATCH_FOLLOW, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.FOLLOW_BATCH_FOLLOW, callBack);
     }
 
     //获取推荐活动标签
     public static HttpHandler<String> activeTags(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_SIGHT_STICK_ACTIVE_TAGS, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_SIGHT_STICK_ACTIVE_TAGS, callBack);
         return httpHandler;
     }
 
@@ -1570,7 +1571,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> addBrand(String title, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("title", title);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_BRANDS_SUBMIT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_BRANDS_SUBMIT, callBack);
         return httpHandler;
     }
 
@@ -1579,7 +1580,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("size", size);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SEARCH_EXPANDED, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SEARCH_EXPANDED, callBack);
         return httpHandler;
     }
 
@@ -1591,14 +1592,14 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> cancelSubscribe(String id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MY_REMOVE_INTEREST_SCENE_ID, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.MY_REMOVE_INTEREST_SCENE_ID, callBack);
         return httpHandler;
     }
 
     public static HttpHandler<String> subscribe(String id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MY_ADD_INTEREST_SCENE_ID, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.MY_ADD_INTEREST_SCENE_ID, callBack);
         return httpHandler;
     }
 
@@ -1606,7 +1607,7 @@ public class ClientDiscoverAPI {
     public static void viewCount(String qjId) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", qjId);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_SIGHT_RECORD_VIEW, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_SIGHT_RECORD_VIEW, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -1629,7 +1630,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_SUBJECT_GETLIST, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_SUBJECT_GETLIST, callBack);
         return httpHandler;
     }
 
@@ -1637,7 +1638,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> firstProducts(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.PRODUCCT_INDEX_NEW, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.PRODUCCT_INDEX_NEW, callBack);
         return httpHandler;
     }
 
@@ -1656,7 +1657,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", pageType);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.CHOOSEN_SUBJECT_URL, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.CHOOSEN_SUBJECT_URL, callBack);
         NetworkManager.getInstance().add(MD5Utils.getMD5(NetworkConstance.CHOOSEN_SUBJECT_URL),httpHandler);
     }
 
@@ -1665,7 +1666,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FAVORITE_AJAX_FAVORITE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.FAVORITE_AJAX_FAVORITE, callBack);
         return httpHandler;
     }
 
@@ -1674,7 +1675,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FAVORITE_AJAX_CANCEL_FAVORITE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.FAVORITE_AJAX_CANCEL_FAVORITE, callBack);
         return httpHandler;
     }
 
@@ -1686,7 +1687,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size + "");
         params.addQueryStringParameter("edit_stick", "1");
         params.addQueryStringParameter("sort", "1");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_FIND_USER, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_FIND_USER, callBack);
         return httpHandler;
     }
 
@@ -1694,7 +1695,7 @@ public class ClientDiscoverAPI {
     public static void getTempGoods(String id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_TEMP_VIEW, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_TEMP_VIEW, callBack);
     }
 
     /**
@@ -1706,13 +1707,13 @@ public class ClientDiscoverAPI {
     public static void updateShareCount(String id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SCENE_SUBJECT_RECORD_SHARE_COUNT, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SCENE_SUBJECT_RECORD_SHARE_COUNT, callBack);
     }
 
     //当前用户是否是管理员
     public static HttpHandler<String> isEditor(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_IS_EDITOR, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_IS_EDITOR, callBack);
         return httpHandler;
     }
 
@@ -1721,7 +1722,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("evt", evt);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_DO_FINE, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_DO_FINE, callBack);
         return httpHandler;
     }
 
@@ -1730,7 +1731,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("evt", evt);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_DO_STICK, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_DO_STICK, callBack);
         return httpHandler;
     }
 
@@ -1739,7 +1740,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("evt", evt);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_DO_CHECK, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.USER_DO_CHECK, callBack);
         return httpHandler;
     }
 
@@ -1755,7 +1756,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("oid",oid);
         params.addQueryStringParameter("pid",pid);
         params.addQueryStringParameter("layer",layer);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.SHOPPING_FETCH_CHINA_CITY, callBack);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, NetworkConstance.SHOPPING_FETCH_CHINA_CITY, callBack);
     }
 
     /**
@@ -1764,7 +1765,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> getIndexChosenSubject(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("use_cache", "1");
-        return MD5Utils.sign(params, NetworkConstance.SCENE_SUBJECT_INDEX_SUJECT_STICK, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SCENE_SUBJECT_INDEX_SUJECT_STICK, callBack);
     }
 
     /**
@@ -1776,7 +1777,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
-        return MD5Utils.sign(params, NetworkConstance.SHOPPING_REFUND_LIST, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SHOPPING_REFUND_LIST, callBack);
     }
 
     /**
@@ -1788,7 +1789,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rId);
         params.addQueryStringParameter("sku_id", skuId);
-        return MD5Utils.sign(params, NetworkConstance.SHOPPING_CHECK_REFUND, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SHOPPING_CHECK_REFUND, callBack);
     }
 
     /**
@@ -1806,7 +1807,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("refund_reason", refund_reason);
         params.addQueryStringParameter("refund_content", refund_content);
         params.addQueryStringParameter("refund_price", refund_price);
-        return MD5Utils.sign(params, NetworkConstance.SHOPPING_APPLY_PRODUCT_REFUND, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SHOPPING_APPLY_PRODUCT_REFUND, callBack);
     }
 
     /**
@@ -1817,7 +1818,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> getRefundSuccessInfo(String chargebackId,RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", chargebackId);
-        return MD5Utils.sign(params, NetworkConstance.SHOPPING_REFUND_VIEW, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SHOPPING_REFUND_VIEW, callBack);
     }
 
     /**
@@ -1828,7 +1829,7 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> updateToLatestVersion(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("from_to", "2");
-        return MD5Utils.sign(params, NetworkConstance.FETCH_LATEST_VERSION, callBack);
+        return HttpRequest.sign(params, NetworkConstance.FETCH_LATEST_VERSION, callBack);
     }
 
     /**
@@ -1840,7 +1841,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("from_to", "2");
         params.addQueryStringParameter("version", versionName);
-        return MD5Utils.sign(params, NetworkConstance.CHECK_VERSION_INFO, callBack);
+        return HttpRequest.sign(params, NetworkConstance.CHECK_VERSION_INFO, callBack);
     }
 
     /**
@@ -1852,7 +1853,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("addbook_id", addbook_id);
         params.addQueryStringParameter("rid", rid);
-        return MD5Utils.sign(params, NetworkConstance.SHOPPING_FETCH_FREIGHT, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SHOPPING_FETCH_FREIGHT, callBack);
     }
 
     /**
@@ -1865,6 +1866,6 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("express_no", express_no);
         params.addQueryStringParameter("express_caty", express_caty);
-        return MD5Utils.sign(params, NetworkConstance.SHOPPING_TRACKING, callBack);
+        return HttpRequest.sign(params, NetworkConstance.SHOPPING_TRACKING, callBack);
     }
 }

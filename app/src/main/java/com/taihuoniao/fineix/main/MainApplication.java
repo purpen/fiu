@@ -38,6 +38,8 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import cn.finalteam.okhttpfinal.OkHttpFinal;
+import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 
 
 /**
@@ -97,6 +99,9 @@ public class MainApplication extends Application {
 //        } catch (Exception e) {
 //        }
         initPush();
+
+        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
+        OkHttpFinal.getInstance().init(builder.build());
     }
 
 

@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.utils;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.lidroid.xutils.HttpUtils;
@@ -45,12 +46,8 @@ public class MD5Utils {
         }
     }
 
-    public static HttpHandler<String> sign(RequestParams params, String url, RequestCallBack<String> callBack) {
-        return sign(params, url, callBack, false);
-    }
-
-    //sign
-    public static HttpHandler<String> sign(RequestParams params, String url, RequestCallBack<String> callBack, boolean isPay) {
+    @NonNull
+    public static List<NameValuePair> getSignedNameValuePairs(RequestParams params) {
         boolean firstIn = true;
         params.addQueryStringParameter("client_id", "1415289600");
         params.addQueryStringParameter("uuid", MainApplication.uuid);
@@ -87,13 +84,7 @@ public class MD5Utils {
 
         params.addQueryStringParameter("sign", sign1);
         Log.e("<<<", params.getQueryStringParams().toString());
-        params.addBodyParameter(list);
-        params.getQueryStringParams().clear();
-        HttpUtils httpUtils = new HttpUtils(ConstantCfg.CONN_TIMEOUT);
-        if (isPay) {
-            httpUtils.configCurrentHttpCacheExpiry(1000);
-        }
-        return httpUtils.send(HttpRequest.HttpMethod.POST, url, params, callBack);
+        return list;
     }
 
 
