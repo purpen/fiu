@@ -20,7 +20,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetWorkUtils;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -125,7 +125,7 @@ public class SystemSettingsActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.item_service:
-                String url1 = NetworkConstance.BASE_URL + "/view/fiu_service_term?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
+                String url1 = URL.BASE_URL + "/view/fiu_service_term?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(), url1);
                 intent.putExtra(AboutUsActivity.class.getName(), "服务条款");
@@ -133,7 +133,7 @@ public class SystemSettingsActivity extends BaseActivity {
                 break;
             case R.id.item_about_us:
                 intent = new Intent(activity, AboutUsActivity.class);
-                intent.putExtra(AboutUsActivity.class.getSimpleName(), NetworkConstance.SETTINGSS_ABOUTUS);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.SETTINGSS_ABOUTUS);
                 intent.putExtra(AboutUsActivity.class.getName(), "关于我们");
                 startActivity(intent);
                 break;

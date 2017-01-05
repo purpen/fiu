@@ -5,8 +5,8 @@ package com.taihuoniao.fineix.base;
  * Email: 895745843@qq.com
  */
 
-interface GlobalDataCallBack {
-    void processData(String paramObject);
+public interface GlobalDataCallBack {
+    void onSuccess(String string);
 
-    void responseError(String string);
+    void onFailure(String string);
 }

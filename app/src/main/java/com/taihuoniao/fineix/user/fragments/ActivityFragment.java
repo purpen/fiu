@@ -22,7 +22,7 @@ import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -159,7 +159,7 @@ public class ActivityFragment extends MyBaseFragment {
 
     @Override
     public void onDestroy() {
-        NetworkManager.getInstance().cancel(MD5Utils.getMD5(NetworkConstance.CHOOSEN_SUBJECT_URL));
+        NetworkManager.getInstance().cancel(MD5Utils.getMD5(URL.CHOOSEN_SUBJECT_URL));
         super.onDestroy();
     }
 }

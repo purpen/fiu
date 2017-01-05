@@ -3,28 +3,20 @@ package com.taihuoniao.fineix.base;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ConstantCfg;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 import com.taihuoniao.fineix.utils.OkHttpUtils;
-import com.taihuoniao.fineix.utils.Util;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import okhttp3.Call;
@@ -50,51 +42,55 @@ public class HttpRequest {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case CALLBACK_SUCCESS:
-                    callBack.processData((String) msg.obj);
+                    callBack.onSuccess((String) msg.obj);
                     break;
                 case CALLBACK_FAILURE:
-                    callBack.responseError((String) msg.obj);
+                    callBack.onFailure((String) msg.obj);
                     break;
             }
         }
     }
 
-    public static void getDataFromServer(RequestParams params, final String requestUrl, GlobalDataCallBack callBack) throws IOException {
-        getDataFromServer(getList(params), requestUrl, callBack, true);
+    public static void getDataFromServer(RequestParams params, final String requestUrl, GlobalDataCallBack callBack) {
+        getDataFromServer(getSignedList(params), requestUrl, callBack, true);
     }
 
-    public static void getDataFromServer(List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) throws IOException {
+    private static void getDataFromServer(List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
         final BaseHandler handler = new BaseHandler(null, callBack);
         LogUtil.e("请求接口为" + requestUrl + "\\n" + "请求参数为" + list.toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
-            requestUrlreal = NetworkConstance.BASE_URL + requestUrl;
+            requestUrlreal = URL.BASE_URL + requestUrl;
         }
-        OkHttpUtils.post(requestUrlreal, list, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Message msg = Message.obtain();
-                msg.what = CALLBACK_FAILURE;
-                handler.sendMessage(msg);
-            }
+        try {
+            OkHttpUtils.post(requestUrlreal, list, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Message msg = Message.obtain();
+                    msg.what = CALLBACK_FAILURE;
+                    handler.sendMessage(msg);
+                }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Message msg = Message.obtain();
-                msg.what = CALLBACK_SUCCESS;
-                msg.obj = response.body().string();
-                LogUtil.e("请求接口为" + requestUrl + "\\n" + "返回数据为" + msg.obj);
-                handler.sendMessage(msg);
-            }
-        });
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    Message msg = Message.obtain();
+                    msg.what = CALLBACK_SUCCESS;
+                    msg.obj = response.body().string();
+                    LogUtil.e("请求接口为" + requestUrl + "\\n" + "返回数据为" + msg.obj);
+                    handler.sendMessage(msg);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static List<NameValuePair> getList(RequestParams params){
-        List<NameValuePair> list = new ArrayList<>();
+    private static List<NameValuePair> getSignedList(RequestParams params){
+        List<NameValuePair> signedNameValuePairs = null;
         if (params != null) {
-            list = params.getQueryStringParams();
+            signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
         }
-        return list;
+        return signedNameValuePairs;
     }
 
     /********************************************** 旧的网络请求******************************************************/

@@ -20,9 +20,6 @@ import okhttp3.Response;
 /**
  * Created by Stephen on 2017/1/4 14:22
  * Email: 895745843@qq.com
- * <p>
- * OkHttp封装的一个简单易用HTTP请求, OkHttp文件下载管理
- * 地址https://github.com/pengjianbo/FileDownloaderFinal
  */
 
 public class OkHttpUtils {

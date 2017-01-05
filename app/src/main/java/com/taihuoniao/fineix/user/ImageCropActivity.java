@@ -18,7 +18,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -91,7 +91,7 @@ public class ImageCropActivity extends BaseActivity {
     void performClick(View v) {
         switch (v.getId()) {
             case R.id.bt_cancel:
-                NetworkManager.getInstance().cancel(NetworkConstance.UPLOAD_BG_URL);
+                NetworkManager.getInstance().cancel(URL.UPLOAD_BG_URL);
                 finish();
                 break;
             case R.id.bt_clip:

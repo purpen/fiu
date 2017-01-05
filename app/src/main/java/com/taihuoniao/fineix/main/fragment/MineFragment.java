@@ -20,7 +20,6 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
@@ -32,7 +31,7 @@ import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
@@ -347,7 +346,7 @@ public class MineFragment extends MyBaseFragment {
                 break;
             case R.id.item_about_us:
                 intent = new Intent(activity, AboutUsActivity.class);
-                intent.putExtra(AboutUsActivity.class.getSimpleName(), NetworkConstance.SETTINGS_ABOUTUS);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.SETTINGS_ABOUTUS);
                 intent.putExtra(AboutUsActivity.class.getName(), "关于Fiu");
                 startActivity(intent);
                 break;
@@ -386,7 +385,7 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(new Intent(activity, CollectionsActivity.class));
                         break;
                     case 5:
-                        String url = NetworkConstance.BASE_URL + "/view/fiu_point?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
+                        String url = URL.BASE_URL + "/view/fiu_point?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
                         intent = new Intent(activity, AboutUsActivity.class);
                         intent.putExtra(AboutUsActivity.class.getSimpleName(), url);
                         intent.putExtra(AboutUsActivity.class.getName(), "积分");
