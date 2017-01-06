@@ -42,47 +42,53 @@ public class HttpRequest {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case CALLBACK_SUCCESS:
-                    callBack.onSuccess((String) msg.obj);
+//                    callBack.onSuccess((String) msg.obj);
                     break;
                 case CALLBACK_FAILURE:
-                    callBack.onFailure((String) msg.obj);
+//                    callBack.onFailure((String) msg.obj);
                     break;
             }
         }
     }
 
-    public static void getDataFromServer(RequestParams params, final String requestUrl, GlobalDataCallBack callBack) {
-        getDataFromServer(getSignedList(params), requestUrl, callBack, true);
+    public static Call post(RequestParams params, String requestUrl){
+        List<NameValuePair> nameValuePairs = getSignedList(params);
+        LogUtil.e("请求接口为" + requestUrl + "\\n" + "请求参数为" + nameValuePairs.toString());
+        String requestUrlreal = requestUrl;
+        if (!requestUrl.contains("http")) {
+            requestUrlreal = URL.BASE_URL + requestUrl;
+        }
+        return OkHttpUtils.post(requestUrlreal, nameValuePairs);
     }
 
-    private static void getDataFromServer(List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
+    public static Call post(RequestParams params, String requestUrl, GlobalDataCallBack callBack) {
+        return post(getSignedList(params), requestUrl, callBack, true);
+    }
+
+    private static Call post(List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
         final BaseHandler handler = new BaseHandler(null, callBack);
         LogUtil.e("请求接口为" + requestUrl + "\\n" + "请求参数为" + list.toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
             requestUrlreal = URL.BASE_URL + requestUrl;
         }
-        try {
-            OkHttpUtils.post(requestUrlreal, list, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Message msg = Message.obtain();
-                    msg.what = CALLBACK_FAILURE;
-                    handler.sendMessage(msg);
-                }
+        return OkHttpUtils.post(requestUrlreal, list, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Message msg = Message.obtain();
+                msg.what = CALLBACK_FAILURE;
+                handler.sendMessage(msg);
+            }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    Message msg = Message.obtain();
-                    msg.what = CALLBACK_SUCCESS;
-                    msg.obj = response.body().string();
-                    LogUtil.e("请求接口为" + requestUrl + "\\n" + "返回数据为" + msg.obj);
-                    handler.sendMessage(msg);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Message msg = Message.obtain();
+                msg.what = CALLBACK_SUCCESS;
+                msg.obj = response.body().string();
+                LogUtil.e("请求接口为" + requestUrl + "\\n" + "返回数据为" + msg.obj);
+                handler.sendMessage(msg);
+            }
+        });
     }
 
     private static List<NameValuePair> getSignedList(RequestParams params){

@@ -10,8 +10,11 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.CartDoOrderBonus;
 import com.taihuoniao.fineix.beans.DictBean;
@@ -52,7 +55,9 @@ public class DataPaser {
      * @param handler handler
      */
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
-        ClientDiscoverAPI.search(q, t, null, page, "8", evt, sort, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getsearchRequestParams(q, t, null, page, "8", evt, sort);
+        HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.search(q, t, null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -144,7 +149,9 @@ public class DataPaser {
      * @param code code
      */
     public static void findPasswordParser(final Handler handler, String phone, String password, String code) {
-        ClientDiscoverAPI.findPasswordNet(phone, password, code, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getfindPasswordNetRequestParams(phone, password, code);
+        HttpRequest.post(params, URL.AUTH_FIND_PWD, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.findPasswordNet(phone, password, code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 FindPasswordInfo findPasswordInfo = null;

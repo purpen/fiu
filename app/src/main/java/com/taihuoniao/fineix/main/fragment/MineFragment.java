@@ -17,12 +17,15 @@ import android.widget.TextView;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -187,8 +190,9 @@ public class MineFragment extends MyBaseFragment {
             LogUtil.e(TAG, "isUserLogin()==false");
             return;
         }
-
-        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
+        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onStart() {
 //                if (!activity.isFinishing() && dialog != null) dialog.show();

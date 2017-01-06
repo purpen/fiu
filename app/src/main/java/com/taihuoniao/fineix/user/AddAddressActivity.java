@@ -15,16 +15,20 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.AddressData;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.fragments.AddressSelectFragment;
 import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -38,6 +42,7 @@ import java.lang.reflect.Type;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * @author lilin
@@ -96,9 +101,12 @@ public class AddAddressActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     new DefaultDialog(AddAddressActivity.this, App.getString(R.string.hint_dialog_delete_address_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
+
                         @Override
                         public void clickRight() {
-                            HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean._id, new RequestCallBack<String>() {
+                            RequestParams params = ClientDiscoverAPI.getdeleteAddressNetRequestParams(addressBean._id);
+                            Call httpHandler = HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS,new GlobalDataCallBack(){
+//                            HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean._id, new RequestCallBack<String>() {
                                 @Override
                                 public void onStart() {
                                     if (dialog != null && !activity.isFinishing()) dialog.show();
@@ -347,7 +355,9 @@ public class AddAddressActivity extends BaseActivity {
             id = addressBean._id;
         }
 
-        ClientDiscoverAPI.commitAddressNet(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcommitAddressNetRequestParams(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default);
+        HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.commitAddressNet(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 LogUtil.e(TAG, responseInfo.result);

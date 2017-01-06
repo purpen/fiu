@@ -15,12 +15,16 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchSubjectAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.NewProductDetailActivity;
@@ -36,6 +40,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/8/23.
@@ -154,7 +159,9 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
     }
 
     private void search() {
-        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "12", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getsearchRequestParams(q, "12", null, page + "", "8", isContent ? "content" : "tag", null);
+        Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
+//        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "12", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索主题", responseInfo.result);

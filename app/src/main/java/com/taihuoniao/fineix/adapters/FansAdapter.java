@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -137,6 +138,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     //关注粉丝操作
     private void doFocus(final FocusFansItem item, final View view) {
         if (userId == LoginInfo.getUserId()) {
+            RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -259,6 +261,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 
     private void dealOthersFocus(final FocusFansItem item, final View view) {
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
+            RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {

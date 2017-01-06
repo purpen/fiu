@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -35,6 +36,8 @@ import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingListBean;
@@ -43,6 +46,7 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.Constants;
@@ -217,7 +221,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             return;
         }
         LogUtil.e(TAG, "requestNet==" + userId);
-        ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetMineInfoRequestParams(userId + "");
+        HttpRequest.post(params,  URL.MINE_INFO, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) dialog.show();
@@ -264,7 +270,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      * 加载情境数据
      */
     private void loadCJData() {
-        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1",new RequestCallBack<String>() {
+        RequestParams params =  ClientDiscoverAPI.getSceneListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1");
+        HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1",new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) {
@@ -334,7 +342,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Deprecated
     private void loadQJData() {
         LogUtil.e("loadQJData", String.format("curPage==%s;;PAGE_SIZE==%s;;userId==%s", curPage, Constants.PAGE_SIZE, userId));
-        ClientDiscoverAPI.getQJList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getQJListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId));
+        HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getQJList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) {
@@ -615,6 +625,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.bt_focus:
                 bt_focus.setEnabled(false);
                 if (user.is_love == FansAdapter.NOT_LOVE) {
+                    RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(userId + "");
                     ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {

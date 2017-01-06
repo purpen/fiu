@@ -10,12 +10,16 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -25,6 +29,7 @@ import java.lang.reflect.Type;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/4/28.
@@ -98,10 +103,12 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private HttpHandler<String> reportHandler;
+    private Call reportHandler;
 
     private void report(String target_id, String type, String evt) {
-        reportHandler = ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getreportRequestParams(target_id, type, evt);
+        reportHandler = HttpRequest.post(params, URL.REPORT, new GlobalDataCallBack(){
+//        reportHandler = ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();

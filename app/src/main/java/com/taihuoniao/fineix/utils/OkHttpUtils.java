@@ -34,37 +34,45 @@ public class OkHttpUtils {
         return URLEncodedUtils.format(params, CHARSET_NAME);
     }
 
-    public static String post(String url, String json) throws IOException {
+    public static Call post(String url, String json) {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .build();
-        Response response = mOkHttpClient.newCall(request).execute();
-        if (response.isSuccessful()) {
-            return response.body().string();
-        } else {
-            throw new IOException("Unexpected code " + response);
+        Call call = mOkHttpClient.newCall(request);
+        try {
+            Response response = call.execute();
+            if (response.isSuccessful()) {
+//            return response.body().string();
+            } else {
+                throw new IOException("Unexpected code " + response);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return call;
     }
 
-    public static void post(String url, String json, Callback callback) throws IOException {
+    public static Call post(String url, String json, Callback callback) {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .build();
+        Call call = mOkHttpClient.newCall(request);
         if (callback != null) {
-            mOkHttpClient.newCall(request).enqueue(callback);
+            call.enqueue(callback);
         }
+        return call;
     }
 
-    public static String post(String url, List<NameValuePair> list) throws IOException {
+    public static Call post(String url, List<NameValuePair> list) {
         return post(url, formatParams(list));
     }
 
-    public static void post(String url, List<NameValuePair> list, Callback callback) throws IOException {
-        post(url, formatParams(list), callback);
+    public static Call post(String url, List<NameValuePair> list, Callback callback) {
+        return post(url, formatParams(list), callback);
     }
 }
 

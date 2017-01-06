@@ -35,9 +35,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -48,6 +51,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJPictureActivity;
@@ -730,7 +734,9 @@ public class IndexQJListAdapter extends BaseAdapter {
 
     //删除情景
     private void deleteScene(String i) {
-        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(i);
+        HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -761,7 +767,9 @@ public class IndexQJListAdapter extends BaseAdapter {
 
     //取消点赞
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
-        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
+        HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 holder.loveRelative.setEnabled(true);
@@ -796,7 +804,9 @@ public class IndexQJListAdapter extends BaseAdapter {
 
     //点赞情景
     private void loveQJ(final int position, String id, final ViewHolder holder) {
-        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
+        HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 holder.loveRelative.setEnabled(true);
@@ -831,6 +841,7 @@ public class IndexQJListAdapter extends BaseAdapter {
 
     //关注用户
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
+        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
         ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -1072,6 +1083,7 @@ public class IndexQJListAdapter extends BaseAdapter {
 
         //关注用户
         private void fllow(final int position, String otherUserId, final VH holder) {
+            RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
             ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {

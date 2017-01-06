@@ -7,14 +7,18 @@ import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SupportQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.DataSupportQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -98,7 +102,9 @@ public class HasLoveActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.getSupportQJ(String.valueOf(curPage), "12", "2", new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getgetSupportQJRequestParams(String.valueOf(curPage), "12", "2");
+        HttpRequest.post(requestParams, URL.FAVORITE_GET_NEW_LIST, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSupportQJ(String.valueOf(curPage), "12", "2", new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 super.onStart();

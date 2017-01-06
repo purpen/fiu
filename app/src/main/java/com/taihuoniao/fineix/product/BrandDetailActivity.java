@@ -21,6 +21,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,12 +29,15 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BrandProductAdapter;
 import com.taihuoniao.fineix.adapters.BrandQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -45,6 +49,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/8/29.
@@ -73,9 +78,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private BrandProductAdapter brandProductAdapter;//品牌下的产品列表
     private List<ProductAndSceneListBean.ProductAndSceneItem> qjList;//情景列表
     private BrandQJAdapter brandQJAdapter;//品牌下的情景列表
-    private HttpHandler<String> productHandler;
-    private HttpHandler<String> qjHandler;
-    private HttpHandler<String> brandHandler;
+    private Call productHandler;
+    private Call qjHandler;
+    private Call brandHandler;
 
     @Override
     protected void getIntentData() {
@@ -131,7 +136,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //获取品牌下的情景
     private void getQJList() {
-        qjHandler = ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getproductAndSceneRequestParams(qjPage + "", 8 + "", null, null, id);
+        HttpRequest.post(requestParams, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
+//        qjHandler = ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -174,7 +181,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌下产品列表
     private void getProductList() {
-        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16");
+        HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
+//        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -218,7 +227,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌详情
     private void brandDetails() {
-        brandHandler = ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getbrandDetailRequestParams(id);
+        HttpRequest.post(requestParams, URL.BRAND_DETAIL, new GlobalDataCallBack(){
+//        brandHandler = ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 BrandDetailBean brandDetailBean = new BrandDetailBean();

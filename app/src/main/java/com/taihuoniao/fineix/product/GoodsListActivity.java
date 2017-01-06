@@ -11,17 +11,21 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.fragment.GoodListFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -35,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/5/3.
@@ -166,7 +171,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 //            }
 //        });
 //    }
-    private HttpHandler<String> cartHandler;
+    private Call cartHandler;
 
     //获取购物车数量
     public void cartNumber() {
@@ -174,7 +179,9 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
             titleLayout.setCartNum(0);
             return;
         }
-        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getcartNumRequestParams();
+        cartHandler = HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
+//        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 CartBean cartBean = new CartBean();

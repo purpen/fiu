@@ -13,14 +13,18 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
@@ -118,7 +122,9 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                     Toast.makeText(FindPasswordActivity.this, "正在获取手机验证码",
                             Toast.LENGTH_SHORT).show();
                     //获取手机验证码
-                    ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
+                    HttpRequest.post(params, URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -128,7 +134,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                         public void onFailure(HttpException e, String s) {
 
                         }
-                    }, phone);
+                    }/*, phone*/);
 
                     new Thread() {
                         @Override

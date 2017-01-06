@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -120,6 +121,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     private void doFocus(final FocusFansItem item, final View view) {
         if (userId == LoginInfo.getUserId()) { //关注列表做关注操作
             if (item.focus_flag) {
+                RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
                 ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -178,6 +180,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 if (userId == LoginInfo.getUserId()) { //关注列表做取消关注操作
                     if (item == null || item.follows == null) return;
                     if (item.focus_flag) {
+                        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
                         ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -271,6 +274,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     private void dealOthersFocus(final FocusFansItem item, final View view) {
         if (item == null || item.follows == null) return;
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
+            RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {

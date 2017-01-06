@@ -14,14 +14,18 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.FindActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -163,7 +167,9 @@ public class SubsListAdapter extends BaseAdapter {
 
     //取消点赞
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
-        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
+        HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE , new GlobalDataCallBack(){
+//        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 holder.qjLove.setEnabled(true);
@@ -196,7 +202,9 @@ public class SubsListAdapter extends BaseAdapter {
 
     //点赞情景
     private void loveQJ(final int position, String id, final ViewHolder holder) {
-        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
+        HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 holder.qjLove.setEnabled(true);

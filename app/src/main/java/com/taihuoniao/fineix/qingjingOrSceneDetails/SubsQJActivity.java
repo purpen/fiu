@@ -13,14 +13,18 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.SubscribeThemeActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -35,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/8/2.
@@ -128,7 +133,9 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
 
     //获取订阅的情景
     private void getSubsQJ() {
-        HttpHandler<String> listHandler = ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
+        RequestParams re = ClientDiscoverAPI.getSceneListRequestParams(page + "", 8 + "", null, ids, null, null, null, null);
+        Call listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
+//        HttpHandler<String> listHandler = ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -170,7 +177,9 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
 
     //获取订阅情境主题个数
     private void hasSubsCount() {
-       HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
+        Call httpHandler = HttpRequest.post(requestParams, URL.USER_CENTER, new GlobalDataCallBack(){
+//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<个人信息", responseInfo.result);

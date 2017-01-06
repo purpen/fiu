@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -124,6 +125,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             public void onClick(View view) {
                 button.setEnabled(false);
                 if (item.is_love == FansAdapter.NOT_LOVE){
+                    RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item._id));
                     ClientDiscoverAPI.focusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {

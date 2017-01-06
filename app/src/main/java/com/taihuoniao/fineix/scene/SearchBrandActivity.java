@@ -19,17 +19,21 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchBrandAdapter;
 import com.taihuoniao.fineix.adapters.SearchProductAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AddBrandBean;
 import com.taihuoniao.fineix.beans.AddProductBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -40,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/8/15.
@@ -239,7 +244,9 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         if (!dialog.isShowing()) {
             dialog.show();
         }
-       HttpHandler<String> httpHandler= ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getaddProductRequestParams(title, brand_id);
+        Call httpHandler = HttpRequest.post(requestParams,URL.ADD_PRODUCT, new GlobalDataCallBack(){
+//        HttpHandler<String> httpHandler= ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -280,7 +287,9 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         if (!dialog.isShowing()) {
             dialog.show();
         }
-       HttpHandler<String> httpHandler= ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getaddBrandRequestParams(title);
+        Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_BRANDS_SUBMIT, new GlobalDataCallBack(){
+//        HttpHandler<String> httpHandler= ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -319,7 +328,9 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void searchBrand(final String q) {
-       HttpHandler<String> httpHandler= ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getsearchRequestParams(q, "13", null, "1", "100", "content", null);
+        Call httpHandler = HttpRequest.post(requestParams , URL.SEARCH,new GlobalDataCallBack(){
+//       HttpHandler<String> httpHandler= ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索品牌", responseInfo.result);
@@ -357,7 +368,9 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     private SearchProductAdapter searchProductAdapter;
 
     private void searchProduct(String title, String brand_id) {
-      HttpHandler<String> httpHandler=  ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getgetProductListRequestParams(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16");
+        Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
+//        HttpHandler<String> httpHandler=  ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<品牌下的产品",responseInfo.result);

@@ -39,6 +39,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -46,6 +47,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAjustAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.blurview.BlurView;
@@ -53,6 +55,7 @@ import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -646,7 +649,10 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 labels.remove(labelView);
                 setHint();
                 if (label.getTagInfo().getType() == 1) {
-                    ClientDiscoverAPI.deleteProduct(label.getTagInfo().getId() + "");
+//                    ClientDiscoverAPI.deleteProduct(label.getTagInfo().getId() + "");
+
+                    RequestParams requestParams = ClientDiscoverAPI.getdeleteProductRequestParams(label.getTagInfo().getId() + "");
+                    HttpRequest.post(requestParams, URL.DELETE_PRODUCT);
                 }
                 imageViewTouch.invalidate();
             }

@@ -13,15 +13,19 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BindPhonePagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -149,7 +153,9 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     ToastUtils.showInfo("请输入密码");
                     return;
                 }
-                ClientDiscoverAPI.bindPhoneNet(openId, unionId, token, phone, password, type, new RequestCallBack<String>() {
+                RequestParams params = ClientDiscoverAPI.getbindPhoneNetRequestParams(openId, unionId, token, phone, password, type);
+                HttpRequest.post(params, URL.AUTH_THIRD_REGISTER_WITH_PHONE, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.bindPhoneNet(openId, unionId, token, phone, password, type, new GlobalDataCallBack() {
                     @Override
                     public void onStart() {
                         v.setEnabled(false);
@@ -187,7 +193,9 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.tv_login:
             case R.id.bt_login: //跳过绑定直接登录
-                ClientDiscoverAPI.skipBindNet(openId, unionId, token, nickName, sex, avatarUrl, type, new RequestCallBack<String>() {
+                RequestParams params3 =ClientDiscoverAPI. getskipBindNetRequestParams(openId, unionId, token, nickName, sex, avatarUrl, type);
+                HttpRequest.post(params3, URL.AUTH_THIRD_REGISTER_WITHOUT_PHONE, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.skipBindNet(openId, unionId, token, nickName, sex, avatarUrl, type, new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         v.setEnabled(false);

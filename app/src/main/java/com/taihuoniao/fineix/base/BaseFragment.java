@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/3/14.
  */
 public abstract class BaseFragment<T> extends Fragment {
-    //    protected static final String systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";//系统相册路径
     protected final String TAG = getClass().getSimpleName();
     protected Activity activity;
 
@@ -131,7 +131,7 @@ public abstract class BaseFragment<T> extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    protected void addNet(HttpHandler<String> httpHandler) {
+    protected void addNet(Call httpHandler) {
         if (handlerList == null) {
             handlerList = new ArrayList<>();
         }
@@ -140,7 +140,7 @@ public abstract class BaseFragment<T> extends Fragment {
 
     private void clearNet() {
         if (handlerList != null) {
-            for (HttpHandler<String> httpHandler : handlerList) {
+            for (Call httpHandler : handlerList) {
                 if (httpHandler != null) {
                     httpHandler.cancel();
                 }
@@ -148,5 +148,5 @@ public abstract class BaseFragment<T> extends Fragment {
         }
     }
 
-    private List<HttpHandler<String>> handlerList;
+    private List<Call> handlerList;
 }

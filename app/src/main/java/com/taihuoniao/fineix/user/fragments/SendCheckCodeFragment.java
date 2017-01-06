@@ -16,9 +16,12 @@ import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
@@ -26,6 +29,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.BindPhoneActivity;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -245,7 +249,9 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
     }
 
     private void getCheckCode(final String phone) {
-        ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
+        HttpRequest.post(params,URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) return;
@@ -271,7 +277,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
             public void onFailure(HttpException e, String s) {
 //                ToastUtils.showError(R.string.network_err);
             }
-        }, phone);
+        }/*, phone*/);
     }
 
     //执行授权,获取用户信息
@@ -324,8 +330,9 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         if (TextUtils.isEmpty(userId)) return;
         if (TextUtils.isEmpty(token)) return;
         if (TextUtils.isEmpty(loginType)) return;
-
-        ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
+        HttpRequest.post(params, URL.AUTH_THIRD_SIGN, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing() && mDialog != null) mDialog.show();

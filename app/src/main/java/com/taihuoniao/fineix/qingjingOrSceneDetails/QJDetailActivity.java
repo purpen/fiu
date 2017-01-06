@@ -35,11 +35,14 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QJDetailBean;
@@ -50,6 +53,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -73,6 +77,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/8/25.
@@ -161,11 +166,13 @@ public class QJDetailActivity extends BaseActivity {
         initPopupWindow();
     }
 
-    private HttpHandler<String> detailHandler;
+    private Call detailHandler;
 
     @Override
     protected void requestNet() {
-        detailHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getsceneDetailsRequestParams(id);
+        detailHandler = HttpRequest.post(requestParams, URL.SCENE_DETAILS, new GlobalDataCallBack() {
+//        detailHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -646,7 +653,9 @@ public class QJDetailActivity extends BaseActivity {
 
     //删除情景
     private void deleteScene() {
-        detailHandler = ClientDiscoverAPI.deleteScene(qjDetailBean.getData().get_id(), new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(qjDetailBean.getData().get_id());
+        detailHandler = HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
+//        detailHandler = ClientDiscoverAPI.deleteScene(qjDetailBean.getData().get_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -679,7 +688,9 @@ public class QJDetailActivity extends BaseActivity {
 
     //取消点赞
     private void cancelLoveQJ() {
-        cancelShoucangHandler = ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
+        HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
+//        cancelShoucangHandler = ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 loveImg.setEnabled(true);
@@ -712,11 +723,13 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
-    private HttpHandler<String> loveHandler;
+    private Call loveHandler;
 
     //点赞情景
     private void loveQJ() {
-        loveHandler = ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
+        loveHandler =  HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
+//        loveHandler = ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 loveImg.setEnabled(true);
@@ -753,6 +766,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //关注用户
     private void fllow() {
+        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(qjDetailBean.getData().getUser_id());
         followHandler = ClientDiscoverAPI.focusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,12 +29,15 @@ import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
 import com.taihuoniao.fineix.adapters.ParticipateQJListAdapter;
 import com.taihuoniao.fineix.adapters.RuleContentAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ActivityPrizeData;
 import com.taihuoniao.fineix.beans.DataParticipateQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -242,7 +246,9 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     protected void loadData() {
         if (TextUtils.isEmpty(id)) return;
         LogUtil.e(TAG, id);
-        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getparticipateActivityRequestParams(String.valueOf(curPage), id);
+        HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;

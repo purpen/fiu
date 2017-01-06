@@ -23,25 +23,6 @@ import com.taihuoniao.fineix.utils.SPUtil;
 public class ClientDiscoverAPI {
 
     //产品
-    //统计用户想购买的数量
-    public static void wantBuy(String id) {
-        String url = NetworkConstance.WANT_BUY;
-        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-
-            }
-        });
-    }
-
-    //产品
     //删除用户添加的产品
     public static void deleteProduct(String id) {
         deleteProduct(id, new RequestCallBack<String>() {
@@ -64,7 +45,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getdeleteProductRequestParams(String id) {
+    public static RequestParams getdeleteProductRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -81,7 +62,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetProductListRequestParams(String title, String sort, String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids, String stick, String fine, String stage) {
+    public static RequestParams getgetProductListRequestParams(String title, String sort, String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids, String stick, String fine, String stage) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("title", title);
         params.addQueryStringParameter("sort", sort);
@@ -126,7 +107,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getaddProductRequestParams(String title, String brand_id) {
+    public static RequestParams getaddProductRequestParams(String title, String brand_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("title", title);
         params.addQueryStringParameter("brand_id", brand_id);
@@ -143,7 +124,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgoodsDetailsRequestParams(String id) {
+    public static RequestParams getgoodsDetailsRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -196,7 +177,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetSupportQJRequestParams(String page, String type, String event) {
+    public static RequestParams getgetSupportQJRequestParams(String page, String type, String event) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
@@ -215,7 +196,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getsubsQingjingRequestParams(String id) {
+    public static RequestParams getsubsQingjingRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -293,7 +274,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcreateSceneRequestParams(String id, String title, String des, String scene_id, String tags, String products, String address, String city, String tmp, String lat, String lng, String subject_ids) {
+    public static RequestParams getcreateSceneRequestParams(String id, String title, String des, String scene_id, String tags, String products, String address, String city, String tmp, String lat, String lng, String subject_ids) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("tmp", tmp);
@@ -320,7 +301,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getdeleteSceneRequestParams(String id) {
+    public static RequestParams getdeleteSceneRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -336,7 +317,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getloveQJRequestParams(String id) {
+    public static RequestParams getloveQJRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -352,7 +333,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcancelLoveQJRequestParams(String id) {
+    public static RequestParams getcancelLoveQJRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -368,23 +349,23 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getsceneDetailsRequestParams(String id) {
+    public static RequestParams getsceneDetailsRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
     }
 
-    //场景
-    //列表数据
-    public static HttpHandler<String> getSceneList(String page, String size, String scene_id, String category_ids, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
-        String url = URL.SCENE_LIST;
-        RequestParams params = getSceneListRequestParams(page, size, scene_id, category_ids, sort, fine, lng, lat);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//    //场景
+//    //列表数据
+//    public static HttpHandler<String> getSceneList(String page, String size, String scene_id, String category_ids, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+//        String url = URL.SCENE_LIST;
+//        RequestParams params = getSceneListRequestParams(page, size, scene_id, category_ids, sort, fine, lng, lat);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getSceneListRequestParams(String page, String size, String scene_id, String category_ids, String sort, String fine, String lng, String lat) {
+    public static RequestParams getSceneListRequestParams(String page, String size, String scene_id, String category_ids, String sort, String fine, String lng, String lat) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -398,26 +379,26 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    public static void getSceneList(LatLng ll, String page, String size, String dis, RequestCallBack<String> callBack) {
-        getSceneList(page, size, null, null, null, null, dis, String.valueOf(ll.longitude), String.valueOf(ll.latitude), callBack);
-    }
+//    public static void getSceneList(LatLng ll, String page, String size, String dis, RequestCallBack<String> callBack) {
+//        getSceneList(page, size, null, null, null, null, dis, String.valueOf(ll.longitude), String.valueOf(ll.latitude), callBack);
+//    }
 
 
-    /**
-     * 获取订阅情境的列表
-     *
-     * @param page
-     * @param category_ids
-     * @param callBack
-     */
-    public static void getQJList(String page, String category_ids, RequestCallBack<String> callBack) {
-        String url = URL.SCENE_LIST;
-        RequestParams params = getQJListRequestParams(page, category_ids);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-    }
+//    /**
+//     * 获取订阅情境的列表
+//     *
+//     * @param page
+//     * @param category_ids
+//     * @param callBack
+//     */
+//    public static void getQJList(String page, String category_ids, RequestCallBack<String> callBack) {
+//        String url = URL.SCENE_LIST;
+//        RequestParams params = getQJListRequestParams(page, category_ids);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//    }
 
     @NonNull
-    static RequestParams getQJListRequestParams(String page, String category_ids) {
+    public static RequestParams getQJListRequestParams(String page, String category_ids) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
@@ -425,21 +406,21 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    /**
-     * 首页精选情境
-     * 参与的情境
-     *
-     * @param subject_id
-     * @param callBack
-     */
-    public static void participateActivity(String page, String subject_id, RequestCallBack<String> callBack) {
-        String url = URL.SCENE_LIST;
-        RequestParams params = getparticipateActivityRequestParams(page, subject_id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-    }
+//    /**
+//     * 首页精选情境
+//     * 参与的情境
+//     *
+//     * @param subject_id
+//     * @param callBack
+//     */
+//    public static void participateActivity(String page, String subject_id, RequestCallBack<String> callBack) {
+//        String url = URL.SCENE_LIST;
+//        RequestParams params = getparticipateActivityRequestParams(page, subject_id);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//    }
 
     @NonNull
-    static RequestParams getparticipateActivityRequestParams(String page, String subject_id) {
+    public static RequestParams getparticipateActivityRequestParams(String page, String subject_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
@@ -456,14 +437,14 @@ public class ClientDiscoverAPI {
      * @param userId
      * @param callBack
      */
-    public static void getSceneList(String page, String size, String userId,String show_all,RequestCallBack<String> callBack) {
-        String url = URL.SCENE_LIST;
-        RequestParams params = getSceneListRequestParams(page, size, userId, show_all);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-    }
+//    public static void getSceneList(String page, String size, String userId,String show_all,RequestCallBack<String> callBack) {
+//        String url = URL.SCENE_LIST;
+//        RequestParams params = getSceneListRequestParams(page, size, userId, show_all);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//    }
 
     @NonNull
-    static RequestParams getSceneListRequestParams(String page, String size, String userId, String show_all) {
+    public static RequestParams getSceneListRequestParams(String page, String size, String userId, String show_all) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -494,7 +475,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getusedLabelListRequestParams() {
+    public static RequestParams getusedLabelListRequestParams() {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("type", 1 + "");
         return params;
@@ -545,7 +526,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getProvinceListRequestParams() {
+    public static RequestParams getProvinceListRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -558,7 +539,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetDefaultAddressNetRequestParams() {
+    public static RequestParams getgetDefaultAddressNetRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -588,7 +569,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcommitAddressNetRequestParams(String id, String name, String phone, String province_id, String city_id, String county_id, String town_id, String address, String zip, String is_default) {
+    public static RequestParams getcommitAddressNetRequestParams(String id, String name, String phone, String province_id, String city_id, String county_id, String town_id, String address, String zip, String is_default) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("name", name);
@@ -603,34 +584,34 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    //收货地址
-    //删除某个收货地址
-    public static HttpHandler<String> deleteAddressNet(String id, RequestCallBack<String> callBack) {
-        String url = URL.URLSTRING_DELETE_ADDRESS;
-        RequestParams params = getdeleteAddressNetRequestParams(id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-//        NetworkManager.getInstance().add("deleteAddress", httpHandler);
-    }
+//    //收货地址
+//    //删除某个收货地址
+//    public static HttpHandler<String> deleteAddressNet(String id, RequestCallBack<String> callBack) {
+//        String url = URL.URLSTRING_DELETE_ADDRESS;
+//        RequestParams params = getdeleteAddressNetRequestParams(id);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+////        NetworkManager.getInstance().add("deleteAddress", httpHandler);
+//    }
 
     @NonNull
-    static RequestParams getdeleteAddressNetRequestParams(String id) {
+    public static RequestParams getdeleteAddressNetRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
     }
 
-    //公共
-    //举报
-    public static HttpHandler<String> report(String target_id, String type, String evt, RequestCallBack<String> callBack) {
-        String url = URL.REPORT;
-        RequestParams params = getreportRequestParams(target_id, type, evt);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//    //公共
+//    //举报
+//    public static HttpHandler<String> report(String target_id, String type, String evt, RequestCallBack<String> callBack) {
+//        String url = URL.REPORT;
+//        RequestParams params = getreportRequestParams(target_id, type, evt);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getreportRequestParams(String target_id, String type, String evt) {
+    public static RequestParams getreportRequestParams(String target_id, String type, String evt) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
@@ -640,33 +621,33 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    //公共
-    //品牌详情
-    public static HttpHandler<String> brandDetail(String id, RequestCallBack<String> callBack) {
-        String url = URL.BRAND_DETAIL;
-        RequestParams params = getbrandDetailRequestParams(id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//    //公共
+//    //品牌详情
+//    public static HttpHandler<String> brandDetail(String id, RequestCallBack<String> callBack) {
+//        String url = URL.BRAND_DETAIL;
+//        RequestParams params = getbrandDetailRequestParams(id);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getbrandDetailRequestParams(String id) {
+    public static RequestParams getbrandDetailRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
     }
 
-    //公共
-    //分类列表
-    public static HttpHandler<String> categoryList(String page, String domain, String show_all, RequestCallBack<String> callBack) {
-        String url = URL.CATEGORY_LIST;
-        RequestParams params = getcategoryListRequestParams(page, domain, show_all);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//    //公共
+//    //分类列表
+//    public static HttpHandler<String> categoryList(String page, String domain, String show_all, RequestCallBack<String> callBack) {
+//        String url = URL.CATEGORY_LIST;
+//        RequestParams params = getcategoryListRequestParams(page, domain, show_all);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getcategoryListRequestParams(String page, String domain, String show_all) {
+    public static RequestParams getcategoryListRequestParams(String page, String domain, String show_all) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", 300 + "");
@@ -677,19 +658,19 @@ public class ClientDiscoverAPI {
     }
 
 
-    /**
-     * 获得情景主题
-     *
-     * @param callBack
-     */
-    public static void categoryList(RequestCallBack<String> callBack) {
-        String url = URL.CATEGORY_LIST;
-        RequestParams params = getcategoryListRequestParams();
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-    }
+//    /**
+//     * 获得情景主题
+//     *
+//     * @param callBack
+//     */
+//    public static void categoryList(RequestCallBack<String> callBack) {
+//        String url = URL.CATEGORY_LIST;
+//        RequestParams params = getcategoryListRequestParams();
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//    }
 
     @NonNull
-    static RequestParams getcategoryListRequestParams() {
+    public static RequestParams getcategoryListRequestParams() {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", "1");
         params.addQueryStringParameter("size", "10");
@@ -697,18 +678,18 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("use_cache", "1");
         return params;
     }
-
-    //公共
-    //搜索列表
-    public static HttpHandler<String> search(String q, String t, String cid, String page, String size, String evt, String sort, RequestCallBack<String> callBack) {
-        String url = URL.SEARCH;
-        RequestParams params = getsearchRequestParams(q, t, cid, page, size, evt, sort);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//
+//    //公共
+//    //搜索列表
+//    public static HttpHandler<String> search(String q, String t, String cid, String page, String size, String evt, String sort, RequestCallBack<String> callBack) {
+//        String url = URL.SEARCH;
+//        RequestParams params = getsearchRequestParams(q, t, cid, page, size, evt, sort);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getsearchRequestParams(String q, String t, String cid, String page, String size, String evt, String sort) {
+    public static RequestParams getsearchRequestParams(String q, String t, String cid, String page, String size, String evt, String sort) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("t", t);
@@ -720,14 +701,14 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    public static void searchUser(String q, String page, RequestCallBack<String> callBack) {
+/*    public static void searchUser(String q, String page, RequestCallBack<String> callBack) {
         String url = URL.SEARCH;
         RequestParams params = getsearchUserRequestParams(q, page);
         HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-    }
+    }*/
 
     @NonNull
-    static RequestParams getsearchUserRequestParams(String q, String page) {
+    public static RequestParams getsearchUserRequestParams(String q, String page) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("t", "14"); //14.用户
@@ -736,16 +717,16 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    //公共
-    //商品和场景关联列表
-    public static HttpHandler<String> productAndScene(String page, String size, String sight_id, String product_id, String brand_id, RequestCallBack<String> callBack) {
-        String url = URL.PRODUCT_AND_SCENELIST;
-        RequestParams params = getproductAndSceneRequestParams(page, size, sight_id, product_id, brand_id);
-        return HttpRequest.sign(params, url, callBack);
-    }
+//    //公共
+//    //商品和场景关联列表
+//    public static HttpHandler<String> productAndScene(String page, String size, String sight_id, String product_id, String brand_id, RequestCallBack<String> callBack) {
+//        String url = URL.PRODUCT_AND_SCENELIST;
+//        RequestParams params = getproductAndSceneRequestParams(page, size, sight_id, product_id, brand_id);
+//        return HttpRequest.sign(params, url, callBack);
+//    }
 
     @NonNull
-    static RequestParams getproductAndSceneRequestParams(String page, String size, String sight_id, String product_id, String brand_id) {
+    public static RequestParams getproductAndSceneRequestParams(String page, String size, String sight_id, String product_id, String brand_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -755,31 +736,31 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    //购物车
-    //商品数量
-    public static HttpHandler<String> cartNum(RequestCallBack<String> callBack) {
-        String url = URL.CART_NUMBER;
-        RequestParams params = getcartNumRequestParams();
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//    //购物车
+//    //商品数量
+//    public static HttpHandler<String> cartNum(RequestCallBack<String> callBack) {
+//        String url = URL.CART_NUMBER;
+//        RequestParams params = getcartNumRequestParams();
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getcartNumRequestParams() {
+    public static RequestParams getcartNumRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
-    //评论
-    //提交评论
-    public static HttpHandler<String> sendComment(String target_id, String content, String type, String target_user_id, String is_reply, String reply_id, String reply_user_id, RequestCallBack<String> callBack) {
-        String url = URL.SEND_COMMENT;
-        RequestParams params = getsendCommentRequestParams(target_id, content, type, target_user_id, is_reply, reply_id, reply_user_id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//    //评论
+//    //提交评论
+//    public static HttpHandler<String> sendComment(String target_id, String content, String type, String target_user_id, String is_reply, String reply_id, String reply_user_id, RequestCallBack<String> callBack) {
+//        String url = URL.SEND_COMMENT;
+//        RequestParams params = getsendCommentRequestParams(target_id, content, type, target_user_id, is_reply, reply_id, reply_user_id);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getsendCommentRequestParams(String target_id, String content, String type, String target_user_id, String is_reply, String reply_id, String reply_user_id) {
+    public static RequestParams getsendCommentRequestParams(String target_id, String content, String type, String target_user_id, String is_reply, String reply_id, String reply_user_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("content", content);
@@ -792,17 +773,17 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    //评论
-    //列表
-    public static HttpHandler<String> commentsList(String page, String size, String target_id, String target_user_id, String type, RequestCallBack<String> callBack) {
-        String url = URL.COMMENTS_LIST;
-        RequestParams params = getcommentsListRequestParams(page, size, target_id, target_user_id, type);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//    //评论
+//    //列表
+//    public static HttpHandler<String> commentsList(String page, String size, String target_id, String target_user_id, String type, RequestCallBack<String> callBack) {
+//        String url = URL.COMMENTS_LIST;
+//        RequestParams params = getcommentsListRequestParams(page, size, target_id, target_user_id, type);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getcommentsListRequestParams(String page, String size, String target_id, String target_user_id, String type) {
+    public static RequestParams getcommentsListRequestParams(String page, String size, String target_id, String target_user_id, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -813,16 +794,16 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    //评论
-    //列表
-    public static void mycommentsList(String page, String size, String target_id, String target_user_id, String type, RequestCallBack<String> callBack) {
-        String url = URL.MY_COMMENTS_LIST;
-        RequestParams params = getmycommentsListRequestParams(page, size, target_id, target_user_id, type);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-    }
+//    //评论
+//    //列表
+//    public static void mycommentsList(String page, String size, String target_id, String target_user_id, String type, RequestCallBack<String> callBack) {
+//        String url = URL.MY_COMMENTS_LIST;
+//        RequestParams params = getmycommentsListRequestParams(page, size, target_id, target_user_id, type);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//    }
 
     @NonNull
-    static RequestParams getmycommentsListRequestParams(String page, String size, String target_id, String target_user_id, String type) {
+    public static RequestParams getmycommentsListRequestParams(String page, String size, String target_id, String target_user_id, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -831,18 +812,18 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", type);
         return params;
     }
-
-    //评论
-    //删除评论
-    public static HttpHandler<String> deleteComment(String id, RequestCallBack<String> callBack) {
-        String url = URL.DELETE_COMMENT;
-        RequestParams params = getdeleteCommentRequestParams(id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-        return httpHandler;
-    }
+//
+//    //评论
+//    //删除评论
+//    public static HttpHandler<String> deleteComment(String id, RequestCallBack<String> callBack) {
+//        String url = URL.DELETE_COMMENT;
+//        RequestParams params = getdeleteCommentRequestParams(id);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    static RequestParams getdeleteCommentRequestParams(String id) {
+    public static RequestParams getdeleteCommentRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -858,7 +839,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getGoodsDetailsCommentsListRequestParams(String target_id, String page) {
+    public static RequestParams getGoodsDetailsCommentsListRequestParams(String target_id, String page) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("target_id", target_id);
@@ -873,7 +854,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getclickLoginNetRequestParams(String phone, String password) {
+    public static RequestParams getclickLoginNetRequestParams(String phone, String password) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("mobile", phone);
         params.addQueryStringParameter("from_to", "2");     //登录渠道
@@ -888,7 +869,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getthirdLoginNetRequestParams(String oid, String access_token, String type) {
+    public static RequestParams getthirdLoginNetRequestParams(String oid, String access_token, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("oid", oid);
         params.addQueryStringParameter("access_token", access_token);
@@ -904,7 +885,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetVerifyCodeNetRequestParams(String phone) {
+    public static RequestParams getgetVerifyCodeNetRequestParams(String phone) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("mobile", phone);
         return params;
@@ -917,7 +898,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getbindPhoneNetRequestParams(String oid, String union_id, String access_token, String account, String password, String type) {
+    public static RequestParams getbindPhoneNetRequestParams(String oid, String union_id, String access_token, String account, String password, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
 ////        params.addQueryStringParameter("uuid", uuid);
         params.addQueryStringParameter("account", account);
@@ -937,7 +918,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getskipBindNetRequestParams(String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type) {
+    public static RequestParams getskipBindNetRequestParams(String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("nickname", nickname);
         params.addQueryStringParameter("sex", sex);
@@ -959,7 +940,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getQJDataRequestParams(LatLng ll, int radius, String page, String pageSize, String stick) {
+    public static RequestParams getQJDataRequestParams(LatLng ll, int radius, String page, String pageSize, String stick) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", pageSize);
@@ -989,7 +970,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getQJListRequestParams(String page, String pageSize, String userId) {
+    public static RequestParams getQJListRequestParams(String page, String pageSize, String userId) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", pageSize);
@@ -1006,7 +987,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getfindPasswordNetRequestParams(String phone, String newpassword, String code) {
+    public static RequestParams getfindPasswordNetRequestParams(String phone, String newpassword, String code) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("mobile", phone);
         params.addQueryStringParameter("password", newpassword);
@@ -1022,7 +1003,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetMineInfoRequestParams(String userId) {
+    public static RequestParams getgetMineInfoRequestParams(String userId) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("user_id", userId);
         LogUtil.e("getMineInfo", userId);
@@ -1037,7 +1018,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetUserCenterDataRequestParams() {
+    public static RequestParams getgetUserCenterDataRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -1053,7 +1034,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetBannersRequestParams(String page_name) {
+    public static RequestParams getgetBannersRequestParams(String page_name) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", String.valueOf(1));
         params.addQueryStringParameter("size", String.valueOf(5));
@@ -1076,7 +1057,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getFocusFansListRequestParams(String userId, String page, String size, String find_type, String clean_remind) {
+    public static RequestParams getFocusFansListRequestParams(String userId, String page, String size, String find_type, String clean_remind) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -1100,7 +1081,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getfocusOperateRequestParams(String follow_id) {
+    public static RequestParams getfocusOperateRequestParams(String follow_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("follow_id", follow_id);
         return params;
@@ -1118,7 +1099,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcancelFocusOperateRequestParams(String follow_id) {
+    public static RequestParams getcancelFocusOperateRequestParams(String follow_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("follow_id", follow_id);
         return params;
@@ -1137,7 +1118,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcommitSuggestionRequestParams(String content, String contact) {
+    public static RequestParams getcommitSuggestionRequestParams(String content, String contact) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("content", content);
         params.addQueryStringParameter("contact", contact);
@@ -1159,7 +1140,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getupdateUserInfoRequestParams(String key, String value) {
+    public static RequestParams getupdateUserInfoRequestParams(String key, String value) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         if (EditUserInfoActivity.isSubmitAddress) {
             params.addQueryStringParameter("province_id", key);
@@ -1183,7 +1164,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getupdateNickNameSexRequestParams(String nickname, String sex) {
+    public static RequestParams getupdateNickNameSexRequestParams(String nickname, String sex) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("nickname", nickname);
         params.addQueryStringParameter("sex", sex);
@@ -1203,7 +1184,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getupdateAgeAssetsRequestParams(String age_group, String assets) {
+    public static RequestParams getupdateAgeAssetsRequestParams(String age_group, String assets) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("age_group", age_group);
         params.addQueryStringParameter("assets", assets);
@@ -1222,7 +1203,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getsubscribeThemeRequestParams(String interest_scene_cate) {
+    public static RequestParams getsubscribeThemeRequestParams(String interest_scene_cate) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("interest_scene_cate", interest_scene_cate);
         return params;
@@ -1241,7 +1222,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getupdateSignatrueLabelRequestParams(String label, String summary) {
+    public static RequestParams getupdateSignatrueLabelRequestParams(String label, String summary) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("label", label);
         params.addQueryStringParameter("summary", summary);
@@ -1259,7 +1240,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetAllCitiesRequestParams() {
+    public static RequestParams getgetAllCitiesRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -1274,7 +1255,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getuploadImgRequestParams(String tmp, String type) {
+    public static RequestParams getuploadImgRequestParams(String tmp, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("tmp", tmp);
         params.addQueryStringParameter("type", type);
@@ -1294,7 +1275,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getuploadBgImgRequestParams(String tmp) {
+    public static RequestParams getuploadBgImgRequestParams(String tmp) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("tmp", tmp);
         return params;
@@ -1313,7 +1294,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetSystemNoticeRequestParams(String page, String pageSize) {
+    public static RequestParams getgetSystemNoticeRequestParams(String page, String pageSize) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", pageSize);
@@ -1334,7 +1315,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetPrivateMessageListRequestParams(String page, String pageSize, String type) {
+    public static RequestParams getgetPrivateMessageListRequestParams(String page, String pageSize, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", pageSize);
@@ -1355,7 +1336,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getsendMessageRequestParams(String to_user_id, String content) {
+    public static RequestParams getsendMessageRequestParams(String to_user_id, String content) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("to_user_id", to_user_id);
         params.addQueryStringParameter("content", content);
@@ -1374,7 +1355,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getmessageDetailListRequestParams(String to_user_id) {
+    public static RequestParams getmessageDetailListRequestParams(String to_user_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("to_user_id", to_user_id);
         return params;
@@ -1387,7 +1368,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcheckRedBagUsableNetRequestParams(String rid, String code) {
+    public static RequestParams getcheckRedBagUsableNetRequestParams(String rid, String code) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
 //        params.addQueryStringParameter("uuid", uuid);
         params.addQueryStringParameter("rid", rid);
@@ -1403,7 +1384,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getmyRedBagNetRequestParams(String page, String size, String used, String time) {
+    public static RequestParams getmyRedBagNetRequestParams(String page, String size, String used, String time) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -1425,7 +1406,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getupdatePasswordRequestParams(String password, String new_password) {
+    public static RequestParams getupdatePasswordRequestParams(String password, String new_password) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("password", password);
         params.addQueryStringParameter("new_password", new_password);
@@ -1442,7 +1423,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getnowConfirmOrderRequestParams(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
+    public static RequestParams getnowConfirmOrderRequestParams(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rrid", rrid);
         params.addQueryStringParameter("from_site", "8");
@@ -1462,7 +1443,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getshopCartNetRequestParams() {
+    public static RequestParams getshopCartNetRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -1474,7 +1455,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getshopCartNumberNetRequestParams() {
+    public static RequestParams getshopCartNumberNetRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -1485,7 +1466,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcalculateShopCartNetRequestParams(String array) {
+    public static RequestParams getcalculateShopCartNetRequestParams(String array) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("array", array);
         params.addQueryStringParameter("referral_code", SPUtil.read("referral_code" ));
@@ -1499,7 +1480,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getdeletShopCartNetRequestParams(String array) {
+    public static RequestParams getdeletShopCartNetRequestParams(String array) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("array", array);
         return params;
@@ -1514,7 +1495,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcancelLoveNetRequestParams(String id, String type) {
+    public static RequestParams getcancelLoveNetRequestParams(String id, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
@@ -1530,7 +1511,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getloveNetRequestParams(String id, String type) {
+    public static RequestParams getloveNetRequestParams(String id, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
@@ -1546,7 +1527,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getaddToCartNetRequestParams(String target_id, String type, String n) {
+    public static RequestParams getaddToCartNetRequestParams(String target_id, String type, String n) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
@@ -1563,7 +1544,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getbuyNowRequestParams(String target_id, String type, String n) {
+    public static RequestParams getbuyNowRequestParams(String target_id, String type, String n) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
@@ -1579,7 +1560,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getdeleteOrderNetRequestParams(String rid) {
+    public static RequestParams getdeleteOrderNetRequestParams(String rid) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         return params;
@@ -1592,7 +1573,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcancelOrderNetRequestParams(String rid) {
+    public static RequestParams getcancelOrderNetRequestParams(String rid) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         return params;
@@ -1605,7 +1586,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getOrderPayNetRequestParams(String rid) {
+    public static RequestParams getOrderPayNetRequestParams(String rid) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         return params;
@@ -1618,7 +1599,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getconfirmReceiveNetRequestParams(String rid) {
+    public static RequestParams getconfirmReceiveNetRequestParams(String rid) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         return params;
@@ -1631,7 +1612,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getpublishEvaluateNetRequestParams(String rid, String array) {
+    public static RequestParams getpublishEvaluateNetRequestParams(String rid, String array) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("array", array);
@@ -1646,7 +1627,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getorderListNetRequestParams(String status, String page, String size) {
+    public static RequestParams getorderListNetRequestParams(String status, String page, String size) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("status", status);
         params.addQueryStringParameter("page", page);
@@ -1661,7 +1642,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getshopcartInventoryNetRequestParams() {
+    public static RequestParams getshopcartInventoryNetRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -1672,7 +1653,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getshopcartAddSubtractNetRequestParams(String array) {
+    public static RequestParams getshopcartAddSubtractNetRequestParams(String array) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("array", array);
         return params;
@@ -1687,7 +1668,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getfiuUserListRequestParams(String page, String size, String sort) {
+    public static RequestParams getfiuUserListRequestParams(String page, String size, String sort) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -1708,7 +1689,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getupdateUserIdentifyRequestParams(String type) {
+    public static RequestParams getupdateUserIdentifyRequestParams(String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("type", type);
         return params;
@@ -1729,7 +1710,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetNoticeListRequestParams(String page, String size, String type) {
+    public static RequestParams getgetNoticeListRequestParams(String page, String size, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -1749,7 +1730,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getfindFriendsRequestParams(String page, String size, String sight_count, String sort) {
+    public static RequestParams getfindFriendsRequestParams(String page, String size, String sight_count, String sort) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -1771,7 +1752,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getlogoutRequestParams() {
+    public static RequestParams getlogoutRequestParams() {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("from_to", "2"); // 1.ios;2.android;3.win;4.ipad;
         return params;
@@ -1789,7 +1770,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetPhoneStateRequestParams(String account) {
+    public static RequestParams getgetPhoneStateRequestParams(String account) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("account", account);
         return params;
@@ -1808,7 +1789,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetPayParamsRequestParams(String rid, String payaway) {
+    public static RequestParams getgetPayParamsRequestParams(String rid, String payaway) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("payaway", payaway);
@@ -1822,7 +1803,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getuploadIdentityInfoRequestParams(String id, String info, String label, String contact, String id_card_a_tmp, String business_card_tmp) {
+    public static RequestParams getuploadIdentityInfoRequestParams(String id, String info, String label, String contact, String id_card_a_tmp, String business_card_tmp) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("info", info);
@@ -1839,7 +1820,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams gettixingFahuoRequestParams(String rid) {
+    public static RequestParams gettixingFahuoRequestParams(String rid) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         return params;
@@ -1856,7 +1837,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetAuthStatusRequestParams() {
+    public static RequestParams getgetAuthStatusRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -1869,7 +1850,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetBonusRequestParams(String type, String evt, String target_id) {
+    public static RequestParams getgetBonusRequestParams(String type, String evt, String target_id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("evt", evt);
@@ -1889,7 +1870,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetSubjectDataRequestParams(String id) {
+    public static RequestParams getgetSubjectDataRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -1904,7 +1885,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getfavoriteRequestParams(String id, String type) {
+    public static RequestParams getfavoriteRequestParams(String id, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
@@ -1918,7 +1899,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getcancelFavoriteRequestParams(String id, String type) {
+    public static RequestParams getcancelFavoriteRequestParams(String id, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
@@ -1932,7 +1913,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getisInvitedRequestParams() {
+    public static RequestParams getisInvitedRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -1943,7 +1924,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getsubmitInviteCodeRequestParams(String code) {
+    public static RequestParams getsubmitInviteCodeRequestParams(String code) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("code", code);
         return params;
@@ -1955,7 +1936,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getupdateInviteCodeStatusRequestParams(String code) {
+    public static RequestParams getupdateInviteCodeStatusRequestParams(String code) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("code", code);
         return params;
@@ -1974,7 +1955,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetCollectOrderedRequestParams(String page, String size, String type, String event) {
+    public static RequestParams getgetCollectOrderedRequestParams(String page, String size, String type, String event) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -1992,7 +1973,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getenvirListRequestParams(String page, String size, String sort, String category_id, String stick) {
+    public static RequestParams getenvirListRequestParams(String page, String size, String sort, String category_id, String stick) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -2009,7 +1990,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getactiveStatusRequestParams() {
+    public static RequestParams getactiveStatusRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -2020,7 +2001,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getsubmitCheckCodeRequestParams(String phone, String code) {
+    public static RequestParams getsubmitCheckCodeRequestParams(String phone, String code) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("phone", phone);
         params.addQueryStringParameter("code", code);
@@ -2034,7 +2015,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getregisterUserRequestParams(String mobile, String password, String verify_code) {
+    public static RequestParams getregisterUserRequestParams(String mobile, String password, String verify_code) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("mobile", mobile);
         params.addQueryStringParameter("password", password);
@@ -2050,7 +2031,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getfocusInterestUserRequestParams() {
+    public static RequestParams getfocusInterestUserRequestParams() {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", "1");
         params.addQueryStringParameter("size", "18");
@@ -2066,21 +2047,21 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getfocusUsersRequestParams(String follow_ids) {
+    public static RequestParams getfocusUsersRequestParams(String follow_ids) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("follow_ids", follow_ids);
         return params;
     }
 
-    //获取推荐活动标签
-    public static HttpHandler<String> activeTags(RequestCallBack<String> callBack) {
-        RequestParams params = getactiveTagsRequestParams();
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SCENE_SIGHT_STICK_ACTIVE_TAGS, callBack);
-        return httpHandler;
-    }
+//    //获取推荐活动标签
+//    public static HttpHandler<String> activeTags(RequestCallBack<String> callBack) {
+//        RequestParams params = getactiveTagsRequestParams();
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SCENE_SIGHT_STICK_ACTIVE_TAGS, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    private static RequestParams getactiveTagsRequestParams() {
+     public static RequestParams getactiveTagsRequestParams() {
         return new RequestParams(ConstantCfg.CHARSET);
     }
 
@@ -2092,21 +2073,21 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getaddBrandRequestParams(String title) {
+     public static RequestParams getaddBrandRequestParams(String title) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("title", title);
         return params;
     }
 
-    //搜索建议
-    public static HttpHandler<String> searchExpand(String q, String size, RequestCallBack<String> callBack) {
-        RequestParams params = getsearchExpandRequestParams(q, size);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SEARCH_EXPANDED, callBack);
-        return httpHandler;
-    }
+//    //搜索建议
+//    public static HttpHandler<String> searchExpand(String q, String size, RequestCallBack<String> callBack) {
+//        RequestParams params = getsearchExpandRequestParams(q, size);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SEARCH_EXPANDED, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    private static RequestParams getsearchExpandRequestParams(String q, String size) {
+    public static RequestParams getsearchExpandRequestParams(String q, String size) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("size", size);
@@ -2118,27 +2099,27 @@ public class ClientDiscoverAPI {
      *
      * @param id
      */
-    public static HttpHandler<String> cancelSubscribe(String id, RequestCallBack<String> callBack) {
-        RequestParams params = getcancelSubscribeRequestParams(id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.MY_REMOVE_INTEREST_SCENE_ID, callBack);
-        return httpHandler;
-    }
+//    public static HttpHandler<String> cancelSubscribe(String id, RequestCallBack<String> callBack) {
+//        RequestParams params = getcancelSubscribeRequestParams(id);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.MY_REMOVE_INTEREST_SCENE_ID, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    private static RequestParams getcancelSubscribeRequestParams(String id) {
+    public static RequestParams getcancelSubscribeRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
     }
 
-    public static HttpHandler<String> subscribe(String id, RequestCallBack<String> callBack) {
-        RequestParams params = getsubscribeRequestParams(id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.MY_ADD_INTEREST_SCENE_ID, callBack);
-        return httpHandler;
-    }
+//    public static HttpHandler<String> subscribe(String id, RequestCallBack<String> callBack) {
+//        RequestParams params = getsubscribeRequestParams(id);
+//        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.MY_ADD_INTEREST_SCENE_ID, callBack);
+//        return httpHandler;
+//    }
 
     @NonNull
-    private static RequestParams getsubscribeRequestParams(String id) {
+    public static RequestParams getsubscribeRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         return params;
@@ -2152,7 +2133,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getsubjectListRequestParams(String page, String size, String stick, String fine, String type, String sort) {
+    public static RequestParams getsubjectListRequestParams(String page, String size, String stick, String fine, String type, String sort) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -2166,10 +2147,16 @@ public class ClientDiscoverAPI {
 
     //最新好货推荐
     public static HttpHandler<String> firstProducts(RequestCallBack<String> callBack) {
-        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        params.addQueryStringParameter("use_cache", "1");
+        RequestParams params = getfirstProductsRequestParams();
         HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.PRODUCCT_INDEX_NEW, callBack);
         return httpHandler;
+    }
+
+    @NonNull
+   public static RequestParams getfirstProductsRequestParams() {
+        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("use_cache", "1");
+        return params;
     }
 
     /**
@@ -2193,32 +2180,50 @@ public class ClientDiscoverAPI {
 
     //收藏情景
     public static HttpHandler<String> shoucang(String id, String type, RequestCallBack<String> callBack) {
-        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        params.addQueryStringParameter("id", id);
-        params.addQueryStringParameter("type", type);
+        RequestParams params = getshoucangRequestParams(id, type);
         HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.FAVORITE_AJAX_FAVORITE, callBack);
         return httpHandler;
     }
 
-    //取消收藏
-    public static HttpHandler<String> cancelShoucang(String id, String type, RequestCallBack<String> callBack) {
+    @NonNull
+    public static RequestParams getshoucangRequestParams(String id, String type) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("type", type);
+        return params;
+    }
+
+    //取消收藏
+    public static HttpHandler<String> cancelShoucang(String id, String type, RequestCallBack<String> callBack) {
+        RequestParams params = getcancelShoucangRequestParams(id, type);
         HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, callBack);
         return httpHandler;
     }
 
+    @NonNull
+   public static RequestParams getcancelShoucangRequestParams(String id, String type) {
+        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("type", type);
+        return params;
+    }
+
     //首页用户列表
     public static HttpHandler<String> getUserList(int size, RequestCallBack<String> callBack) {
+        RequestParams params = getUserListRequestParams(size);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.USER_FIND_USER, callBack);
+        return httpHandler;
+    }
+
+    @NonNull
+    public static RequestParams getUserListRequestParams(int size) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", "1");
         params.addQueryStringParameter("type", "1");
         params.addQueryStringParameter("size", size + "");
         params.addQueryStringParameter("edit_stick", "1");
         params.addQueryStringParameter("sort", "1");
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.USER_FIND_USER, callBack);
-        return httpHandler;
+        return params;
     }
 
     //临时产品库
@@ -2298,7 +2303,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getIndexChosenSubjectRequestParams() {
+    public static RequestParams getIndexChosenSubjectRequestParams() {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("use_cache", "1");
         return params;
@@ -2315,7 +2320,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getRefundListRequestParams(String page, String size) {
+    public static RequestParams getRefundListRequestParams(String page, String size) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -2333,7 +2338,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getChargeBackInfoRequestParams(String rId, String skuId) {
+    public static RequestParams getChargeBackInfoRequestParams(String rId, String skuId) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rId);
         params.addQueryStringParameter("sku_id", skuId);
@@ -2353,7 +2358,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getApplyProductRefundRequestParams(String rid, String sku_id, String refund_type, String refund_reason, String refund_content, String refund_price) {
+    public static RequestParams getApplyProductRefundRequestParams(String rid, String sku_id, String refund_type, String refund_reason, String refund_content, String refund_price) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("sku_id", sku_id);
@@ -2375,7 +2380,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getRefundSuccessInfoRequestParams(String chargebackId) {
+    public static RequestParams getRefundSuccessInfoRequestParams(String chargebackId) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", chargebackId);
         return params;
@@ -2392,7 +2397,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getupdateToLatestVersionRequestParams() {
+    public static RequestParams getupdateToLatestVersionRequestParams() {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("from_to", "2");
         return params;
@@ -2409,7 +2414,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getcheckVersionInfoRequestParams(String versionName) {
+    public static RequestParams getcheckVersionInfoRequestParams(String versionName) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("from_to", "2");
         params.addQueryStringParameter("version", versionName);
@@ -2427,7 +2432,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    private static RequestParams getFetchFreightRequestParams(String addbook_id, String rid) {
+    public static RequestParams getFetchFreightRequestParams(String addbook_id, String rid) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("addbook_id", addbook_id);
         params.addQueryStringParameter("rid", rid);
@@ -2444,7 +2449,7 @@ public class ClientDiscoverAPI {
         return HttpRequest.sign(params, URL.SHOPPING_TRACKING, callBack);
     }
 
-    private static RequestParams getShoppingTrackingRequestParams(String rid, String express_no, String express_caty) {
+    public static RequestParams getShoppingTrackingRequestParams(String rid, String express_no, String express_caty) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("rid", rid);
         params.addQueryStringParameter("express_no", express_no);

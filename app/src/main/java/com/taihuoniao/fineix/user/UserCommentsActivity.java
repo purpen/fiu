@@ -8,15 +8,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UserCommentsAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -87,7 +91,9 @@ public class UserCommentsActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         int curPage = 1;
-        ClientDiscoverAPI.mycommentsList(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getmycommentsListRequestParams(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE);
+        HttpRequest.post(params, URL.MY_COMMENTS_LIST, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.mycommentsList(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing() && dialog != null) dialog.show();

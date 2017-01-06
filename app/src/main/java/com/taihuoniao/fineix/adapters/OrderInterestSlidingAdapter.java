@@ -11,13 +11,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -80,7 +84,9 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
         itbn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                ClientDiscoverAPI.subsQingjing(item.get_id(), new RequestCallBack<String>() {
+                RequestParams requestParams = ClientDiscoverAPI.getsubsQingjingRequestParams(item.get_id());
+                HttpRequest.post(requestParams, URL.SUBS_QINGJING, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.subsQingjing(item.get_id(), new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         if (progressBar!=null) progressBar.setVisibility(View.VISIBLE);

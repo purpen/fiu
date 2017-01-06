@@ -12,16 +12,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ActivityPrizeData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -161,7 +165,9 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
     private void doFocus(final ActivityPrizeData.PrizeSightsEntity.DataEntity item, final View view) {
         if (LoginInfo.isUserLogin()) {
             if (item.user.is_follow == 0) {
-                ClientDiscoverAPI.focusOperate(String.valueOf(item.user._id), new RequestCallBack<String>() {
+                RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item.user._id));
+                HttpRequest.post(params, URL.FOCUS_OPRATE_URL,new GlobalDataCallBack(){
+//                ClientDiscoverAPI.focusOperate(String.valueOf(item.user._id), new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         view.setEnabled(true);

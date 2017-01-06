@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -143,6 +144,7 @@ public class SearchUsersAdapter extends BaseAdapter {
 
     //关注用户
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
+        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
         ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

@@ -10,15 +10,19 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubscribeThemeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ThemeQJ;
 import com.taihuoniao.fineix.beans.ThemeQJData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -65,7 +69,9 @@ public class SubscribeThemeActivity extends BaseActivity {
                 final View view_bg = view.findViewById(R.id.view_bg);
                 final ThemeQJ themeQJ = mList.get(position);
                 if (themeQJ.isSubscribed) {
-                    ClientDiscoverAPI.cancelSubscribe(themeQJ._id, new RequestCallBack<String>() {
+                    RequestParams requestParams = ClientDiscoverAPI.getcancelSubscribeRequestParams(themeQJ._id);
+                    HttpRequest.post(requestParams, URL.MY_REMOVE_INTEREST_SCENE_ID, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.cancelSubscribe(themeQJ._id, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             super.onStart();
@@ -99,7 +105,9 @@ public class SubscribeThemeActivity extends BaseActivity {
                     });
 
                 } else {
-                    ClientDiscoverAPI.subscribe(themeQJ._id, new RequestCallBack<String>() {
+                    RequestParams requestParams = ClientDiscoverAPI.getsubscribeRequestParams(themeQJ._id);
+                    HttpRequest.post(requestParams, URL.MY_ADD_INTEREST_SCENE_ID, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.subscribe(themeQJ._id, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             super.onStart();
@@ -158,7 +166,9 @@ public class SubscribeThemeActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcategoryListRequestParams();
+        HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;

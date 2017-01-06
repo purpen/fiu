@@ -28,12 +28,15 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.CartBean;
@@ -42,6 +45,7 @@ import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.fragment.BuyGoodsDetailsFragment;
 import com.taihuoniao.fineix.product.fragment.CommentFragment;
 import com.taihuoniao.fineix.product.fragment.WebFragment;
@@ -66,6 +70,7 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/2/22.
@@ -114,9 +119,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private int maxNumber = 1;//库存数量，最大不得超过
     //判断用户加入或立即购买的sku是第几个
     private int which = -1;
-    private HttpHandler<String> detailHandler;
-    private HttpHandler<String> cartHandler;
-    private HttpHandler<String> cancelShoucangHandler;
+    private Call detailHandler;
+    private Call cartHandler;
+    private Call cancelShoucangHandler;
     private boolean isBuy;//判断点击的是购买还是添加购物车
 
     public BuyGoodsDetailsActivity() {
@@ -414,7 +419,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //获取商品详情
     private void goodDetails() {
-        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(id);
+        detailHandler = HttpRequest.post(requestParams, URL.GOOD_DETAILS, new GlobalDataCallBack(){
+//        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -493,7 +500,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             titleLayout.setCartNum(0);
             return;
         }
-        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getcartNumRequestParams();
+        cartHandler =  HttpRequest.post(requestParams, URL.CART_NUMBER, new GlobalDataCallBack(){
+//        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 CartBean cartBean = new CartBean();
@@ -522,7 +531,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //取消收藏
     private void cancelFavorate() {
-        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcancelShoucangRequestParams(id, "1");
+        cancelShoucangHandler=   HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
+//        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -551,11 +562,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
-    private HttpHandler<String> shoucangHandler;
+    private Call shoucangHandler;
 
     //收藏
     private void favorate() {
-        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getshoucangRequestParams(id, "1");
+        shoucangHandler=  HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
+//        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -584,11 +597,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
-    private HttpHandler<String> buyHandler;
+    private Call buyHandler;
 
     //立即购买
     private void buyNow(String target_id, String type, String n) {
-        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getbuyNowRequestParams(target_id, type, n);
+        buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack(){
+//        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -620,11 +635,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
-    private HttpHandler<String> addCartHandler;
+    private Call addCartHandler;
 
     //加入购物车
     private void addToCart(String target_id, String type, String n) {
-        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getaddToCartNetRequestParams(target_id, type, n);
+        addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack(){
+//        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();

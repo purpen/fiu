@@ -19,14 +19,18 @@ import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchUserAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.DataUserSearch;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemUserSearch;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -149,7 +153,9 @@ public class SearchUserFragment extends DialogFragment {
             ToastUtils.showInfo("请输入查询关键字");
             return;
         }
-        ClientDiscoverAPI.searchUser(query, String.valueOf(curPage), new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI.getsearchUserRequestParams(query, String.valueOf(curPage));
+        HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.searchUser(query, String.valueOf(curPage), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null) dialog.show();

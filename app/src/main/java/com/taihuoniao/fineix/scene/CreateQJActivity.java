@@ -32,6 +32,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -39,6 +40,8 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CreateQJBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
@@ -51,6 +54,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.EffectUtil;
@@ -66,6 +70,7 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import butterknife.Bind;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/8/15.
@@ -465,8 +470,11 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                           String products, String address, String city, String tmp, String lat, String lng,
                           String subject_ids) {
         Log.e("<<<", "开始上传");
-        HttpHandler<String> httpHandler = ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,
-                tmp, lat, lng, subject_ids, new RequestCallBack<String>() {
+        RequestParams requestParams = ClientDiscoverAPI.getcreateSceneRequestParams(id, title, des, scene_id, tags, products, address, city,
+                tmp, lat, lng, subject_ids);
+        Call httpHandler = HttpRequest.post(requestParams, URL.CREATE_SCENE, new GlobalDataCallBack(){
+//        HttpHandler<String> httpHandler = ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,
+//                tmp, lat, lng, subject_ids, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(final ResponseInfo<String> responseInfo) {
                         runOnUiThread(new Runnable() {

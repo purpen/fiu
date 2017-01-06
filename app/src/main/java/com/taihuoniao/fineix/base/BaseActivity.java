@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -28,7 +29,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     protected FragmentActivity activity;
     private int layoutResID;
     protected DisplayImageOptions options;
-    private List<HttpHandler<String>> handlerList;
+    private List<Call> handlerList;
 
 
     public BaseActivity(int layoutResID) {
@@ -79,7 +80,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         MobclickAgent.onPause(this);
     }
 
-    protected void addNet(HttpHandler<String> httpHandler) {
+    protected void addNet(Call httpHandler) {
         if (handlerList == null) {
             handlerList = new ArrayList<>();
         }
@@ -87,7 +88,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     }
     private void clearNet(){
         if (handlerList != null) {
-            for (HttpHandler<String> httpHandler : handlerList) {
+            for (Call httpHandler : handlerList) {
                 if (httpHandler != null) {
                     httpHandler.cancel();
                 }
