@@ -9,13 +9,16 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.salesevice.adapter.SaleAfterListAdapter;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackListBean;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
@@ -109,15 +112,17 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
         if (!mDialog.isShowing()) {
             mDialog.show();
         }
-        ClientDiscoverAPI.getRefundList(String.valueOf(curPage), size, new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getRefundListRequestParams(String.valueOf(curPage), size);
+        HttpRequest.post(params,URL.SHOPPING_REFUND_LIST, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getRefundList(String.valueOf(curPage), size, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) {
                     return;
                 }
                 ChargeBackListBean refundListData = null;
                 try {
-                    HttpResponse<ChargeBackListBean> refundList = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ChargeBackListBean>>() {
+                    HttpResponse<ChargeBackListBean> refundList = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackListBean>>() {
                     });
                     if (refundList.isSuccess()) {
                         refundListData = refundList.getData();

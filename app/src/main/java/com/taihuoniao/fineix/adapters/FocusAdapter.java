@@ -13,15 +13,17 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -122,13 +124,14 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         if (userId == LoginInfo.getUserId()) { //关注列表做关注操作
             if (item.focus_flag) {
                 RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
-                ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
+                HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         view.setEnabled(true);
                         if (responseInfo == null) return;
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()) {
                             item.focus_flag = false;
                             notifyDataSetChanged();
@@ -181,13 +184,14 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     if (item == null || item.follows == null) return;
                     if (item.focus_flag) {
                         RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
-                        ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
+                        HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//                        ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                 view.setEnabled(true);
                                 if (responseInfo == null) return;
-                                if (TextUtils.isEmpty(responseInfo.result)) return;
-                                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                                if (TextUtils.isEmpty(json)) return;
+                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
                                     item.focus_flag = false;
                                     notifyDataSetChanged();
@@ -203,14 +207,16 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             }
                         });
                     } else {
-                        ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
+                        RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
+                        HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//                        ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                 view.setEnabled(true);
                                 myPopupWindow.dismiss();
                                 if (responseInfo == null) return;
-                                if (TextUtils.isEmpty(responseInfo.result)) return;
-                                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                                if (TextUtils.isEmpty(json)) return;
+                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
 //                                    list.remove(item);
                                     item.focus_flag = true;  //变为可关注
@@ -275,13 +281,14 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         if (item == null || item.follows == null) return;
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
             RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
-            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
+            HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
+                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                     view.setEnabled(true);
                     if (responseInfo == null) return;
-                    if (TextUtils.isEmpty(responseInfo.result)) return;
-                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                    if (TextUtils.isEmpty(json)) return;
+                    HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                     if (response.isSuccess()) {
                         item.follows.is_love = LOVE;
                         notifyDataSetChanged();
@@ -297,14 +304,16 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 }
             });
         } else if (item.follows.is_love == LOVE) {
-            ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
+            RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
+            HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//            ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
+                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                     view.setEnabled(true);
                     myPopupWindow.dismiss();
                     if (responseInfo == null) return;
-                    if (TextUtils.isEmpty(responseInfo.result)) return;
-                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                    if (TextUtils.isEmpty(json)) return;
+                    HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                     if (response.isSuccess()) {
                         item.follows.is_love = NOT_LOVE;
                         notifyDataSetChanged();

@@ -23,7 +23,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -196,18 +195,18 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (waittingDialog != null) waittingDialog.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
-                if (responseInfo.result == null) {
+                if (json == null) {
                     return;
                 }
-                LogUtil.e("附近所有场景", responseInfo.result);
+                LogUtil.e("附近所有场景", json);
                 HttpResponse<UserCJListData> response;
                 try {
-                    response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<UserCJListData>>() {
+                    response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<UserCJListData>>() {
                     });
                     if (response == null) return;
                     if (response.isSuccess()) {

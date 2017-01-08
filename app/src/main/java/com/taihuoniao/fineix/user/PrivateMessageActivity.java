@@ -13,16 +13,19 @@ import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PrivateMessageItemAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.MessageDetailData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -90,18 +93,20 @@ public class PrivateMessageActivity extends BaseActivity{
     protected void requestNet() {
         if (user==null) return;
         if (user._id<=0) return;
-        ClientDiscoverAPI.messageDetailList(String.valueOf(user._id),new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getmessageDetailListRequestParams(String.valueOf(user._id));
+        HttpRequest.post(params,  URL.MESSAGE_DETAIL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.messageDetailList(String.valueOf(user._id),new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog!=null&&!isSendMsg) dialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 if (responseInfo==null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<MessageDetailData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<MessageDetailData>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<MessageDetailData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<MessageDetailData>>() {
                 });
 
                 if (response.isSuccess()){
@@ -142,7 +147,9 @@ public class PrivateMessageActivity extends BaseActivity{
             Util.makeToast("私信内容不能为空哦！");
             return;
         }
-        ClientDiscoverAPI.sendMessage(String.valueOf(user._id), content, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getsendMessageRequestParams(String.valueOf(user._id), content);
+        HttpRequest.post(params,  URL.SEND_MESSAGE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.sendMessage(String.valueOf(user._id), content, new RequestCallBack<String>() {
             @Override
             public void onStart() {
 //                if (dialog!=null) dialog.show();
@@ -150,13 +157,13 @@ public class PrivateMessageActivity extends BaseActivity{
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 isSendMsg=true;
                 v.setEnabled(true);
 //                dialog.dismiss();
                 if (responseInfo==null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()){
                     et.getText().clear();
                     ((Button)v).setText("发送");

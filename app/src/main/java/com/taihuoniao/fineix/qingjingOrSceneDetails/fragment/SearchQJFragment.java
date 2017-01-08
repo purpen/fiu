@@ -12,10 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchQJAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -132,14 +130,14 @@ public class SearchQJFragment extends SearchFragment {
         Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "9", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<搜索情景", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<搜索情景", json);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SearchBean>() {
                     }.getType();
-                    searchBean = gson.fromJson(responseInfo.result, type);
+                    searchBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }

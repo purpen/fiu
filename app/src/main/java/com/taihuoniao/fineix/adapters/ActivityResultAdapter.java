@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -169,10 +167,10 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                 HttpRequest.post(params, URL.FOCUS_OPRATE_URL,new GlobalDataCallBack(){
 //                ClientDiscoverAPI.focusOperate(String.valueOf(item.user._id), new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         view.setEnabled(true);
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()) {
                             for (ActivityPrizeData.PrizeSightsEntity.DataEntity dataEntity:list){
                                 if (TextUtils.equals(item.user._id,dataEntity.user._id)){
@@ -194,16 +192,18 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                     }
                 });
             } else {
-                ClientDiscoverAPI.cancelFocusOperate(item.user._id + "", new RequestCallBack<String>() {
+                RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.user._id + "");
+                HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.cancelFocusOperate(item.user._id + "", new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         view.setEnabled(true);
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()) {
-                            for (ActivityPrizeData.PrizeSightsEntity.DataEntity dataEntity:list){
-                                if (TextUtils.equals(item.user._id,dataEntity.user._id)){
-                                    dataEntity.user.is_follow=0;
+                            for (ActivityPrizeData.PrizeSightsEntity.DataEntity dataEntity : list) {
+                                if (TextUtils.equals(item.user._id, dataEntity.user._id)) {
+                                    dataEntity.user.is_follow = 0;
                                 }
                             }
 //                            item.user.is_follow = 0;

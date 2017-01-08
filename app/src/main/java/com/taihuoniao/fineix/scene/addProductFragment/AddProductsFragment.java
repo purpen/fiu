@@ -16,10 +16,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
@@ -90,7 +88,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         Call httpHandler = HttpRequest.post(requestParams,URL.SEARCH, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, 7 + "", null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
@@ -99,7 +97,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     Gson gson = new Gson();
                     Type type = new TypeToken<SearchBean>() {
                     }.getType();
-                    searchBean = gson.fromJson(responseInfo.result, type);
+                    searchBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
@@ -144,11 +142,11 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
 //                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         dialog.dismiss();
                         pullToRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
-                        getProductList(responseInfo.result);
+                        getProductList(json);
                     }
 
                     @Override
@@ -165,11 +163,11 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 Call httpHandler = HttpRequest.post(requestParams,URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
 //                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         dialog.dismiss();
                         pullToRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
-                        getProductList(responseInfo.result);
+                        getProductList(json);
                     }
 
                     @Override
@@ -315,15 +313,15 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         Call httpHandler = HttpRequest.post(requestParams,URL.GOOD_DETAILS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.goodsDetails(ids, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<商品详情", responseInfo.result);
+                Log.e("<<<商品详情", json);
                 BuyGoodDetailsBean netGood = new BuyGoodDetailsBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<BuyGoodDetailsBean>() {
                     }.getType();
-                    netGood = gson.fromJson(responseInfo.result, type);
+                    netGood = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<>>>", "数据异常" + e.toString());
                 }

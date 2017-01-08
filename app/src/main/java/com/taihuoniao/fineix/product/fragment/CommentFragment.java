@@ -9,10 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -99,10 +97,10 @@ public class CommentFragment extends SearchFragment {
        Call httpHandler =  HttpRequest.post(params, URL.COMMENTS_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<商品评论", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json",responseInfo.result);
-                List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<商品评论", json);
+//                WriteJsonToSD.writeToSD("json",json);
+                List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(json);
                 progressBar.setVisibility(View.GONE);
                 if (page == 1) {
                     commentsList.clear();

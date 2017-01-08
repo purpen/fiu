@@ -23,7 +23,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NearByQJAdapter;
 import com.taihuoniao.fineix.adapters.QJRecommonedAdapter;
@@ -151,18 +150,18 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 //TODO 关闭加载框
                 if (responseInfo == null) {
                     return;
                 }
-                if (responseInfo.result == null) {
+                if (json == null) {
                     return;
                 }
-                LogUtil.e("附近情境", responseInfo.result);
+                LogUtil.e("附近情境", json);
                 QingJingData qingJingData = null;
                 try {
-                    qingJingData = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<QingJingData>>() {
+                    qingJingData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<QingJingData>>() {
                     });
                 } catch (JsonSyntaxException e) {//TODO log
                     Util.makeToast(activity, "对不起,数据异常");
@@ -194,18 +193,18 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 //TODO 关闭加载框
                 if (responseInfo == null) {
                     return;
                 }
-                if (responseInfo.result == null) {
+                if (json == null) {
                     return;
                 }
-                LogUtil.e("推荐情境", responseInfo.result);
+                LogUtil.e("推荐情境", json);
                 QingJingData qingJingData = null;
                 try {
-                    qingJingData = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<QingJingData>>() {
+                    qingJingData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<QingJingData>>() {
                     });
                 } catch (JsonSyntaxException e) {//TODO log
                     Util.makeToast(activity, "对不起,数据异常");

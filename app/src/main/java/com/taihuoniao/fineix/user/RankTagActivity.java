@@ -13,13 +13,16 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AuthData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -113,13 +116,15 @@ public class RankTagActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetAuthStatusRequestParams();
+        HttpRequest.post(params,URL.MY_FETCH_TALENT, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo==null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("getAuthStatus",responseInfo.result);
-                HttpResponse<AuthData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<AuthData>>() {});
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("getAuthStatus",json);
+                HttpResponse<AuthData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AuthData>>() {});
                 if (response.isSuccess()){
                     authData = response.getData();
                     refreshUI();
@@ -181,12 +186,14 @@ public class RankTagActivity extends BaseActivity{
         }
 
         if (TextUtils.isEmpty(value)) return;
-        ClientDiscoverAPI.updateUserInfo(key, value, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateUserInfoRequestParams(key, value);
+        HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateUserInfo(key, value, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo==null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()){
                     LogUtil.e(TAG,"非官方认证提交成功！");
                     return;

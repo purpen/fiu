@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ShareContent;
@@ -25,6 +27,7 @@ import com.taihuoniao.fineix.beans.SupportData;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
@@ -171,10 +174,12 @@ public class SubjectActivity extends BaseActivity {
 
     private void jump2ThemeDetail(final String id) {
         if (TextUtils.isEmpty(id)) return;
-        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
 
                 if (response.isSuccess()) {
@@ -265,7 +270,9 @@ public class SubjectActivity extends BaseActivity {
         if (data == null) return;
         switch (data.is_love) {
             case 0:
-                ClientDiscoverAPI.loveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
+                RequestParams params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
+                HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.loveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -273,10 +280,10 @@ public class SubjectActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         v.setEnabled(true);
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse<SupportData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SupportData>>() {
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse<SupportData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SupportData>>() {
                         });
                         if (response.isSuccess()) {
                             data.is_love = 1;
@@ -296,7 +303,9 @@ public class SubjectActivity extends BaseActivity {
                 });
                 break;
             case 1:
-                ClientDiscoverAPI.cancelLoveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
+                RequestParams params2 = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
+                HttpRequest.post(params2,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.cancelLoveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -304,10 +313,10 @@ public class SubjectActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         v.setEnabled(true);
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse<SupportData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SupportData>>() {
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse<SupportData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SupportData>>() {
                         });
                         if (response.isSuccess()) {
                             data.is_love = 0;
@@ -332,11 +341,13 @@ public class SubjectActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.getSubjectData(url, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(url);
+        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSubjectData(url, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
 
                 if (response.isSuccess()) {

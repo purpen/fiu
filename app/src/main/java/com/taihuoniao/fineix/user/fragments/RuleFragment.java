@@ -76,8 +76,8 @@ public class RuleFragment extends MyBaseFragment {
 //            @Override
 //            public void onSuccess(ResponseInfo<String> responseInfo) {
 //                btn.setEnabled(true);
-//                if (TextUtils.isEmpty(responseInfo.result)) return;
-//                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+//                if (TextUtils.isEmpty(json)) return;
+//                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
 //                if (response.isSuccess()){
 //                    btn.setBackgroundColor(getResources().getColor(R.color.color_222));
 //                    btn.setText("已参加");

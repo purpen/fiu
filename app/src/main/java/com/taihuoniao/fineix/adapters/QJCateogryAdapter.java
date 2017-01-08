@@ -16,8 +16,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -160,7 +158,7 @@ public class QJCateogryAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 holder.qjLove.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -168,7 +166,7 @@ public class QJCateogryAdapter extends BaseAdapter {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneLoveBean>() {
                     }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                    sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }
@@ -195,7 +193,7 @@ public class QJCateogryAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 holder.qjLove.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -203,7 +201,7 @@ public class QJCateogryAdapter extends BaseAdapter {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneLoveBean>() {
                     }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                    sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }

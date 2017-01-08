@@ -10,14 +10,17 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCompleteData;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -135,12 +138,14 @@ public class DecadeSelectFragment extends MyBaseFragment {
         switch (v.getId()) {
             case R.id.btn_next:
                 v.setEnabled(false);
-                ClientDiscoverAPI.updateAgeAssets(age_group, assets, new RequestCallBack<String>() {
+                RequestParams params =ClientDiscoverAPI. getupdateAgeAssetsRequestParams(age_group, assets);
+                HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.updateAgeAssets(age_group, assets, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         v.setEnabled(true);
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse<User> response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse<User> response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()) {
 //                            ToastUtils.showSuccess("更新成功");
                             LogUtil.e(TAG, "更新成功");

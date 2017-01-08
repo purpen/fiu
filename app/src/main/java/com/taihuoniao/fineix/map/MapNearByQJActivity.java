@@ -16,13 +16,11 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -160,18 +158,18 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (waittingDialog!=null) waittingDialog.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
-                if (responseInfo.result == null) {
+                if (json == null) {
                     return;
                 }
-                LogUtil.e("附近所有情境", responseInfo.result);
+                LogUtil.e("附近所有情境", json);
                 QingJingData qingJingData = null;
                 try {
-                    qingJingData = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<QingJingData>>() {
+                    qingJingData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<QingJingData>>() {
                     });
                 } catch (JsonSyntaxException e) {//TODO log
                     Util.makeToast(activity, "对不起,数据异常");

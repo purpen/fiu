@@ -12,7 +12,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubscribeThemeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -79,10 +78,10 @@ public class SubscribeThemeActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             view.setEnabled(true);
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 themeQJ.isSubscribed = false;
                                 adapter.notifyDataSetChanged();
@@ -115,10 +114,10 @@ public class SubscribeThemeActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             view.setEnabled(true);
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 themeQJ.isSubscribed = true;
                                 adapter.notifyDataSetChanged();
@@ -145,8 +144,8 @@ public class SubscribeThemeActivity extends BaseActivity {
 //                    @Override
 //                    public void onSuccess(ResponseInfo<String> responseInfo) {
 //                        view.setEnabled(true);
-//                        if (TextUtils.isEmpty(responseInfo.result)) return;
-//                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+//                        if (TextUtils.isEmpty(json)) return;
+//                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
 //                        if (response.isSuccess()) {
 //                            LogUtil.e(TAG, "订阅成功");
 //                            return;
@@ -170,9 +169,9 @@ public class SubscribeThemeActivity extends BaseActivity {
         HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<ThemeQJData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThemeQJData>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<ThemeQJData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThemeQJData>>() {
                 });
                 if (response.isSuccess()) {
                     mList = response.getData().rows;

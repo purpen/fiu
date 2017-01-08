@@ -9,12 +9,10 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
  * Email: 895745843@qq.com
  */
 
-public class GlobalDataCallBack extends RequestCallBack<String> {
-    public void onSuccess(ResponseInfo<String> responseInfo) {
+public abstract class GlobalDataCallBack {
+    public void onStart(){}
 
-    }
+    public abstract void onSuccess(ResponseInfo<String> responseInfo, String json);
 
-    public void onFailure(HttpException e, String s) {
-
-    }
+    public abstract void onFailure(HttpException e, String s);
 }

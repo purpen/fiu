@@ -17,14 +17,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.Base2Activity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.salesevice.ChargeBackActivity;
 import com.taihuoniao.fineix.personal.salesevice.KEY;
 import com.taihuoniao.fineix.personal.salesevice.SalesReturnActivity;
@@ -113,12 +116,14 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
         if (!mDialog.isShowing()) {
             mDialog.show();
         }
-        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
+        HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
                 try {
-                    HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() {
+                    HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderDetailBean>>() {
                     });
                     if (response.isError()) {
                         LogUtil.e(TAG, "---------> responseInfo: " + responseInfo.reasonPhrase);
@@ -523,9 +528,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         toShopOrderListActivity();
                                     }
 
@@ -584,9 +591,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getcancelOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_CANCEL_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         toShopOrderListActivity();
                                     }
 
@@ -637,16 +646,18 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         if (!mDialog.isShowing()) {
                             mDialog.show();
                         }
-                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
+                        RequestParams params = ClientDiscoverAPI.gettixingFahuoRequestParams(rid);
+                        HttpRequest.post(params, URL.SHOPPING_ALERT_SEND_GOODS, new GlobalDataCallBack(){
+//                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                 mDialog.dismiss();
                                 NetBean netBean = new NetBean();
                                 try {
                                     Gson gson = new Gson();
                                     Type type = new TypeToken<NetBean>() {
                                     }.getType();
-                                    netBean = gson.fromJson(responseInfo.result, type);
+                                    netBean = gson.fromJson(json, type);
                                 } catch (JsonSyntaxException e) {
                                     Log.e("<<<提醒发货", "数据解析异常");
                                 }
@@ -676,9 +687,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         toShopOrderListActivity();
                                     }
 
@@ -729,9 +742,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         new DefaultDialog(OrderDetailsActivity.this, title, textButtons, new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getconfirmReceiveNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.SHOPPING_TAKE_DELIVERY, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         toShopOrderListActivity();
                                     }
 
@@ -781,9 +796,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         toShopOrderListActivity();
                                     }
 
@@ -840,9 +857,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         toShopOrderListActivity();
                                     }
 
@@ -891,9 +910,11 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         new DefaultDialog(OrderDetailsActivity.this, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         toShopOrderListActivity();
                                     }
 

@@ -18,10 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -149,7 +147,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
       Call httpHandler =  HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //     HttpHandler<String> httpHandler= ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 SearchBean netSearch = new SearchBean();
@@ -157,7 +155,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
                     Gson gson = new Gson();
                     Type type = new TypeToken<SearchBean>() {
                     }.getType();
-                    netSearch = gson.fromJson(responseInfo.result, type);
+                    netSearch = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }

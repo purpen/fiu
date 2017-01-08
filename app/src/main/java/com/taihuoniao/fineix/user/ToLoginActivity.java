@@ -19,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -274,14 +273,14 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
                 btnWechat.setEnabled(true);
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThirdLogin>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
                 if (response.isSuccess()) {
                     ThirdLogin thirdLogin = response.getData();
@@ -344,18 +343,20 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
-        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("updateUserIdentity", responseInfo.result);
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("updateUserIdentity", json);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");
                     return;
                 }
-                LogUtil.e("改为非首次登录失败", responseInfo.result + "===" + response.getMessage());
+                LogUtil.e("改为非首次登录失败", json + "===" + response.getMessage());
             }
 
             @Override
@@ -417,16 +418,15 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (responseInfo == null) return;
-                Log.e("<<<登录成功",responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<登录成功",json);
                 v.setEnabled(true);
                 mDialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<LoginInfo>>() {
                 });
-//                ToastUtils.showError(responseInfo.result);
-                LogUtil.e("LOGIN_INFO", responseInfo.result);
+//                ToastUtils.showError(json);
+                LogUtil.e("LOGIN_INFO", json);
                 if (response.isSuccess()) {//登录界面登录成功
                     MainApplication.hasUser = true;
                     LoginInfo loginInfo = response.getData();

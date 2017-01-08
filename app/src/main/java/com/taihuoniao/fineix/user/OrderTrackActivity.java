@@ -9,13 +9,16 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.adapter.OrderTrackAdapter;
 import com.taihuoniao.fineix.user.bean.OrderTrackBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -73,16 +76,18 @@ public class OrderTrackActivity extends BaseActivity {
             mDialog = new WaittingDialog(this);
             mDialog.show();
         }
-        ClientDiscoverAPI.shoppingTracking(s1, s2, s3, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getShoppingTrackingRequestParams(s1, s2, s3);
+        HttpRequest.post(params,URL.SHOPPING_TRACKING, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.shoppingTracking(s1, s2, s3, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (mDialog != null && mDialog.isShowing()) {
                     mDialog.dismiss();
                 }
                 if (responseInfo == null) {
                     return;
                 }
-                HttpResponse<OrderTrackBean> orderTrackBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderTrackBean>>() {
+                HttpResponse<OrderTrackBean> orderTrackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderTrackBean>>() {
                 });
 
                 if (orderTrackBeanHttpResponse.isError()) {

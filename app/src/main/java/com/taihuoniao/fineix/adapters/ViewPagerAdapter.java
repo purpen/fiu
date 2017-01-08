@@ -13,11 +13,13 @@ import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IsInviteData;
@@ -26,6 +28,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BannerActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
@@ -180,10 +183,12 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             break;
                         case 11:    //情境专题
                             Log.e("<<<", "banner.toString=" + banner.toString());
-                            ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
+                            RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(banner.web_url);
+                            HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+//                            ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
                                 @Override
-                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                    HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+                                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                                     });
 
                                     if (response.isSuccess()) {
@@ -253,13 +258,15 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             ToastUtils.showError("请输入邀请码");
             return;
         }
-        ClientDiscoverAPI.submitInviteCode(code, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getsubmitInviteCodeRequestParams(code);
+        HttpRequest.post(params, URL.GATEWAY_VALIDE_INVITE_CODE , new GlobalDataCallBack(){
+//        ClientDiscoverAPI.submitInviteCode(code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) {
                     return;
                 }
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     updateInviteCodeStatus();
                     return;
@@ -275,13 +282,15 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     }
 
     private void updateInviteCodeStatus() {
-        ClientDiscoverAPI.updateInviteCodeStatus(code, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateInviteCodeStatusRequestParams(code);
+        HttpRequest.post(params, URL.GATEWAY_DEL_INVITE_CODE , new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateInviteCodeStatus(code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) {
                     return;
                 }
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     SPUtil.write(DataConstants.INVITE_CODE_TAG, false);
                     activity.startActivity(new Intent(activity, MainActivity.class));
@@ -305,15 +314,17 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getisInvitedRequestParams();
+        HttpRequest.post(params,URL.GATEWAY_IS_INVITED, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-//                ToastUtils.showError(responseInfo.result);
-                if (TextUtils.isEmpty(responseInfo.result)) {
+//                ToastUtils.showError(json);
+                if (TextUtils.isEmpty(json)) {
                     return;
                 }
-                HttpResponse<IsInviteData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<IsInviteData>>() {
+                HttpResponse<IsInviteData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<IsInviteData>>() {
                 });
                 if (response.isSuccess()) {
                     if (response.getData().status == 1) {

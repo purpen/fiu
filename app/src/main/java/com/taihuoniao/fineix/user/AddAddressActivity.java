@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,10 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -113,13 +109,13 @@ public class AddAddressActivity extends BaseActivity {
                                 }
 
                                 @Override
-                                public void onSuccess(ResponseInfo<String> responseInfo) {
+                                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                     NetBean netBean = new NetBean();
                                     try {
                                         Gson gson = new Gson();
                                         Type type = new TypeToken<NetBean>() {
                                         }.getType();
-                                        netBean = gson.fromJson(responseInfo.result, type);
+                                        netBean = gson.fromJson(json, type);
                                     } catch (JsonSyntaxException e) {
                                         e.printStackTrace();
                                     }
@@ -161,7 +157,7 @@ public class AddAddressActivity extends BaseActivity {
 //                                        Gson gson = new Gson();
 //                                        Type type = new TypeToken<NetBean>() {
 //                                        }.getType();
-//                                        netBean = gson.fromJson(responseInfo.result, type);
+//                                        netBean = gson.fromJson(json, type);
 //                                    } catch (JsonSyntaxException e) {
 //                                        e.printStackTrace();
 //                                    }
@@ -359,15 +355,15 @@ public class AddAddressActivity extends BaseActivity {
         HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.commitAddressNet(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                LogUtil.e(TAG, responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                LogUtil.e(TAG, json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }

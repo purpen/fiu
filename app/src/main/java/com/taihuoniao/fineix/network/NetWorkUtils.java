@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.network;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,20 +10,19 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.bean.CheckVersionBean;
 import com.taihuoniao.fineix.network.bean.UpdateInfoBean;
-import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -140,14 +138,16 @@ public class NetWorkUtils {
     }
 
     public void updateToLatestVersion() {
-        ClientDiscoverAPI.updateToLatestVersion(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateToLatestVersionRequestParams();
+        HttpRequest.post(params,URL.FETCH_LATEST_VERSION, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateToLatestVersion(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 try {
                     if (responseInfo == null) {
                         return;
                     }
-                    UpdateInfoBean updateVersionInfo = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<UpdateInfoBean>>() {
+                    UpdateInfoBean updateVersionInfo = JsonUtil.fromJson(json, new TypeToken<HttpResponse<UpdateInfoBean>>() {
                     });
                     if (getAppVersionName(mContext).equals(updateVersionInfo.getVersion())) {
                         ToastUtils.showInfo("您当前已经是最新版本");
@@ -157,7 +157,7 @@ public class NetWorkUtils {
                         mHandler.sendEmptyMessage(INSTALL_APK);
                     }
                 } catch (Exception e) {
-                    LogUtil.e(this.getClass().getSimpleName(), "<<<<< " + responseInfo.result);
+                    LogUtil.e(this.getClass().getSimpleName(), "<<<<< " + json);
                 }
             }
 
@@ -173,21 +173,23 @@ public class NetWorkUtils {
 
     public void checkVersionInfo() {
         String appVersionName = getAppVersionName(mContext);
-        ClientDiscoverAPI.checkVersionInfo(appVersionName, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcheckVersionInfoRequestParams(appVersionName);
+        HttpRequest.post(params, URL.CHECK_VERSION_INFO, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.checkVersionInfo(appVersionName, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 try {
                     if (responseInfo == null) {
                         return;
                     }
                     CheckVersionBean
-                            checkVersionBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<CheckVersionBean>>() {});
+                            checkVersionBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<CheckVersionBean>>() {});
                     if (checkVersionBean != null) {
                         downloadUrl = checkVersionBean.getDownload();
                         mHandler.sendEmptyMessage(checkVersionBean.getCode());
                     }
                 } catch (Exception e) {
-                    LogUtil.e(this.getClass().getSimpleName(), "<<<<< " + responseInfo.result);
+                    LogUtil.e(this.getClass().getSimpleName(), "<<<<< " + json);
                 }
             }
 

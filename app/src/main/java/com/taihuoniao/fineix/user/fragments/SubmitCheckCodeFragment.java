@@ -11,13 +11,16 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.RegisterInfo;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.ToRegisterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -72,11 +75,13 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
         if (registerInfo == null) return;
         String phone = registerInfo.mobile;
         if (TextUtils.isEmpty(phone)) return;
-        ClientDiscoverAPI.submitCheckCode(phone, text, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getsubmitCheckCodeRequestParams(phone, text);
+        HttpRequest.post(params, URL.AUTH_CHECK_VERIFY_CODE , new GlobalDataCallBack(){
+//        ClientDiscoverAPI.submitCheckCode(phone, text, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     registerInfo.verify_code = text;
                     if (activity instanceof ToRegisterActivity) {

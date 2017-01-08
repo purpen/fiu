@@ -15,13 +15,16 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SimpleTextAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AddressData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
@@ -239,7 +242,9 @@ public class AddressSelectFragment extends DialogFragment {
     }
 
     private void requestNet() {
-        ClientDiscoverAPI.requestAddress(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer), new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getrequestAddressRequestParams(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer));
+        HttpRequest.post(params,URL.SHOPPING_FETCH_CHINA_CITY, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.requestAddress(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 progressbar.setVisibility(View.VISIBLE);
@@ -247,10 +252,10 @@ public class AddressSelectFragment extends DialogFragment {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 setItemClickable(true);
                 progressbar.setVisibility(View.GONE);
-                HttpResponse<AddressData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<AddressData>>() {
+                HttpResponse<AddressData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AddressData>>() {
                 });
                 if (response.isSuccess()) {
                     AddressData data = response.getData();

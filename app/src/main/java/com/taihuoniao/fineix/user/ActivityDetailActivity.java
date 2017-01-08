@@ -22,7 +22,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
@@ -212,17 +211,19 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void requestNet() {
         if (TextUtils.isEmpty(id)) return;
-        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null) dialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<ActivityPrizeData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ActivityPrizeData>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<ActivityPrizeData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ActivityPrizeData>>() {
                 });
                 if (response.isSuccess()) {
                     detailData = response.getData();
@@ -250,9 +251,9 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<DataParticipateQJ> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataParticipateQJ>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<DataParticipateQJ> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataParticipateQJ>>() {
                 });
 
                 if (response.isSuccess()) {

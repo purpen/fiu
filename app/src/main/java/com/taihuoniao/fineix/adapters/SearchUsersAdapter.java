@@ -15,9 +15,10 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SearchBean;
@@ -26,6 +27,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -145,17 +147,18 @@ public class SearchUsersAdapter extends BaseAdapter {
     //关注用户
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
         RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
-        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<关注用户", responseInfo.result);
+                Log.e("<<<关注用户", json);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }
@@ -211,16 +214,18 @@ public class SearchUsersAdapter extends BaseAdapter {
 
     //取消关注
     private void cancelFollow(final SearchBean.Data.SearchItem item, final ViewHolder holder) {
-        ClientDiscoverAPI.cancelFocusOperate(item.getUser_id(), new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_id());
+        HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.cancelFocusOperate(item.getUser_id(), new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }

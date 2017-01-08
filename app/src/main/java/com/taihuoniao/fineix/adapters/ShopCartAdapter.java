@@ -10,12 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -197,12 +199,14 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
     List<ShopCartInventoryItemBean> mInventoryList = new ArrayList<>();
 
     private void inventory() {
-        ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getshopcartInventoryNetRequestParams();
+        HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_PRODUCT_COUUNT, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 List<ShopCartInventoryItemBean> list = new ArrayList<>();
                 try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject obj = new JSONObject(json);
                     JSONObject jsonObj = obj.getJSONObject("data");
                     JSONArray jsonArray = jsonObj.getJSONArray("items");
                     for (int i = 0; i < jsonArray.length(); i++) {

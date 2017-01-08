@@ -24,10 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -391,7 +389,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         }
     };
 
-    private HttpHandler<String> bonusHandler;
+    private Call bonusHandler;
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
@@ -401,16 +399,18 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 
 //                ToastUtils.showSuccess("分享成功");
 //                DataPaser.getBonus(2 + "", 1 + "", id);
-                bonusHandler = ClientDiscoverAPI.getBonus(2 + "", 1 + "", id, new RequestCallBack<String>() {
+                RequestParams params = ClientDiscoverAPI.getgetBonusRequestParams(2 + "", 1 + "", id);
+                bonusHandler =  HttpRequest.post(params,  URL.GET_BONUS, new GlobalDataCallBack(){
+//                bonusHandler = ClientDiscoverAPI.getBonus(2 + "", 1 + "", id, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         dialog.dismiss();
                         BonusBean bonusBean = new BonusBean();
                         try {
                             Gson gson = new Gson();
                             Type type = new TypeToken<BonusBean>() {
                             }.getType();
-                            bonusBean = gson.fromJson(responseInfo.result, type);
+                            bonusBean = gson.fromJson(json, type);
                         } catch (JsonSyntaxException e) {
                             Log.e("<<<送积分", "数据解析异常:" + e.toString());
                         }
@@ -464,15 +464,15 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         detailsHandler = HttpRequest.post(requestParams, URL.SCENE_DETAILS, new GlobalDataCallBack(){
 //        detailsHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<情景详情", responseInfo.result);
+                Log.e("<<<情景详情", json);
                 QJDetailBean qjDetailBean = new QJDetailBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<QJDetailBean>() {
                     }.getType();
-                    qjDetailBean = gson.fromJson(responseInfo.result, type);
+                    qjDetailBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<情景详情", "解析异常=" + e.toString());
                 }

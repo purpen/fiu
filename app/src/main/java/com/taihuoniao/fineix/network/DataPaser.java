@@ -9,10 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
@@ -39,6 +37,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+
 /**
  * Created by taihuoniao on 2016/3/14.
  * 数据解析类
@@ -59,7 +59,7 @@ public class DataPaser {
         HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.search(q, t, null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SEARCH_LIST;
                 msg.obj = new SearchBean();
@@ -67,7 +67,7 @@ public class DataPaser {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SearchBean>() {
                     }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
+                    msg.obj = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
@@ -153,12 +153,12 @@ public class DataPaser {
         HttpRequest.post(params, URL.AUTH_FIND_PWD, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.findPasswordNet(phone, password, code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 FindPasswordInfo findPasswordInfo = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_FIND_PASSWORD;
                 try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject obj = new JSONObject(json);
                     JSONObject findPasswordObj = obj.getJSONObject("data");
                     findPasswordInfo = new FindPasswordInfo();
                     findPasswordInfo.setSuccess(Boolean.parseBoolean(obj.optString("success")));
@@ -185,15 +185,17 @@ public class DataPaser {
      * @param handler handler
      */
     public static void checkRedbagUsableParser(String rid, String code, final Handler handler) {
-        ClientDiscoverAPI.checkRedBagUsableNet(rid, code, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcheckRedBagUsableNetRequestParams(rid, code);
+        HttpRequest.post(params,  URL.SHOPPING_USE_BONUS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.checkRedBagUsableNet(rid, code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 CheckRedBagUsable checkRedBagUsable = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_CHECK_REDBAG_USABLE;
                 try {
                     checkRedBagUsable = new CheckRedBagUsable();
-                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject obj = new JSONObject(json);
                     if (!obj.optBoolean("success")) {
                         ToastUtils.showInfo(obj.optString("message"));
                     }
@@ -222,16 +224,18 @@ public class DataPaser {
      * @param handler handler
      * @return
      */
-    public static HttpHandler<String> shopCartParser(final Handler handler) {
-        return ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
+    public static Call shopCartParser(final Handler handler) {
+        RequestParams params = ClientDiscoverAPI.getshopCartNetRequestParams();
+        return HttpRequest.post(params, URL.SHOPPING_FETCH_CART, new GlobalDataCallBack(){
+//        return ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 List<ShopCart> list = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_SHOP_CART;
                 try {
                     list = new ArrayList<>();
-                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject obj = new JSONObject(json);
                     JSONObject shopCartObj = obj.getJSONObject("data");
                     ShopCart shopCart = new ShopCart();
                     shopCart.set_id(shopCartObj.optString("_id"));
@@ -282,16 +286,18 @@ public class DataPaser {
      * @param handler handler
      * @return
      */
-    public static HttpHandler<String> shopCartNumberParser(final Handler handler) {
-        return ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
+    public static Call shopCartNumberParser(final Handler handler) {
+        RequestParams params = ClientDiscoverAPI.getshopCartNumberNetRequestParams();
+        return HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_COUNT, new GlobalDataCallBack(){
+//        return ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 ShopCartNumber shopCartNumber = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_SHOP_CART_NUMBER;
                 try {
                     shopCartNumber = new ShopCartNumber();
-                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject obj = new JSONObject(json);
                     shopCartNumber.setSuccess(obj.optBoolean("success"));
                     JSONObject cartNumberObj = obj.getJSONObject("data");
                     shopCartNumber.setCount(cartNumberObj.optInt("count"));
@@ -315,14 +321,16 @@ public class DataPaser {
      * @param handler handler
      */
     public static void shopCartCalculateParser(String array, final Handler handler) {
-        ClientDiscoverAPI.calculateShopCartNet(array, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcalculateShopCartNetRequestParams(array);
+        HttpRequest.post(params,  URL.SHOPING_CHECKOUT, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.calculateShopCartNet(array, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         List<CartDoOrder> list = null;
                         Message msg = new Message();
                         msg.what = DataConstants.PARSER_SHOP_CART_CALCULATE;
                         try {
-                            JSONObject obj = new JSONObject(responseInfo.result);
+                            JSONObject obj = new JSONObject(json);
                             if (!obj.optBoolean("success")) {
                                 msg.obj = obj.optString("message");
                                 handler.sendMessage(msg);
@@ -431,15 +439,17 @@ public class DataPaser {
      * @param handler handler
      */
     public static void orderListParser(String status, String page, String size, final Handler handler) {
-        ClientDiscoverAPI.orderListNet(status, page, size, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getorderListNetRequestParams(status, page, size);
+        HttpRequest.post(params,  URL.SHOPPING_ORDERS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.orderListNet(status, page, size, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 List<OrderEntity> list = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_ORDER;
                 try {
                     list = new ArrayList<>();
-                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject obj = new JSONObject(json);
                     JSONObject orderObj = obj.getJSONObject("data");
                     JSONArray orderArrs = orderObj.getJSONArray("rows");
                     for (int i = 0; i < orderArrs.length(); i++) {

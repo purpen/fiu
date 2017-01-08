@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -195,68 +194,68 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         }
     }
 
-    private void isPhoneRegisted(final String phone) { //true 未被注册
-        ClientDiscoverAPI.getPhoneState(phone, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-                if (response.isSuccess()) {
-                    getCheckCode(phone);
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            super.run();
-
-                            int recordSed = 60;
-                            Message msg = new Message();
-                            msg.what = 1;
-                            mHandler.sendMessage(msg);
-
-                            for (; ; ) {
-                                if (--recordSed < 0)
-                                    break;
-
-                                Message msg2 = new Message();
-                                msg2.what = 2;
-                                msg2.arg1 = recordSed;
-                                mHandler.sendMessage(msg2);
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            Message msg3 = new Message();
-                            msg3.what = 3;
-                            mHandler.sendMessage(msg3);
-                        }
-
-                    }.start();
-                } else {
-                    ToastUtils.showError(response.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-                ToastUtils.showError(R.string.network_err);
-            }
-        });
-
-    }
+//    private void isPhoneRegisted(final String phone) { //true 未被注册
+//        ClientDiscoverAPI.getPhoneState(phone, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                if (responseInfo == null) return;
+//                if (TextUtils.isEmpty(json)) return;
+//                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+//                if (response.isSuccess()) {
+//                    getCheckCode(phone);
+//                    new Thread() {
+//                        @Override
+//                        public void run() {
+//                            super.run();
+//
+//                            int recordSed = 60;
+//                            Message msg = new Message();
+//                            msg.what = 1;
+//                            mHandler.sendMessage(msg);
+//
+//                            for (; ; ) {
+//                                if (--recordSed < 0)
+//                                    break;
+//
+//                                Message msg2 = new Message();
+//                                msg2.what = 2;
+//                                msg2.arg1 = recordSed;
+//                                mHandler.sendMessage(msg2);
+//                                try {
+//                                    Thread.sleep(1000);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//
+//                            Message msg3 = new Message();
+//                            msg3.what = 3;
+//                            mHandler.sendMessage(msg3);
+//                        }
+//
+//                    }.start();
+//                } else {
+//                    ToastUtils.showError(response.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException e, String s) {
+//                ToastUtils.showError(R.string.network_err);
+//            }
+//        });
+//
+//    }
 
     private void getCheckCode(final String phone) {
         RequestParams params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
         HttpRequest.post(params,URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) return;
-                if (responseInfo.result == null) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (json == null) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     COUNT ++;
 
@@ -339,15 +338,15 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) return;
-                Log.e("<<<登录成功",responseInfo.result);
+                Log.e("<<<登录成功",json);
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
                 btnWechat.setEnabled(true);
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThirdLogin>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
                 if (response.isSuccess()) {
                     ThirdLogin thirdLogin = response.getData();
@@ -411,18 +410,20 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
-        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("updateUserIdentity", responseInfo.result);
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("updateUserIdentity", json);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");
                     return;
                 }
-                LogUtil.e("改为非首次登录失败", responseInfo.result + "===" + response.getMessage());
+                LogUtil.e("改为非首次登录失败", json + "===" + response.getMessage());
             }
 
             @Override

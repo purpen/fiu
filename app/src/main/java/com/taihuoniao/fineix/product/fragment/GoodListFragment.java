@@ -12,10 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListFragmentAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -127,7 +125,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
 //                null, null,"9", new RequestCallBack<String>() {
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         dialog.dismiss();
                         pullRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
@@ -136,7 +134,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
                             Gson gson = new Gson();
                             Type type = new TypeToken<ProductBean>() {
                             }.getType();
-                            productBean = gson.fromJson(responseInfo.result, type);
+                            productBean = gson.fromJson(json, type);
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }

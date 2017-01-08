@@ -14,12 +14,13 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShopCartAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.ShopCart;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
@@ -28,6 +29,7 @@ import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
+import okhttp3.Call;
 
 public class ShopCartActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.custom_head)
@@ -175,8 +178,8 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
         initView();
-        HttpHandler<String> cartHandler = DataPaser.shopCartParser(mHandler);
-        HttpHandler<String> numHandler = DataPaser.shopCartNumberParser(mHandler);
+        Call cartHandler = DataPaser.shopCartParser(mHandler);
+        Call numHandler = DataPaser.shopCartNumberParser(mHandler);
     }
 
     protected void initView() {
@@ -295,9 +298,11 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     if (!mDialog.isShowing()) {
                         mDialog.show();
                     }
-                    ClientDiscoverAPI.shopcartAddSubtractNet(addSubtractArray, new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getshopcartAddSubtractNetRequestParams(addSubtractArray);
+                    HttpRequest.post(params,  URL.SHOPPINGN_EDIT_CART,  new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.shopcartAddSubtractNet(addSubtractArray, new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             DataPaser.shopCartParser(mHandler);
                         }
 
@@ -384,9 +389,11 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     if (!mDialog.isShowing()) {
                         mDialog.show();
                     }
-                    ClientDiscoverAPI.deletShopCartNet(array, new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getdeletShopCartNetRequestParams(array);
+                    HttpRequest.post(params,  URL.SHOPPING_REMOVE_CART, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.deletShopCartNet(array, new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             ToastUtils.showSuccess("删除成功");
                             if (mAllCheck.isChecked()) {
                                 mAllCheck.setChecked(false);

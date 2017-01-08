@@ -16,14 +16,17 @@ import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackBean;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackResultBean;
 import com.taihuoniao.fineix.utils.DPUtil;
@@ -130,14 +133,16 @@ public class SalesReturnActivity extends BaseActivity {
     }
 
     private void requestGetChargeBackInfo(){
-        ClientDiscoverAPI.getChargeBackInfo(rId, skuId, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getChargeBackInfoRequestParams(rId, skuId);
+        HttpRequest.post(params, URL.SHOPPING_CHECK_REFUND, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getChargeBackInfo(rId, skuId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) {
                     return;
                 }
                 try {
-                    HttpResponse<ChargeBackBean> chargeBackBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ChargeBackBean>>(){});
+                    HttpResponse<ChargeBackBean> chargeBackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackBean>>(){});
                     if (chargeBackBeanHttpResponse.isSuccess()) {
                         chargeBackBean = chargeBackBeanHttpResponse.getData();
                     }
@@ -159,12 +164,15 @@ public class SalesReturnActivity extends BaseActivity {
 
     private void requestChargeBack(String price, String refundReason, String refundContent){
         String refund_type = "2";
-        ClientDiscoverAPI.getApplyProductRefund(rId, skuId, refund_type, refundReason, refundContent,
-                price, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getApplyProductRefundRequestParams(rId, skuId, refund_type, refundReason, refundContent,
+                price);
+        HttpRequest.post(params,URL.SHOPPING_APPLY_PRODUCT_REFUND, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getApplyProductRefund(rId, skuId, refund_type, refundReason, refundContent,
+//                price, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        HttpResponse<ChargeBackResultBean> chargeBackResultBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ChargeBackResultBean>>(){});
-                        LogUtil.e(TAG, "--------> responseInfo: " + responseInfo.result);
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        HttpResponse<ChargeBackResultBean> chargeBackResultBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackResultBean>>(){});
+                        LogUtil.e(TAG, "--------> responseInfo: " + json);
                         if (chargeBackResultBeanHttpResponse.isSuccess()) {
                             Toast.makeText(activity, App.getString(R.string.hint_salesAfter_chargeBack_request_success), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(SalesReturnActivity.this, SalesReturnDetailsActivity.class);

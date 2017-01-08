@@ -16,9 +16,11 @@ import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.RegisterInfo;
@@ -26,6 +28,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.ToLoginActivity;
@@ -110,11 +113,13 @@ public class SetPasswordFragment extends MyBaseFragment {
 
     private void registerUser(String password) {//注册完成
         if (registerInfo == null) return;
-        ClientDiscoverAPI.registerUser(registerInfo.mobile, password, registerInfo.verify_code, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getregisterUserRequestParams(registerInfo.mobile, password, registerInfo.verify_code);
+        HttpRequest.post(params, URL.AUTH_REGISTER, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.registerUser(registerInfo.mobile, password, registerInfo.verify_code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<LoginInfo>>() {
                 });
                 if (response.isSuccess()) {
                     if (response.isSuccess()) {
@@ -153,18 +158,20 @@ public class SetPasswordFragment extends MyBaseFragment {
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
-        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("updateUserIdentity", responseInfo.result);
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("updateUserIdentity", json);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");
                     return;
                 }
-                LogUtil.e("改为非首次登录失败", responseInfo.result + "===" + response.getMessage());
+                LogUtil.e("改为非首次登录失败", json + "===" + response.getMessage());
             }
 
             @Override

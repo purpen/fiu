@@ -12,7 +12,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -163,9 +162,9 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() { });
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() { });
                 if (response.isSuccess()) {
                     user = response.getData();
                     if (isRestart) {

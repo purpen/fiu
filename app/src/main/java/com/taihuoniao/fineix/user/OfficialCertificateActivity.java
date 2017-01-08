@@ -16,17 +16,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AuthData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -209,22 +212,23 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
         }
 
         setViewsEnable(false);
-
-        ClientDiscoverAPI.uploadIdentityInfo(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card), new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getuploadIdentityInfoRequestParams(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card));
+        HttpRequest.post(params, URL.UPLOAD_IDENTIFY_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.uploadIdentityInfo(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing()&&dialog != null) dialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (bitmap_id != null) bitmap_id.recycle();
                 if (bitmap_card != null) bitmap_card.recycle();
                 setViewsEnable(true);
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     ToastUtils.showSuccess("认证信息提交成功");
                     new Handler().postDelayed(new Runnable() {

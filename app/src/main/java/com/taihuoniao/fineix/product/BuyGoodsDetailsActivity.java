@@ -27,10 +27,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
@@ -423,14 +421,14 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         detailHandler = HttpRequest.post(requestParams, URL.GOOD_DETAILS, new GlobalDataCallBack(){
 //        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<商品详情", responseInfo.result);
+                Log.e("<<<商品详情", json);
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<BuyGoodDetailsBean>() {
                     }.getType();
-                    buyGoodDetailsBean = gson.fromJson(responseInfo.result, type);
+                    buyGoodDetailsBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<商品详情", "解析异常=" + e.toString());
                 }
@@ -504,13 +502,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         cartHandler =  HttpRequest.post(requestParams, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 CartBean cartBean = new CartBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CartBean>() {
                     }.getType();
-                    cartBean = gson.fromJson(responseInfo.result, type);
+                    cartBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<>>>", "数据异常" + e.toString());
                 }
@@ -535,13 +533,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         cancelShoucangHandler=   HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<取消收藏情景", "数据解析异常");
                 }
@@ -570,13 +568,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         shoucangHandler=  HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
 //        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<收藏情景", "数据解析异常");
                 }
@@ -605,16 +603,16 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack(){
 //        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<立即购买", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<立即购买", json);
+//                WriteJsonToSD.writeToSD("json", json);
                 NowBuyBean nowBuyBean = new NowBuyBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NowBuyBean>() {
                     }.getType();
-                    nowBuyBean = gson.fromJson(responseInfo.result, type);
+                    nowBuyBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<立即购买", "解析异常=" + e.toString());
                 }
@@ -643,13 +641,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack(){
 //        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type1 = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type1);
+                    netBean = gson.fromJson(json, type1);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }

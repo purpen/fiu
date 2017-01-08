@@ -13,16 +13,19 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SalePromotionDetailAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -127,11 +130,13 @@ public class SalePromotionDetailActivity extends BaseActivity {
                 customShareView.setOnShareSuccessListener(new CustomShareView.OnShareSuccessListener() {
                     @Override
                     public void onSuccess() {
-                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
+                        RequestParams params = ClientDiscoverAPI.getupdateShareCountRequestParams(id);
+                        HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack(){
+//                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo) {
-                                if (TextUtils.isEmpty(responseInfo.result)) return;
-                                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                if (TextUtils.isEmpty(json)) return;
+                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
                                     return;
                                 }
@@ -175,17 +180,19 @@ public class SalePromotionDetailActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null) dialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
 
                 if (response.isSuccess()) {

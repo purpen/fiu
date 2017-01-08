@@ -9,13 +9,16 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackResultDetailsBean;
 import com.taihuoniao.fineix.user.ShopOrderListActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -72,14 +75,16 @@ public class ChargeBackDetailsActivity extends BaseActivity {
     }
 
     private void requestResultInfo() {
-        ClientDiscoverAPI.getRefundSuccessInfo(chargeBackId, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getRefundSuccessInfoRequestParams(chargeBackId);
+        HttpRequest.post(params, URL.SHOPPING_REFUND_VIEW, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getRefundSuccessInfo(chargeBackId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) {
                     return;
                 }
                 try {
-                    HttpResponse<ChargeBackResultDetailsBean> chargeBackBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ChargeBackResultDetailsBean>>() {
+                    HttpResponse<ChargeBackResultDetailsBean> chargeBackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackResultDetailsBean>>() {
                     });
                     if (chargeBackBeanHttpResponse.isSuccess()) {
                         chargeBackResultDetailsBean = chargeBackBeanHttpResponse.getData();

@@ -6,11 +6,14 @@ import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.ConstantCfg;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.pay.bean.JdPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -29,12 +32,14 @@ public class JdPay {
     }
 
     private static void getPayParams(final String orderId) {
-        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.JD_PAY, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.JD_PAY);
+        HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.JD_PAY, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("JD", responseInfo.result);
-                HttpResponse<JdPayParams> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<JdPayParams>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("JD", json);
+                HttpResponse<JdPayParams> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<JdPayParams>>() {
                 });
                 if (response.isSuccess()) {
                     JdPayParams data = response.getData();

@@ -11,14 +11,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllFiuerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FiuUserListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -30,6 +32,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import java.lang.reflect.Type;
 
 import butterknife.Bind;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/7/7.
@@ -43,7 +46,7 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
     PullToRefreshListView pullRefreshView;
     private ListView listView;
     private WaittingDialog dialog;
-    private HttpHandler<String> userHandler;
+    private Call userHandler;
 
     public AllFiuerActivity() {
         super(R.layout.activity_all_fiuer);
@@ -68,16 +71,18 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        userHandler = ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getfiuUserListRequestParams(1 + "", 100 + "", 1 + "");
+        userHandler = HttpRequest.post(params,  URL.FIU_USER_LIST, new GlobalDataCallBack(){
+//        userHandler = ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<用户排行", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<用户排行", json);
+//                WriteJsonToSD.writeToSD("json", json);
                 try {
                     Gson gson = new Gson();
                     Type type1 = new TypeToken<FiuUserListBean>() {
                     }.getType();
-                    netUsers = gson.fromJson(responseInfo.result, type1);
+                    netUsers = gson.fromJson(json, type1);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }

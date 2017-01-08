@@ -9,13 +9,15 @@ import android.view.View;
 import android.widget.Button;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
@@ -120,7 +122,9 @@ public class ImageCropActivity extends BaseActivity {
         String imgStr = Util.saveBitmap2Base64Str(bitmap);
         bitmap.recycle();
         try {
-            ClientDiscoverAPI.uploadBgImg(imgStr, new RequestCallBack<String>() {
+            RequestParams params = ClientDiscoverAPI.getuploadBgImgRequestParams(imgStr);
+            HttpRequest.post(params,  URL.UPLOAD_BG_URL, new GlobalDataCallBack(){
+//            ClientDiscoverAPI.uploadBgImg(imgStr, new RequestCallBack<String>() {
                 @Override
                 public void onStart() {
                     setViewEnable(false);
@@ -128,17 +132,17 @@ public class ImageCropActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
+                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                     setViewEnable(true);
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     if (responseInfo == null) {
                         return;
                     }
-                    if (TextUtils.isEmpty(responseInfo.result)) {
+                    if (TextUtils.isEmpty(json)) {
                         return;
                     }
-                    LogUtil.e(TAG, responseInfo.result);
-                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                    LogUtil.e(TAG, json);
+                    HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                     if (response.isSuccess()) {
                         ToastUtils.showSuccess("背景图上传成功");
 //                        svProgressHUD.showSuccessWithStatus("背景图上传成功");
@@ -176,7 +180,9 @@ public class ImageCropActivity extends BaseActivity {
         String type="3"; //上传头像
         String imgStr=Util.saveBitmap2Base64Str(bitmap);
         try {
-            ClientDiscoverAPI.uploadImg(imgStr,type, new RequestCallBack<String>() {
+            RequestParams params = ClientDiscoverAPI.getuploadImgRequestParams(imgStr,type);
+            HttpRequest.post(params, URL.UPLOAD_IMG_URL, new GlobalDataCallBack(){
+//            ClientDiscoverAPI.uploadImg(imgStr,type, new RequestCallBack<String>() {
                 @Override
                 public void onStart() {
                     if (dialog!=null && !activity.isFinishing()) dialog.show();
@@ -184,17 +190,17 @@ public class ImageCropActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
+                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     setViewEnable(true);
                     if (responseInfo==null){
                         return;
                     }
-                    if (TextUtils.isEmpty(responseInfo.result)){
+                    if (TextUtils.isEmpty(json)){
                         return;
                     }
 
-                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                    HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                     if (response.isSuccess()){
                         ToastUtils.showSuccess("头像上传成功");
                         if (listener!=null){

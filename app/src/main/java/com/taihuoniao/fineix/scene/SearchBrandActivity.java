@@ -18,10 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchBrandAdapter;
 import com.taihuoniao.fineix.adapters.SearchProductAdapter;
@@ -248,15 +246,15 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams,URL.ADD_PRODUCT, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler= ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<添加产品", responseInfo.result);
+                Log.e("<<<添加产品", json);
                 AddProductBean addProductBean = new AddProductBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<AddProductBean>() {
                     }.getType();
-                    addProductBean = gson.fromJson(responseInfo.result, type);
+                    addProductBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
@@ -291,14 +289,14 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_BRANDS_SUBMIT, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler= ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 AddBrandBean addBrandBean = new AddBrandBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<AddBrandBean>() {
                     }.getType();
-                    addBrandBean = gson.fromJson(responseInfo.result, type);
+                    addBrandBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "添加品牌解析异常" + e.toString());
                 }
@@ -332,14 +330,14 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams , URL.SEARCH,new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler= ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<搜索品牌", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<搜索品牌", json);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SearchBean>() {
                     }.getType();
-                    searchBean = gson.fromJson(responseInfo.result, type);
+                    searchBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
@@ -372,14 +370,14 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler=  ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<品牌下的产品",responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<品牌下的产品",json);
                 ProductBean productBean = new ProductBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ProductBean>() {
                     }.getType();
-                    productBean = gson.fromJson(responseInfo.result, type);
+                    productBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<品牌下的产品","解析异常"+e.toString());
                 }

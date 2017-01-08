@@ -9,15 +9,18 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.ConstantCfg;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -89,18 +92,20 @@ public class PayDetailsActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         if (TextUtils.isEmpty(mRid)) return;
-        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
+        HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (mDialog!=null) mDialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 mDialog.dismiss();
                 if (responseInfo==null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<ShoppingDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<ShoppingDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ShoppingDetailBean>>() {
                 });
                 if (response.isSuccess()){
                     ShoppingDetailBean data = response.getData();

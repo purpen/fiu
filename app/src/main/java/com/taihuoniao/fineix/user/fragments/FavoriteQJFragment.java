@@ -14,15 +14,18 @@ import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FavoriteQJGVAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.DataQJCollect;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemQJCollect;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -109,7 +112,9 @@ public class FavoriteQJFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        ClientDiscoverAPI.getCollectOrdered(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetCollectOrderedRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT);
+        HttpRequest.post(params, URL.FAVORITE_GET_NEW_LIST, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getCollectOrdered(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {
@@ -118,11 +123,11 @@ public class FavoriteQJFragment extends MyBaseFragment {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
+                if (TextUtils.isEmpty(json)) return;
 
-                HttpResponse<DataQJCollect> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataQJCollect>>() {
+                HttpResponse<DataQJCollect> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataQJCollect>>() {
                 });
 
                 if (response.isSuccess()) {

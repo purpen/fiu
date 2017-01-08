@@ -6,12 +6,15 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -72,7 +75,9 @@ public class UpdatePasswordActivity extends BaseActivity {
             Util.makeToast("原密码不能和新密码相同");
             return;
         }
-        ClientDiscoverAPI.updatePassword(originPsd, newPsd, new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getupdatePasswordRequestParams(originPsd, newPsd);
+        HttpRequest.post(params,  URL.MY_MODIFY_PASSWORD, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updatePassword(originPsd, newPsd, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 v.setEnabled(false);
@@ -80,12 +85,12 @@ public class UpdatePasswordActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 v.setEnabled(true);
                 dialog.dismiss();
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     Util.makeToast(response.getMessage());
                     return;

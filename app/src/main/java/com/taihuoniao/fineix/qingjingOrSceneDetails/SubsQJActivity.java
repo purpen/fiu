@@ -12,10 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -137,8 +135,8 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
         Call listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> listHandler = ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<情景列表", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<情景列表", json);
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
@@ -147,7 +145,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneList>() {
                     }.getType();
-                    sceneL = gson.fromJson(responseInfo.result, type);
+                    sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "情景列表解析异常" + e.toString());
                 }
@@ -181,14 +179,14 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
         Call httpHandler = HttpRequest.post(requestParams, URL.USER_CENTER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<个人信息", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<个人信息", json);
                 UserInfo userInfo = new UserInfo();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<UserInfo>() {
                     }.getType();
-                    userInfo = gson.fromJson(responseInfo.result, type);
+                    userInfo = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<个人信息", "解析异常=" + e.toString());
                 }

@@ -15,10 +15,12 @@ import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FocusInterestedUserViewPagerAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.InterestUserData;
 import com.taihuoniao.fineix.beans.User;
@@ -26,6 +28,7 @@ import com.taihuoniao.fineix.beans.UserCompleteData;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -85,11 +88,13 @@ public class FocusUserFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        ClientDiscoverAPI.focusInterestUser(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getfocusInterestUserRequestParams();
+        HttpRequest.post(params, URL.USER_FIND_USER, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.focusInterestUser(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<InterestUserData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<InterestUserData>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<InterestUserData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<InterestUserData>>() {
                 });
 
                 if (response.isSuccess()) {
@@ -208,11 +213,13 @@ public class FocusUserFragment extends MyBaseFragment {
                 }
                 if (TextUtils.isEmpty(builder)) return;
                 LogUtil.e(TAG, builder.deleteCharAt(builder.length() - 1).toString());
-                ClientDiscoverAPI.focusUsers(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
+                RequestParams params = ClientDiscoverAPI.getfocusUsersRequestParams(builder.deleteCharAt(builder.length() - 1).toString());
+                HttpRequest.post(params,URL.FOLLOW_BATCH_FOLLOW, new GlobalDataCallBack(){
+//                ClientDiscoverAPI.focusUsers(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()) {
                             LogUtil.e(TAG, "关注成功");
                             return;

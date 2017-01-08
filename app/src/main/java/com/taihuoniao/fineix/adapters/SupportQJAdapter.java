@@ -10,13 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.DataSupportQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -99,17 +101,19 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
             public void onClick(View v) {
                 if (item == null) return;
                 if (item.sight.is_love == 0) {
-                    ClientDiscoverAPI.loveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
+                    HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.loveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             ibtn.setEnabled(true);
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 item.sight.is_love = 1;
 //                                ibtn.setImageResource(R.mipmap.zaned);
@@ -128,17 +132,19 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                         }
                     });
                 } else {
-                    ClientDiscoverAPI.cancelLoveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
+                    HttpRequest.post(params,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.cancelLoveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             ibtn.setEnabled(true);
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 item.sight.is_love = 0;
 //                                ibtn.setImageResource(R.mipmap.zan_normal);

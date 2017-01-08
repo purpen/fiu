@@ -9,16 +9,19 @@ import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PrivateMessageListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.PrivateMessageListData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -83,14 +86,16 @@ public class PrivateMessageListActivity extends BaseActivity{
     @Override
     protected void requestNet() {
         int curPage = 1;
-        ClientDiscoverAPI.getPrivateMessageList(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetPrivateMessageListRequestParams(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL);
+        HttpRequest.post(params,  URL.MESSAGE_RECORD, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getPrivateMessageList(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing()&&dialog!=null) dialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -98,8 +103,8 @@ public class PrivateMessageListActivity extends BaseActivity{
                     }
                 }, DataConstants.DIALOG_DELAY);
                 if (responseInfo==null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<PrivateMessageListData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<PrivateMessageListData>>() {});
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<PrivateMessageListData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<PrivateMessageListData>>() {});
                 if (response.isSuccess()){
                     List<PrivateMessageListData.RowItem> list = response.getData().rows;
                     refreshUI(list);

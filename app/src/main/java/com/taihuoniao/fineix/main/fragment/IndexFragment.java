@@ -21,10 +21,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
@@ -42,7 +40,6 @@ import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
@@ -233,10 +230,10 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         Call httpHandler = HttpRequest.post(requestParams,URL.BANNERS_URL, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getBanners("app_fiu_sight_index_slide", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<首页banner图", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<首页banner图", json);
                 try {
-                    BannerData bannerData = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<BannerData>>() {
+                    BannerData bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerData>>() {
                     });
                     if (bannerData == null || bannerData.rows == null ||bannerData.rows.size() == 0) {
                         return;
@@ -271,14 +268,14 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         Call httpHandler = HttpRequest.post(re, URL.USER_FIND_USER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<首页用户列表", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<首页用户列表", json);
                 IndexUserListBean indexUserListBean = new IndexUserListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<IndexUserListBean>() {
                     }.getType();
-                    indexUserListBean = gson.fromJson(responseInfo.result, type);
+                    indexUserListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<首页用户列表", "解析异常=" + e.toString());
                 }
@@ -324,13 +321,13 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_SUBJECT_INDEX_SUJECT_STICK, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getIndexChosenSubject(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SubjectListBean>() {
                     }.getType();
-                    subjectListBean = gson.fromJson(responseInfo.result, type);
+                    subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
@@ -351,13 +348,13 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "4", null, "1", null, "2", new RequestCallBack<String>() {
 //            @Override
 //            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<精选主题", responseInfo.result);
+//                Log.e("<<<精选主题", json);
 //                SubjectListBean subjectListBean = new SubjectListBean();
 //                try {
 //                    Gson gson = new Gson();
 //                    Type type = new TypeToken<SubjectListBean>() {
 //                    }.getType();
-//                    subjectListBean = gson.fromJson(responseInfo.result, type);
+//                    subjectListBean = gson.fromJson(json, type);
 //                } catch (JsonSyntaxException e) {
 //                    Log.e("<<<", "解析异常=" + e.toString());
 //                }
@@ -383,15 +380,15 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<情景列表", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<情景列表", json);
+//                WriteJsonToSD.writeToSD("json", json);
                 SceneList sceneL = new SceneList();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneList>() {
                     }.getType();
-                    sceneL = gson.fromJson(responseInfo.result, type);
+                    sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "情景列表解析异常" + e.toString());
                 }

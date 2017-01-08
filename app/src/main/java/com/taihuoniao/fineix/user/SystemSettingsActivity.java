@@ -8,10 +8,12 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.main.MainActivity;
@@ -163,12 +165,14 @@ public class SystemSettingsActivity extends BaseActivity {
     }
 
     private void logout() {
-        ClientDiscoverAPI.logout(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getlogoutRequestParams();
+        HttpRequest.post(params,  URL.LOGOUT, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.logout(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {//   退出成功跳转首页
                     ToastUtils.showSuccess("退出成功");
                 }

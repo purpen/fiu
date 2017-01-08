@@ -21,7 +21,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.util.ContentLengthInputStream;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -29,7 +28,6 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CommentsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -272,7 +270,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         delelteHandler = HttpRequest.post(params, URL.DELETE_COMMENT, new GlobalDataCallBack(){
 //        delelteHandler = ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
 //                Message msg = handler.obtainMessage();
 //                msg.what = DataConstants.DELETE_COMMENT;
                 NetBean netBean = new NetBean();
@@ -280,7 +278,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<删除评论", "数据解析异常" + e.toString());
                 }
@@ -312,13 +310,13 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         sendHandler = HttpRequest.post(params, URL.SEND_COMMENT, new GlobalDataCallBack(){
 //        sendHandler = ClientDiscoverAPI.sendComment(target_i, conten, typ, target_user_id, is_r, reply_i, reply_user_i, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
 //                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -357,14 +355,14 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(params,URL.COMMENTS_LIST, new GlobalDataCallBack(){
 //        commentsHander = ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<评论列表", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<评论列表", json);
                 CommentsBean netComments = new CommentsBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CommentsBean>() {
                     }.getType();
-                    netComments = gson.fromJson(responseInfo.result, type);
+                    netComments = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
                 }

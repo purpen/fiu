@@ -17,11 +17,14 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
 import com.taihuoniao.fineix.base.Base2Activity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.DefaultAddressBean;
@@ -30,6 +33,7 @@ import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.bean.FreightBean;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
@@ -46,6 +50,8 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/2/25.
@@ -108,7 +114,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         }
         getDefaultAddress();
     }
-    private HttpHandler<String> addressHandler;
+    private Call addressHandler;
 
     @Override
     protected void onDestroy() {
@@ -117,16 +123,18 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     }
 
     private void getDefaultAddress() {
-        addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetDefaultAddressNetRequestParams();
+        addressHandler = HttpRequest.post(params, URL.URLSTRING_DEFAULT_ADDRESS, new GlobalDataCallBack() {
+//        addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<默认收货地址", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<默认收货地址", json);
                 DefaultAddressBean defaultAddressBean = new DefaultAddressBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<DefaultAddressBean>() {
                     }.getType();
-                    defaultAddressBean = gson.fromJson(responseInfo.result, type);
+                    defaultAddressBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<默认收货地址", "数据解析异常" + e.toString());
                 }
@@ -303,14 +311,16 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 break;
         }
     }
-    private  HttpHandler<String> confirmHandler;
+    private Call confirmHandler;
     private void confirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
-       confirmHandler =  ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getnowConfirmOrderRequestParams(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code);
+        confirmHandler = HttpRequest.post(params,  URL.URLSTRING_NOW_CONFIRMORDER, new GlobalDataCallBack(){
+//       confirmHandler =  ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NowConfirmBean nowConfirmBean = new NowConfirmBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
+                    JSONObject job = new JSONObject(json);
                     nowConfirmBean.setSuccess(job.optBoolean("success"));
                     nowConfirmBean.setMessage(job.optString("message"));
                     JSONObject data = job.getJSONObject("data");
@@ -483,13 +493,15 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     // TODO: 2016/12/8 计算邮费
     private void fetchFreight(String addbook_id, String rid){
         String rid2 = nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getData().getOrder_info().getRid();
-        ClientDiscoverAPI.fetchFreight(addbook_id, rid2, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getFetchFreightRequestParams(addbook_id, rid2);
+        HttpRequest.post(params,URL.SHOPPING_FETCH_FREIGHT, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.fetchFreight(addbook_id, rid2, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) {
                     return;
                 }
-                HttpResponse<FreightBean> freightBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<FreightBean>>() {
+                HttpResponse<FreightBean> freightBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FreightBean>>() {
                 });
                 if (freightBeanHttpResponse != null) {
                     String newfreight = freightBeanHttpResponse.getData().getFreight();

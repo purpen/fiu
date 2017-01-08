@@ -355,14 +355,14 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-//    //场景
-//    //列表数据
-//    public static HttpHandler<String> getSceneList(String page, String size, String scene_id, String category_ids, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
-//        String url = URL.SCENE_LIST;
-//        RequestParams params = getSceneListRequestParams(page, size, scene_id, category_ids, sort, fine, lng, lat);
-//        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
-//        return httpHandler;
-//    }
+    //场景
+    //列表数据
+    public static HttpHandler<String> getSceneList(String page, String size, String scene_id, String category_ids, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+        String url = URL.SCENE_LIST;
+        RequestParams params = getSceneListRequestParams(page, size, scene_id, category_ids, sort, fine, lng, lat);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, url, callBack);
+        return httpHandler;
+    }
 
     @NonNull
     public static RequestParams getSceneListRequestParams(String page, String size, String scene_id, String category_ids, String sort, String fine, String lng, String lat) {
@@ -553,7 +553,7 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    static RequestParams getgetAddressListRequestParams(String page) {
+    public static RequestParams getgetAddressListRequestParams(String page) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         return params;
@@ -2167,6 +2167,13 @@ public class ClientDiscoverAPI {
      */
     public static void getChoosenSubject(String page, String pageType, String fine, String sort, RequestCallBack<String> callBack) {
 //        String url = URL.BASE_URL + "/scene_subject/getlist";
+        RequestParams params = getChoosenSubjectRequestParams(page, pageType, fine, sort);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.CHOOSEN_SUBJECT_URL, callBack);
+        NetworkManager.getInstance().add(MD5Utils.getMD5(URL.CHOOSEN_SUBJECT_URL),httpHandler);
+    }
+
+    @NonNull
+    public static RequestParams getChoosenSubjectRequestParams(String page, String pageType, String fine, String sort) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);//
@@ -2174,8 +2181,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", pageType);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("use_cache", "1");
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.CHOOSEN_SUBJECT_URL, callBack);
-        NetworkManager.getInstance().add(MD5Utils.getMD5(URL.CHOOSEN_SUBJECT_URL),httpHandler);
+        return params;
     }
 
     //收藏情景
@@ -2240,43 +2246,72 @@ public class ClientDiscoverAPI {
      * @param callBack
      */
     public static void updateShareCount(String id, RequestCallBack<String> callBack) {
+        RequestParams params = getupdateShareCountRequestParams(id);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, callBack);
+    }
+
+    @NonNull
+    public static RequestParams getupdateShareCountRequestParams(String id) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, callBack);
+        return params;
     }
 
     //当前用户是否是管理员
     public static HttpHandler<String> isEditor(RequestCallBack<String> callBack) {
-        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        RequestParams params = getisEditorRequestParams();
         HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.USER_IS_EDITOR, callBack);
         return httpHandler;
     }
 
+    @NonNull
+    public static RequestParams getisEditorRequestParams() {
+        return new RequestParams(ConstantCfg.CHARSET);
+    }
+
     //管理员添加精选或取消精选
     public static HttpHandler<String> setFine(String id, String evt, RequestCallBack<String> callBack) {
-        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
-        params.addQueryStringParameter("id", id);
-        params.addQueryStringParameter("evt", evt);
+        RequestParams params = getsetFineRequestParams(id, evt);
         HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.USER_DO_FINE, callBack);
         return httpHandler;
     }
 
-    //管理员添加推荐或取消推荐
-    public static HttpHandler<String> setStick(String id, String evt, RequestCallBack<String> callBack) {
+    @NonNull
+    public static RequestParams getsetFineRequestParams(String id, String evt) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("evt", evt);
+        return params;
+    }
+
+    //管理员添加推荐或取消推荐
+    public static HttpHandler<String> setStick(String id, String evt, RequestCallBack<String> callBack) {
+        RequestParams params = getsetStickRequestParams(id, evt);
         HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.USER_DO_STICK, callBack);
         return httpHandler;
     }
 
-    //管理员添加屏蔽或取消屏蔽
-    public static HttpHandler<String> setCheck(String id, String evt, RequestCallBack<String> callBack) {
+    @NonNull
+    public static RequestParams getsetStickRequestParams(String id, String evt) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("evt", evt);
+        return params;
+    }
+
+    //管理员添加屏蔽或取消屏蔽
+    public static HttpHandler<String> setCheck(String id, String evt, RequestCallBack<String> callBack) {
+        RequestParams params = getsetCheckRequestParams(id, evt);
         HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.USER_DO_CHECK, callBack);
         return httpHandler;
+    }
+
+    @NonNull
+    public static RequestParams getsetCheckRequestParams(String id, String evt) {
+        RequestParams params = new RequestParams(ConstantCfg.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("evt", evt);
+        return params;
     }
 
     /**
@@ -2287,11 +2322,17 @@ public class ClientDiscoverAPI {
      * @param callBack
      */
     public static void requestAddress(String oid, String pid,String layer,RequestCallBack<String> callBack) {
+        RequestParams params = getrequestAddressRequestParams(oid, pid, layer);
+        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SHOPPING_FETCH_CHINA_CITY, callBack);
+    }
+
+    @NonNull
+    public static RequestParams getrequestAddressRequestParams(String oid, String pid, String layer) {
         RequestParams params = new RequestParams(ConstantCfg.CHARSET);
         params.addQueryStringParameter("oid",oid);
         params.addQueryStringParameter("pid",pid);
         params.addQueryStringParameter("layer",layer);
-        HttpHandler<String> httpHandler = HttpRequest.sign(params, URL.SHOPPING_FETCH_CHINA_CITY, callBack);
+        return params;
     }
 
     /**

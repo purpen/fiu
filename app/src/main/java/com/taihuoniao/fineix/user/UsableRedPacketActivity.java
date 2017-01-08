@@ -15,17 +15,20 @@ import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UsableRedPacketAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.RedPacketData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -110,16 +113,18 @@ public class UsableRedPacketActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {//请求可用红包
-        ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage), PAGE_SIZE, UNUSED, UNTIMEOUT, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getmyRedBagNetRequestParams(String.valueOf(curPage), PAGE_SIZE, UNUSED, UNTIMEOUT);
+        HttpRequest.post(params,   URL.MY_BONUS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage), PAGE_SIZE, UNUSED, UNTIMEOUT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing() && mDialog != null&& isFirstLoad) mDialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (mDialog != null) mDialog.dismiss();
-                HttpResponse<RedPacketData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<RedPacketData>>() {
+                HttpResponse<RedPacketData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<RedPacketData>>() {
                 });
                 if (response.isSuccess()) {
                     if (isFirstLoad) {

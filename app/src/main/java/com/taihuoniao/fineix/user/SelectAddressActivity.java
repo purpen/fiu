@@ -179,13 +179,13 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
@@ -210,10 +210,12 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
 
     //获得收货地址列表
     private void getAddressList(String page) {
-        ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetAddressListRequestParams(page);
+        HttpRequest.post(params, URL.URLSTRING_ADDRESS_LISTS, new GlobalDataCallBack() {
+//        ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                HttpResponse<AddressListBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<AddressListBean>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                HttpResponse<AddressListBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AddressListBean>>() {
                 });
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);

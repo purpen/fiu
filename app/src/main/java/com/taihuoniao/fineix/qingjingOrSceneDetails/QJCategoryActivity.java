@@ -19,7 +19,6 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -120,15 +119,15 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        userCenterHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<个人信息", responseInfo.result);
+                Log.e("<<<个人信息", json);
                 UserInfo userInfo = new UserInfo();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<UserInfo>() {
                     }.getType();
-                    userInfo = gson.fromJson(responseInfo.result, type);
+                    userInfo = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<个人信息", "解析异常=" + e.toString());
                 }
@@ -193,15 +192,15 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         cancelSubsHandler = HttpRequest.post(requestParams, URL.MY_REMOVE_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //        cancelSubsHandler = ClientDiscoverAPI.cancelSubscribe(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<取消订阅", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<取消订阅", json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<订阅情景分类", "解析异常=" + e.toString());
                 }
@@ -229,15 +228,15 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         subsHandler = HttpRequest.post(requestParams, URL.MY_ADD_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //        subsHandler = ClientDiscoverAPI.subscribe(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<订阅", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<订阅", json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<订阅情景分类", "解析异常=" + e.toString());
                 }

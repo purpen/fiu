@@ -255,14 +255,14 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         Call httpHandler = HttpRequest.post(requestParams, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "13", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<分类列表", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<分类列表", json);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CategoryListBean>() {
                     }.getType();
-                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                    categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
@@ -291,14 +291,14 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "2", null, "1", "1,2", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<精选主题", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<精选主题", json);
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SubjectListBean>() {
                     }.getType();
-                    subjectListBean = gson.fromJson(responseInfo.result, type);
+                    subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
@@ -330,13 +330,14 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景列表
     private void sceneNet() {
+        // TODO: 1/7/2017 debug
         RequestParams re = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 10 + "", null, null, 0 + "", null, null, null);
-        Call httpHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
+//        Call httpHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo/*, String json*/) {
                 Log.e("<<<情景列表", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", json);
                 SceneList sceneL = new SceneList();
                 try {
                     Gson gson = new Gson();
@@ -351,16 +352,16 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                 progressBar.setVisibility(View.GONE);
                 if (sceneL.isSuccess()) {
                     findQJAdapter.setPage(sceneL.getData().getCurrent_page());
-                    if (currentPage == 1) {
-                        sceneList.clear();
-                        pullRefreshView.lastTotalItem = -1;
-                        pullRefreshView.lastSavedFirstVisibleItem = -1;
-                    }
-                    sceneList.addAll(sceneL.getData().getRows());
-                    if (subjectList.size() <= 0 && sneceComplete == 0) {
-                        sneceComplete = 1;
-                        return;
-                    }
+//                    if (currentPage == 1) {
+//                        sceneList.clear();
+//                        pullRefreshView.lastTotalItem = -1;
+//                        pullRefreshView.lastSavedFirstVisibleItem = -1;
+//                    }
+//                    sceneList.addAll(sceneL.getData().getRows());
+//                    if (subjectList.size() <= 0 && sneceComplete == 0) {
+//                        sneceComplete = 1;
+//                        return;
+//                    }
                     findQJAdapter.notifyDataSetChanged();
                 }
             }
@@ -373,7 +374,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                 ToastUtils.showError("网络错误");
             }
         });
-        addNet(httpHandler);
+//        addNet(httpHandler);
     }
 
     @Override

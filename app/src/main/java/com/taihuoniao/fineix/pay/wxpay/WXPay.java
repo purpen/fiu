@@ -5,11 +5,14 @@ import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.ConstantCfg;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.pay.bean.WXPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -45,13 +48,15 @@ public class WXPay {
     }
 
     private static void getPayParams(String orderId) {
-        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.WX_PAY, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.WX_PAY);
+        HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.WX_PAY, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("responseInfo", responseInfo.result);
-                HttpResponse<WXPayParams> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<WXPayParams>>() {
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("responseInfo", json);
+                HttpResponse<WXPayParams> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WXPayParams>>() {
                 });
 
                 if (response.isSuccess()) {

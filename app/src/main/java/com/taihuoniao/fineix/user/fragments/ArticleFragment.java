@@ -14,14 +14,17 @@ import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ArticleAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -107,7 +110,9 @@ public class ArticleFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        ClientDiscoverAPI.getChoosenSubject(String.valueOf(curPage), PAGE_TYPE, FINE, SORT, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getChoosenSubjectRequestParams(String.valueOf(curPage), PAGE_TYPE, FINE, SORT);
+        HttpRequest.post(params, URL.CHOOSEN_SUBJECT_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getChoosenSubject(String.valueOf(curPage), PAGE_TYPE, FINE, SORT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {
@@ -116,11 +121,11 @@ public class ArticleFragment extends MyBaseFragment {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
+                if (TextUtils.isEmpty(json)) return;
 
-                HttpResponse<DataChooseSubject> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataChooseSubject>>() {
+                HttpResponse<DataChooseSubject> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataChooseSubject>>() {
                 });
 
                 if (response.isSuccess()) {

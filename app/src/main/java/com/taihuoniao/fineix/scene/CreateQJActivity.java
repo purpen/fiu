@@ -2,12 +2,10 @@ package com.taihuoniao.fineix.scene;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
@@ -31,10 +29,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -476,7 +472,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,
 //                tmp, lat, lng, subject_ids, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(final ResponseInfo<String> responseInfo) {
+                    public void onSuccess(final ResponseInfo<String> responseInfo, final String json) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -486,7 +482,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     Gson gson = new Gson();
                                     Type type = new TypeToken<CreateQJBean>() {
                                     }.getType();
-                                    createQJBean = gson.fromJson(responseInfo.result, type);
+                                    createQJBean = gson.fromJson(json, type);
                                 } catch (JsonSyntaxException e) {
                                     Log.e("<<<", "解析异常");
                                 }

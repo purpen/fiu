@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -116,20 +115,20 @@ public class MessageActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                     }
                 }, DataConstants.DIALOG_DELAY);
-                LogUtil.e("result", responseInfo.result);
-                if (TextUtils.isEmpty(responseInfo.result)) {
+                LogUtil.e("result", json);
+                if (TextUtils.isEmpty(json)) {
                     return;
                 }
 
                 try {
-                    HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
                     });
                     if (response.isSuccess()) {
                         user = response.getData();

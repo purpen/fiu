@@ -15,12 +15,14 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -126,14 +128,15 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                 button.setEnabled(false);
                 if (item.is_love == FansAdapter.NOT_LOVE){
                     RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item._id));
-                    ClientDiscoverAPI.focusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
+                    HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.focusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             button.setEnabled(true);
                             if (responseInfo == null) return;
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            LogUtil.e("focusOperate",responseInfo.result);
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            LogUtil.e("focusOperate",json);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 item.is_love=FansAdapter.LOVE;
                                 setFocusBtnStyle(button, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
@@ -149,15 +152,17 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         }
                     });
                 }else {
-                    ClientDiscoverAPI.cancelFocusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(String.valueOf(item._id));
+                    HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.cancelFocusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             button.setEnabled(true);
                             PopupWindowUtil.dismiss();
                             if (responseInfo==null) return;
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            LogUtil.e("cancelFocusOperate",responseInfo.result);
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            LogUtil.e("cancelFocusOperate",json);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()){
                                 item.is_love=FansAdapter.NOT_LOVE;
                                 setFocusBtnStyle(button, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white, android.R.color.white, R.drawable.shape_subscribe_theme);

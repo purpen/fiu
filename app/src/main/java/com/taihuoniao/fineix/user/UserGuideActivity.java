@@ -13,15 +13,18 @@ import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -162,11 +165,13 @@ public class UserGuideActivity extends BaseActivity {
     }
 
     private void initGuide() {
-        ClientDiscoverAPI.activeStatus(new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getactiveStatusRequestParams();
+        HttpRequest.post(params, URL.GATEWAY_RECORD_FIU_USER_ACTIVE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.activeStatus(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                LogUtil.e(TAG,responseInfo.result);
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                LogUtil.e(TAG,json);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (!response.isSuccess()) {
                     LogUtil.e(TAG, "提交渠道失败信息:" + response.getMessage());
                 }

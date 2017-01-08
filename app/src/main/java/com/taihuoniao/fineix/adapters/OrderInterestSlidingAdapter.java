@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -95,12 +93,12 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
                     }
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         progressBar.setVisibility(View.GONE);
                         view.setEnabled(true);
                         if (responseInfo==null) return;
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()){
                             itbn.setImageResource(R.mipmap.ordered_qj);
                             item.isOrdered=true;

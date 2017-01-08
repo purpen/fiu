@@ -21,7 +21,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchUserAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -163,10 +162,10 @@ public class SearchUserFragment extends DialogFragment {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<DataUserSearch> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataUserSearch>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<DataUserSearch> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataUserSearch>>() {
                 });
                 if (response.isSuccess()) {
                     ArrayList<ItemUserSearch> list = response.getData().rows;

@@ -26,10 +26,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.FirstProductAdapter;
@@ -228,13 +226,13 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
        Call httpHandler=  HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 CartBean cartBean = new CartBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CartBean>() {
                     }.getType();
-                    cartBean = gson.fromJson(responseInfo.result, type);
+                    cartBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<>>>", "数据异常" + e.toString());
                 }
@@ -264,8 +262,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<好货专题列表", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<好货专题列表", json);
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
@@ -274,7 +272,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     Gson gson = new Gson();
                     Type type = new TypeToken<SubjectListBean>() {
                     }.getType();
-                    subjectListBean = gson.fromJson(responseInfo.result, type);
+                    subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
@@ -306,15 +304,15 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
        Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.firstProducts(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<最新好货推荐", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json",responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<最新好货推荐", json);
+//                WriteJsonToSD.writeToSD("json",json);
                 FirstProductBean firstProductBean = new FirstProductBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<FirstProductBean>() {
                     }.getType();
-                    firstProductBean = gson.fromJson(responseInfo.result, type);
+                    firstProductBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
@@ -339,14 +337,14 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         Call  httpHandler  = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "1", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<分类列表", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<分类列表", json);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CategoryListBean>() {
                     }.getType();
-                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                    categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }

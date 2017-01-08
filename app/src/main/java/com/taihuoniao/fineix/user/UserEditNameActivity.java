@@ -7,13 +7,16 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -80,18 +83,20 @@ public class UserEditNameActivity extends BaseActivity {
     protected void submitData() {
         final String nickName = et_nickname.getText().toString();
         EditUserInfoActivity.isSubmitAddress = false;
-        ClientDiscoverAPI.updateUserInfo("nickname", nickName, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateUserInfoRequestParams("nickname", nickName);
+        HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateUserInfo("nickname", nickName, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo == null) {
                     return;
                 }
 
-                if (TextUtils.isEmpty(responseInfo.result)) {
+                if (TextUtils.isEmpty(json)) {
                     return;
                 }
 
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
 
                 if (response.isSuccess()) {
                     Util.makeToast(response.getMessage());

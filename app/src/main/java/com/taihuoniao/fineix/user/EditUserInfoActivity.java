@@ -15,7 +15,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
@@ -243,18 +242,18 @@ public class EditUserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
-                LogUtil.e("result", responseInfo.result);
-                if (TextUtils.isEmpty(responseInfo.result)) {
+                LogUtil.e("result", json);
+                if (TextUtils.isEmpty(json)) {
                     return;
                 }
 
                 try {
-                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    user = JsonUtil.fromJson(json, new TypeToken<HttpResponse<User>>() {
                     });
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
@@ -379,18 +378,20 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     protected void submitData() {
-        ClientDiscoverAPI.updateUserInfo(key,value, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getupdateUserInfoRequestParams(key, value);
+        HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.updateUserInfo(key,value, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo==null){
                     return;
                 }
 
-                if (TextUtils.isEmpty(responseInfo.result)){
+                if (TextUtils.isEmpty(json)){
                     return;
                 }
 
-                HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result,new TypeToken<HttpResponse<User>>(){});
+                HttpResponse<User> response = JsonUtil.json2Bean(json,new TypeToken<HttpResponse<User>>(){});
                 if (response.isSuccess()){
                     user = response.getData();
                     ToastUtils.showSuccess(response.getMessage());

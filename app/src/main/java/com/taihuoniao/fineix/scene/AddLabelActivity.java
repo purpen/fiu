@@ -19,10 +19,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.ExpandAdapter;
@@ -154,14 +152,14 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler = HttpRequest.post(params, URL.USED_LABEL_LIST, new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler =  ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 UsedLabelBean usedLabelBean = new UsedLabelBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<UsedLabelBean>() {
                     }.getType();
-                    usedLabelBean = gson.fromJson(responseInfo.result, type);
+                    usedLabelBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常" + e.toString());
                 }
@@ -205,14 +203,14 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
        Call httpHandler =  HttpRequest.post(requestParams, URL.SEARCH_EXPANDED, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler=  ClientDiscoverAPI.searchExpand(str, 20 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<索搜建议", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<索搜建议", json);
                 SearchExpandBean searchExpandBean = new SearchExpandBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SearchExpandBean>() {
                     }.getType();
-                    searchExpandBean = gson.fromJson(responseInfo.result, type);
+                    searchExpandBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常" + e.toString());
                 }

@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -29,6 +29,8 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
@@ -36,6 +38,7 @@ import com.taihuoniao.fineix.beans.UserCompleteData;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
@@ -165,12 +168,14 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 if (TextUtils.isEmpty(nickName)) {
                     ToastUtils.showInfo("昵称不能为空");
                 }
+                RequestParams params = ClientDiscoverAPI.getupdateNickNameSexRequestParams(nickName, gender);
+                HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 
-                ClientDiscoverAPI.updateNickNameSex(nickName, gender, new RequestCallBack<String>() {
+//                ClientDiscoverAPI.updateNickNameSex(nickName, gender, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
-                        HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        if (TextUtils.isEmpty(json)) return;
+                        HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
                         });
                         if (response.isSuccess()) {
 //                            User user = response.getData();

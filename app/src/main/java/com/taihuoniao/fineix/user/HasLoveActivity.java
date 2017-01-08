@@ -9,7 +9,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SupportQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -114,11 +113,11 @@ public class HasLoveActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (dialog != null) dialog.dismiss();
                 pullGv.onRefreshComplete();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<DataSupportQJ> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataSupportQJ>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<DataSupportQJ> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataSupportQJ>>() {
                 });
                 if (response.isSuccess()) {
                     List list = response.getData().rows;

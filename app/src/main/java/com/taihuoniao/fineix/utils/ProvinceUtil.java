@@ -4,11 +4,14 @@ import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.URL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,16 +27,18 @@ public class ProvinceUtil {
     private static HashMap<String,Integer> idProvinceMap=null;
     private static HashMap<String,Integer> idCitiesMap=null;
     public static void init() {
-        ClientDiscoverAPI.getAllCities(new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getgetAllCitiesRequestParams();
+        HttpRequest.post(params,  URL.ALL_CITY_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getAllCities(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (responseInfo==null){
                     return;
                 }
-                if (TextUtils.isEmpty(responseInfo.result)){
+                if (TextUtils.isEmpty(json)){
                     return;
                 }
-                data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ProvinceCityData>>() {
+                data = JsonUtil.fromJson(json, new TypeToken<HttpResponse<ProvinceCityData>>() {
                 });
                 dealData();
             }

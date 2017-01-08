@@ -17,16 +17,19 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
@@ -119,9 +122,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         mdialog.dismiss();
                                         removeItem(position);
                                         notifyDataSetChanged();
@@ -186,9 +191,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getcancelOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_CANCEL_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         mdialog.dismiss();
                                         removeItem(position);
                                         //TODO 待付款
@@ -247,16 +254,18 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                     public void onClick(View v) {
                         if(!mdialog.isShowing()){
                         mdialog.show();}
-                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
+                        RequestParams params = ClientDiscoverAPI.gettixingFahuoRequestParams(rid);
+                        HttpRequest.post(params, URL.SHOPPING_ALERT_SEND_GOODS, new GlobalDataCallBack(){
+//                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                 mdialog.dismiss();
                                 NetBean netBean = new NetBean();
                                 try {
                                     Gson gson = new Gson();
                                     Type type = new TypeToken<NetBean>() {
                                     }.getType();
-                                    netBean = gson.fromJson(responseInfo.result, type);
+                                    netBean = gson.fromJson(json, type);
                                 } catch (JsonSyntaxException e) {
 //                                    Log.e("<<<提醒发货", "数据解析异常");
                                 }
@@ -286,9 +295,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         removeItem(position);
                                         notifyDataSetChanged();
                                     }
@@ -338,9 +349,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_confirm_receipt_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getconfirmReceiveNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.SHOPPING_TAKE_DELIVERY, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         removeItem(position);
                                         //TODO 待收货
                                         ((ShopOrderListActivity) context).changeNum(3);
@@ -395,9 +408,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         removeItem(position);
                                         ((ShopOrderListActivity) context).changeNum(4);
                                         notifyDataSetChanged();
@@ -460,9 +475,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         removeItem(position);
                                         notifyDataSetChanged();
                                     }
@@ -513,9 +530,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack(){
                             @Override
                             public void clickRight() {
-                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
+//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                         removeItem(position);
                                         notifyDataSetChanged();
                                     }

@@ -20,10 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BrandProductAdapter;
@@ -140,16 +138,16 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(requestParams, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
 //        qjHandler = ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                Log.e("<<<品牌下的情景", responseInfo.result);
+                Log.e("<<<品牌下的情景", json);
                 ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ProductAndSceneListBean>() {
                     }.getType();
-                    productAndSceneListBean = gson.fromJson(responseInfo.result, type);
+                    productAndSceneListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<品牌下的情景", "解析异常=" + e.toString());
                 }
@@ -167,7 +165,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     ToastUtils.showError(productAndSceneListBean.getMessage());
                 }
-//                WriteJsonToSD.writeToSD("json",responseInfo.result);
+//                WriteJsonToSD.writeToSD("json",json);
             }
 
             @Override
@@ -185,7 +183,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
 //        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ProductBean productBean = new ProductBean();
@@ -193,7 +191,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                     Gson gson = new Gson();
                     Type type = new TypeToken<ProductBean>() {
                     }.getType();
-                    productBean = gson.fromJson(responseInfo.result, type);
+                    productBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
@@ -231,13 +229,13 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(requestParams, URL.BRAND_DETAIL, new GlobalDataCallBack(){
 //        brandHandler = ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 BrandDetailBean brandDetailBean = new BrandDetailBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<BrandDetailBean>() {
                     }.getType();
-                    brandDetailBean = gson.fromJson(responseInfo.result, type);
+                    brandDetailBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }

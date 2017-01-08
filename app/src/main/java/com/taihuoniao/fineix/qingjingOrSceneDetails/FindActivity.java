@@ -10,10 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindQJSceneListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -111,16 +109,16 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
         listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        listHandler = ClientDiscoverAPI.getSceneList(page + "", size, scene_id, category_ids, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 pullRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
-                Log.e("<<<情景列表", responseInfo.result);
+                Log.e("<<<情景列表", json);
                 SceneList sceneL = new SceneList();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneList>() {
                     }.getType();
-                    sceneL = gson.fromJson(responseInfo.result, type);
+                    sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "情景列表解析异常" + e.toString());
                 }

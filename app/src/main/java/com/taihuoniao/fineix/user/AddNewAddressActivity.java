@@ -18,10 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -207,11 +205,11 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         Call httpHandler = HttpRequest.post(params, URL.URLSTRING_PROVINCE_CITIES, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 List<ProvinceBean> list = new ArrayList<>();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
+                    JSONObject job = new JSONObject(json);
                     JSONObject data = job.getJSONObject("data");
                     JSONArray rows = data.getJSONArray("rows");
                     for (int i = 0; i < rows.length(); i++) {
@@ -373,14 +371,14 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
 Call httpHandler = HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean._id, nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, countyId, townId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }

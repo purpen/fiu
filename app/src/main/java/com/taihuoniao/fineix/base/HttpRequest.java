@@ -42,10 +42,10 @@ public class HttpRequest {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case CALLBACK_SUCCESS:
-//                    callBack.onSuccess((String) msg.obj);
+                    callBack.onSuccess(null, (String) msg.obj);
                     break;
                 case CALLBACK_FAILURE:
-//                    callBack.onFailure((String) msg.obj);
+                    callBack.onFailure(null,(String) msg.obj);
                     break;
             }
         }
@@ -62,6 +62,9 @@ public class HttpRequest {
     }
 
     public static Call post(RequestParams params, String requestUrl, GlobalDataCallBack callBack) {
+        if (callBack != null) {
+            callBack.onStart();
+        }
         return post(getSignedList(params), requestUrl, callBack, true);
     }
 

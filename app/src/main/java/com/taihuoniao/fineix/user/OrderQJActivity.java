@@ -11,7 +11,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderedQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -139,11 +138,11 @@ public class OrderQJActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (dialog != null) dialog.dismiss();
                 pull_gv.onRefreshComplete();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<DataSubscribedQJ> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataSubscribedQJ>>() {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<DataSubscribedQJ> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataSubscribedQJ>>() {
                 });
                 if (response.isSuccess()) {
                     List list = response.getData().rows;

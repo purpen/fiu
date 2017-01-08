@@ -10,7 +10,6 @@ import android.widget.ListView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UserCommentsAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -100,7 +99,7 @@ public class UserCommentsActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -108,9 +107,9 @@ public class UserCommentsActivity extends BaseActivity {
                     }
                 }, DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e(TAG, responseInfo.result);
-                commentsBean = JsonUtil.fromJson(responseInfo.result, CommentsBean.class);
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e(TAG, json);
+                commentsBean = JsonUtil.fromJson(json, CommentsBean.class);
                 if (commentsBean.isSuccess()) {
                     if (commentsBean.getData() == null) return;
                     list = commentsBean.getData().getRows();

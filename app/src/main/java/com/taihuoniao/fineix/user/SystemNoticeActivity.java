@@ -11,15 +11,18 @@ import android.widget.ListView;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -118,14 +121,16 @@ public class SystemNoticeActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         int curPage = 1;
-        ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {
+        RequestParams params =ClientDiscoverAPI. getgetSystemNoticeRequestParams(String.valueOf(curPage), PAGE_SIZE);
+        HttpRequest.post(params,  URL.SYSTEM_NOTICE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing()&& dialog!=null) dialog.show();
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -133,9 +138,9 @@ public class SystemNoticeActivity extends BaseActivity {
                     }
                 }, DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
+                if (TextUtils.isEmpty(json)) return;
                 try {
-                    HttpResponse<SystemNoticeData> response= JsonUtil.json2Bean(responseInfo.result,new TypeToken<HttpResponse<SystemNoticeData>>(){});
+                    HttpResponse<SystemNoticeData> response= JsonUtil.json2Bean(json,new TypeToken<HttpResponse<SystemNoticeData>>(){});
                     if (response.isSuccess()){
                         list = response.getData().rows;
                         refreshUI();

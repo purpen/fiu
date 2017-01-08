@@ -11,13 +11,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.scene.AddEnvirActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -31,6 +33,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * Created by taihuoniao on 2016/9/2.
@@ -88,9 +91,11 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
 
     //语境列表
     private void envirList() {
-       HttpHandler<String> httpHandler= ClientDiscoverAPI.envirList(page + "", 8 + "", 1 + "", cid, null, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getenvirListRequestParams(page + "", 8 + "", 1 + "", cid, null);
+        Call httpHandler = HttpRequest.post(params,  URL.SCENE_CONTEXT_GETLIST, new GlobalDataCallBack(){
+//       HttpHandler<String> httpHandler= ClientDiscoverAPI.envirList(page + "", 8 + "", 1 + "", cid, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
@@ -100,7 +105,7 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
                     Gson gson = new Gson();
                     Type type = new TypeToken<SearchBean>() {
                     }.getType();
-                    netSearch = gson.fromJson(responseInfo.result, type);
+                    netSearch = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }

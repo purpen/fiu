@@ -20,10 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -318,14 +316,14 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler=HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
 //                dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CategoryListBean>() {
                     }.getType();
-                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                    categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
@@ -363,13 +361,13 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SIGHT_STICK_ACTIVE_TAGS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<活动标签", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<活动标签", json);
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ActiveTagsBean>() {
                     }.getType();
-                    activeTagsBean = gson.fromJson(responseInfo.result, type);
+                    activeTagsBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常" + e.toString());
                 }

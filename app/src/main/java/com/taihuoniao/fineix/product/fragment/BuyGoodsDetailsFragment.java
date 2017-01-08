@@ -17,10 +17,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodDetailsSceneListAdapter;
@@ -186,16 +184,16 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
        Call httpHandler = HttpRequest.post(params, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
 
-                Log.e("<<<关联列表", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<关联列表", json);
+//                WriteJsonToSD.writeToSD("json", json);
                 ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ProductAndSceneListBean>() {
                     }.getType();
-                    productAndSceneListBean = gson.fromJson(responseInfo.result, type);
+                    productAndSceneListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<关联列表", "解析异常=" + e.toString());
                 }

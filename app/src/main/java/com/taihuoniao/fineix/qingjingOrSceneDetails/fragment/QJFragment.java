@@ -10,10 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.QJCateogryAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -125,8 +123,8 @@ public class QJFragment extends SearchFragment {
         sceneListHandler =  HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //     sceneListHandler =    ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<情景列表", responseInfo.result);
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                Log.e("<<<情景列表", json);
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
@@ -135,7 +133,7 @@ public class QJFragment extends SearchFragment {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneList>() {
                     }.getType();
-                    sceneL = gson.fromJson(responseInfo.result, type);
+                    sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "情景列表解析异常" + e.toString());
                 }

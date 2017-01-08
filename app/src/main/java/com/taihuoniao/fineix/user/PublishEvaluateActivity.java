@@ -12,13 +12,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EvaluateAdapter;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -103,15 +106,17 @@ public class PublishEvaluateActivity extends Activity {
                         builder.replace(builder.length() - 2, builder.length() - 1, "");
                         String array = builder.toString();
 //                        Log.e(">>>", ">>>arrayratingbar>>" + array);
-                        ClientDiscoverAPI.publishEvaluateNet(mRid, array, new RequestCallBack<String>() {
+                        RequestParams params = ClientDiscoverAPI.getpublishEvaluateNetRequestParams(mRid, array);
+                         HttpRequest.post(params,  URL.PRODUCT_AJAX_COMMENT, new GlobalDataCallBack(){
+//                        ClientDiscoverAPI.publishEvaluateNet(mRid, array, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                                 Gson gson = new Gson();
                                 NetBean netBean = new NetBean();
                                 try {
                                     Type type = new TypeToken<NetBean>() {
                                     }.getType();
-                                    netBean = gson.fromJson(responseInfo.result, type);
+                                    netBean = gson.fromJson(json, type);
                                 } catch (JsonSyntaxException e) {
                                     Log.e("<<<", "数据解析异常" + e.toString());
                                 }
@@ -144,12 +149,14 @@ public class PublishEvaluateActivity extends Activity {
         mRid = getIntent().getStringExtra("rid");
 //        DataPaser.orderPayDetailsParser(mRid, mHandler);
         //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取
-        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
+        HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
 
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() {});
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderDetailBean>>() {});
                 if (response.isError()) {
                     LogUtil.e(TAG, "---------> responseInfo: "  + responseInfo.reasonPhrase);
                     return;
@@ -157,10 +164,10 @@ public class PublishEvaluateActivity extends Activity {
                 shoppingDetailBean = response.getData();
                 mListProducts = shoppingDetailBean.getItems();
 
-////                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
+////                Log.e(">>>", ">>>OOO>>>" + json);
 //                List<OrderDetails> ordersList = new ArrayList<>();
 //                try {
-//                    JSONObject obj = new JSONObject(responseInfo.result);
+//                    JSONObject obj = new JSONObject(json);
 //                    JSONObject orderObj = obj.getJSONObject("data");
 //                    OrderDetails details = new OrderDetails();
 //                    details.setRid(orderObj.optString("rid"));

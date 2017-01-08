@@ -5,11 +5,14 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -45,19 +48,21 @@ public class FeedbackActivity extends BaseActivity {
                 if (!isUserInputLegal()) {
                     return;
                 }
-                ClientDiscoverAPI.commitSuggestion(et_suggestion.getText().toString(), et_contact.getText().toString(), new RequestCallBack<String>() {
+                RequestParams params = ClientDiscoverAPI.getcommitSuggestionRequestParams(et_suggestion.getText().toString(), et_contact.getText().toString());
+                HttpRequest.post(params,  URL.SUGGESTION_URL, new GlobalDataCallBack(){
+//                 ClientDiscoverAPI.commitSuggestion(et_suggestion.getText().toString(), et_contact.getText().toString(), new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         if (responseInfo == null) {
                             return;
                         }
 
-                        if (TextUtils.isEmpty(responseInfo.result)) {
+                        if (TextUtils.isEmpty(json)) {
                             return;
                         }
 
                         try {
-                            JSONObject response = new JSONObject(responseInfo.result);
+                            JSONObject response = new JSONObject(json);
                             if (response.optBoolean("success")){
                                 Util.makeToast(response.optString("message"));
                                 activity.finish();

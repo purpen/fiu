@@ -12,7 +12,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -117,12 +116,12 @@ public class FansActivity extends BaseActivity {
 //                flag ? "1" : null,
 //                new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                         if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
+                        if (TextUtils.isEmpty(json)) return;
 
-                        LogUtil.e(TAG, responseInfo.result);
-                        FocusFansData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<FocusFansData>>() {
+                        LogUtil.e(TAG, json);
+                        FocusFansData data = JsonUtil.fromJson(json, new TypeToken<HttpResponse<FocusFansData>>() {
                         });
 
                         if (data == null) {

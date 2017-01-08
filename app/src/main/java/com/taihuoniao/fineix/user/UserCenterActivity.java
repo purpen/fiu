@@ -24,7 +24,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -230,14 +229,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) {
+                if (TextUtils.isEmpty(json)) {
                     return;
                 }
 
                 try {
-                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    user = JsonUtil.fromJson(json, new TypeToken<HttpResponse<User>>() {
                     });
                     refreshUI();
                 } catch (JsonSyntaxException e) {
@@ -282,13 +281,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("getSceneList", responseInfo.result);
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("getSceneList", json);
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
-                    UserCJListData listBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<UserCJListData>>() {
+                    UserCJListData listBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<UserCJListData>>() {
                     });
                     List list = listBean.rows;
                     refreshCJUI(list);
@@ -354,11 +353,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("getQJList", responseInfo.result);
-                QingJingListBean listBean = JsonUtil.fromJson(responseInfo.result, QingJingListBean.class);
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("getQJList", json);
+                QingJingListBean listBean = JsonUtil.fromJson(json, QingJingListBean.class);
                 if (listBean.isSuccess()) {
                     List list = listBean.getData().getRows();
                     LogUtil.e("每次请求==", list.size() + "");
@@ -626,14 +625,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 bt_focus.setEnabled(false);
                 if (user.is_love == FansAdapter.NOT_LOVE) {
                     RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(userId + "");
-                    ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
+                    HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             bt_focus.setEnabled(true);
                             if (responseInfo == null) return;
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            LogUtil.e("focusOperate", responseInfo.result);
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            LogUtil.e("focusOperate", json);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.LOVE;
 //                                bt_focus.setText("已关注");
@@ -650,15 +650,17 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         }
                     });
                 } else {
-                    ClientDiscoverAPI.cancelFocusOperate(userId + "", new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userId + "");
+                    HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.cancelFocusOperate(userId + "", new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             bt_focus.setEnabled(true);
                             PopupWindowUtil.dismiss();
                             if (responseInfo == null) return;
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            LogUtil.e("cancelFocusOperate", responseInfo.result);
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            LogUtil.e("cancelFocusOperate", json);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.NOT_LOVE;
 //                                bt_focus.setText("关注");

@@ -10,14 +10,17 @@ import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.fragments.SearchUserFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -125,7 +128,9 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     @Override
     protected void requestNet() {
         String sight_count = "5";
-        ClientDiscoverAPI.findFriends(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getfindFriendsRequestParams(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT);
+        HttpRequest.post(params,  URL.FIND_FRIENDS, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.findFriends(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null) {
@@ -134,11 +139,11 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("getSceneList", responseInfo.result);
-                HttpResponse<FindFriendData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<FindFriendData>>() {
+                if (TextUtils.isEmpty(json)) return;
+                LogUtil.e("getSceneList", json);
+                HttpResponse<FindFriendData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FindFriendData>>() {
                 });
                 if (response.isSuccess()) {
                     FindFriendData data = response.getData();

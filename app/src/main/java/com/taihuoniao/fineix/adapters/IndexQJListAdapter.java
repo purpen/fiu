@@ -37,7 +37,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -672,15 +671,17 @@ public class IndexQJListAdapter extends BaseAdapter {
 
     //取消收藏情景
     private void cancelShoucang(final int position) {
-        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcancelShoucangRequestParams(sceneList.get(position).get_id(), "12");
+        HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<取消收藏情景", "数据解析异常");
                 }
@@ -703,15 +704,17 @@ public class IndexQJListAdapter extends BaseAdapter {
 
     //收藏情景
     private void shoucang(final int position) {
-        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getshoucangRequestParams(sceneList.get(position).get_id(), "12");
+        HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<收藏情景", "数据解析异常");
                 }
@@ -738,13 +741,13 @@ public class IndexQJListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<删除场景", "数据解析异常");
                 }
@@ -771,7 +774,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -779,7 +782,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneLoveBean>() {
                     }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                    sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }
@@ -808,7 +811,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -816,7 +819,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneLoveBean>() {
                     }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                    sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }
@@ -842,17 +845,18 @@ public class IndexQJListAdapter extends BaseAdapter {
     //关注用户
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
         RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
-        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
-                Log.e("<<<关注用户", responseInfo.result);
+                Log.e("<<<关注用户", json);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }
@@ -881,16 +885,18 @@ public class IndexQJListAdapter extends BaseAdapter {
 
     //取消关注
     private void cancelFollow(final SceneList.DataBean.RowsBean.UserInfoBean userInfoBean, final ViewHolder holder) {
-        ClientDiscoverAPI.cancelFocusOperate(userInfoBean.getUser_id(), new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userInfoBean.getUser_id());
+        HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.cancelFocusOperate(userInfoBean.getUser_id(), new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>() {
                     }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
+                    netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常");
                 }
@@ -1084,17 +1090,18 @@ public class IndexQJListAdapter extends BaseAdapter {
         //关注用户
         private void fllow(final int position, String otherUserId, final VH holder) {
             RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
-            ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+            HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+//            ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
+                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                     dialog.dismiss();
-                    Log.e("<<<关注用户", responseInfo.result);
+                    Log.e("<<<关注用户", json);
                     NetBean netBean = new NetBean();
                     try {
                         Gson gson = new Gson();
                         Type type = new TypeToken<NetBean>() {
                         }.getType();
-                        netBean = gson.fromJson(responseInfo.result, type);
+                        netBean = gson.fromJson(json, type);
                     } catch (JsonSyntaxException e) {
                         Log.e("<<<", "解析异常");
                     }
@@ -1120,16 +1127,18 @@ public class IndexQJListAdapter extends BaseAdapter {
 
         //取消关注
         private void cancelFollow(final IndexUserListBean.DataBean.UsersBean usersBean, final VH holder) {
-            ClientDiscoverAPI.cancelFocusOperate(usersBean.get_id(), new RequestCallBack<String>() {
+            RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(usersBean.get_id());
+            HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+//            ClientDiscoverAPI.cancelFocusOperate(usersBean.get_id(), new RequestCallBack<String>() {
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
+                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                     dialog.dismiss();
                     NetBean netBean = new NetBean();
                     try {
                         Gson gson = new Gson();
                         Type type = new TypeToken<NetBean>() {
                         }.getType();
-                        netBean = gson.fromJson(responseInfo.result, type);
+                        netBean = gson.fromJson(json, type);
                     } catch (JsonSyntaxException e) {
                         Log.e("<<<", "解析异常");
                     }

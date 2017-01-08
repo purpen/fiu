@@ -10,10 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -132,7 +130,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 //                    Gson gson = new Gson();
 //                    Type type = new TypeToken<CategoryLabelListBean>() {
 //                    }.getType();
-//                    categoryLabelListBean = gson.fromJson(responseInfo.result, type);
+//                    categoryLabelListBean = gson.fromJson(json, type);
 //                } catch (JsonSyntaxException e) {
 //                    Log.e("<<<", "数据解析异常" + e.toString());
 //                }
@@ -183,13 +181,13 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         cartHandler = HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                 CartBean cartBean = new CartBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CartBean>() {
                     }.getType();
-                    cartBean = gson.fromJson(responseInfo.result, type);
+                    cartBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<>>>", "数据异常" + e.toString());
                 }

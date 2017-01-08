@@ -14,13 +14,16 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
@@ -172,10 +175,12 @@ public class NewProductDetailActivity extends BaseActivity {
 
     private static void jump2ThemeDetail(final Activity activity,final String id) {
         if (TextUtils.isEmpty(id)) return;
-        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
                 if (response.isSuccess()) {
                     SubjectData data = response.getData();
@@ -220,12 +225,14 @@ public class NewProductDetailActivity extends BaseActivity {
             case R.id.ibtn_favorite: //收藏
                 v.setEnabled(false);
                 if (data.product.is_favorite == 0) {
-                    ClientDiscoverAPI.favorite(data.product._id, "1", new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getfavoriteRequestParams(data.product._id, "1");
+                    HttpRequest.post(params,  URL.FAVORITE_PRODUCT, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.favorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             v.setEnabled(true);
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 data.product.is_favorite = 1;
                                 setFavoriteStyle();
@@ -241,12 +248,14 @@ public class NewProductDetailActivity extends BaseActivity {
                         }
                     });
                 } else {
-                    ClientDiscoverAPI.cancelFavorite(data.product._id, "1", new RequestCallBack<String>() {
+                    RequestParams params = ClientDiscoverAPI.getcancelFavoriteRequestParams(data.product._id, "1");
+                    HttpRequest.post(params, URL.CANCEL_FAVORITE_PRODUCT, new GlobalDataCallBack(){
+//                    ClientDiscoverAPI.cancelFavorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
                             v.setEnabled(true);
-                            if (TextUtils.isEmpty(responseInfo.result)) return;
-                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (TextUtils.isEmpty(json)) return;
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 data.product.is_favorite = 0;
                                 setFavoriteStyle();
@@ -274,11 +283,13 @@ public class NewProductDetailActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+            RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+            HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+//            ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
 
                 if (response.isSuccess()) {
