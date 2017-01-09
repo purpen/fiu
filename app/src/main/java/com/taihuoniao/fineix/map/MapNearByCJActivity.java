@@ -20,9 +20,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -195,11 +193,8 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (waittingDialog != null) waittingDialog.dismiss();
-                if (responseInfo == null) {
-                    return;
-                }
                 if (json == null) {
                     return;
                 }
@@ -219,9 +214,9 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (waittingDialog != null) waittingDialog.dismiss();
-                LogUtil.e(TAG, s);
+                LogUtil.e(TAG, error);
             }
         });
     }

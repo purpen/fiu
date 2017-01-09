@@ -19,9 +19,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -316,7 +314,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler=HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
 //                dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
@@ -345,7 +343,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -361,7 +359,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SIGHT_STICK_ACTIVE_TAGS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<活动标签", json);
                 try {
                     Gson gson = new Gson();
@@ -374,7 +372,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
             }
         });
         addNet(httpHandler);

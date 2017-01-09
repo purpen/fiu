@@ -18,9 +18,7 @@ import android.widget.ImageButton;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchUserAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -162,7 +160,7 @@ public class SearchUserFragment extends DialogFragment {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<DataUserSearch> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataUserSearch>>() {
@@ -176,10 +174,9 @@ public class SearchUserFragment extends DialogFragment {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (dialog != null) dialog.dismiss();
-                e.printStackTrace();
-                ToastUtils.showError(s);
+                ToastUtils.showError(error);
             }
         });
     }

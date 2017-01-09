@@ -3,9 +3,7 @@ package com.taihuoniao.fineix.utils;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ProvinceCityData;
@@ -31,10 +29,7 @@ public class ProvinceUtil {
         HttpRequest.post(params,  URL.ALL_CITY_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getAllCities(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo==null){
-                    return;
-                }
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)){
                     return;
                 }
@@ -44,8 +39,8 @@ public class ProvinceUtil {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                Util.makeToast(s);
+            public void onFailure(String error) {
+                Util.makeToast(error);
             }
         });
     }

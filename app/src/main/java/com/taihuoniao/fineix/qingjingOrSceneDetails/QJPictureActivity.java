@@ -14,9 +14,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -311,7 +309,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
         Call httpHandler  = HttpRequest.post(params,URL.USER_IS_EDITOR, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.isEditor(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<权限", json);
                 IsEditorBean isEditorBean = new IsEditorBean();
@@ -327,7 +325,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -341,7 +339,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_FINE, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.setFine(id, isFine ? "0" : "1", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<精选", json);
                 NetBean netBean = new NetBean();
@@ -361,7 +359,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -375,7 +373,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_STICK, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.setStick(id, isStick ? "0" : "1", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<精选", json);
                 NetBean netBean = new NetBean();
@@ -395,7 +393,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -409,7 +407,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_CHECK, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.setCheck(id, isCheck ? "1" : "0", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<精选", json);
                 NetBean netBean = new NetBean();
@@ -429,7 +427,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

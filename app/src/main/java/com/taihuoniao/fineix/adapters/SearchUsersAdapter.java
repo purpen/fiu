@@ -12,9 +12,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -150,7 +148,7 @@ public class SearchUsersAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<关注用户", json);
                 NetBean netBean = new NetBean();
@@ -175,7 +173,7 @@ public class SearchUsersAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -218,7 +216,7 @@ public class SearchUsersAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelFocusOperate(item.getUser_id(), new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -242,7 +240,7 @@ public class SearchUsersAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

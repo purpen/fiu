@@ -32,9 +32,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -582,7 +580,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -602,7 +600,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -615,7 +613,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -635,7 +633,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -648,7 +646,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -668,7 +666,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -681,7 +679,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -704,7 +702,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
@@ -718,7 +716,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -741,7 +739,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
@@ -755,7 +753,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<关注用户", json);
                 NetBean netBean = new NetBean();
@@ -783,7 +781,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -796,7 +794,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelFocusOperate(item.getUser_info().getUser_id(), new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -823,7 +821,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

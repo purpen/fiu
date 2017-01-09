@@ -9,9 +9,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -203,7 +201,7 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
         HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_PRODUCT_COUUNT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 List<ShopCartInventoryItemBean> list = new ArrayList<>();
                 try {
                     JSONObject obj = new JSONObject(json);
@@ -227,7 +225,7 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError("网络错误");
             }
         });

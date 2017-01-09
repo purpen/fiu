@@ -26,9 +26,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
@@ -421,7 +419,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         detailHandler = HttpRequest.post(requestParams, URL.GOOD_DETAILS, new GlobalDataCallBack(){
 //        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<商品详情", json);
                 try {
@@ -485,7 +483,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -502,7 +500,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         cartHandler =  HttpRequest.post(requestParams, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 CartBean cartBean = new CartBean();
                 try {
                     Gson gson = new Gson();
@@ -521,7 +519,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 titleLayout.setCartNum(0);
             }
         });
@@ -533,7 +531,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         cancelShoucangHandler=   HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -553,7 +551,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -568,7 +566,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         shoucangHandler=  HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
 //        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -588,7 +586,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -603,7 +601,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack(){
 //        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<立即购买", json);
 //                WriteJsonToSD.writeToSD("json", json);
@@ -626,7 +624,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -641,7 +639,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack(){
 //        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -662,7 +660,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

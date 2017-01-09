@@ -10,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -93,10 +91,9 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
                     }
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         progressBar.setVisibility(View.GONE);
                         view.setEnabled(true);
-                        if (responseInfo==null) return;
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()){
@@ -109,7 +106,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
+                    public void onFailure(String error) {
                         progressBar.setVisibility(View.GONE);
                         view.setEnabled(true);
                         ToastUtils.showError("网络异常，请确认网络畅通");

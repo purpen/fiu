@@ -8,9 +8,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -97,7 +95,7 @@ public class CommentFragment extends SearchFragment {
        Call httpHandler =  HttpRequest.post(params, URL.COMMENTS_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<商品评论", json);
 //                WriteJsonToSD.writeToSD("json",json);
                 List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(json);
@@ -117,7 +115,7 @@ public class CommentFragment extends SearchFragment {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
             }

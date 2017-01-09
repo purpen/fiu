@@ -28,9 +28,7 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -472,7 +470,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,
 //                tmp, lat, lng, subject_ids, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(final ResponseInfo<String> responseInfo, final String json) {
+                    public void onSuccess(final String json) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -514,12 +512,11 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     }
 
                     @Override
-                    public void onFailure(final HttpException error, final String msg) {
+                    public void onFailure(final String error) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 dialog.dismiss();
-                                Log.e("<<<失败", error.toString() + "," + msg);
                                 ToastUtils.showError(R.string.net_fail);
                             }
                         });

@@ -9,9 +9,7 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindQJSceneListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -109,7 +107,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
         listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        listHandler = ClientDiscoverAPI.getSceneList(page + "", size, scene_id, category_ids, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 pullRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
                 Log.e("<<<情景列表", json);
@@ -132,7 +130,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
                 ToastUtils.showError("网络错误");

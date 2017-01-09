@@ -15,11 +15,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
 import com.taihuoniao.fineix.base.Base2Activity;
@@ -127,7 +123,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         addressHandler = HttpRequest.post(params, URL.URLSTRING_DEFAULT_ADDRESS, new GlobalDataCallBack() {
 //        addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<默认收货地址", json);
                 DefaultAddressBean defaultAddressBean = new DefaultAddressBean();
                 try {
@@ -151,7 +147,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
@@ -317,7 +313,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         confirmHandler = HttpRequest.post(params,  URL.URLSTRING_NOW_CONFIRMORDER, new GlobalDataCallBack(){
 //       confirmHandler =  ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NowConfirmBean nowConfirmBean = new NowConfirmBean();
                 try {
                     JSONObject job = new JSONObject(json);
@@ -366,7 +362,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
@@ -497,10 +493,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         HttpRequest.post(params,URL.SHOPPING_FETCH_FREIGHT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.fetchFreight(addbook_id, rid2, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) {
-                    return;
-                }
+            public void onSuccess(String json) {
                 HttpResponse<FreightBean> freightBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FreightBean>>() {
                 });
                 if (freightBeanHttpResponse != null) {
@@ -519,7 +512,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
 
             }
         });

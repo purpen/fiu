@@ -6,9 +6,7 @@ import android.widget.GridView;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SupportQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -113,7 +111,7 @@ public class HasLoveActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (dialog != null) dialog.dismiss();
                 pullGv.onRefreshComplete();
                 if (TextUtils.isEmpty(json)) return;
@@ -128,9 +126,8 @@ public class HasLoveActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (dialog != null) dialog.dismiss();
-                e.printStackTrace();
                 ToastUtils.showError(R.string.network_err);
             }
         });

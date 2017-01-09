@@ -20,9 +20,7 @@ import android.widget.RelativeLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
@@ -230,7 +228,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         Call httpHandler = HttpRequest.post(requestParams,URL.BANNERS_URL, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getBanners("app_fiu_sight_index_slide", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<首页banner图", json);
                 try {
                     BannerData bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerData>>() {
@@ -246,7 +244,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
 
             }
         });
@@ -268,7 +266,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         Call httpHandler = HttpRequest.post(re, URL.USER_FIND_USER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<首页用户列表", json);
                 IndexUserListBean indexUserListBean = new IndexUserListBean();
                 try {
@@ -305,7 +303,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 if (sneceComplete == 1) {
                     indexQJListAdapter.notifyDataSetChanged();
                     sneceComplete = 0;
@@ -321,7 +319,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_SUBJECT_INDEX_SUJECT_STICK, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getIndexChosenSubject(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
                     Gson gson = new Gson();
@@ -339,8 +337,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                e.printStackTrace();
+            public void onFailure(String error) {
                 LogUtil.e("getIndexChosenSubject",getResources().getString(R.string.network_err));
             }
         });
@@ -380,7 +377,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<情景列表", json);
 //                WriteJsonToSD.writeToSD("json", json);
                 SceneList sceneL = new SceneList();
@@ -417,7 +414,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();

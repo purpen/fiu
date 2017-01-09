@@ -15,9 +15,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
@@ -88,7 +86,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         Call httpHandler = HttpRequest.post(requestParams,URL.SEARCH, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, 7 + "", null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
@@ -122,7 +120,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
@@ -142,7 +140,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
 //                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         dialog.dismiss();
                         pullToRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
@@ -150,7 +148,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }
 
                     @Override
-                    public void onFailure(HttpException error, String msg) {
+                    public void onFailure(String error) {
                         dialog.dismiss();
                         pullToRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
@@ -163,7 +161,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 Call httpHandler = HttpRequest.post(requestParams,URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
 //                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         dialog.dismiss();
                         pullToRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
@@ -171,7 +169,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }
 
                     @Override
-                    public void onFailure(HttpException error, String msg) {
+                    public void onFailure(String error) {
                         dialog.dismiss();
                         pullToRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
@@ -313,7 +311,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         Call httpHandler = HttpRequest.post(requestParams,URL.GOOD_DETAILS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.goodsDetails(ids, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<商品详情", json);
                 BuyGoodDetailsBean netGood = new BuyGoodDetailsBean();
@@ -336,7 +334,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络错误");
             }

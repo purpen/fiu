@@ -8,9 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -74,9 +72,8 @@ public class CertificateStatusActivity extends BaseActivity{
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (dialog!=null) dialog.dismiss();
-                if (responseInfo==null) return;
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("getAuthStatus",json);
                 HttpResponse<AuthData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AuthData>>() {});
@@ -89,7 +86,7 @@ public class CertificateStatusActivity extends BaseActivity{
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (dialog!=null) dialog.dismiss();
                 ToastUtils.showError("网络异常，请保持网络畅通");
             }

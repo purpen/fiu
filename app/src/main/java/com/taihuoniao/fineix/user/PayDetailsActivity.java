@@ -8,9 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -101,9 +99,8 @@ public class PayDetailsActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 mDialog.dismiss();
-                if (responseInfo==null) return;
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<ShoppingDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ShoppingDetailBean>>() {
                 });
@@ -134,7 +131,7 @@ public class PayDetailsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 mDialog.dismiss();
                 Util.makeToast("网络异常");
             }

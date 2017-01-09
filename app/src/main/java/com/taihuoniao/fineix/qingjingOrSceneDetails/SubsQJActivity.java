@@ -11,9 +11,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -135,7 +133,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
         Call listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> listHandler = ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<情景列表", json);
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
@@ -163,7 +161,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
@@ -179,7 +177,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
         Call httpHandler = HttpRequest.post(requestParams, URL.USER_CENTER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<个人信息", json);
                 UserInfo userInfo = new UserInfo();
                 try {
@@ -220,7 +218,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 progressBar.setVisibility(View.GONE);
                 dialog.dismiss();
                 pullRefreshView.onRefreshComplete();

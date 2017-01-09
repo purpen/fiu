@@ -10,9 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UnUsableRedPacketAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -190,7 +188,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (mDialog!=null) mDialog.dismiss();
                 HttpResponse<RedPacketData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<RedPacketData>>() {});
                 if (response.isSuccess()){
@@ -202,7 +200,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (mDialog!=null) mDialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }

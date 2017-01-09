@@ -9,9 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -110,7 +108,7 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             ibtn.setEnabled(true);
                             if (TextUtils.isEmpty(json)) return;
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -124,11 +122,10 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             ibtn.setEnabled(true);
-                            e.printStackTrace();
                             ToastUtils.showError(R.string.network_err);
-                            LogUtil.e(TAG, s);
+                            LogUtil.e(TAG, error);
                         }
                     });
                 } else {
@@ -141,7 +138,7 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             ibtn.setEnabled(true);
                             if (TextUtils.isEmpty(json)) return;
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -155,11 +152,10 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             ibtn.setEnabled(true);
-                            e.printStackTrace();
                             ToastUtils.showError(R.string.network_err);
-                            LogUtil.e(TAG, s);
+                            LogUtil.e(TAG, error);
                         }
                     });
                 }

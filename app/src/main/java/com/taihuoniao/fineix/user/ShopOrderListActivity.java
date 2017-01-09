@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -162,7 +160,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() { });
                 if (response.isSuccess()) {
@@ -176,7 +174,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });

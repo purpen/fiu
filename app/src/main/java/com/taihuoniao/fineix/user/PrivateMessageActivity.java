@@ -12,9 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PrivateMessageItemAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -102,9 +100,8 @@ public class PrivateMessageActivity extends BaseActivity{
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
-                if (responseInfo==null) return;
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<MessageDetailData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<MessageDetailData>>() {
                 });
@@ -120,9 +117,9 @@ public class PrivateMessageActivity extends BaseActivity{
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
-                Util.makeToast(s);
+                Util.makeToast(error);
             }
         });
     }
@@ -157,11 +154,10 @@ public class PrivateMessageActivity extends BaseActivity{
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 isSendMsg=true;
                 v.setEnabled(true);
 //                dialog.dismiss();
-                if (responseInfo==null) return;
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()){
@@ -176,7 +172,7 @@ public class PrivateMessageActivity extends BaseActivity{
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 v.setEnabled(true);
 //                dialog.dismiss();
                 Util.makeToast("请您检查网络！");

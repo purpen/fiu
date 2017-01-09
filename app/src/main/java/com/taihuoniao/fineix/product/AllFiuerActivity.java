@@ -10,9 +10,7 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllFiuerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -75,7 +73,7 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         userHandler = HttpRequest.post(params,  URL.FIU_USER_LIST, new GlobalDataCallBack(){
 //        userHandler = ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<用户排行", json);
 //                WriteJsonToSD.writeToSD("json", json);
                 try {
@@ -96,7 +94,7 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络错误");
             }

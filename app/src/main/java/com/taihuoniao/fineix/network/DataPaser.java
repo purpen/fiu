@@ -8,9 +8,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
@@ -59,7 +57,7 @@ public class DataPaser {
         HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.search(q, t, null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SEARCH_LIST;
                 msg.obj = new SearchBean();
@@ -75,7 +73,7 @@ public class DataPaser {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -153,7 +151,7 @@ public class DataPaser {
         HttpRequest.post(params, URL.AUTH_FIND_PWD, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.findPasswordNet(phone, password, code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 FindPasswordInfo findPasswordInfo = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_FIND_PASSWORD;
@@ -172,7 +170,7 @@ public class DataPaser {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
             }
         });
@@ -189,7 +187,7 @@ public class DataPaser {
         HttpRequest.post(params,  URL.SHOPPING_USE_BONUS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.checkRedBagUsableNet(rid, code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 CheckRedBagUsable checkRedBagUsable = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_CHECK_REDBAG_USABLE;
@@ -212,7 +210,7 @@ public class DataPaser {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
             }
         });
@@ -229,7 +227,7 @@ public class DataPaser {
         return HttpRequest.post(params, URL.SHOPPING_FETCH_CART, new GlobalDataCallBack(){
 //        return ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 List<ShopCart> list = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_SHOP_CART;
@@ -275,7 +273,7 @@ public class DataPaser {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
             }
         });
@@ -291,7 +289,7 @@ public class DataPaser {
         return HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_COUNT, new GlobalDataCallBack(){
 //        return ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 ShopCartNumber shopCartNumber = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_SHOP_CART_NUMBER;
@@ -309,7 +307,7 @@ public class DataPaser {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
             }
         });
@@ -325,7 +323,7 @@ public class DataPaser {
         HttpRequest.post(params,  URL.SHOPING_CHECKOUT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.calculateShopCartNet(array, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         List<CartDoOrder> list = null;
                         Message msg = new Message();
                         msg.what = DataConstants.PARSER_SHOP_CART_CALCULATE;
@@ -424,7 +422,7 @@ public class DataPaser {
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
+                    public void onFailure(String error) {
                         handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
                     }
                 }
@@ -443,7 +441,7 @@ public class DataPaser {
         HttpRequest.post(params,  URL.SHOPPING_ORDERS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.orderListNet(status, page, size, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 List<OrderEntity> list = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_ORDER;
@@ -490,7 +488,7 @@ public class DataPaser {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
             }
         });

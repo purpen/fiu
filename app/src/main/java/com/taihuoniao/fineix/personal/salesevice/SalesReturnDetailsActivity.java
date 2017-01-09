@@ -8,9 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -91,10 +89,7 @@ public class SalesReturnDetailsActivity extends BaseActivity {
         HttpRequest.post(params, URL.SHOPPING_REFUND_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getRefundSuccessInfo(chargeBackId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) {
-                    return;
-                }
+            public void onSuccess(String json) {
                 try {
                     HttpResponse<ChargeBackResultDetailsBean> chargeBackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackResultDetailsBean>>() {
                     });
@@ -111,7 +106,7 @@ public class SalesReturnDetailsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
 
             }
         });

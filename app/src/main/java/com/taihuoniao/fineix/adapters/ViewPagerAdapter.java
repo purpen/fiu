@@ -12,9 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -187,7 +185,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //                            ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
                                 @Override
-                                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                public void onSuccess(String json) {
                                     HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                                     });
 
@@ -222,7 +220,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                                 }
 
                                 @Override
-                                public void onFailure(HttpException e, String s) {
+                                public void onFailure(String error) {
                                     ToastUtils.showError(R.string.network_err);
                                 }
                             });
@@ -262,7 +260,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         HttpRequest.post(params, URL.GATEWAY_VALIDE_INVITE_CODE , new GlobalDataCallBack(){
 //        ClientDiscoverAPI.submitInviteCode(code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) {
                     return;
                 }
@@ -275,7 +273,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError("网络异常，请确保网络畅通");
             }
         });
@@ -286,7 +284,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         HttpRequest.post(params, URL.GATEWAY_DEL_INVITE_CODE , new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateInviteCodeStatus(code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) {
                     return;
                 }
@@ -301,7 +299,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError("网络异常，请确保网络畅通");
             }
         });
@@ -318,7 +316,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         HttpRequest.post(params,URL.GATEWAY_IS_INVITED, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
 //                ToastUtils.showError(json);
                 if (TextUtils.isEmpty(json)) {
@@ -348,7 +346,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络异常，请确保网络畅通");
             }

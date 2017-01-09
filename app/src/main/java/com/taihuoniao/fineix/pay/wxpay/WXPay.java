@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -52,8 +50,7 @@ public class WXPay {
         HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.WX_PAY, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) return;
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("responseInfo", json);
                 HttpResponse<WXPayParams> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WXPayParams>>() {
@@ -68,7 +65,7 @@ public class WXPay {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 Util.makeToast("网络异常");
             }
         });

@@ -12,9 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -125,12 +123,12 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                     HttpRequest.post(params, URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
 
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
 
                         }
                     }/*, phone*/);

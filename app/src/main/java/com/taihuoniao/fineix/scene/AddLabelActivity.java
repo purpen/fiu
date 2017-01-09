@@ -18,9 +18,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.ExpandAdapter;
@@ -152,7 +150,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler = HttpRequest.post(params, URL.USED_LABEL_LIST, new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler =  ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 UsedLabelBean usedLabelBean = new UsedLabelBean();
                 try {
@@ -171,7 +169,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
             }
         });
@@ -203,7 +201,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
        Call httpHandler =  HttpRequest.post(requestParams, URL.SEARCH_EXPANDED, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler=  ClientDiscoverAPI.searchExpand(str, 20 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<索搜建议", json);
                 SearchExpandBean searchExpandBean = new SearchExpandBean();
                 try {
@@ -222,7 +220,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
 
             }
         });

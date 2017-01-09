@@ -21,9 +21,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -229,7 +227,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) {
                     return;
@@ -245,7 +243,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
@@ -281,7 +279,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("getSceneList", json);
@@ -297,7 +295,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
@@ -353,7 +351,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("getQJList", json);
@@ -368,7 +366,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
@@ -628,9 +626,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             bt_focus.setEnabled(true);
-                            if (responseInfo == null) return;
                             if (TextUtils.isEmpty(json)) return;
                             LogUtil.e("focusOperate", json);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -644,7 +641,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             bt_focus.setEnabled(true);
                             ToastUtils.showError(R.string.network_err);
                         }
@@ -654,10 +651,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelFocusOperate(userId + "", new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             bt_focus.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            if (responseInfo == null) return;
                             if (TextUtils.isEmpty(json)) return;
                             LogUtil.e("cancelFocusOperate", json);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -671,7 +667,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             bt_focus.setEnabled(true);
                             PopupWindowUtil.dismiss();
                             ToastUtils.showError(R.string.network_err);

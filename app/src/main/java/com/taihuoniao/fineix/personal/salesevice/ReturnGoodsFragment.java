@@ -8,9 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -116,10 +114,7 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
         HttpRequest.post(params,URL.SHOPPING_REFUND_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getRefundList(String.valueOf(curPage), size, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) {
-                    return;
-                }
+            public void onSuccess(String json) {
                 ChargeBackListBean refundListData = null;
                 try {
                     HttpResponse<ChargeBackListBean> refundList = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackListBean>>() {
@@ -147,7 +142,7 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 progressBar.setVisibility(View.GONE);
                 mDialog.dismiss();
                 ToastUtils.showError(App.getString(R.string.hint_load_net_error));

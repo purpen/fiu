@@ -12,9 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -131,9 +129,8 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                     HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.focusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             button.setEnabled(true);
-                            if (responseInfo == null) return;
                             if (TextUtils.isEmpty(json)) return;
                             LogUtil.e("focusOperate",json);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -146,7 +143,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             button.setEnabled(true);
                             ToastUtils.showError(R.string.network_err);
                         }
@@ -156,10 +153,9 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                     HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelFocusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             button.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            if (responseInfo==null) return;
                             if (TextUtils.isEmpty(json)) return;
                             LogUtil.e("cancelFocusOperate",json);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -172,7 +168,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             button.setEnabled(true);
                             PopupWindowUtil.dismiss();
                             ToastUtils.showError(R.string.network_err);

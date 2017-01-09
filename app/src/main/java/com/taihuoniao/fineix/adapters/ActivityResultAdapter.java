@@ -11,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -167,7 +165,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                 HttpRequest.post(params, URL.FOCUS_OPRATE_URL,new GlobalDataCallBack(){
 //                ClientDiscoverAPI.focusOperate(String.valueOf(item.user._id), new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         view.setEnabled(true);
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -186,7 +184,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
+                    public void onFailure(String error) {
                         view.setEnabled(true);
                         ToastUtils.showError(R.string.network_err);
                     }
@@ -196,7 +194,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                 HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.cancelFocusOperate(item.user._id + "", new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         view.setEnabled(true);
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -215,7 +213,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
+                    public void onFailure(String error) {
                         view.setEnabled(true);
                         ToastUtils.showError(R.string.network_err);
                     }

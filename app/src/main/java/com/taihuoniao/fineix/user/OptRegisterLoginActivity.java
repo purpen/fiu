@@ -13,9 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -230,8 +228,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) return;
+            public void onSuccess(String json) {
                 Log.e("<<<登录成功",json);
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
@@ -288,7 +285,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
                 btnWechat.setEnabled(true);
@@ -306,8 +303,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) return;
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("updateUserIdentity", json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -319,8 +315,8 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                if (TextUtils.isEmpty(s)) return;
+            public void onFailure(String error) {
+                if (TextUtils.isEmpty(error)) return;
                 LogUtil.e("网络异常", "改为非首次登录失败");
             }
         });

@@ -9,9 +9,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubscribeThemeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -78,7 +76,7 @@ public class SubscribeThemeActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             view.setEnabled(true);
                             if (TextUtils.isEmpty(json)) return;
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -96,9 +94,8 @@ public class SubscribeThemeActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             view.setEnabled(true);
-                            e.printStackTrace();
                             ToastUtils.showError(R.string.network_err);
                         }
                     });
@@ -114,7 +111,7 @@ public class SubscribeThemeActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             view.setEnabled(true);
                             if (TextUtils.isEmpty(json)) return;
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -132,9 +129,8 @@ public class SubscribeThemeActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             view.setEnabled(true);
-                            e.printStackTrace();
                             ToastUtils.showError(R.string.network_err);
                         }
                     });
@@ -169,7 +165,7 @@ public class SubscribeThemeActivity extends BaseActivity {
         HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<ThemeQJData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThemeQJData>>() {
                 });
@@ -182,8 +178,7 @@ public class SubscribeThemeActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                e.printStackTrace();
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });

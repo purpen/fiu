@@ -17,9 +17,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchBrandAdapter;
 import com.taihuoniao.fineix.adapters.SearchProductAdapter;
@@ -246,7 +244,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams,URL.ADD_PRODUCT, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler= ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<添加产品", json);
                 AddProductBean addProductBean = new AddProductBean();
@@ -273,7 +271,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -289,7 +287,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_BRANDS_SUBMIT, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler= ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 AddBrandBean addBrandBean = new AddBrandBean();
                 try {
@@ -317,7 +315,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -330,7 +328,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams , URL.SEARCH,new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler= ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<搜索品牌", json);
                 SearchBean searchBean = new SearchBean();
                 try {
@@ -355,7 +353,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.net_fail);
             }
         });
@@ -370,7 +368,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler=  ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<品牌下的产品",json);
                 ProductBean productBean = new ProductBean();
                 try {
@@ -396,7 +394,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.net_fail);
             }
         });

@@ -11,9 +11,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EvaluateAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -24,7 +22,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -110,7 +107,7 @@ public class PublishEvaluateActivity extends Activity {
                          HttpRequest.post(params,  URL.PRODUCT_AJAX_COMMENT, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.publishEvaluateNet(mRid, array, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                            public void onSuccess(String json) {
                                 Gson gson = new Gson();
                                 NetBean netBean = new NetBean();
                                 try {
@@ -133,7 +130,7 @@ public class PublishEvaluateActivity extends Activity {
                             }
 
                             @Override
-                            public void onFailure(HttpException e, String s) {
+                            public void onFailure(String error) {
                                 dialog.dismiss();
                             }
                         });
@@ -153,12 +150,12 @@ public class PublishEvaluateActivity extends Activity {
         HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
 
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderDetailBean>>() {});
                 if (response.isError()) {
-                    LogUtil.e(TAG, "---------> responseInfo: "  + responseInfo.reasonPhrase);
+//                    LogUtil.e(TAG, "---------> responseInfo: "  + responseInfo.reasonPhrase);
                     return;
                 }
                 shoppingDetailBean = response.getData();
@@ -221,7 +218,7 @@ public class PublishEvaluateActivity extends Activity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError("网络错误");
             }
         });

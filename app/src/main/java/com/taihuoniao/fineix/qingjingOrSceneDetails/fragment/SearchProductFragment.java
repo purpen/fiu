@@ -13,9 +13,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchProductsAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -134,7 +132,7 @@ public class SearchProductFragment extends SearchFragment implements AdapterView
         Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "7", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<搜索产品", json);
                 SearchBean searchBean = new SearchBean();
                 try {
@@ -168,7 +166,7 @@ public class SearchProductFragment extends SearchFragment implements AdapterView
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError("网络错误");

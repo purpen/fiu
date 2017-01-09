@@ -8,9 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -119,8 +117,7 @@ public class UserEditSignatureActivity extends BaseActivity{
         HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateSignatrueLabel(label,summary, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo==null) return;
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
 
@@ -138,8 +135,8 @@ public class UserEditSignatureActivity extends BaseActivity{
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                Util.makeToast(s);
+            public void onFailure(String error) {
+                Util.makeToast(error);
             }
         });
     }

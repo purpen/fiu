@@ -12,9 +12,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
@@ -242,11 +240,8 @@ public class EditUserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
-                if (responseInfo == null) {
-                    return;
-                }
                 LogUtil.e("result", json);
                 if (TextUtils.isEmpty(json)) {
                     return;
@@ -264,10 +259,10 @@ public class EditUserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                LogUtil.e(TAG, s);
+                if (TextUtils.isEmpty(error)) return;
+                LogUtil.e(TAG, error);
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -382,10 +377,7 @@ public class EditUserInfoActivity extends BaseActivity {
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserInfo(key,value, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo==null){
-                    return;
-                }
+            public void onSuccess(String json) {
 
                 if (TextUtils.isEmpty(json)){
                     return;
@@ -402,7 +394,7 @@ public class EditUserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });

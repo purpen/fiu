@@ -15,9 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -138,10 +136,7 @@ public class ChargeBackActivity extends BaseActivity {
         HttpRequest.post(params,URL.SHOPPING_CHECK_REFUND, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getChargeBackInfo(rId, skuId, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) {
-                    return;
-                }
+            public void onSuccess(String json) {
                 try {
                     HttpResponse<ChargeBackBean> chargeBackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackBean>>(){});
                     if (chargeBackBeanHttpResponse.isSuccess()) {
@@ -156,7 +151,7 @@ public class ChargeBackActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
 
             }
         });
@@ -170,10 +165,7 @@ public class ChargeBackActivity extends BaseActivity {
 //        ClientDiscoverAPI.getApplyProductRefund(rId, skuId, refund_type, refundReason, refundContent,
 //                price, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) {
-                    return;
-                }
+            public void onSuccess(String json) {
 
                 HttpResponse<ChargeBackResultBean> chargeBackResultBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackResultBean>>(){});
                 LogUtil.e(TAG, "--------> responseInfo: " + json);
@@ -187,7 +179,7 @@ public class ChargeBackActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
 
             }
         });

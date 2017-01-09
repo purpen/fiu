@@ -12,9 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SalePromotionDetailAdapter;
@@ -134,7 +132,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
                         HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                            public void onSuccess(String json) {
                                 if (TextUtils.isEmpty(json)) return;
                                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
@@ -144,8 +142,8 @@ public class SalePromotionDetailActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onFailure(HttpException e, String s) {
-                                LogUtil.e(TAG, "更新分享数量失败：" + s);
+                            public void onFailure(String error) {
+                                LogUtil.e(TAG, "更新分享数量失败：" + error);
                             }
                         });
                         ibtnShare.setText(String.valueOf(data.share_count + 1));
@@ -189,7 +187,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
@@ -204,7 +202,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }

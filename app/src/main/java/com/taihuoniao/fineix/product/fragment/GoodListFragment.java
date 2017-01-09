@@ -11,9 +11,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListFragmentAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -125,7 +123,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
 //                null, null,"9", new RequestCallBack<String>() {
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         dialog.dismiss();
                         pullRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
@@ -158,7 +156,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
                     }
 
                     @Override
-                    public void onFailure(HttpException error, String msg) {
+                    public void onFailure(String error) {
                         dialog.dismiss();
                         pullRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);

@@ -12,9 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -169,7 +167,7 @@ public class UserGuideActivity extends BaseActivity {
         HttpRequest.post(params, URL.GATEWAY_RECORD_FIU_USER_ACTIVE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.activeStatus(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 LogUtil.e(TAG,json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (!response.isSuccess()) {
@@ -178,7 +176,7 @@ public class UserGuideActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 LogUtil.e(TAG, "网络异常,请确保网络畅通");
             }
         });

@@ -20,9 +20,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
@@ -73,7 +71,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         Call httpHandler = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler= ClientDiscoverAPI.categoryList(1 + "", 1 + "", 1 + "", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
 //                dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
@@ -97,7 +95,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络错误");
             }

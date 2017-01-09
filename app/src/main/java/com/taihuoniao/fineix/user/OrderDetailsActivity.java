@@ -16,9 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -120,13 +118,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
         HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 try {
                     HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderDetailBean>>() {
                     });
                     if (response.isError()) {
-                        LogUtil.e(TAG, "---------> responseInfo: " + responseInfo.reasonPhrase);
                         return;
                     }
                     orderDetailBean = response.getData();
@@ -144,7 +141,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 mDialog.dismiss();
                 ToastUtils.showError("网络错误");
             }
@@ -532,12 +529,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    public void onSuccess(String json) {
                                         toShopOrderListActivity();
                                     }
 
                                     @Override
-                                    public void onFailure(HttpException e, String s) {
+                                    public void onFailure(String error) {
 
                                     }
                                 });
@@ -595,12 +592,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 HttpRequest.post(params,  URL.MY_CANCEL_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    public void onSuccess(String json) {
                                         toShopOrderListActivity();
                                     }
 
                                     @Override
-                                    public void onFailure(HttpException e, String s) {
+                                    public void onFailure(String error) {
                                     }
                                 });
                             }
@@ -650,7 +647,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         HttpRequest.post(params, URL.SHOPPING_ALERT_SEND_GOODS, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                            public void onSuccess(String json) {
                                 mDialog.dismiss();
                                 NetBean netBean = new NetBean();
                                 try {
@@ -669,7 +666,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             }
 
                             @Override
-                            public void onFailure(HttpException error, String msg) {
+                            public void onFailure(String error) {
                                 mDialog.dismiss();
                                 ToastUtils.showError("网络错误");
                             }
@@ -691,12 +688,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    public void onSuccess(String json) {
                                         toShopOrderListActivity();
                                     }
 
                                     @Override
-                                    public void onFailure(HttpException e, String s) {
+                                    public void onFailure(String error) {
 
                                     }
                                 });
@@ -746,12 +743,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 HttpRequest.post(params,  URL.SHOPPING_TAKE_DELIVERY, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    public void onSuccess(String json) {
                                         toShopOrderListActivity();
                                     }
 
                                     @Override
-                                    public void onFailure(HttpException e, String s) {
+                                    public void onFailure(String error) {
 
                                     }
                                 });
@@ -800,12 +797,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    public void onSuccess(String json) {
                                         toShopOrderListActivity();
                                     }
 
                                     @Override
-                                    public void onFailure(HttpException e, String s) {
+                                    public void onFailure(String error) {
 
                                     }
                                 });
@@ -861,12 +858,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    public void onSuccess(String json) {
                                         toShopOrderListActivity();
                                     }
 
                                     @Override
-                                    public void onFailure(HttpException e, String s) {
+                                    public void onFailure(String error) {
 
                                     }
                                 });
@@ -914,12 +911,12 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                    public void onSuccess(String json) {
                                         toShopOrderListActivity();
                                     }
 
                                     @Override
-                                    public void onFailure(HttpException e, String s) {
+                                    public void onFailure(String error) {
 
                                     }
                                 });

@@ -7,9 +7,7 @@ import android.view.View;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -115,7 +113,7 @@ public class MessageActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -142,7 +140,7 @@ public class MessageActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
 //                dialog.showErrorWithStatus("网络异常,请确认网络畅通");

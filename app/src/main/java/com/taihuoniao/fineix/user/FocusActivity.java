@@ -9,9 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FocusAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -108,7 +106,7 @@ public class FocusActivity extends BaseActivity {
         HttpRequest.post(params, URL.FOCUS_FAVORITE_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (!activity.isFinishing() && dialog != null) dialog.dismiss();
 
                 if (TextUtils.isEmpty(json)) return;
@@ -126,7 +124,7 @@ public class FocusActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }

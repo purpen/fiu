@@ -15,9 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
@@ -221,12 +219,11 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (bitmap_id != null) bitmap_id.recycle();
                 if (bitmap_card != null) bitmap_card.recycle();
                 setViewsEnable(true);
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
@@ -246,7 +243,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 setViewsEnable(true);
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError("网络异常，请确保网络畅通");

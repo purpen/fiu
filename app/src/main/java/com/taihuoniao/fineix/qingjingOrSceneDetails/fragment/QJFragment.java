@@ -9,9 +9,7 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.QJCateogryAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -123,7 +121,7 @@ public class QJFragment extends SearchFragment {
         sceneListHandler =  HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //     sceneListHandler =    ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<情景列表", json);
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
@@ -150,7 +148,7 @@ public class QJFragment extends SearchFragment {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();

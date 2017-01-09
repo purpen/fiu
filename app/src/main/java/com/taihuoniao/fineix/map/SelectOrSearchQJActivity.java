@@ -20,9 +20,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NearByQJAdapter;
 import com.taihuoniao.fineix.adapters.QJRecommonedAdapter;
@@ -150,11 +148,8 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 //TODO 关闭加载框
-                if (responseInfo == null) {
-                    return;
-                }
                 if (json == null) {
                     return;
                 }
@@ -173,9 +168,9 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 //TODO 关闭加载框
-                LogUtil.e(TAG, s);
+                LogUtil.e(TAG, error);
             }
         });
     }
@@ -193,11 +188,8 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 //TODO 关闭加载框
-                if (responseInfo == null) {
-                    return;
-                }
                 if (json == null) {
                     return;
                 }
@@ -216,9 +208,9 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 //TODO 关闭加载框
-                LogUtil.e(TAG, s);
+                LogUtil.e(TAG, error);
             }
         });
     }

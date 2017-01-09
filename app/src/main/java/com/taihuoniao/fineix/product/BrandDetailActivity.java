@@ -19,9 +19,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BrandProductAdapter;
@@ -138,7 +136,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(requestParams, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
 //        qjHandler = ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 Log.e("<<<品牌下的情景", json);
@@ -169,7 +167,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
@@ -183,7 +181,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
 //        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ProductBean productBean = new ProductBean();
@@ -215,7 +213,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
@@ -229,7 +227,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(requestParams, URL.BRAND_DETAIL, new GlobalDataCallBack(){
 //        brandHandler = ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 BrandDetailBean brandDetailBean = new BrandDetailBean();
                 try {
                     Gson gson = new Gson();
@@ -250,7 +248,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 ToastUtils.showError("网络错误");
             }
         });

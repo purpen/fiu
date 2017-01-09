@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -79,7 +77,7 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
         HttpRequest.post(params, URL.AUTH_CHECK_VERIFY_CODE , new GlobalDataCallBack(){
 //        ClientDiscoverAPI.submitCheckCode(phone, text, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
@@ -94,7 +92,7 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });

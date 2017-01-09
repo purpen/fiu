@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.base;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.http.HttpHandler;
@@ -42,10 +43,10 @@ public class HttpRequest {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case CALLBACK_SUCCESS:
-                    callBack.onSuccess(null, (String) msg.obj);
+                    callBack.onSuccess((String) msg.obj);
                     break;
                 case CALLBACK_FAILURE:
-                    callBack.onFailure(null,(String) msg.obj);
+                    callBack.onFailure((String) msg.obj);
                     break;
             }
         }
@@ -98,6 +99,12 @@ public class HttpRequest {
         List<NameValuePair> signedNameValuePairs = null;
         if (params != null) {
             signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
+            for(int i = signedNameValuePairs.size() - 1; i >= 0; i--) {
+                NameValuePair nameValuePair = signedNameValuePairs.get(i);
+                if (TextUtils.isEmpty(nameValuePair.getValue())) {
+                    signedNameValuePairs.remove(nameValuePair);
+                }
+            }
         }
         return signedNameValuePairs;
     }

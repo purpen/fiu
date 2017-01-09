@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -169,8 +167,7 @@ public class SystemSettingsActivity extends BaseActivity {
         HttpRequest.post(params,  URL.LOGOUT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.logout(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) return;
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {//   退出成功跳转首页
@@ -186,8 +183,8 @@ public class SystemSettingsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                LogUtil.e(TAG, s);
+            public void onFailure(String error) {
+                LogUtil.e(TAG, error);
             }
         });
     }

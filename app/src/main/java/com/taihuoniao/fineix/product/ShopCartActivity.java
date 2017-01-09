@@ -13,9 +13,7 @@ import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShopCartAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -302,12 +300,12 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     HttpRequest.post(params,  URL.SHOPPINGN_EDIT_CART,  new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.shopcartAddSubtractNet(addSubtractArray, new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             DataPaser.shopCartParser(mHandler);
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
 
                         }
                     });
@@ -393,7 +391,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     HttpRequest.post(params,  URL.SHOPPING_REMOVE_CART, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.deletShopCartNet(array, new RequestCallBack<String>() {
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             ToastUtils.showSuccess("删除成功");
                             if (mAllCheck.isChecked()) {
                                 mAllCheck.setChecked(false);
@@ -410,7 +408,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                         }
                     });
 

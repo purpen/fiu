@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -142,7 +140,7 @@ public class DecadeSelectFragment extends MyBaseFragment {
                 HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.updateAgeAssets(age_group, assets, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         v.setEnabled(true);
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse<User> response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -155,9 +153,8 @@ public class DecadeSelectFragment extends MyBaseFragment {
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
+                    public void onFailure(String error) {
                         v.setEnabled(true);
-                        e.printStackTrace();
                         ToastUtils.showError(R.string.network_err);
                     }
                 });

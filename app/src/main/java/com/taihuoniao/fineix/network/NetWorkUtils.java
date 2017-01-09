@@ -13,9 +13,7 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -142,11 +140,8 @@ public class NetWorkUtils {
         HttpRequest.post(params,URL.FETCH_LATEST_VERSION, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateToLatestVersion(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 try {
-                    if (responseInfo == null) {
-                        return;
-                    }
                     UpdateInfoBean updateVersionInfo = JsonUtil.fromJson(json, new TypeToken<HttpResponse<UpdateInfoBean>>() {
                     });
                     if (getAppVersionName(mContext).equals(updateVersionInfo.getVersion())) {
@@ -162,7 +157,7 @@ public class NetWorkUtils {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
 
             }
         });
@@ -177,11 +172,8 @@ public class NetWorkUtils {
         HttpRequest.post(params, URL.CHECK_VERSION_INFO, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.checkVersionInfo(appVersionName, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 try {
-                    if (responseInfo == null) {
-                        return;
-                    }
                     CheckVersionBean
                             checkVersionBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<CheckVersionBean>>() {});
                     if (checkVersionBean != null) {
@@ -194,7 +186,7 @@ public class NetWorkUtils {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
 
             }
         });

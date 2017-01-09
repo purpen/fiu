@@ -14,9 +14,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -254,7 +252,7 @@ public class ArticalDetailActivity extends BaseActivity {
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
 
@@ -301,7 +299,7 @@ public class ArticalDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -328,7 +326,7 @@ public class ArticalDetailActivity extends BaseActivity {
                         HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
                             @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                            public void onSuccess(String json) {
                                 if (TextUtils.isEmpty(json)) return;
                                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
@@ -338,8 +336,8 @@ public class ArticalDetailActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onFailure(HttpException e, String s) {
-                                LogUtil.e(TAG, "更新分享数量失败：" + s);
+                            public void onFailure(String error) {
+                                LogUtil.e(TAG, "更新分享数量失败：" + error);
                             }
                         });
                         ibtnShare.setText(String.valueOf(data.share_count + 1));
@@ -378,7 +376,7 @@ public class ArticalDetailActivity extends BaseActivity {
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
@@ -392,7 +390,7 @@ public class ArticalDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });

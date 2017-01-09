@@ -9,9 +9,7 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -99,7 +97,7 @@ public class NoticeActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<提醒", json);
                 dialog.dismiss();
                 NoticeBean noticeBean = new NoticeBean();
@@ -125,7 +123,7 @@ public class NoticeActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

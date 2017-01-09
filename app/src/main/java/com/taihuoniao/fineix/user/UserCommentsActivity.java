@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UserCommentsAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -99,14 +97,13 @@ public class UserCommentsActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                     }
                 }, DataConstants.DIALOG_DELAY);
-                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e(TAG, json);
                 commentsBean = JsonUtil.fromJson(json, CommentsBean.class);
@@ -121,7 +118,7 @@ public class UserCommentsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
 //                dialog.showErrorWithStatus("网络异常，请确认网络畅通");

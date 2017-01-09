@@ -21,9 +21,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NearByQJAdapter;
@@ -159,11 +157,8 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 waittingDialog.dismiss();
-                if (responseInfo == null) {
-                    return;
-                }
                 if (json == null) {
                     return;
                 }
@@ -182,9 +177,9 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 waittingDialog.dismiss();
-                LogUtil.e(TAG, s);
+                LogUtil.e(TAG, error);
             }
         });
     }

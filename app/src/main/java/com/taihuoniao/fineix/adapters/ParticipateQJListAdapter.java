@@ -11,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -177,7 +175,7 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             ibtn.setEnabled(true);
                             if (TextUtils.isEmpty(json)) return;
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -190,11 +188,10 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             ibtn.setEnabled(true);
-                            e.printStackTrace();
                             ToastUtils.showError(R.string.network_err);
-                            LogUtil.e(TAG, s);
+                            LogUtil.e(TAG, error);
                         }
                     });
                 } else {
@@ -207,7 +204,7 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
                         }
 
                         @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                        public void onSuccess(String json) {
                             ibtn.setEnabled(true);
                             if (TextUtils.isEmpty(json)) return;
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -220,11 +217,10 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
                         }
 
                         @Override
-                        public void onFailure(HttpException e, String s) {
+                        public void onFailure(String error) {
                             ibtn.setEnabled(true);
-                            e.printStackTrace();
                             ToastUtils.showError(R.string.network_err);
-                            LogUtil.e(TAG, s);
+                            LogUtil.e(TAG, error);
                         }
                     });
                 }

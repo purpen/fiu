@@ -12,9 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -120,8 +118,7 @@ public class RankTagActivity extends BaseActivity{
         HttpRequest.post(params,URL.MY_FETCH_TALENT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo==null) return;
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("getAuthStatus",json);
                 HttpResponse<AuthData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AuthData>>() {});
@@ -134,7 +131,7 @@ public class RankTagActivity extends BaseActivity{
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 Util.makeToast("网络异常，请保持网络畅通");
             }
         });
@@ -190,8 +187,7 @@ public class RankTagActivity extends BaseActivity{
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserInfo(key, value, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo==null) return;
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()){
@@ -202,8 +198,8 @@ public class RankTagActivity extends BaseActivity{
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                LogUtil.e(TAG,s);
+            public void onFailure(String error) {
+                LogUtil.e(TAG, error);
             }
         });
     }

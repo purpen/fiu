@@ -25,9 +25,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.FirstProductAdapter;
@@ -226,7 +224,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
        Call httpHandler=  HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 CartBean cartBean = new CartBean();
                 try {
                     Gson gson = new Gson();
@@ -248,7 +246,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 cartNumber.setVisibility(View.GONE);
             }
         });
@@ -262,7 +260,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<好货专题列表", json);
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
@@ -288,7 +286,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
@@ -304,7 +302,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
        Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.firstProducts(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<最新好货推荐", json);
 //                WriteJsonToSD.writeToSD("json",json);
                 FirstProductBean firstProductBean = new FirstProductBean();
@@ -324,7 +322,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
 
             }
         });
@@ -337,7 +335,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         Call  httpHandler  = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "1", null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<分类列表", json);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
@@ -360,7 +358,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 gridView.setVisibility(View.GONE);
             }
         });

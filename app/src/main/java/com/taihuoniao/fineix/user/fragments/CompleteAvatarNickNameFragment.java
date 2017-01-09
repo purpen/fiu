@@ -19,9 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -173,7 +171,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
 
 //                ClientDiscoverAPI.updateNickNameSex(nickName, gender, new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
                         });
@@ -195,8 +193,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
-                        e.printStackTrace();
+                    public void onFailure(String error) {
                         ToastUtils.showError(R.string.network_err);
                     }
                 });

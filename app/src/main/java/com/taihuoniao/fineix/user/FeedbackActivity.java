@@ -4,9 +4,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -52,10 +50,7 @@ public class FeedbackActivity extends BaseActivity {
                 HttpRequest.post(params,  URL.SUGGESTION_URL, new GlobalDataCallBack(){
 //                 ClientDiscoverAPI.commitSuggestion(et_suggestion.getText().toString(), et_contact.getText().toString(), new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                        if (responseInfo == null) {
-                            return;
-                        }
+                    public void onSuccess(String json) {
 
                         if (TextUtils.isEmpty(json)) {
                             return;
@@ -76,8 +71,8 @@ public class FeedbackActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
-                        Util.makeToast(s);
+                    public void onFailure(String error) {
+                        Util.makeToast(error);
                     }
                 });
                 break;

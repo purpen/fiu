@@ -10,9 +10,7 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -95,7 +93,7 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
         Call httpHandler = HttpRequest.post(params,  URL.SCENE_CONTEXT_GETLIST, new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler= ClientDiscoverAPI.envirList(page + "", 8 + "", 1 + "", cid, null, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
@@ -125,7 +123,7 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);

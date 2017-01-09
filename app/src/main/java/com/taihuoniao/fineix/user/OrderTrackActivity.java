@@ -8,9 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -80,12 +78,9 @@ public class OrderTrackActivity extends BaseActivity {
         HttpRequest.post(params,URL.SHOPPING_TRACKING, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.shoppingTracking(s1, s2, s3, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (mDialog != null && mDialog.isShowing()) {
                     mDialog.dismiss();
-                }
-                if (responseInfo == null) {
-                    return;
                 }
                 HttpResponse<OrderTrackBean> orderTrackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderTrackBean>>() {
                 });
@@ -109,7 +104,7 @@ public class OrderTrackActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
 
             }
         });

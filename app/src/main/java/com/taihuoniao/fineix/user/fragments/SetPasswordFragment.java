@@ -15,9 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -117,7 +115,7 @@ public class SetPasswordFragment extends MyBaseFragment {
         HttpRequest.post(params, URL.AUTH_REGISTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.registerUser(registerInfo.mobile, password, registerInfo.verify_code, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<LoginInfo> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<LoginInfo>>() {
                 });
@@ -150,7 +148,7 @@ public class SetPasswordFragment extends MyBaseFragment {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -162,8 +160,7 @@ public class SetPasswordFragment extends MyBaseFragment {
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
-                if (responseInfo == null) return;
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("updateUserIdentity", json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -175,8 +172,8 @@ public class SetPasswordFragment extends MyBaseFragment {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                if (TextUtils.isEmpty(s)) return;
+            public void onFailure(String error) {
+                if (TextUtils.isEmpty(error)) return;
                 LogUtil.e("网络异常", "改为非首次登录失败");
             }
         });

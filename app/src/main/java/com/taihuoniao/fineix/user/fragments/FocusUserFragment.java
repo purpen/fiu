@@ -14,9 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FocusInterestedUserViewPagerAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -92,7 +90,7 @@ public class FocusUserFragment extends MyBaseFragment {
         HttpRequest.post(params, URL.USER_FIND_USER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.focusInterestUser(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<InterestUserData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<InterestUserData>>() {
                 });
@@ -106,8 +104,7 @@ public class FocusUserFragment extends MyBaseFragment {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                e.printStackTrace();
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -217,7 +214,7 @@ public class FocusUserFragment extends MyBaseFragment {
                 HttpRequest.post(params,URL.FOLLOW_BATCH_FOLLOW, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.focusUsers(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()) {
@@ -228,8 +225,7 @@ public class FocusUserFragment extends MyBaseFragment {
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
-                        e.printStackTrace();
+                    public void onFailure(String error) {
                         ToastUtils.showError(R.string.network_err);
                     }
                 });

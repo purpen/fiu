@@ -33,10 +33,8 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -173,7 +171,7 @@ public class QJDetailActivity extends BaseActivity {
         detailHandler = HttpRequest.post(requestParams, URL.SCENE_DETAILS, new GlobalDataCallBack() {
 //        detailHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<情景详情", json);
                 qjDetailBean = new QJDetailBean();
@@ -193,9 +191,9 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
-                Log.e("<<<", "网络错误=" + msg);
+                Log.e("<<<", "网络错误=" + error);
                 ToastUtils.showError(R.string.net_fail);
             }
         });
@@ -590,7 +588,7 @@ public class QJDetailActivity extends BaseActivity {
         cancelShoucangHandler = HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -610,7 +608,7 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -625,7 +623,7 @@ public class QJDetailActivity extends BaseActivity {
         shoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
 //         = ClientDiscoverAPI.shoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -645,7 +643,7 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -660,7 +658,7 @@ public class QJDetailActivity extends BaseActivity {
         detailHandler = HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
 //        detailHandler = ClientDiscoverAPI.deleteScene(qjDetailBean.getData().get_id(), new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -680,7 +678,7 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -695,7 +693,7 @@ public class QJDetailActivity extends BaseActivity {
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -718,7 +716,7 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
@@ -734,7 +732,7 @@ public class QJDetailActivity extends BaseActivity {
         loveHandler =  HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
 //        loveHandler = ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
@@ -757,7 +755,7 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
@@ -773,7 +771,7 @@ public class QJDetailActivity extends BaseActivity {
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //        followHandler = ClientDiscoverAPI.focusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<关注用户", json);
                 NetBean netBean = new NetBean();
@@ -797,7 +795,7 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -842,7 +840,7 @@ public class QJDetailActivity extends BaseActivity {
         cancelShoucangHandler = HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelFocusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -865,7 +863,7 @@ public class QJDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

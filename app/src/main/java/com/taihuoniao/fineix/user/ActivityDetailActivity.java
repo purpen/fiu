@@ -19,9 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
@@ -220,7 +218,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<ActivityPrizeData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ActivityPrizeData>>() {
@@ -234,7 +232,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
@@ -251,7 +249,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<DataParticipateQJ> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataParticipateQJ>>() {
                 });
@@ -273,8 +271,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
-                e.printStackTrace();
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });

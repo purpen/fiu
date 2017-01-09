@@ -12,9 +12,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -178,7 +176,7 @@ public class SubjectActivity extends BaseActivity {
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
 
@@ -213,7 +211,7 @@ public class SubjectActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -280,7 +278,7 @@ public class SubjectActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         v.setEnabled(true);
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse<SupportData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SupportData>>() {
@@ -296,7 +294,7 @@ public class SubjectActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
+                    public void onFailure(String error) {
                         v.setEnabled(true);
                         ToastUtils.showError("网络异常，请确保网络畅通");
                     }
@@ -313,7 +311,7 @@ public class SubjectActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                    public void onSuccess(String json) {
                         v.setEnabled(true);
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse<SupportData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SupportData>>() {
@@ -329,7 +327,7 @@ public class SubjectActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(HttpException e, String s) {
+                    public void onFailure(String error) {
                         v.setEnabled(true);
                         ToastUtils.showError("网络异常，请确保网络畅通");
                     }
@@ -345,7 +343,7 @@ public class SubjectActivity extends BaseActivity {
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(url, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
                 });
@@ -359,7 +357,7 @@ public class SubjectActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 ToastUtils.showError("网络异常，请确认网络畅通");
             }
         });

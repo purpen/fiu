@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -139,7 +137,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e("getSceneList", json);
@@ -155,7 +153,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }

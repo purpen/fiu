@@ -11,9 +11,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -109,7 +107,7 @@ public class AddAddressActivity extends BaseActivity {
                                 }
 
                                 @Override
-                                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                                public void onSuccess(String json) {
                                     NetBean netBean = new NetBean();
                                     try {
                                         Gson gson = new Gson();
@@ -131,7 +129,7 @@ public class AddAddressActivity extends BaseActivity {
                                 }
 
                                 @Override
-                                public void onFailure(HttpException error, String msg) {
+                                public void onFailure(String error) {
                                     dialog.dismiss();
                                     ToastUtils.showError(R.string.network_err);
                                 }
@@ -355,7 +353,7 @@ public class AddAddressActivity extends BaseActivity {
         HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.commitAddressNet(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 LogUtil.e(TAG, json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
@@ -379,7 +377,7 @@ public class AddAddressActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }

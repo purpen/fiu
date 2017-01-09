@@ -13,10 +13,7 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SelectAddressListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -179,7 +176,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -200,7 +197,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.network_err);
@@ -214,7 +211,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         HttpRequest.post(params, URL.URLSTRING_ADDRESS_LISTS, new GlobalDataCallBack() {
 //        ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 HttpResponse<AddressListBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AddressListBean>>() {
                 });
                 dialog.dismiss();
@@ -249,7 +246,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.network_err);

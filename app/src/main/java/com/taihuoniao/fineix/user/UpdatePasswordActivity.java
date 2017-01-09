@@ -5,9 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -85,10 +83,9 @@ public class UpdatePasswordActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 v.setEnabled(true);
                 dialog.dismiss();
-                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
@@ -99,10 +96,10 @@ public class UpdatePasswordActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(HttpException e, String s) {
+            public void onFailure(String error) {
                 v.setEnabled(true);
                 dialog.dismiss();
-               if (!TextUtils.isEmpty(s)) Util.makeToast("请先检查网络连接");
+               if (!TextUtils.isEmpty(error)) Util.makeToast("请先检查网络连接");
 
             }
         });

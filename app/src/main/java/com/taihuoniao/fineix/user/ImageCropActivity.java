@@ -8,9 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -132,12 +130,9 @@ public class ImageCropActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                public void onSuccess(String json) {
                     setViewEnable(true);
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
-                    if (responseInfo == null) {
-                        return;
-                    }
                     if (TextUtils.isEmpty(json)) {
                         return;
                     }
@@ -154,7 +149,7 @@ public class ImageCropActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onFailure(HttpException e, String s) {
+                public void onFailure(String error) {
                     setViewEnable(true);
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     ToastUtils.showError("网络异常，请确认网络畅通");
@@ -190,12 +185,9 @@ public class ImageCropActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+                public void onSuccess(String json) {
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     setViewEnable(true);
-                    if (responseInfo==null){
-                        return;
-                    }
                     if (TextUtils.isEmpty(json)){
                         return;
                     }
@@ -213,7 +205,7 @@ public class ImageCropActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onFailure(HttpException e, String s) {
+                public void onFailure(String error) {
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     setViewEnable(true);
                     ToastUtils.showError(R.string.network_err);

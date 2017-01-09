@@ -17,9 +17,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -205,7 +203,7 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         Call httpHandler = HttpRequest.post(params, URL.URLSTRING_PROVINCE_CITIES, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 List<ProvinceBean> list = new ArrayList<>();
                 try {
@@ -239,7 +237,7 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
@@ -371,7 +369,7 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
 Call httpHandler = HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean._id, nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, countyId, townId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -394,7 +392,7 @@ Call httpHandler = HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new Globa
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }

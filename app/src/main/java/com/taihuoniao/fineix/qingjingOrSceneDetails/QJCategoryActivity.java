@@ -15,10 +15,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -119,7 +117,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        userCenterHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 dialog.dismiss();
                 Log.e("<<<个人信息", json);
                 UserInfo userInfo = new UserInfo();
@@ -146,7 +144,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 isSubs = 0;
                 ToastUtils.showError(R.string.net_fail);
@@ -192,7 +190,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         cancelSubsHandler = HttpRequest.post(requestParams, URL.MY_REMOVE_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //        cancelSubsHandler = ClientDiscoverAPI.cancelSubscribe(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<取消订阅", json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
@@ -213,7 +211,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -228,7 +226,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         subsHandler = HttpRequest.post(requestParams, URL.MY_ADD_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //        subsHandler = ClientDiscoverAPI.subscribe(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<订阅", json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
@@ -249,7 +247,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

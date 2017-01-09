@@ -24,10 +24,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CommentsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -270,7 +268,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         delelteHandler = HttpRequest.post(params, URL.DELETE_COMMENT, new GlobalDataCallBack(){
 //        delelteHandler = ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
 //                Message msg = handler.obtainMessage();
 //                msg.what = DataConstants.DELETE_COMMENT;
                 NetBean netBean = new NetBean();
@@ -295,7 +293,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络错误");
             }
@@ -310,7 +308,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         sendHandler = HttpRequest.post(params, URL.SEND_COMMENT, new GlobalDataCallBack(){
 //        sendHandler = ClientDiscoverAPI.sendComment(target_i, conten, typ, target_user_id, is_r, reply_i, reply_user_i, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -341,7 +339,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
 
             }
         });
@@ -355,7 +353,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(params,URL.COMMENTS_LIST, new GlobalDataCallBack(){
 //        commentsHander = ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
-            public void onSuccess(ResponseInfo<String> responseInfo, String json) {
+            public void onSuccess(String json) {
                 Log.e("<<<评论列表", json);
                 CommentsBean netComments = new CommentsBean();
                 try {
@@ -389,7 +387,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
+            public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络错误");
             }
