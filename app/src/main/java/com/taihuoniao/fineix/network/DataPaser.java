@@ -253,6 +253,8 @@ public class DataPaser {
                         shopCartItem.setType(shopCartArr.optString("type"));
                         shopCartItem.setSku_mode(shopCartArr.optString("sku_mode"));
                         shopCartItem.setTitle(shopCartArr.optString("title"));
+                        shopCartItem.setReferral_code(shopCartArr.optString("referral_code"));
+                        shopCartItem.setStorage_id(shopCartArr.optString("storage_id"));
                         if (TextUtils.equals("null", shopCartItem.vop_id) || TextUtils.isEmpty(shopCartItem.vop_id)) {
                             itemList.add(shopCartItem);
                         } else {

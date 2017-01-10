@@ -17,6 +17,26 @@ public class ShopCartItem implements Serializable{
     private String product_id;
     public String vop_id;
     public boolean isFirstJD;
+    private String referral_code;
+
+    public String getStorage_id() {
+        return storage_id;
+    }
+
+    public void setStorage_id(String storage_id) {
+        this.storage_id = storage_id;
+    }
+
+    public String getReferral_code() {
+        return referral_code;
+    }
+
+    public void setReferral_code(String referral_code) {
+        this.referral_code = referral_code;
+    }
+
+    private String storage_id;
+
     @Override
     public String toString() {
         return "ShopCartItem{" +

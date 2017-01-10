@@ -28,6 +28,8 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -47,6 +49,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
     CustomHeadView customHead;
     @Bind(R.id.pull_lv)
     PullToRefreshListView pullLv;
+
     private WaittingDialog mDialog = null;
     private List<ShopCart> mList = new ArrayList<>();
     private List<Map<String, Object>> totalList = new ArrayList<>();
@@ -288,7 +291,13 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     StringBuilder addSubtractBuilder = new StringBuilder();
                     addSubtractBuilder.append("[");
                     for (int i = 0; i < ShopCartActivity.this.hashMap.size(); i++) {
-                        addSubtractBuilder.append("{\"target_id\":").append(totalList.get(i).get("keyTargetId")).append(",\"n\":").append(ShopCartActivity.this.hashMap.get(i)).append(",\"type\":").append(1).append("},");
+                        addSubtractBuilder.append("{\"target_id\":")
+                                .append(totalList.get(i).get("keyTargetId"))
+                                .append(",\"n\":").append(ShopCartActivity.this.hashMap.get(i))
+                                .append(",\"type\":").append(1)
+                                .append(",\"storage_id\":").append("")
+                                .append(",\"referral_code\":").append("")
+                                .append("},");
                     }
                     addSubtractBuilder.append("]");
                     addSubtractBuilder.replace(addSubtractBuilder.length() - 2, addSubtractBuilder.length() - 1, "");
@@ -369,10 +378,12 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                 for (int i = 0; i < totalList.size(); i++) {
                     if ((boolean) totalList.get(i).get("status")) {
                         list_delete.add(totalList.get(i));
-                        builder.append("{\"target_id\":")
-                                .append(totalList.get(i).get("keyTargetId"))
+                        builder.append("{\"target_id\":").append(totalList.get(i).get("keyTargetId"))
                                 .append(",\"n\":").append(totalList.get(i).get("keyCount"))
-                                .append(",\"type\":").append(totalList.get(i).get("keyType")).append("},");
+                                .append(",\"type\":").append(totalList.get(i).get("keyType"))
+                                .append(",\"referral_code\":").append("\"" + SPUtil.read("referral_code") + "\"")
+                                .append(",\"storage_id\":").append("\"店铺ID\"")
+                                .append("},");
                     }
                 }
                 builder.append("]");

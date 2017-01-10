@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.network;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.baidu.mapapi.model.LatLng;
 import com.lidroid.xutils.exception.HttpException;
@@ -1532,6 +1533,8 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("n", n);
+        params.addQueryStringParameter("storage_id", "店铺ID");
+        params.addQueryStringParameter("referral_code", SPUtil.read("referral_code" ));
         return params;
     }
 
@@ -1549,6 +1552,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("n", n);
+        params.addQueryStringParameter("storage_id", "店铺ID");
         params.addQueryStringParameter("referral_code", SPUtil.read("referral_code" ));
         return params;
     }

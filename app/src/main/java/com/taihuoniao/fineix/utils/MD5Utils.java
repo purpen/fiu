@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.utils;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.lidroid.xutils.HttpUtils;
@@ -9,6 +10,7 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ConstantCfg;
 
@@ -52,8 +54,7 @@ public class MD5Utils {
         params.addQueryStringParameter("client_id", "1415289600");
         params.addQueryStringParameter("uuid", MainApplication.uuid);
         params.addQueryStringParameter("app_type", "2");
-        params.addQueryStringParameter("channel", Util.getAppMetaData(MainApplication.getContext().getResources().getString(R.string.channel_name)));
-//        ToastUtils.showError(Util.getAppMetaData(MainApplication.getContext().getResources().getString(R.string.channel_name)));
+        params.addQueryStringParameter("channel", Util.getAppMetaData(App.getString(R.string.channel_name)));
         params.addQueryStringParameter("time", System.currentTimeMillis() / 1000 + "");
         List<NameValuePair> list = params.getQueryStringParams();
         Collections.sort(list, new Comparator<NameValuePair>() {
@@ -68,7 +69,8 @@ public class MD5Utils {
             String name = nameValuePair.getName();
             String value = nameValuePair.getValue();
             if (name.equals("tmp") || name.equals("id_card_a_tmp") || name.equals("business_card_tmp")
-                    || name.equals("link") || name.equals("cover_url") || name.equals("banners_url") || value == null) {
+                    || name.equals("link") || name.equals("cover_url") || name.equals("banners_url") || value == null
+                    || TextUtils.isEmpty(value)) {
                 continue;
             }
             if (firstIn) {

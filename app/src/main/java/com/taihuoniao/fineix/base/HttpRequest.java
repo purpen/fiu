@@ -30,28 +30,6 @@ import okhttp3.Response;
  */
 
 public class HttpRequest {
-    private static final int CALLBACK_SUCCESS = 200;
-    private static final int CALLBACK_FAILURE = 201;
-
-    private static class BaseHandler extends Handler {
-        private GlobalDataCallBack callBack;
-
-        private BaseHandler(Context context, GlobalDataCallBack callBack) {
-            this.callBack = callBack;
-        }
-
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case CALLBACK_SUCCESS:
-                    callBack.onSuccess((String) msg.obj);
-                    break;
-                case CALLBACK_FAILURE:
-                    callBack.onFailure((String) msg.obj);
-                    break;
-            }
-        }
-    }
-
     public static Call post(RequestParams params, String requestUrl){
         List<NameValuePair> nameValuePairs = getSignedList(params);
         LogUtil.e("请求接口为" + requestUrl + "\\n" + "请求参数为" + nameValuePairs.toString());
@@ -80,14 +58,14 @@ public class HttpRequest {
             @Override
             public void onFailure(Call call, IOException e) {
                 Message msg = Message.obtain();
-                msg.what = CALLBACK_FAILURE;
+                msg.what = BaseHandler.CALLBACK_FAILURE;
                 handler.sendMessage(msg);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Message msg = Message.obtain();
-                msg.what = CALLBACK_SUCCESS;
+                msg.what = BaseHandler.CALLBACK_SUCCESS;
                 msg.obj = response.body().string();
                 LogUtil.e("请求接口为" + requestUrl + "\\n" + "返回数据为" + msg.obj);
                 handler.sendMessage(msg);

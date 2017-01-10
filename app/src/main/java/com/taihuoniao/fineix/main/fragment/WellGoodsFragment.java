@@ -92,8 +92,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     PullToRefreshListView pullRefreshView;
     @Bind(R.id.to_top_img)
     RoundedImageView toTopImg;
-    @Bind(R.id.progress_bar)
-    ProgressBar progressBar;
+//    @Bind(R.id.progress_bar)
+//    ProgressBar progressBar;
 
     private ListView listView;
     private CustomGridViewForScrollView gridView;//商品分类
@@ -263,7 +263,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             public void onSuccess(String json) {
                 Log.e("<<<好货专题列表", json);
                 dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
+//                progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
@@ -289,7 +289,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             public void onFailure(String error) {
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
+//                progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
             }
         });
@@ -412,7 +412,10 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             if (firstVisibleItem != pullRefreshView.lastSavedFirstVisibleItem && pullRefreshView.lastTotalItem != totalItemCount) {
                 pullRefreshView.lastSavedFirstVisibleItem = firstVisibleItem;
                 pullRefreshView.lastTotalItem = totalItemCount;
-                progressBar.setVisibility(View.VISIBLE);
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+//                progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
                 //产品列表
                 subjectList();

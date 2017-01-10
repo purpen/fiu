@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
 import com.taihuoniao.fineix.user.ShopOrderListActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
@@ -606,7 +607,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             }
             mCount.setText("× " + list.get(position).getOrderItem().get(i).getQuantity());
             mMoney.setText("¥" + list.get(position).getOrderItem().get(i).getSale_price());
-            bitmapUtils_listview.display(mImageView, list.get(position).getOrderItem().get(i).getCover_url());
+            GlideUtils.displayImage(list.get(position).getOrderItem().get(i).getCover_url(), mImageView);
+//            bitmapUtils_listview.display(mImageView, list.get(position).getOrderItem().get(i).getCover_url());
             mHolder.mItem.addView(mView);
         }
         mHolder.mItem.setOnClickListener(new View.OnClickListener() {

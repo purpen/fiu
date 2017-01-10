@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -44,10 +45,11 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
     GlobalTitleLayout titleLayout;
     @Bind(R.id.pull_refresh_view)
     PullToRefreshListView pullRefreshView;
-    @Bind(R.id.progress_bar)
-    ProgressBar progressBar;
+//    @Bind(R.id.progress_bar)
+//    ProgressBar progressBar;
     private ListView listView;
     private FindQJSceneListAdapter findQJSceneListAdapter;
+    private WaittingDialog dialog;//耗时操作对话框
 
     public FindActivity() {
         super(R.layout.activity_find);
@@ -67,6 +69,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
 
     @Override
     protected void initList() {
+        dialog = new WaittingDialog(this);
         page = getIntent().getIntExtra("page", 1);
         if (getIntent().hasExtra(SubsQJActivity.class.getSimpleName())) {
             pos = getIntent().getIntExtra(SubsQJActivity.class.getSimpleName(), 0);
@@ -82,7 +85,10 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
 
     @Override
     public void onLastItemVisible() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
+//        progressBar.setVisibility(View.VISIBLE);
         page++;
         lastList();
     }
@@ -95,7 +101,8 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
         } else if (getIntent().hasExtra(FindFragment.class.getSimpleName())) {
             getSceneList(page, 10 + "", null, null, 0 + "", null, null, null, null);
         } else {
-            progressBar.setVisibility(View.GONE);
+            dialog.dismiss();
+//            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -109,7 +116,8 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
             @Override
             public void onSuccess(String json) {
                 pullRefreshView.onRefreshComplete();
-                progressBar.setVisibility(View.GONE);
+                dialog.dismiss();
+//                progressBar.setVisibility(View.GONE);
                 Log.e("<<<情景列表", json);
                 SceneList sceneL = new SceneList();
                 try {
@@ -131,7 +139,8 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
 
             @Override
             public void onFailure(String error) {
-                progressBar.setVisibility(View.GONE);
+                dialog.dismiss();
+//                progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
                 ToastUtils.showError("网络错误");
             }
