@@ -10,7 +10,6 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -89,7 +89,7 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
 
     //语境列表
     private void envirList() {
-        RequestParams params = ClientDiscoverAPI.getenvirListRequestParams(page + "", 8 + "", 1 + "", cid, null);
+        HashMap<String, String> params = ClientDiscoverAPI.getenvirListRequestParams(page + "", 8 + "", 1 + "", cid, null);
         Call httpHandler = HttpRequest.post(params,  URL.SCENE_CONTEXT_GETLIST, new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler= ClientDiscoverAPI.envirList(page + "", 8 + "", 1 + "", cid, null, new RequestCallBack<String>() {
             @Override

@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -146,7 +147,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        RequestParams params = ClientDiscoverAPI.getusedLabelListRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getusedLabelListRequestParams();
         Call httpHandler = HttpRequest.post(params, URL.USED_LABEL_LIST, new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler =  ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
@@ -197,7 +198,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void searchExpand(String str) {
-        RequestParams requestParams = ClientDiscoverAPI.getsearchExpandRequestParams(str, 20 + "");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsearchExpandRequestParams(str, 20 + "");
        Call httpHandler =  HttpRequest.post(requestParams, URL.SEARCH_EXPANDED, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler=  ClientDiscoverAPI.searchExpand(str, 20 + "", new RequestCallBack<String>() {
             @Override

@@ -8,14 +8,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AuthData;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -23,6 +22,8 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -63,7 +64,7 @@ public class CertificateStatusActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
-        RequestParams params = ClientDiscoverAPI.getgetAuthStatusRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getgetAuthStatusRequestParams();
         HttpRequest.post(params,URL.MY_FETCH_TALENT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
             @Override

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -24,6 +23,8 @@ import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -136,7 +137,7 @@ public class DecadeSelectFragment extends MyBaseFragment {
         switch (v.getId()) {
             case R.id.btn_next:
                 v.setEnabled(false);
-                RequestParams params =ClientDiscoverAPI. getupdateAgeAssetsRequestParams(age_group, assets);
+                HashMap<String, String> params =ClientDiscoverAPI. getupdateAgeAssetsRequestParams(age_group, assets);
                 HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.updateAgeAssets(age_group, assets, new RequestCallBack<String>() {
                     @Override

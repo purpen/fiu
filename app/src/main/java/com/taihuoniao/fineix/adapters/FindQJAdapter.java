@@ -45,6 +45,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -395,7 +396,7 @@ public class FindQJAdapter extends BaseAdapter {
 
     //取消点赞
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder, final boolean isRight) {
-        RequestParams requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
@@ -436,7 +437,7 @@ public class FindQJAdapter extends BaseAdapter {
 
     //点赞情景
     private void loveQJ(final int position, String id, final ViewHolder holder, final boolean isRight) {
-        RequestParams requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override

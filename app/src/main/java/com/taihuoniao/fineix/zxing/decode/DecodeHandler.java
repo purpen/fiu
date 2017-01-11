@@ -34,7 +34,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
-
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 

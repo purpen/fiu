@@ -11,14 +11,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.AddressData;
 import com.taihuoniao.fineix.beans.AddressListBean;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -33,6 +32,7 @@ import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -98,7 +98,7 @@ public class AddAddressActivity extends BaseActivity {
 
                         @Override
                         public void clickRight() {
-                            RequestParams params = ClientDiscoverAPI.getdeleteAddressNetRequestParams(addressBean._id);
+                            HashMap<String, String> params = ClientDiscoverAPI.getdeleteAddressNetRequestParams(addressBean._id);
                             Call httpHandler = HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS,new GlobalDataCallBack(){
 //                            HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean._id, new RequestCallBack<String>() {
                                 @Override
@@ -349,7 +349,7 @@ public class AddAddressActivity extends BaseActivity {
             id = addressBean._id;
         }
 
-        RequestParams params = ClientDiscoverAPI.getcommitAddressNetRequestParams(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default);
+        HashMap<String, String> params = ClientDiscoverAPI.getcommitAddressNetRequestParams(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default);
         HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.commitAddressNet(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default, new RequestCallBack<String>() {
             @Override

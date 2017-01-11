@@ -13,15 +13,14 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SelectAddressListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
@@ -36,6 +35,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -172,7 +172,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        RequestParams params = ClientDiscoverAPI.getdeleteAddressNetRequestParams(id);
+        HashMap<String, String> params = ClientDiscoverAPI.getdeleteAddressNetRequestParams(id);
         HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
             @Override
@@ -207,7 +207,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
 
     //获得收货地址列表
     private void getAddressList(String page) {
-        RequestParams params = ClientDiscoverAPI.getgetAddressListRequestParams(page);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetAddressListRequestParams(page);
         HttpRequest.post(params, URL.URLSTRING_ADDRESS_LISTS, new GlobalDataCallBack() {
 //        ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
             @Override

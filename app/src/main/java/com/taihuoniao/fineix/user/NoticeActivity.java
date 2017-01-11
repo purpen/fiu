@@ -9,7 +9,6 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -26,6 +25,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -87,7 +87,7 @@ public class NoticeActivity extends BaseActivity {
         String type = "1"; //Fiu
 //        app_type=2, channel=10, client_id=1415289600, page=1, size=9999, time=1474441155, type=1, uuid=ffffffff-b056-1c0b-ffff-ffffa8556b0e, sign=fd2a1e20ff4344c098ac08c98d3b9c22
         int curPage = 1;
-        RequestParams params = ClientDiscoverAPI.getgetNoticeListRequestParams(String.valueOf(curPage), pageSize, type);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetNoticeListRequestParams(String.valueOf(curPage), pageSize, type);
         HttpRequest.post(params,     URL.NOTICE_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getNoticeList(String.valueOf(curPage), pageSize, type, new RequestCallBack<String>() {
             @Override

@@ -11,13 +11,12 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EvaluateAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
@@ -103,7 +102,7 @@ public class PublishEvaluateActivity extends Activity {
                         builder.replace(builder.length() - 2, builder.length() - 1, "");
                         String array = builder.toString();
 //                        Log.e(">>>", ">>>arrayratingbar>>" + array);
-                        RequestParams params = ClientDiscoverAPI.getpublishEvaluateNetRequestParams(mRid, array);
+                        HashMap<String, String> params = ClientDiscoverAPI.getpublishEvaluateNetRequestParams(mRid, array);
                          HttpRequest.post(params,  URL.PRODUCT_AJAX_COMMENT, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.publishEvaluateNet(mRid, array, new RequestCallBack<String>() {
                             @Override
@@ -146,7 +145,7 @@ public class PublishEvaluateActivity extends Activity {
         mRid = getIntent().getStringExtra("rid");
 //        DataPaser.orderPayDetailsParser(mRid, mHandler);
         //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取
-        RequestParams params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
+        HashMap<String, String> params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
         HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override

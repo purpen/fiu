@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -99,7 +100,7 @@ public class HasLoveActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        RequestParams requestParams = ClientDiscoverAPI.getgetSupportQJRequestParams(String.valueOf(curPage), "12", "2");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetSupportQJRequestParams(String.valueOf(curPage), "12", "2");
         HttpRequest.post(requestParams, URL.FAVORITE_GET_NEW_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSupportQJ(String.valueOf(curPage), "12", "2", new RequestCallBack<String>() {
             @Override

@@ -13,7 +13,6 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -36,6 +35,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -173,7 +173,7 @@ public class NewProductDetailActivity extends BaseActivity {
 
     private static void jump2ThemeDetail(final Activity activity,final String id) {
         if (TextUtils.isEmpty(id)) return;
-        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
@@ -223,7 +223,7 @@ public class NewProductDetailActivity extends BaseActivity {
             case R.id.ibtn_favorite: //收藏
                 v.setEnabled(false);
                 if (data.product.is_favorite == 0) {
-                    RequestParams params = ClientDiscoverAPI.getfavoriteRequestParams(data.product._id, "1");
+                    HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams(data.product._id, "1");
                     HttpRequest.post(params,  URL.FAVORITE_PRODUCT, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.favorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
@@ -246,7 +246,7 @@ public class NewProductDetailActivity extends BaseActivity {
                         }
                     });
                 } else {
-                    RequestParams params = ClientDiscoverAPI.getcancelFavoriteRequestParams(data.product._id, "1");
+                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams(data.product._id, "1");
                     HttpRequest.post(params, URL.CANCEL_FAVORITE_PRODUCT, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelFavorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
@@ -281,7 +281,7 @@ public class NewProductDetailActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-            RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+            HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
             HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override

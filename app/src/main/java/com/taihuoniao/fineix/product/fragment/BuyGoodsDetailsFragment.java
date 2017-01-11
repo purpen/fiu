@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodDetailsSceneListAdapter;
@@ -38,6 +37,7 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -178,7 +178,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
 
     //获取商品相关的情境列表
     private void getSceneList() {
-        RequestParams params =ClientDiscoverAPI. getproductAndSceneRequestParams(page + "", 8 + "", null, id, null);
+        HashMap<String, String> params =ClientDiscoverAPI. getproductAndSceneRequestParams(page + "", 8 + "", null, id, null);
        Call httpHandler = HttpRequest.post(params, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
             @Override

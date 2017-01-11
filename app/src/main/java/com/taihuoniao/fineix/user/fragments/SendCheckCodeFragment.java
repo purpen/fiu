@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -246,7 +245,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 //    }
 
     private void getCheckCode(final String phone) {
-        RequestParams params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
         HttpRequest.post(params,URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
             @Override
@@ -326,7 +325,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         if (TextUtils.isEmpty(userId)) return;
         if (TextUtils.isEmpty(token)) return;
         if (TextUtils.isEmpty(loginType)) return;
-        RequestParams params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
+        HashMap<String, String> params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
         HttpRequest.post(params, URL.AUTH_THIRD_SIGN, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
@@ -406,7 +405,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
-        RequestParams params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override

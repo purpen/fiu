@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -35,6 +34,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -141,7 +141,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void search() {
-        RequestParams params = ClientDiscoverAPI.getsearchRequestParams(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "");
+        HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "");
       Call httpHandler =  HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //     HttpHandler<String> httpHandler= ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "", new RequestCallBack<String>() {
             @Override

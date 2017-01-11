@@ -7,7 +7,6 @@ import android.text.TextUtils;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -18,6 +17,9 @@ import com.taihuoniao.fineix.pay.bean.ALIPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
+
+import java.util.HashMap;
+
 /**
  * @author lilin
  * created at 2016/5/13 15:54
@@ -86,7 +88,7 @@ public class AliPay{
 		getPayParams(orderId);
 	}
 	private static void getPayParams(String orderId){
-		RequestParams params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.ALI_PAY);
+		HashMap<String, String> params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.ALI_PAY);
 		HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
 //		ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.ALI_PAY, new RequestCallBack<String>() {
 			@Override

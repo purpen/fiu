@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -33,6 +32,7 @@ import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -161,7 +161,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
     private void doFocus(final ActivityPrizeData.PrizeSightsEntity.DataEntity item, final View view) {
         if (LoginInfo.isUserLogin()) {
             if (item.user.is_follow == 0) {
-                RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item.user._id));
+                HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item.user._id));
                 HttpRequest.post(params, URL.FOCUS_OPRATE_URL,new GlobalDataCallBack(){
 //                ClientDiscoverAPI.focusOperate(String.valueOf(item.user._id), new RequestCallBack<String>() {
                     @Override
@@ -190,7 +190,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                     }
                 });
             } else {
-                RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.user._id + "");
+                HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.user._id + "");
                 HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.cancelFocusOperate(item.user._id + "", new RequestCallBack<String>() {
                     @Override

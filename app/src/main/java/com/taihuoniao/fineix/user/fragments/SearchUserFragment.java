@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchUserAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -35,6 +34,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -150,7 +150,7 @@ public class SearchUserFragment extends DialogFragment {
             ToastUtils.showInfo("请输入查询关键字");
             return;
         }
-        RequestParams params =ClientDiscoverAPI.getsearchUserRequestParams(query, String.valueOf(curPage));
+        HashMap<String, String> params =ClientDiscoverAPI.getsearchUserRequestParams(query, String.valueOf(curPage));
         HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.searchUser(query, String.valueOf(curPage), new RequestCallBack<String>() {
             @Override

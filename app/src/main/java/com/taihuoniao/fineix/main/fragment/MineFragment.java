@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
@@ -57,6 +56,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -187,7 +187,7 @@ public class MineFragment extends MyBaseFragment {
             LogUtil.e(TAG, "isUserLogin()==false");
             return;
         }
-        RequestParams params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override

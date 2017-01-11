@@ -7,15 +7,14 @@ import android.view.View;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -24,6 +23,8 @@ import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -104,7 +105,7 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        RequestParams params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override

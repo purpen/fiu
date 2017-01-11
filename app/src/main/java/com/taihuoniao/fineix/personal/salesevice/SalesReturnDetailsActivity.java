@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -23,6 +22,8 @@ import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -85,7 +86,7 @@ public class SalesReturnDetailsActivity extends BaseActivity {
     }
 
     private void requestResultInfo() {
-        RequestParams params = ClientDiscoverAPI.getRefundSuccessInfoRequestParams(chargeBackId);
+        HashMap<String, String> params = ClientDiscoverAPI.getRefundSuccessInfoRequestParams(chargeBackId);
         HttpRequest.post(params, URL.SHOPPING_REFUND_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getRefundSuccessInfo(chargeBackId, new RequestCallBack<String>() {
             @Override

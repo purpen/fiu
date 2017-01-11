@@ -26,9 +26,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,7 +35,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -58,7 +55,6 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
-import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
@@ -68,6 +64,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.imageViewTouch.ImageViewTouch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -651,7 +648,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 if (label.getTagInfo().getType() == 1) {
 //                    ClientDiscoverAPI.deleteProduct(label.getTagInfo().getId() + "");
 
-                    RequestParams requestParams = ClientDiscoverAPI.getdeleteProductRequestParams(label.getTagInfo().getId() + "");
+                    HashMap<String, String> requestParams = ClientDiscoverAPI.getdeleteProductRequestParams(label.getTagInfo().getId() + "");
                     HttpRequest.post(requestParams, URL.DELETE_PRODUCT);
                 }
                 imageViewTouch.invalidate();

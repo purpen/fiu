@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -22,9 +21,9 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.IsEditorBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
@@ -35,6 +34,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import okhttp3.Call;
@@ -305,7 +305,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
 
     //查看当前用户是否有编辑权限
     private void isEditor() {
-        RequestParams params = ClientDiscoverAPI.getisEditorRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getisEditorRequestParams();
         Call httpHandler  = HttpRequest.post(params,URL.USER_IS_EDITOR, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.isEditor(new RequestCallBack<String>() {
             @Override
@@ -335,7 +335,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
 
     //精选或取消精选
     private void setFine() {
-        RequestParams params = ClientDiscoverAPI.getsetFineRequestParams(id, isFine ? "0" : "1");
+        HashMap<String, String> params = ClientDiscoverAPI.getsetFineRequestParams(id, isFine ? "0" : "1");
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_FINE, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.setFine(id, isFine ? "0" : "1", new RequestCallBack<String>() {
             @Override
@@ -369,7 +369,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
 
     //推荐或取消推荐
     private void setStick() {
-        RequestParams params = ClientDiscoverAPI.getsetStickRequestParams(id, isStick ? "0" : "1");
+        HashMap<String, String> params = ClientDiscoverAPI.getsetStickRequestParams(id, isStick ? "0" : "1");
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_STICK, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.setStick(id, isStick ? "0" : "1", new RequestCallBack<String>() {
             @Override
@@ -403,7 +403,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
 
     //屏蔽或取消屏蔽
     private void setCheck() {
-        RequestParams params = ClientDiscoverAPI.getsetCheckRequestParams(id, isCheck ? "1" : "0");
+        HashMap<String, String> params = ClientDiscoverAPI.getsetCheckRequestParams(id, isCheck ? "1" : "0");
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_CHECK, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.setCheck(id, isCheck ? "1" : "0", new RequestCallBack<String>() {
             @Override

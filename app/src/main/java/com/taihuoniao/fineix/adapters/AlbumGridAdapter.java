@@ -13,7 +13,6 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 

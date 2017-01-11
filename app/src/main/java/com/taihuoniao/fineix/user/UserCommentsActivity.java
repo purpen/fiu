@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UserCommentsAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -26,6 +25,7 @@ import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -88,7 +88,7 @@ public class UserCommentsActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         int curPage = 1;
-        RequestParams params = ClientDiscoverAPI.getmycommentsListRequestParams(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE);
+        HashMap<String, String> params = ClientDiscoverAPI.getmycommentsListRequestParams(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE);
         HttpRequest.post(params, URL.MY_COMMENTS_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.mycommentsList(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE, new RequestCallBack<String>() {
             @Override

@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -22,6 +21,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -102,7 +102,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
     private Call reportHandler;
 
     private void report(String target_id, String type, String evt) {
-        RequestParams params = ClientDiscoverAPI.getreportRequestParams(target_id, type, evt);
+        HashMap<String, String> params = ClientDiscoverAPI.getreportRequestParams(target_id, type, evt);
         reportHandler = HttpRequest.post(params, URL.REPORT, new GlobalDataCallBack(){
 //        reportHandler = ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
             @Override

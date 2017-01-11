@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -16,6 +15,8 @@ import com.taihuoniao.fineix.pay.bean.JdPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
+
+import java.util.HashMap;
 
 /**
  * @author lilin
@@ -30,7 +31,7 @@ public class JdPay {
     }
 
     private static void getPayParams(final String orderId) {
-        RequestParams params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.JD_PAY);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.JD_PAY);
         HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.JD_PAY, new RequestCallBack<String>() {
             @Override

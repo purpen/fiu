@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -27,6 +26,8 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -90,7 +91,7 @@ public class PayDetailsActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         if (TextUtils.isEmpty(mRid)) return;
-        RequestParams params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
+        HashMap<String, String> params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
         HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override

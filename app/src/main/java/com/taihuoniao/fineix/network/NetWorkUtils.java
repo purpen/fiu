@@ -13,7 +13,6 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -28,6 +27,7 @@ import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * Created by Stephen on 2016/12/6 15:05
@@ -136,7 +136,7 @@ public class NetWorkUtils {
     }
 
     public void updateToLatestVersion() {
-        RequestParams params = ClientDiscoverAPI.getupdateToLatestVersionRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateToLatestVersionRequestParams();
         HttpRequest.post(params,URL.FETCH_LATEST_VERSION, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateToLatestVersion(new RequestCallBack<String>() {
             @Override
@@ -168,7 +168,7 @@ public class NetWorkUtils {
 
     public void checkVersionInfo() {
         String appVersionName = getAppVersionName(mContext);
-        RequestParams params = ClientDiscoverAPI.getcheckVersionInfoRequestParams(appVersionName);
+        HashMap<String, String> params = ClientDiscoverAPI.getcheckVersionInfoRequestParams(appVersionName);
         HttpRequest.post(params, URL.CHECK_VERSION_INFO, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.checkVersionInfo(appVersionName, new RequestCallBack<String>() {
             @Override

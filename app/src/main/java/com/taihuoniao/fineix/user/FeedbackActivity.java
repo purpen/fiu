@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -17,6 +16,8 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -46,7 +47,7 @@ public class FeedbackActivity extends BaseActivity {
                 if (!isUserInputLegal()) {
                     return;
                 }
-                RequestParams params = ClientDiscoverAPI.getcommitSuggestionRequestParams(et_suggestion.getText().toString(), et_contact.getText().toString());
+                HashMap<String, String> params = ClientDiscoverAPI.getcommitSuggestionRequestParams(et_suggestion.getText().toString(), et_contact.getText().toString());
                 HttpRequest.post(params,  URL.SUGGESTION_URL, new GlobalDataCallBack(){
 //                 ClientDiscoverAPI.commitSuggestion(et_suggestion.getText().toString(), et_contact.getText().toString(), new RequestCallBack<String>() {
                     @Override

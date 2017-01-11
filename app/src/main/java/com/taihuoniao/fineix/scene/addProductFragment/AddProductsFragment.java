@@ -37,6 +37,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Call;
@@ -82,7 +83,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void search(String q, String t, String page, String evt, String sort) {
-        RequestParams requestParams = ClientDiscoverAPI.getsearchRequestParams(q, 7 + "", null, page, "8", evt, sort);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsearchRequestParams(q, 7 + "", null, page, "8", evt, sort);
         Call httpHandler = HttpRequest.post(requestParams,URL.SEARCH, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, 7 + "", null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
@@ -136,7 +137,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             search(q, "10", currentPage + "", null, null);
         } else {
             if (position == 0) {
-                RequestParams requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9");
+                HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9");
                 Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
 //                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
@@ -157,7 +158,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 });
                 addNet(httpHandler);
             } else {
-                RequestParams requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9");
+                HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9");
                 Call httpHandler = HttpRequest.post(requestParams,URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
 //                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
@@ -307,7 +308,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         } else if (searchList.size() > 0) {
             ids = searchList.get(position).get_id();
         }
-        RequestParams requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(ids);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(ids);
         Call httpHandler = HttpRequest.post(requestParams,URL.GOOD_DETAILS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.goodsDetails(ids, new RequestCallBack<String>() {
             @Override

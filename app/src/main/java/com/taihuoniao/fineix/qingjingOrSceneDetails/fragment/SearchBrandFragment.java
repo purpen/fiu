@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchBrandsAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -29,6 +28,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -137,7 +137,7 @@ public class SearchBrandFragment extends SearchFragment implements AdapterView.O
     }
 
     private void search() {
-        RequestParams params = ClientDiscoverAPI.getsearchRequestParams(q, "13", null, page + "", "8", isContent ? "content" : "tag", null);
+        HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(q, "13", null, page + "", "8", isContent ? "content" : "tag", null);
         Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "13", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override

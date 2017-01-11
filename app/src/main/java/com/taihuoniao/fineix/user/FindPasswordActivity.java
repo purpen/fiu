@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -24,6 +23,8 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+
+import java.util.HashMap;
 
 public class FindPasswordActivity extends BaseActivity implements View.OnClickListener {
 
@@ -119,7 +120,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                     Toast.makeText(FindPasswordActivity.this, "正在获取手机验证码",
                             Toast.LENGTH_SHORT).show();
                     //获取手机验证码
-                    RequestParams params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
+                    HashMap<String, String> params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
                     HttpRequest.post(params, URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
                         @Override

@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -31,6 +30,7 @@ import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -125,7 +125,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             public void onClick(View view) {
                 button.setEnabled(false);
                 if (item.is_love == FansAdapter.NOT_LOVE){
-                    RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item._id));
+                    HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item._id));
                     HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.focusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
@@ -149,7 +149,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         }
                     });
                 }else {
-                    RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(String.valueOf(item._id));
+                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(String.valueOf(item._id));
                     HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelFocusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override

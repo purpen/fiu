@@ -8,7 +8,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -23,6 +22,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -91,7 +91,7 @@ public class CommentFragment extends SearchFragment {
     //获得评论列表
     private void getCommentList() {
         progressBar.setVisibility(View.VISIBLE);
-        RequestParams params =ClientDiscoverAPI. getGoodsDetailsCommentsListRequestParams(target_id, page + "");
+        HashMap<String, String> params =ClientDiscoverAPI. getGoodsDetailsCommentsListRequestParams(target_id, page + "");
        Call httpHandler =  HttpRequest.post(params, URL.COMMENTS_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page + "", new RequestCallBack<String>() {
             @Override

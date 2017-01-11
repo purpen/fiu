@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -30,6 +29,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -156,7 +156,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
 
     @Override
     protected void requestNet() {
-        RequestParams params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override

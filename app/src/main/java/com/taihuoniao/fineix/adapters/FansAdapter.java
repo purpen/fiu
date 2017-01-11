@@ -9,7 +9,6 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -28,6 +27,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.popupwindow.MyPopupWindow;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -138,7 +138,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     //关注粉丝操作
     private void doFocus(final FocusFansItem item, final View view) {
         if (userId == LoginInfo.getUserId()) {
-            RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
+            HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
@@ -201,7 +201,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 final FocusFansItem item = (FocusFansItem) view.getTag();
                 if (userId == LoginInfo.getUserId()) {
                     if (item == null || item.follows == null) return;
-                    RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
+                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
                     HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                         @Override
@@ -262,7 +262,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 
     private void dealOthersFocus(final FocusFansItem item, final View view) {
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
-            RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
+            HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
@@ -286,7 +286,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 }
             });
         } else if (item.follows.is_love == LOVE) {//取消关注
-            RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
+            HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override

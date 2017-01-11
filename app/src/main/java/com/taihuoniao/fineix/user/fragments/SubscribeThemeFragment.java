@@ -13,7 +13,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubscribeThemeAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -31,6 +30,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -101,7 +101,7 @@ public class SubscribeThemeFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        RequestParams params = ClientDiscoverAPI.getcategoryListRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams();
         HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
             @Override
@@ -154,7 +154,7 @@ public class SubscribeThemeFragment extends MyBaseFragment {
                 }
                 if (TextUtils.isEmpty(builder)) return;
                 v.setEnabled(false);
-                RequestParams params = ClientDiscoverAPI.getsubscribeThemeRequestParams(builder.deleteCharAt(builder.length() - 1).toString());
+                HashMap<String, String> params = ClientDiscoverAPI.getsubscribeThemeRequestParams(builder.deleteCharAt(builder.length() - 1).toString());
                 HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.subscribeTheme(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
                     @Override

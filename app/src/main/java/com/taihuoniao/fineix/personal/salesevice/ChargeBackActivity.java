@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -34,6 +33,7 @@ import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChargeBackActivity extends BaseActivity {
@@ -132,7 +132,7 @@ public class ChargeBackActivity extends BaseActivity {
     }
 
     private void requestGetChargeBackInfo(){
-        RequestParams params = ClientDiscoverAPI.getChargeBackInfoRequestParams(rId, skuId);
+        HashMap<String, String> params = ClientDiscoverAPI.getChargeBackInfoRequestParams(rId, skuId);
         HttpRequest.post(params,URL.SHOPPING_CHECK_REFUND, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getChargeBackInfo(rId, skuId, new RequestCallBack<String>() {
             @Override
@@ -159,7 +159,7 @@ public class ChargeBackActivity extends BaseActivity {
 
     private void requestChargeBack(String price, String refundReason, String refundContent){
         String refund_type = "1";
-        RequestParams params = ClientDiscoverAPI.getApplyProductRefundRequestParams(rId, skuId, refund_type, refundReason, refundContent,
+        HashMap<String, String> params = ClientDiscoverAPI.getApplyProductRefundRequestParams(rId, skuId, refund_type, refundReason, refundContent,
                 price);
         HttpRequest.post(params,URL.SHOPPING_APPLY_PRODUCT_REFUND, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getApplyProductRefund(rId, skuId, refund_type, refundReason, refundContent,

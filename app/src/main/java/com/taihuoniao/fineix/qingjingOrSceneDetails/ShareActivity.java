@@ -397,7 +397,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 
 //                ToastUtils.showSuccess("分享成功");
 //                DataPaser.getBonus(2 + "", 1 + "", id);
-                RequestParams params = ClientDiscoverAPI.getgetBonusRequestParams(2 + "", 1 + "", id);
+                HashMap<String, String> params = ClientDiscoverAPI.getgetBonusRequestParams(2 + "", 1 + "", id);
                 bonusHandler =  HttpRequest.post(params,  URL.GET_BONUS, new GlobalDataCallBack(){
 //                bonusHandler = ClientDiscoverAPI.getBonus(2 + "", 1 + "", id, new RequestCallBack<String>() {
                     @Override
@@ -458,7 +458,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 
     //情境详情
     private void sceneDetails(String id) {
-        RequestParams requestParams = ClientDiscoverAPI.getsceneDetailsRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsceneDetailsRequestParams(id);
         detailsHandler = HttpRequest.post(requestParams, URL.SCENE_DETAILS, new GlobalDataCallBack(){
 //        detailsHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override

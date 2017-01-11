@@ -12,7 +12,6 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -39,6 +38,8 @@ import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomShareView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -172,7 +173,7 @@ public class SubjectActivity extends BaseActivity {
 
     private void jump2ThemeDetail(final String id) {
         if (TextUtils.isEmpty(id)) return;
-        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
@@ -268,7 +269,7 @@ public class SubjectActivity extends BaseActivity {
         if (data == null) return;
         switch (data.is_love) {
             case 0:
-                RequestParams params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
+                HashMap<String, String> params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
                 HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.loveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
                     @Override
@@ -301,7 +302,7 @@ public class SubjectActivity extends BaseActivity {
                 });
                 break;
             case 1:
-                RequestParams params2 = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
+                HashMap<String, String> params2 = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
                 HttpRequest.post(params2,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.cancelLoveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
                     @Override
@@ -339,7 +340,7 @@ public class SubjectActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(url);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(url);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(url, new RequestCallBack<String>() {
             @Override

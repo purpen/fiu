@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -81,7 +80,7 @@ public class UserEditNameActivity extends BaseActivity {
     protected void submitData() {
         final String nickName = et_nickname.getText().toString();
         EditUserInfoActivity.isSubmitAddress = false;
-        RequestParams params = ClientDiscoverAPI.getupdateUserInfoRequestParams("nickname", nickName);
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserInfoRequestParams("nickname", nickName);
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserInfo("nickname", nickName, new RequestCallBack<String>() {
             @Override

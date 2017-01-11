@@ -1,24 +1,20 @@
 package com.taihuoniao.fineix.base;
 
-import android.content.Context;
-import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.lidroid.xutils.HttpUtils;
-import com.lidroid.xutils.http.HttpHandler;
-import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 import com.taihuoniao.fineix.utils.OkHttpUtils;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,9 +26,9 @@ import okhttp3.Response;
  */
 
 public class HttpRequest {
-    public static Call post(RequestParams params, String requestUrl){
+    public static Call post(Map<String, String> params, String requestUrl){
         List<NameValuePair> nameValuePairs = getSignedList(params);
-        LogUtil.e("请求接口为" + requestUrl + "\\n" + "请求参数为" + nameValuePairs.toString());
+        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + nameValuePairs.toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
             requestUrlreal = URL.BASE_URL + requestUrl;
@@ -40,7 +36,7 @@ public class HttpRequest {
         return OkHttpUtils.post(requestUrlreal, nameValuePairs);
     }
 
-    public static Call post(RequestParams params, String requestUrl, GlobalDataCallBack callBack) {
+    public static Call post(Map<String, String> params, String requestUrl, GlobalDataCallBack callBack) {
         if (callBack != null) {
             callBack.onStart();
         }
@@ -49,7 +45,7 @@ public class HttpRequest {
 
     private static Call post(List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
         final BaseHandler handler = new BaseHandler(null, callBack);
-        LogUtil.e("请求接口为" + requestUrl + "\\n" + "请求参数为" + list.toString());
+        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
             requestUrlreal = URL.BASE_URL + requestUrl;
@@ -67,33 +63,33 @@ public class HttpRequest {
                 Message msg = Message.obtain();
                 msg.what = BaseHandler.CALLBACK_SUCCESS;
                 msg.obj = response.body().string();
-                LogUtil.e("请求接口为" + requestUrl + "\\n" + "返回数据为" + msg.obj);
+                LogUtil.e("请求接口为" + requestUrl + "\n" + "返回数据为" + msg.obj);
                 handler.sendMessage(msg);
             }
         });
     }
 
-    private static List<NameValuePair> getSignedList(RequestParams params){
-        List<NameValuePair> signedNameValuePairs = null;
+    private static List<NameValuePair> getSignedList(Map<String, String> params){
         if (params != null) {
-            signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
+            List<NameValuePair> signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
             for(int i = signedNameValuePairs.size() - 1; i >= 0; i--) {
                 NameValuePair nameValuePair = signedNameValuePairs.get(i);
                 if (TextUtils.isEmpty(nameValuePair.getValue())) {
                     signedNameValuePairs.remove(nameValuePair);
                 }
             }
+            return signedNameValuePairs;
         }
-        return signedNameValuePairs;
+        return new ArrayList<>();
     }
 
     /********************************************** 旧的网络请求******************************************************/
-    public static HttpHandler<String> sign(RequestParams params, String url, RequestCallBack<String> callBack) {
+/*    public static HttpHandler<String> sign(HashMap<String, String> params, String url, RequestCallBack<String> callBack) {
         return sign(params, url, callBack, false);
     }
 
     //sign
-    public static HttpHandler<String> sign(RequestParams params, String url, RequestCallBack<String> callBack, boolean isPay) {
+    public static HttpHandler<String> sign(HashMap<String, String> params, String url, RequestCallBack<String> callBack, boolean isPay) {
         List<NameValuePair> list = MD5Utils.getSignedNameValuePairs(params);
         params.addBodyParameter(list);
         params.getQueryStringParams().clear();
@@ -102,5 +98,5 @@ public class HttpRequest {
             httpUtils.configCurrentHttpCacheExpiry(1000);
         }
         return httpUtils.send(com.lidroid.xutils.http.client.HttpRequest.HttpMethod.POST, url, params, callBack);
-    }
+    }*/
 }

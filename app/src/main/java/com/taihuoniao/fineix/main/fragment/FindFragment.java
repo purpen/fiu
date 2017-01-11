@@ -64,6 +64,7 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -247,7 +248,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景分类列表
     private void sceneCategoryList() {
-        RequestParams requestParams = ClientDiscoverAPI.getcategoryListRequestParams("1", "13", null);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcategoryListRequestParams("1", "13", null);
         Call httpHandler = HttpRequest.post(requestParams, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "13", null, new RequestCallBack<String>() {
             @Override
@@ -283,7 +284,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景列表嵌入的主题列表
     private void subjectList() {
-        RequestParams params = ClientDiscoverAPI.getsubjectListRequestParams("1", "2", null, "1", "1,2", null);
+        HashMap<String, String> params = ClientDiscoverAPI.getsubjectListRequestParams("1", "2", null, "1", "1,2", null);
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "2", null, "1", "1,2", null, new RequestCallBack<String>() {
             @Override
@@ -327,7 +328,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     //获取情景列表
     private void sceneNet() {
         // TODO: 1/7/2017 debug
-        RequestParams re = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 10 + "", null, null, 0 + "", null, null, null);
+        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 10 + "", null, null, 0 + "", null, null, null);
         Call httpHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override

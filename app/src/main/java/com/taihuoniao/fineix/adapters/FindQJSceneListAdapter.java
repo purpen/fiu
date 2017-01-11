@@ -36,8 +36,8 @@ import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -69,6 +69,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -576,7 +577,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     //取消收藏情景
     private void cancelShoucang(final int position) {
-        RequestParams params = ClientDiscoverAPI.getcancelShoucangRequestParams(sceneList.get(position).get_id(), "12");
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(sceneList.get(position).get_id(), "12");
         HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
@@ -609,7 +610,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     //收藏情景
     private void shoucang(final int position) {
-        RequestParams params = ClientDiscoverAPI.getshoucangRequestParams(sceneList.get(position).get_id(), "12");
+        HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(sceneList.get(position).get_id(), "12");
         HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
@@ -642,7 +643,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     //删除情景
     private void deleteScene(String i) {
-        RequestParams requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(i);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(i);
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
             @Override
@@ -675,7 +676,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     //取消点赞
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
-        RequestParams requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
@@ -712,7 +713,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     //点赞情景
     private void loveQJ(final int position, String id, final ViewHolder holder) {
-        RequestParams requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
@@ -749,7 +750,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     //关注用户
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
-        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
+        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
@@ -790,7 +791,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     //取消关注
     private void cancelFollow(final SceneList.DataBean.RowsBean item, final ViewHolder holder) {
-        RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_info().getUser_id());
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_info().getUser_id());
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelFocusOperate(item.getUser_info().getUser_id(), new RequestCallBack<String>() {
             @Override

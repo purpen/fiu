@@ -8,7 +8,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -110,7 +110,7 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
         if (!mDialog.isShowing()) {
             mDialog.show();
         }
-        RequestParams params =ClientDiscoverAPI. getRefundListRequestParams(String.valueOf(curPage), size);
+        HashMap<String, String> params =ClientDiscoverAPI. getRefundListRequestParams(String.valueOf(curPage), size);
         HttpRequest.post(params,URL.SHOPPING_REFUND_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getRefundList(String.valueOf(curPage), size, new RequestCallBack<String>() {
             @Override

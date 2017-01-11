@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderedQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -125,7 +125,7 @@ public class OrderQJActivity extends BaseActivity {
             builder.append(id).append(",");
         }
         if (TextUtils.isEmpty(builder)) return;
-        RequestParams params = ClientDiscoverAPI.getQJListRequestParams(String.valueOf(curPage), builder.deleteCharAt(builder.length() - 1).toString());
+        HashMap<String, String> params = ClientDiscoverAPI.getQJListRequestParams(String.valueOf(curPage), builder.deleteCharAt(builder.length() - 1).toString());
         HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getQJList(String.valueOf(curPage), builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
             @Override

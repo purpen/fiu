@@ -2,9 +2,7 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -28,6 +26,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -110,7 +109,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
 
     //获取情景列表
     private void getSceneList(final int page, String size, String scene_id, String category_ids, String sort, String fine, String dis, String lng, String lat) {
-        RequestParams re = ClientDiscoverAPI.getSceneListRequestParams(page + "", size, scene_id, category_ids, sort, fine, lng, lat);
+        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(page + "", size, scene_id, category_ids, sort, fine, lng, lat);
         listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        listHandler = ClientDiscoverAPI.getSceneList(page + "", size, scene_id, category_ids, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override

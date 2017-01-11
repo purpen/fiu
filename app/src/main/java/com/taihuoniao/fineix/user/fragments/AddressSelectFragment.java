@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SimpleTextAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -240,7 +240,7 @@ public class AddressSelectFragment extends DialogFragment {
     }
 
     private void requestNet() {
-        RequestParams params =ClientDiscoverAPI. getrequestAddressRequestParams(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer));
+        HashMap<String, String> params =ClientDiscoverAPI. getrequestAddressRequestParams(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer));
         HttpRequest.post(params,URL.SHOPPING_FETCH_CHINA_CITY, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.requestAddress(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer), new RequestCallBack<String>() {
             @Override

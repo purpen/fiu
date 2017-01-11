@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -24,6 +23,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -73,7 +73,7 @@ public class ParticipateQJAdapter extends CommonBaseAdapter<DataParticipateQJ.It
             public void onClick(View v) {
                 if (item == null) return;
                 if (item.is_love == 0) {
-                    RequestParams params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
+                    HashMap<String, String> params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.loveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
@@ -101,7 +101,7 @@ public class ParticipateQJAdapter extends CommonBaseAdapter<DataParticipateQJ.It
                             LogUtil.e(TAG, error);
                         }
                     });
-                } else {                    RequestParams params = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
+                } else {                    HashMap<String, String> params = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelLoveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override

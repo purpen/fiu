@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.BitmapUtils;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -39,6 +38,7 @@ import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -121,7 +121,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
@@ -190,7 +190,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_cancel_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                RequestParams params = ClientDiscoverAPI.getcancelOrderNetRequestParams(rid);
+                                HashMap<String, String> params = ClientDiscoverAPI.getcancelOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_CANCEL_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
@@ -253,7 +253,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                     public void onClick(View v) {
                         if(!mdialog.isShowing()){
                         mdialog.show();}
-                        RequestParams params = ClientDiscoverAPI.gettixingFahuoRequestParams(rid);
+                        HashMap<String, String> params = ClientDiscoverAPI.gettixingFahuoRequestParams(rid);
                         HttpRequest.post(params, URL.SHOPPING_ALERT_SEND_GOODS, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                             @Override
@@ -294,7 +294,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
@@ -348,7 +348,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_confirm_receipt_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                RequestParams params = ClientDiscoverAPI.getconfirmReceiveNetRequestParams(rid);
+                                HashMap<String, String> params = ClientDiscoverAPI.getconfirmReceiveNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.SHOPPING_TAKE_DELIVERY, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
                                     @Override
@@ -407,7 +407,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
@@ -474,7 +474,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
                             @Override
                             public void clickRight() {
-                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
@@ -529,7 +529,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         new DefaultDialog(context, App.getString(R.string.hint_dialog_delete_order_title), App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack(){
                             @Override
                             public void clickRight() {
-                                RequestParams params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
+                                HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
 //                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override

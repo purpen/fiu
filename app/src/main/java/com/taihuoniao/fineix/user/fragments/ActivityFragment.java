@@ -13,7 +13,6 @@ import android.widget.ListView;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ActivityAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -22,8 +21,8 @@ import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.network.NetworkManager;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
@@ -31,6 +30,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -110,7 +110,7 @@ public class ActivityFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        RequestParams params = ClientDiscoverAPI.getChoosenSubjectRequestParams(String.valueOf(curPage), PAGE_TYPE, FINE, SORT);
+        HashMap<String, String> params = ClientDiscoverAPI.getChoosenSubjectRequestParams(String.valueOf(curPage), PAGE_TYPE, FINE, SORT);
         HttpRequest.post(params, URL.CHOOSEN_SUBJECT_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getChoosenSubject(String.valueOf(curPage), PAGE_TYPE, FINE, SORT, new RequestCallBack<String>() {
             @Override

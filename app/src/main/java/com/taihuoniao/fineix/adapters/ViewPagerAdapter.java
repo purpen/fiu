@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -42,6 +41,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.InputCodeDialog;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
@@ -181,7 +181,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             break;
                         case 11:    //情境专题
                             Log.e("<<<", "banner.toString=" + banner.toString());
-                            RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(banner.web_url);
+                            HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(banner.web_url);
                             HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //                            ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
                                 @Override
@@ -256,7 +256,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             ToastUtils.showError("请输入邀请码");
             return;
         }
-        RequestParams params = ClientDiscoverAPI.getsubmitInviteCodeRequestParams(code);
+        HashMap<String, String> params = ClientDiscoverAPI.getsubmitInviteCodeRequestParams(code);
         HttpRequest.post(params, URL.GATEWAY_VALIDE_INVITE_CODE , new GlobalDataCallBack(){
 //        ClientDiscoverAPI.submitInviteCode(code, new RequestCallBack<String>() {
             @Override
@@ -280,7 +280,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     }
 
     private void updateInviteCodeStatus() {
-        RequestParams params = ClientDiscoverAPI.getupdateInviteCodeStatusRequestParams(code);
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateInviteCodeStatusRequestParams(code);
         HttpRequest.post(params, URL.GATEWAY_DEL_INVITE_CODE , new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateInviteCodeStatus(code, new RequestCallBack<String>() {
             @Override
@@ -312,7 +312,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        RequestParams params = ClientDiscoverAPI.getisInvitedRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getisInvitedRequestParams();
         HttpRequest.post(params,URL.GATEWAY_IS_INVITED, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
             @Override

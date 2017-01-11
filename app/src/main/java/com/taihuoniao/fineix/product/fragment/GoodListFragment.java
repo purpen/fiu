@@ -30,6 +30,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -116,7 +117,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
 
     //根据子分类获取商品列表
     private void productList() {
-        RequestParams requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, id, null, tag_id, page + "", 8 + "", null, null,
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, id, null, tag_id, page + "", 8 + "", null, null,
                 null, null, "9");
         Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler= ClientDiscoverAPI.getProductList(null, null, id, null, tag_id, page + "", 8 + "", null, null,

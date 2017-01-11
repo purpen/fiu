@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -66,7 +67,7 @@ public class SubscribeThemeActivity extends BaseActivity {
                 final View view_bg = view.findViewById(R.id.view_bg);
                 final ThemeQJ themeQJ = mList.get(position);
                 if (themeQJ.isSubscribed) {
-                    RequestParams requestParams = ClientDiscoverAPI.getcancelSubscribeRequestParams(themeQJ._id);
+                    HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelSubscribeRequestParams(themeQJ._id);
                     HttpRequest.post(requestParams, URL.MY_REMOVE_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelSubscribe(themeQJ._id, new RequestCallBack<String>() {
                         @Override
@@ -101,7 +102,7 @@ public class SubscribeThemeActivity extends BaseActivity {
                     });
 
                 } else {
-                    RequestParams requestParams = ClientDiscoverAPI.getsubscribeRequestParams(themeQJ._id);
+                    HashMap<String, String> requestParams = ClientDiscoverAPI.getsubscribeRequestParams(themeQJ._id);
                     HttpRequest.post(requestParams, URL.MY_ADD_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.subscribe(themeQJ._id, new RequestCallBack<String>() {
                         @Override
@@ -161,7 +162,7 @@ public class SubscribeThemeActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        RequestParams params = ClientDiscoverAPI.getcategoryListRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams();
         HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
             @Override

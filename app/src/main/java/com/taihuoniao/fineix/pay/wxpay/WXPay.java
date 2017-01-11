@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -18,6 +17,8 @@ import com.taihuoniao.fineix.utils.Util;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+import java.util.HashMap;
 
 /**
  * @author lilin
@@ -46,7 +47,7 @@ public class WXPay {
     }
 
     private static void getPayParams(String orderId) {
-        RequestParams params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.WX_PAY);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.WX_PAY);
         HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.WX_PAY, new RequestCallBack<String>() {
             @Override

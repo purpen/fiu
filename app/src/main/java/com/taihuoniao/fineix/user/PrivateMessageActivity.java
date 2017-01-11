@@ -12,17 +12,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PrivateMessageItemAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.MessageDetailData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -31,6 +30,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -91,7 +91,7 @@ public class PrivateMessageActivity extends BaseActivity{
     protected void requestNet() {
         if (user==null) return;
         if (user._id<=0) return;
-        RequestParams params =ClientDiscoverAPI. getmessageDetailListRequestParams(String.valueOf(user._id));
+        HashMap<String, String> params =ClientDiscoverAPI. getmessageDetailListRequestParams(String.valueOf(user._id));
         HttpRequest.post(params,  URL.MESSAGE_DETAIL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.messageDetailList(String.valueOf(user._id),new RequestCallBack<String>() {
             @Override
@@ -144,7 +144,7 @@ public class PrivateMessageActivity extends BaseActivity{
             Util.makeToast("私信内容不能为空哦！");
             return;
         }
-        RequestParams params = ClientDiscoverAPI.getsendMessageRequestParams(String.valueOf(user._id), content);
+        HashMap<String, String> params = ClientDiscoverAPI.getsendMessageRequestParams(String.valueOf(user._id), content);
         HttpRequest.post(params,  URL.SEND_MESSAGE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.sendMessage(String.valueOf(user._id), content, new RequestCallBack<String>() {
             @Override

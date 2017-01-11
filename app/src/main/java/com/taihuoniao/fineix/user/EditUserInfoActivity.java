@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
@@ -44,6 +43,7 @@ import com.taihuoniao.fineix.view.wheelview.WheelView;
 import java.io.File;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -231,7 +231,7 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         ProvinceUtil.init();
-        RequestParams params = ClientDiscoverAPI.getgetMineInfoRequestParams(LoginInfo.getUserId()+"");
+        HashMap<String, String> params = ClientDiscoverAPI.getgetMineInfoRequestParams(LoginInfo.getUserId()+"");
         HttpRequest.post(params,  URL.MINE_INFO, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
             @Override
@@ -373,7 +373,7 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     protected void submitData() {
-        RequestParams params = ClientDiscoverAPI.getupdateUserInfoRequestParams(key, value);
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserInfoRequestParams(key, value);
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserInfo(key,value, new RequestCallBack<String>() {
             @Override

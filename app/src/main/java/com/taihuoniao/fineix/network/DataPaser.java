@@ -8,14 +8,13 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.CartDoOrderBonus;
-import com.taihuoniao.fineix.beans.DictBean;
 import com.taihuoniao.fineix.beans.CartOrderContentItem;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
+import com.taihuoniao.fineix.beans.DictBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
@@ -33,6 +32,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Call;
@@ -53,7 +53,7 @@ public class DataPaser {
      * @param handler handler
      */
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
-        RequestParams params = ClientDiscoverAPI.getsearchRequestParams(q, t, null, page, "8", evt, sort);
+        HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(q, t, null, page, "8", evt, sort);
         HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.search(q, t, null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
@@ -147,7 +147,7 @@ public class DataPaser {
      * @param code code
      */
     public static void findPasswordParser(final Handler handler, String phone, String password, String code) {
-        RequestParams params = ClientDiscoverAPI.getfindPasswordNetRequestParams(phone, password, code);
+        HashMap<String, String> params = ClientDiscoverAPI.getfindPasswordNetRequestParams(phone, password, code);
         HttpRequest.post(params, URL.AUTH_FIND_PWD, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.findPasswordNet(phone, password, code, new RequestCallBack<String>() {
             @Override
@@ -183,7 +183,7 @@ public class DataPaser {
      * @param handler handler
      */
     public static void checkRedbagUsableParser(String rid, String code, final Handler handler) {
-        RequestParams params = ClientDiscoverAPI.getcheckRedBagUsableNetRequestParams(rid, code);
+        HashMap<String, String> params = ClientDiscoverAPI.getcheckRedBagUsableNetRequestParams(rid, code);
         HttpRequest.post(params,  URL.SHOPPING_USE_BONUS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.checkRedBagUsableNet(rid, code, new RequestCallBack<String>() {
             @Override
@@ -223,7 +223,7 @@ public class DataPaser {
      * @return
      */
     public static Call shopCartParser(final Handler handler) {
-        RequestParams params = ClientDiscoverAPI.getshopCartNetRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getshopCartNetRequestParams();
         return HttpRequest.post(params, URL.SHOPPING_FETCH_CART, new GlobalDataCallBack(){
 //        return ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
             @Override
@@ -287,7 +287,7 @@ public class DataPaser {
      * @return
      */
     public static Call shopCartNumberParser(final Handler handler) {
-        RequestParams params = ClientDiscoverAPI.getshopCartNumberNetRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getshopCartNumberNetRequestParams();
         return HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_COUNT, new GlobalDataCallBack(){
 //        return ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
             @Override
@@ -321,7 +321,7 @@ public class DataPaser {
      * @param handler handler
      */
     public static void shopCartCalculateParser(String array, final Handler handler) {
-        RequestParams params = ClientDiscoverAPI.getcalculateShopCartNetRequestParams(array);
+        HashMap<String, String> params = ClientDiscoverAPI.getcalculateShopCartNetRequestParams(array);
         HttpRequest.post(params,  URL.SHOPING_CHECKOUT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.calculateShopCartNet(array, new RequestCallBack<String>() {
                     @Override
@@ -439,7 +439,7 @@ public class DataPaser {
      * @param handler handler
      */
     public static void orderListParser(String status, String page, String size, final Handler handler) {
-        RequestParams params = ClientDiscoverAPI.getorderListNetRequestParams(status, page, size);
+        HashMap<String, String> params = ClientDiscoverAPI.getorderListNetRequestParams(status, page, size);
         HttpRequest.post(params,  URL.SHOPPING_ORDERS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.orderListNet(status, page, size, new RequestCallBack<String>() {
             @Override

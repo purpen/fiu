@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -126,7 +125,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     @Override
     protected void requestNet() {
         String sight_count = "5";
-        RequestParams params = ClientDiscoverAPI.getfindFriendsRequestParams(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT);
+        HashMap<String, String> params = ClientDiscoverAPI.getfindFriendsRequestParams(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT);
         HttpRequest.post(params,  URL.FIND_FRIENDS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.findFriends(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT, new RequestCallBack<String>() {
             @Override

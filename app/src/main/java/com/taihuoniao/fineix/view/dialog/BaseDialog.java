@@ -2,14 +2,9 @@ package com.taihuoniao.fineix.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.utils.DialogHelp;
 
 /**
  * Created by Stephen on 2016/12/13 15:48

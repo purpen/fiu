@@ -14,7 +14,6 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -37,6 +36,8 @@ import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomShareView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -248,7 +249,7 @@ public class ArticalDetailActivity extends BaseActivity {
 
     public static void jump2ThemeDetail(final Context activity, final String id, final boolean hasFlag) {
         if (TextUtils.isEmpty(id)) return;
-        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
@@ -322,7 +323,7 @@ public class ArticalDetailActivity extends BaseActivity {
                 customShareView.setOnShareSuccessListener(new CustomShareView.OnShareSuccessListener() {
                     @Override
                     public void onSuccess() {
-                        RequestParams params = ClientDiscoverAPI.getupdateShareCountRequestParams(id);
+                        HashMap<String, String> params = ClientDiscoverAPI.getupdateShareCountRequestParams(id);
                         HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
                             @Override
@@ -372,7 +373,7 @@ public class ArticalDetailActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override

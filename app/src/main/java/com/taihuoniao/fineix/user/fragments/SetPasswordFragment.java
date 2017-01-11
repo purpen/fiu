@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -35,6 +34,8 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -111,7 +112,7 @@ public class SetPasswordFragment extends MyBaseFragment {
 
     private void registerUser(String password) {//注册完成
         if (registerInfo == null) return;
-        RequestParams params = ClientDiscoverAPI.getregisterUserRequestParams(registerInfo.mobile, password, registerInfo.verify_code);
+        HashMap<String, String> params = ClientDiscoverAPI.getregisterUserRequestParams(registerInfo.mobile, password, registerInfo.verify_code);
         HttpRequest.post(params, URL.AUTH_REGISTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.registerUser(registerInfo.mobile, password, registerInfo.verify_code, new RequestCallBack<String>() {
             @Override
@@ -156,7 +157,7 @@ public class SetPasswordFragment extends MyBaseFragment {
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
-        RequestParams params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override

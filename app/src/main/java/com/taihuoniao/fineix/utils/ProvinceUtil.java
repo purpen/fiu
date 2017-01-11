@@ -3,12 +3,11 @@ package com.taihuoniao.fineix.utils;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.URL;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class ProvinceUtil {
     private static HashMap<String,Integer> idProvinceMap=null;
     private static HashMap<String,Integer> idCitiesMap=null;
     public static void init() {
-        RequestParams params =ClientDiscoverAPI. getgetAllCitiesRequestParams();
+        HashMap<String, String> params =ClientDiscoverAPI. getgetAllCitiesRequestParams();
         HttpRequest.post(params,  URL.ALL_CITY_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getAllCities(new RequestCallBack<String>() {
             @Override

@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -29,6 +28,7 @@ import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.view.ScrollableView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -163,7 +163,7 @@ public class UserGuideActivity extends BaseActivity {
     }
 
     private void initGuide() {
-        RequestParams params = ClientDiscoverAPI.getactiveStatusRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getactiveStatusRequestParams();
         HttpRequest.post(params, URL.GATEWAY_RECORD_FIU_USER_ACTIVE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.activeStatus(new RequestCallBack<String>() {
             @Override

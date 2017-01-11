@@ -25,15 +25,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.http.HttpHandler;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CommentsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -49,6 +48,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Call;
@@ -264,7 +264,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     //删除评论
     private void deleteComment(String id) {
-        RequestParams params = ClientDiscoverAPI. getdeleteCommentRequestParams(id);
+        HashMap<String, String> params = ClientDiscoverAPI. getdeleteCommentRequestParams(id);
         delelteHandler = HttpRequest.post(params, URL.DELETE_COMMENT, new GlobalDataCallBack(){
 //        delelteHandler = ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
             @Override
@@ -304,7 +304,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     //发表评论
     private void sendComments(String target_i, String conten, String typ, String target_user_id, String is_r, String reply_i, String reply_user_i) {
-        RequestParams params = ClientDiscoverAPI.getsendCommentRequestParams(target_id, conten, type, target_user_id, is_reply, reply_id, reply_user_id);
+        HashMap<String, String> params = ClientDiscoverAPI.getsendCommentRequestParams(target_id, conten, type, target_user_id, is_reply, reply_id, reply_user_id);
         sendHandler = HttpRequest.post(params, URL.SEND_COMMENT, new GlobalDataCallBack(){
 //        sendHandler = ClientDiscoverAPI.sendComment(target_i, conten, typ, target_user_id, is_r, reply_i, reply_user_i, new RequestCallBack<String>() {
             @Override
@@ -349,7 +349,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     //评论列表
     private void getComments(String page, String size, String target_id, String target_user_id, String type) {
-        RequestParams params =ClientDiscoverAPI. getcommentsListRequestParams(page, size, target_id, target_user_id, type);
+        HashMap<String, String> params =ClientDiscoverAPI. getcommentsListRequestParams(page, size, target_id, target_user_id, type);
         HttpRequest.post(params,URL.COMMENTS_LIST, new GlobalDataCallBack(){
 //        commentsHander = ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override

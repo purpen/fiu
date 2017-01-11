@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShopCartAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -28,7 +27,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
-import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -305,7 +303,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     if (!mDialog.isShowing()) {
                         mDialog.show();
                     }
-                    RequestParams params = ClientDiscoverAPI.getshopcartAddSubtractNetRequestParams(addSubtractArray);
+                    HashMap<String, String> params = ClientDiscoverAPI.getshopcartAddSubtractNetRequestParams(addSubtractArray);
                     HttpRequest.post(params,  URL.SHOPPINGN_EDIT_CART,  new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.shopcartAddSubtractNet(addSubtractArray, new RequestCallBack<String>() {
                         @Override
@@ -398,7 +396,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     if (!mDialog.isShowing()) {
                         mDialog.show();
                     }
-                    RequestParams params = ClientDiscoverAPI.getdeletShopCartNetRequestParams(array);
+                    HashMap<String, String> params = ClientDiscoverAPI.getdeletShopCartNetRequestParams(array);
                     HttpRequest.post(params,  URL.SHOPPING_REMOVE_CART, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.deletShopCartNet(array, new RequestCallBack<String>() {
                         @Override

@@ -37,6 +37,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -240,7 +241,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        RequestParams requestParams = ClientDiscoverAPI.getaddProductRequestParams(title, brand_id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getaddProductRequestParams(title, brand_id);
         Call httpHandler = HttpRequest.post(requestParams,URL.ADD_PRODUCT, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler= ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
@@ -283,7 +284,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        RequestParams requestParams = ClientDiscoverAPI.getaddBrandRequestParams(title);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getaddBrandRequestParams(title);
         Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_BRANDS_SUBMIT, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler= ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
             @Override
@@ -324,7 +325,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void searchBrand(final String q) {
-        RequestParams requestParams = ClientDiscoverAPI.getsearchRequestParams(q, "13", null, "1", "100", "content", null);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsearchRequestParams(q, "13", null, "1", "100", "content", null);
         Call httpHandler = HttpRequest.post(requestParams , URL.SEARCH,new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler= ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
             @Override
@@ -364,7 +365,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     private SearchProductAdapter searchProductAdapter;
 
     private void searchProduct(String title, String brand_id) {
-        RequestParams requestParams = ClientDiscoverAPI.getgetProductListRequestParams(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16");
         Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler=  ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override

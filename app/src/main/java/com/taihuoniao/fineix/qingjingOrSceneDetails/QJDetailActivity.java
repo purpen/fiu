@@ -40,8 +40,8 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
@@ -70,6 +70,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -167,7 +168,7 @@ public class QJDetailActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        RequestParams requestParams = ClientDiscoverAPI.getsceneDetailsRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsceneDetailsRequestParams(id);
         detailHandler = HttpRequest.post(requestParams, URL.SCENE_DETAILS, new GlobalDataCallBack() {
 //        detailHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
@@ -584,7 +585,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //取消收藏情景
     private void cancelShoucang() {
-        RequestParams params = ClientDiscoverAPI.getcancelShoucangRequestParams(qjDetailBean.getData().get_id(), "12");
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(qjDetailBean.getData().get_id(), "12");
         cancelShoucangHandler = HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
             @Override
@@ -619,7 +620,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //收藏情景
     private void shoucang() {
-        RequestParams params = ClientDiscoverAPI.getshoucangRequestParams(qjDetailBean.getData().get_id(), "12");
+        HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(qjDetailBean.getData().get_id(), "12");
         shoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
 //         = ClientDiscoverAPI.shoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
             @Override
@@ -654,7 +655,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //删除情景
     private void deleteScene() {
-        RequestParams requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(qjDetailBean.getData().get_id());
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(qjDetailBean.getData().get_id());
         detailHandler = HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
 //        detailHandler = ClientDiscoverAPI.deleteScene(qjDetailBean.getData().get_id(), new RequestCallBack<String>() {
             @Override
@@ -689,7 +690,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //取消点赞
     private void cancelLoveQJ() {
-        RequestParams requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
@@ -728,7 +729,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //点赞情景
     private void loveQJ() {
-        RequestParams requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
         loveHandler =  HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
 //        loveHandler = ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
@@ -767,7 +768,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //关注用户
     private void fllow() {
-        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(qjDetailBean.getData().getUser_id());
+        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(qjDetailBean.getData().getUser_id());
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //        followHandler = ClientDiscoverAPI.focusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
             @Override
@@ -836,7 +837,7 @@ public class QJDetailActivity extends BaseActivity {
 
     //取消关注
     private void cancelFollow() {
-        RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(qjDetailBean.getData().getUser_id());
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(qjDetailBean.getData().getUser_id());
         cancelShoucangHandler = HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelFocusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
             @Override

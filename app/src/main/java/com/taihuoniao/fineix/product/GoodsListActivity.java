@@ -9,7 +9,6 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -32,6 +31,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -175,7 +175,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
             titleLayout.setCartNum(0);
             return;
         }
-        RequestParams params =ClientDiscoverAPI. getcartNumRequestParams();
+        HashMap<String, String> params =ClientDiscoverAPI. getcartNumRequestParams();
         cartHandler = HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override

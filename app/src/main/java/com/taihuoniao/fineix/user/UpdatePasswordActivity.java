@@ -5,19 +5,20 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -73,7 +74,7 @@ public class UpdatePasswordActivity extends BaseActivity {
             Util.makeToast("原密码不能和新密码相同");
             return;
         }
-        RequestParams params =ClientDiscoverAPI. getupdatePasswordRequestParams(originPsd, newPsd);
+        HashMap<String, String> params =ClientDiscoverAPI. getupdatePasswordRequestParams(originPsd, newPsd);
         HttpRequest.post(params,  URL.MY_MODIFY_PASSWORD, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updatePassword(originPsd, newPsd, new RequestCallBack<String>() {
             @Override

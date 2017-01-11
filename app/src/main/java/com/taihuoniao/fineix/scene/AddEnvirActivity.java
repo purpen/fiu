@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -39,6 +38,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -310,7 +310,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
     //分类列表
     private void categoryList() {
-        RequestParams params = ClientDiscoverAPI.getcategoryListRequestParams(1 + "", 11 + "", 1 + "");
+        HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams(1 + "", 11 + "", 1 + "");
         Call httpHandler=HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
@@ -355,7 +355,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
     //获取活动标签
     private void activeTags() {
-        RequestParams params = ClientDiscoverAPI.getactiveTagsRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getactiveTagsRequestParams();
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SIGHT_STICK_ACTIVE_TAGS, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
             @Override

@@ -62,6 +62,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import okhttp3.Call;
@@ -464,7 +465,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                           String products, String address, String city, String tmp, String lat, String lng,
                           String subject_ids) {
         Log.e("<<<", "开始上传");
-        RequestParams requestParams = ClientDiscoverAPI.getcreateSceneRequestParams(id, title, des, scene_id, tags, products, address, city,
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcreateSceneRequestParams(id, title, des, scene_id, tags, products, address, city,
                 tmp, lat, lng, subject_ids);
         Call httpHandler = HttpRequest.post(requestParams, URL.CREATE_SCENE, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,

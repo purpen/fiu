@@ -20,17 +20,16 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NearByQJAdapter;
 import com.taihuoniao.fineix.adapters.QJRecommonedAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.QingJingData;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -41,6 +40,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -139,7 +139,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
         page=1;
         pageSize=3;
         int radius = 5000;
-        RequestParams params = ClientDiscoverAPI.getQJDataRequestParams(ll, radius,String.valueOf(page),String.valueOf(pageSize),STICK_ALL);
+        HashMap<String, String> params = ClientDiscoverAPI.getQJDataRequestParams(ll, radius,String.valueOf(page),String.valueOf(pageSize),STICK_ALL);
         HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getQJData(ll, radius,String.valueOf(page),String.valueOf(pageSize),STICK_ALL,new RequestCallBack<String>() {
             @Override
@@ -179,7 +179,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     protected void requestNet() {//推荐情境
         page=1;
         pageSize=2;
-        RequestParams params = ClientDiscoverAPI.getQJDataRequestParams(null,0,String.valueOf(page),String.valueOf(pageSize),STICK_SELECT);
+        HashMap<String, String> params = ClientDiscoverAPI.getQJDataRequestParams(null,0,String.valueOf(page),String.valueOf(pageSize),STICK_SELECT);
         HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getQJData(null,0,String.valueOf(page),String.valueOf(pageSize),STICK_SELECT,new RequestCallBack<String>() {
             @Override

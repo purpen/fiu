@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
 import com.taihuoniao.fineix.base.Base2Activity;
@@ -36,9 +35,9 @@ import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.dialog.CustomDialogForPay;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
+import com.taihuoniao.fineix.view.dialog.CustomDialogForPay;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import org.json.JSONException;
@@ -46,6 +45,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 import okhttp3.Call;
 
@@ -119,7 +119,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     }
 
     private void getDefaultAddress() {
-        RequestParams params = ClientDiscoverAPI.getgetDefaultAddressNetRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getgetDefaultAddressNetRequestParams();
         addressHandler = HttpRequest.post(params, URL.URLSTRING_DEFAULT_ADDRESS, new GlobalDataCallBack() {
 //        addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
@@ -309,7 +309,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     }
     private Call confirmHandler;
     private void confirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
-        RequestParams params =ClientDiscoverAPI. getnowConfirmOrderRequestParams(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code);
+        HashMap<String, String> params =ClientDiscoverAPI. getnowConfirmOrderRequestParams(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code);
         confirmHandler = HttpRequest.post(params,  URL.URLSTRING_NOW_CONFIRMORDER, new GlobalDataCallBack(){
 //       confirmHandler =  ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
             @Override
@@ -489,7 +489,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     // TODO: 2016/12/8 计算邮费
     private void fetchFreight(String addbook_id, String rid){
         String rid2 = nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getData().getOrder_info().getRid();
-        RequestParams params = ClientDiscoverAPI.getFetchFreightRequestParams(addbook_id, rid2);
+        HashMap<String, String> params = ClientDiscoverAPI.getFetchFreightRequestParams(addbook_id, rid2);
         HttpRequest.post(params,URL.SHOPPING_FETCH_FREIGHT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.fetchFreight(addbook_id, rid2, new RequestCallBack<String>() {
             @Override

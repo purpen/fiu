@@ -14,9 +14,9 @@ import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -80,7 +81,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
         itbn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                RequestParams requestParams = ClientDiscoverAPI.getsubsQingjingRequestParams(item.get_id());
+                HashMap<String, String> requestParams = ClientDiscoverAPI.getsubsQingjingRequestParams(item.get_id());
                 HttpRequest.post(requestParams, URL.SUBS_QINGJING, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.subsQingjing(item.get_id(), new RequestCallBack<String>() {
                     @Override

@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -129,7 +130,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
 
     //获取订阅的情景
     private void getSubsQJ() {
-        RequestParams re = ClientDiscoverAPI.getSceneListRequestParams(page + "", 8 + "", null, ids, null, null, null, null);
+        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(page + "", 8 + "", null, ids, null, null, null, null);
         Call listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> listHandler = ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
             @Override
@@ -173,7 +174,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
 
     //获取订阅情境主题个数
     private void hasSubsCount() {
-        RequestParams requestParams = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
         Call httpHandler = HttpRequest.post(requestParams, URL.USER_CENTER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override

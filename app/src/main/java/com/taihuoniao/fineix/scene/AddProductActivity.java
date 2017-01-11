@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
@@ -36,6 +35,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import okhttp3.Call;
 
@@ -67,7 +67,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        RequestParams params = ClientDiscoverAPI.getcategoryListRequestParams(1 + "", 1 + "", 1 + "");
+        HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams(1 + "", 1 + "", 1 + "");
         Call httpHandler = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //       HttpHandler<String> httpHandler= ClientDiscoverAPI.categoryList(1 + "", 1 + "", 1 + "", new RequestCallBack<String>() {
             @Override

@@ -33,10 +33,10 @@ import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -415,7 +415,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //获取商品详情
     private void goodDetails() {
-        RequestParams requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(id);
         detailHandler = HttpRequest.post(requestParams, URL.GOOD_DETAILS, new GlobalDataCallBack(){
 //        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
@@ -496,7 +496,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             titleLayout.setCartNum(0);
             return;
         }
-        RequestParams requestParams = ClientDiscoverAPI.getcartNumRequestParams();
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcartNumRequestParams();
         cartHandler =  HttpRequest.post(requestParams, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
@@ -527,7 +527,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //取消收藏
     private void cancelFavorate() {
-        RequestParams params = ClientDiscoverAPI.getcancelShoucangRequestParams(id, "1");
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(id, "1");
         cancelShoucangHandler=   HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
 //        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
             @Override
@@ -562,7 +562,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //收藏
     private void favorate() {
-        RequestParams params = ClientDiscoverAPI.getshoucangRequestParams(id, "1");
+        HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(id, "1");
         shoucangHandler=  HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
 //        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
             @Override
@@ -597,7 +597,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //立即购买
     private void buyNow(String target_id, String type, String n) {
-        RequestParams requestParams = ClientDiscoverAPI.getbuyNowRequestParams(target_id, type, n);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getbuyNowRequestParams(target_id, type, n);
         buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack(){
 //        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
@@ -635,7 +635,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //加入购物车
     private void addToCart(String target_id, String type, String n) {
-        RequestParams requestParams = ClientDiscoverAPI.getaddToCartNetRequestParams(target_id, type, n);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getaddToCartNetRequestParams(target_id, type, n);
         addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack(){
 //        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override

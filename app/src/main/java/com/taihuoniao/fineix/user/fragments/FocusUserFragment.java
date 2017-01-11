@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FocusInterestedUserViewPagerAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -33,6 +32,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomViewPager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -86,7 +86,7 @@ public class FocusUserFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        RequestParams params = ClientDiscoverAPI.getfocusInterestUserRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getfocusInterestUserRequestParams();
         HttpRequest.post(params, URL.USER_FIND_USER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.focusInterestUser(new RequestCallBack<String>() {
             @Override
@@ -210,7 +210,7 @@ public class FocusUserFragment extends MyBaseFragment {
                 }
                 if (TextUtils.isEmpty(builder)) return;
                 LogUtil.e(TAG, builder.deleteCharAt(builder.length() - 1).toString());
-                RequestParams params = ClientDiscoverAPI.getfocusUsersRequestParams(builder.deleteCharAt(builder.length() - 1).toString());
+                HashMap<String, String> params = ClientDiscoverAPI.getfocusUsersRequestParams(builder.deleteCharAt(builder.length() - 1).toString());
                 HttpRequest.post(params,URL.FOLLOW_BATCH_FOLLOW, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.focusUsers(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
                     @Override

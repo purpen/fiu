@@ -10,7 +10,6 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllFiuerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -28,6 +27,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import okhttp3.Call;
@@ -69,7 +69,7 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        RequestParams params = ClientDiscoverAPI.getfiuUserListRequestParams(1 + "", 100 + "", 1 + "");
+        HashMap<String, String> params = ClientDiscoverAPI.getfiuUserListRequestParams(1 + "", 100 + "", 1 + "");
         userHandler = HttpRequest.post(params,  URL.FIU_USER_LIST, new GlobalDataCallBack(){
 //        userHandler = ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override

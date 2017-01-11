@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -18,8 +17,8 @@ import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.network.NetworkManager;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -27,6 +26,8 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -120,7 +121,7 @@ public class ImageCropActivity extends BaseActivity {
         String imgStr = Util.saveBitmap2Base64Str(bitmap);
         bitmap.recycle();
         try {
-            RequestParams params = ClientDiscoverAPI.getuploadBgImgRequestParams(imgStr);
+            HashMap<String, String> params = ClientDiscoverAPI.getuploadBgImgRequestParams(imgStr);
             HttpRequest.post(params,  URL.UPLOAD_BG_URL, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.uploadBgImg(imgStr, new RequestCallBack<String>() {
                 @Override
@@ -175,7 +176,7 @@ public class ImageCropActivity extends BaseActivity {
         String type="3"; //上传头像
         String imgStr=Util.saveBitmap2Base64Str(bitmap);
         try {
-            RequestParams params = ClientDiscoverAPI.getuploadImgRequestParams(imgStr,type);
+            HashMap<String, String> params = ClientDiscoverAPI.getuploadImgRequestParams(imgStr,type);
             HttpRequest.post(params, URL.UPLOAD_IMG_URL, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.uploadImg(imgStr,type, new RequestCallBack<String>() {
                 @Override

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -219,7 +218,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
         if (TextUtils.isEmpty(token)) return;
         if (TextUtils.isEmpty(loginType)) return;
 
-        RequestParams params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
+        HashMap<String, String> params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
         HttpRequest.post(params, URL.AUTH_THIRD_SIGN, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
@@ -299,7 +298,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
-        RequestParams params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override

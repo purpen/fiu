@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BindPhonePagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -34,6 +33,7 @@ import com.taihuoniao.fineix.view.CustomViewPager;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -150,7 +150,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     ToastUtils.showInfo("请输入密码");
                     return;
                 }
-                RequestParams params = ClientDiscoverAPI.getbindPhoneNetRequestParams(openId, unionId, token, phone, password, type);
+                HashMap<String, String> params = ClientDiscoverAPI.getbindPhoneNetRequestParams(openId, unionId, token, phone, password, type);
                 HttpRequest.post(params, URL.AUTH_THIRD_REGISTER_WITH_PHONE, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.bindPhoneNet(openId, unionId, token, phone, password, type, new GlobalDataCallBack() {
                     @Override
@@ -190,7 +190,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.tv_login:
             case R.id.bt_login: //跳过绑定直接登录
-                RequestParams params3 =ClientDiscoverAPI. getskipBindNetRequestParams(openId, unionId, token, nickName, sex, avatarUrl, type);
+                HashMap<String, String> params3 =ClientDiscoverAPI. getskipBindNetRequestParams(openId, unionId, token, nickName, sex, avatarUrl, type);
                 HttpRequest.post(params3, URL.AUTH_THIRD_REGISTER_WITHOUT_PHONE, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.skipBindNet(openId, unionId, token, nickName, sex, avatarUrl, type, new RequestCallBack<String>() {
                     @Override
@@ -277,7 +277,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
-        RequestParams params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override

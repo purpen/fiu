@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -124,7 +125,7 @@ public class ParticipateQJFragment extends MyBaseFragment {
     protected void loadData() {
         if (TextUtils.isEmpty(id)) return;
         LogUtil.e(TAG, id);
-        RequestParams requestParams = ClientDiscoverAPI.getparticipateActivityRequestParams(String.valueOf(curPage), id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getparticipateActivityRequestParams(String.valueOf(curPage), id);
         HttpRequest.post(requestParams, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
             @Override

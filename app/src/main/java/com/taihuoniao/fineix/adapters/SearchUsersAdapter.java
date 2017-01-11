@@ -12,13 +12,12 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -38,6 +37,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -144,7 +144,7 @@ public class SearchUsersAdapter extends BaseAdapter {
 
     //关注用户
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
-        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
+        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
@@ -212,7 +212,7 @@ public class SearchUsersAdapter extends BaseAdapter {
 
     //取消关注
     private void cancelFollow(final SearchBean.Data.SearchItem item, final ViewHolder holder) {
-        RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_id());
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_id());
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.cancelFocusOperate(item.getUser_id(), new RequestCallBack<String>() {
             @Override

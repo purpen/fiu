@@ -9,7 +9,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FocusAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -29,6 +28,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 
@@ -102,7 +102,7 @@ public class FocusActivity extends BaseActivity {
         LogUtil.e(TAG, "requestNet==" + userId);
         if (!activity.isFinishing() && dialog != null) dialog.show();
         int curPage = 1;
-        RequestParams params = ClientDiscoverAPI.getFocusFansListRequestParams(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, null);
+        HashMap<String, String> params = ClientDiscoverAPI.getFocusFansListRequestParams(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, null);
         HttpRequest.post(params, URL.FOCUS_FAVORITE_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, null, new RequestCallBack<String>() {
             @Override

@@ -10,7 +10,6 @@ import android.widget.ListView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -32,6 +31,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -119,7 +119,7 @@ public class SystemNoticeActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         int curPage = 1;
-        RequestParams params =ClientDiscoverAPI. getgetSystemNoticeRequestParams(String.valueOf(curPage), PAGE_SIZE);
+        HashMap<String, String> params =ClientDiscoverAPI. getgetSystemNoticeRequestParams(String.valueOf(curPage), PAGE_SIZE);
         HttpRequest.post(params,  URL.SYSTEM_NOTICE, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {
             @Override

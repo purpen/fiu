@@ -1,53 +1,53 @@
  package com.taihuoniao.fineix.user;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.AbsListView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+ import android.content.BroadcastReceiver;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.os.Build;
+ import android.os.Bundle;
+ import android.os.PersistableBundle;
+ import android.text.TextUtils;
+ import android.view.Gravity;
+ import android.view.View;
+ import android.view.ViewTreeObserver;
+ import android.widget.AbsListView;
+ import android.widget.Button;
+ import android.widget.ImageView;
+ import android.widget.LinearLayout;
+ import android.widget.ListView;
+ import android.widget.RelativeLayout;
+ import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
-import com.taihuoniao.fineix.adapters.ParticipateQJListAdapter;
-import com.taihuoniao.fineix.adapters.RuleContentAdapter;
-import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
-import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.ActivityPrizeData;
-import com.taihuoniao.fineix.beans.DataParticipateQJ;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.URL;
-import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
-import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.utils.WindowUtils;
-import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+ import com.google.gson.reflect.TypeToken;
+ import com.nostra13.universalimageloader.core.ImageLoader;
+ import com.taihuoniao.fineix.R;
+ import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
+ import com.taihuoniao.fineix.adapters.ParticipateQJListAdapter;
+ import com.taihuoniao.fineix.adapters.RuleContentAdapter;
+ import com.taihuoniao.fineix.base.BaseActivity;
+ import com.taihuoniao.fineix.base.GlobalDataCallBack;
+ import com.taihuoniao.fineix.base.HttpRequest;
+ import com.taihuoniao.fineix.beans.ActivityPrizeData;
+ import com.taihuoniao.fineix.beans.DataParticipateQJ;
+ import com.taihuoniao.fineix.beans.HttpResponse;
+ import com.taihuoniao.fineix.main.MainApplication;
+ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+ import com.taihuoniao.fineix.network.DataConstants;
+ import com.taihuoniao.fineix.network.URL;
+ import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+ import com.taihuoniao.fineix.utils.JsonUtil;
+ import com.taihuoniao.fineix.utils.LogUtil;
+ import com.taihuoniao.fineix.utils.ToastUtils;
+ import com.taihuoniao.fineix.utils.Util;
+ import com.taihuoniao.fineix.utils.WindowUtils;
+ import com.taihuoniao.fineix.view.CustomHeadView;
+ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.util.ArrayList;
+ import java.util.ArrayList;
+ import java.util.HashMap;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+ import butterknife.Bind;
+ import butterknife.ButterKnife;
 
 /**
  * @author lilin  活动详情
@@ -209,7 +209,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void requestNet() {
         if (TextUtils.isEmpty(id)) return;
-        RequestParams params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
@@ -245,7 +245,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     protected void loadData() {
         if (TextUtils.isEmpty(id)) return;
         LogUtil.e(TAG, id);
-        RequestParams params = ClientDiscoverAPI.getparticipateActivityRequestParams(String.valueOf(curPage), id);
+        HashMap<String, String> params = ClientDiscoverAPI.getparticipateActivityRequestParams(String.valueOf(curPage), id);
         HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
             @Override

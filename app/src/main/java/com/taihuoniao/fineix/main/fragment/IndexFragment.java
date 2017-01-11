@@ -59,6 +59,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -224,7 +225,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     }
 
     private void getBanners() {
-        RequestParams requestParams = ClientDiscoverAPI.getgetBannersRequestParams("app_fiu_sight_index_slide");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetBannersRequestParams("app_fiu_sight_index_slide");
         Call httpHandler = HttpRequest.post(requestParams,URL.BANNERS_URL, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getBanners("app_fiu_sight_index_slide", new RequestCallBack<String>() {
             @Override
@@ -262,7 +263,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     //获取中间插入的用户列表
     private void getUserList() {
-        RequestParams re = ClientDiscoverAPI.getUserListRequestParams(5);
+        HashMap<String, String> re = ClientDiscoverAPI.getUserListRequestParams(5);
         Call httpHandler = HttpRequest.post(re, URL.USER_FIND_USER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
             @Override
@@ -315,7 +316,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     //获取精选主题
     private void subjectList() {
-        RequestParams requestParams = ClientDiscoverAPI.getIndexChosenSubjectRequestParams();
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getIndexChosenSubjectRequestParams();
         Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_SUBJECT_INDEX_SUJECT_STICK, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getIndexChosenSubject(new RequestCallBack<String>() {
             @Override
@@ -373,7 +374,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     //获取情景列表
     private void sceneNet() {
         dialog.show();
-        RequestParams sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 8 + "", null, null, 2 + "", null, null, null);
+        HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 8 + "", null, null, 2 + "", null, null, null);
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override

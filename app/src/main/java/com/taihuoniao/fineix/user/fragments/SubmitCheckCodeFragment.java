@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -23,6 +22,8 @@ import com.taihuoniao.fineix.user.ToRegisterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MaskedEditText;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -73,7 +74,7 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
         if (registerInfo == null) return;
         String phone = registerInfo.mobile;
         if (TextUtils.isEmpty(phone)) return;
-        RequestParams params = ClientDiscoverAPI.getsubmitCheckCodeRequestParams(phone, text);
+        HashMap<String, String> params = ClientDiscoverAPI.getsubmitCheckCodeRequestParams(phone, text);
         HttpRequest.post(params, URL.AUTH_CHECK_VERIFY_CODE , new GlobalDataCallBack(){
 //        ClientDiscoverAPI.submitCheckCode(phone, text, new RequestCallBack<String>() {
             @Override

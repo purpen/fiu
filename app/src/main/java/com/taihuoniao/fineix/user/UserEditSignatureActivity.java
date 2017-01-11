@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -23,6 +22,8 @@ import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -113,7 +114,7 @@ public class UserEditSignatureActivity extends BaseActivity{
     protected void submitData() {
         final String label=tv_tag.getText().toString().trim();
         final String summary=et_nickname.getText().toString().trim();
-        RequestParams params =ClientDiscoverAPI. getupdateSignatrueLabelRequestParams(label,summary);
+        HashMap<String, String> params =ClientDiscoverAPI. getupdateSignatrueLabelRequestParams(label,summary);
         HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.updateSignatrueLabel(label,summary, new RequestCallBack<String>() {
             @Override

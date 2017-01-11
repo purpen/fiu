@@ -8,17 +8,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PrivateMessageListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.PrivateMessageListData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -84,7 +84,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     @Override
     protected void requestNet() {
         int curPage = 1;
-        RequestParams params = ClientDiscoverAPI.getgetPrivateMessageListRequestParams(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetPrivateMessageListRequestParams(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL);
         HttpRequest.post(params,  URL.MESSAGE_RECORD, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getPrivateMessageList(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL, new RequestCallBack<String>() {
             @Override

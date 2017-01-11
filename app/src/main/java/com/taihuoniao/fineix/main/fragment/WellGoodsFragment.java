@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,6 +61,7 @@ import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -220,7 +220,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             cartNumber.setVisibility(View.GONE);
             return;
         }
-        RequestParams params =ClientDiscoverAPI. getcartNumRequestParams();
+        HashMap<String, String> params =ClientDiscoverAPI. getcartNumRequestParams();
        Call httpHandler=  HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
@@ -255,7 +255,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     //好货专题列表
     private void subjectList() {
-        RequestParams requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "2");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "2");
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
@@ -298,7 +298,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     //最新好货推荐
     private void firstProducts() {
-        RequestParams requestParams = ClientDiscoverAPI.getfirstProductsRequestParams();
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getfirstProductsRequestParams();
        Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.firstProducts(new RequestCallBack<String>() {
             @Override
@@ -331,7 +331,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     //获取产品分类列表
     private void productCategoryList() {
-        RequestParams params = ClientDiscoverAPI.getcategoryListRequestParams("1", "1", null);
+        HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams("1", "1", null);
         Call  httpHandler  = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "1", null, new RequestCallBack<String>() {
             @Override

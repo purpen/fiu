@@ -22,8 +22,8 @@ import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -38,6 +38,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -113,7 +114,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
 
     //获取订阅情境主题个数
     private void hasSubsCount() {
-        RequestParams params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
 //        userCenterHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
@@ -186,7 +187,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
 
     //取消订阅分类
     private void cancelSubs() {
-        RequestParams requestParams = ClientDiscoverAPI.getcancelSubscribeRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelSubscribeRequestParams(id);
         cancelSubsHandler = HttpRequest.post(requestParams, URL.MY_REMOVE_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //        cancelSubsHandler = ClientDiscoverAPI.cancelSubscribe(id, new RequestCallBack<String>() {
             @Override
@@ -222,7 +223,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
 
     //订阅分类
     private void subs() {
-        RequestParams requestParams = ClientDiscoverAPI.getsubscribeRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubscribeRequestParams(id);
         subsHandler = HttpRequest.post(requestParams, URL.MY_ADD_INTEREST_SCENE_ID, new GlobalDataCallBack(){
 //        subsHandler = ClientDiscoverAPI.subscribe(id, new RequestCallBack<String>() {
             @Override

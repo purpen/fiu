@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -35,6 +34,8 @@ import com.taihuoniao.fineix.view.CustomShareView;
 import com.umeng.message.IUmengCallback;
 import com.umeng.message.MessageSharedPrefs;
 import com.umeng.message.PushAgent;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -163,7 +164,7 @@ public class SystemSettingsActivity extends BaseActivity {
     }
 
     private void logout() {
-        RequestParams params = ClientDiscoverAPI.getlogoutRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getlogoutRequestParams();
         HttpRequest.post(params,  URL.LOGOUT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.logout(new RequestCallBack<String>() {
             @Override

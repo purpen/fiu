@@ -2,15 +2,13 @@ package com.taihuoniao.fineix.utils;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,6 +30,7 @@ public class OkHttpUtils {
 
     private static String formatParams(List<NameValuePair> params) {
         return URLEncodedUtils.format(params, CHARSET_NAME);
+//        return JsonUtil.list2Json(params);
     }
 
     public static Call post(String url, String json) {

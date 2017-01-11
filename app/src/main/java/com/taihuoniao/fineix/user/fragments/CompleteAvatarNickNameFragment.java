@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -48,6 +47,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -166,7 +166,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 if (TextUtils.isEmpty(nickName)) {
                     ToastUtils.showInfo("昵称不能为空");
                 }
-                RequestParams params = ClientDiscoverAPI.getupdateNickNameSexRequestParams(nickName, gender);
+                HashMap<String, String> params = ClientDiscoverAPI.getupdateNickNameSexRequestParams(nickName, gender);
                 HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
 
 //                ClientDiscoverAPI.updateNickNameSex(nickName, gender, new RequestCallBack<String>() {

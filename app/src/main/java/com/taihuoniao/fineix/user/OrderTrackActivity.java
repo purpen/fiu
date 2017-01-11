@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -26,6 +25,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -74,7 +74,7 @@ public class OrderTrackActivity extends BaseActivity {
             mDialog = new WaittingDialog(this);
             mDialog.show();
         }
-        RequestParams params = ClientDiscoverAPI.getShoppingTrackingRequestParams(s1, s2, s3);
+        HashMap<String, String> params = ClientDiscoverAPI.getShoppingTrackingRequestParams(s1, s2, s3);
         HttpRequest.post(params,URL.SHOPPING_TRACKING, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.shoppingTracking(s1, s2, s3, new RequestCallBack<String>() {
             @Override

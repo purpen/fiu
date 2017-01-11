@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UnUsableRedPacketAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -32,6 +31,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -179,7 +179,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {//请求可用红包
-        RequestParams params = ClientDiscoverAPI.getmyRedBagNetRequestParams(String.valueOf(curPage),PAGE_SIZE,ALLUSED,TIMEOUT);
+        HashMap<String, String> params = ClientDiscoverAPI.getmyRedBagNetRequestParams(String.valueOf(curPage),PAGE_SIZE,ALLUSED,TIMEOUT);
         HttpRequest.post(params,   URL.MY_BONUS, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage),PAGE_SIZE,ALLUSED,TIMEOUT, new RequestCallBack<String>() {
             @Override

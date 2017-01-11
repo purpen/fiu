@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -58,6 +57,7 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -218,7 +218,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             return;
         }
         LogUtil.e(TAG, "requestNet==" + userId);
-        RequestParams params = ClientDiscoverAPI.getgetMineInfoRequestParams(userId + "");
+        HashMap<String, String> params = ClientDiscoverAPI.getgetMineInfoRequestParams(userId + "");
         HttpRequest.post(params,  URL.MINE_INFO, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
             @Override
@@ -267,7 +267,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      * 加载情境数据
      */
     private void loadCJData() {
-        RequestParams params =  ClientDiscoverAPI.getSceneListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1");
+        HashMap<String, String> params =  ClientDiscoverAPI.getSceneListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1");
         HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1",new RequestCallBack<String>() {
             @Override
@@ -339,7 +339,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Deprecated
     private void loadQJData() {
         LogUtil.e("loadQJData", String.format("curPage==%s;;PAGE_SIZE==%s;;userId==%s", curPage, Constants.PAGE_SIZE, userId));
-        RequestParams params =ClientDiscoverAPI. getQJListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId));
+        HashMap<String, String> params =ClientDiscoverAPI. getQJListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId));
         HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getQJList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
             @Override
@@ -622,7 +622,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.bt_focus:
                 bt_focus.setEnabled(false);
                 if (user.is_love == FansAdapter.NOT_LOVE) {
-                    RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(userId + "");
+                    HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(userId + "");
                     HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
                         @Override
@@ -647,7 +647,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         }
                     });
                 } else {
-                    RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userId + "");
+                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userId + "");
                     HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                    ClientDiscoverAPI.cancelFocusOperate(userId + "", new RequestCallBack<String>() {
                         @Override

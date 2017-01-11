@@ -41,6 +41,7 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -132,7 +133,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //获取品牌下的情景
     private void getQJList() {
-        RequestParams requestParams = ClientDiscoverAPI.getproductAndSceneRequestParams(qjPage + "", 8 + "", null, null, id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getproductAndSceneRequestParams(qjPage + "", 8 + "", null, null, id);
         HttpRequest.post(requestParams, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
 //        qjHandler = ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
             @Override
@@ -177,7 +178,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌下产品列表
     private void getProductList() {
-        RequestParams requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16");
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
 //        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
@@ -223,7 +224,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌详情
     private void brandDetails() {
-        RequestParams requestParams = ClientDiscoverAPI.getbrandDetailRequestParams(id);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getbrandDetailRequestParams(id);
         HttpRequest.post(requestParams, URL.BRAND_DETAIL, new GlobalDataCallBack(){
 //        brandHandler = ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override

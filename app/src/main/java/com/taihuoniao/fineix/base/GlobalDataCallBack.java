@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.base;
 
-import com.lidroid.xutils.exception.HttpException;
-
 /**
  * Created by Stephen on 2017/1/4 16:23
  * Email: 895745843@qq.com

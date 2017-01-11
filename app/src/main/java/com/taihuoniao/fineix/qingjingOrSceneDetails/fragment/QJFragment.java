@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -117,7 +118,7 @@ public class QJFragment extends SearchFragment {
     private Call sceneListHandler;
     //获取订阅的情景
     private void getSubsQJ() {
-        RequestParams re = ClientDiscoverAPI.getSceneListRequestParams(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null);
+        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null);
         sceneListHandler =  HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
 //     sceneListHandler =    ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null, null, new RequestCallBack<String>() {
             @Override

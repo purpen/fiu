@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -29,6 +28,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.popupwindow.MyPopupWindow;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -121,7 +121,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     private void doFocus(final FocusFansItem item, final View view) {
         if (userId == LoginInfo.getUserId()) { //关注列表做关注操作
             if (item.focus_flag) {
-                RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
+                HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
                 HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //                ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                     @Override
@@ -180,7 +180,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 if (userId == LoginInfo.getUserId()) { //关注列表做取消关注操作
                     if (item == null || item.follows == null) return;
                     if (item.focus_flag) {
-                        RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
+                        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
                         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
@@ -203,7 +203,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             }
                         });
                     } else {
-                        RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
+                        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
                         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //                        ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
@@ -275,7 +275,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     private void dealOthersFocus(final FocusFansItem item, final View view) {
         if (item == null || item.follows == null) return;
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
-            RequestParams params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
+            HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
@@ -298,7 +298,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 }
             });
         } else if (item.follows.is_love == LOVE) {
-            RequestParams params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
+            HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
 //            ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override

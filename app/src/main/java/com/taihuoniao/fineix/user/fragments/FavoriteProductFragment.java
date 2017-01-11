@@ -13,7 +13,6 @@ import android.widget.GridView;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FavoriteProductGVAdapter;
 import com.taihuoniao.fineix.base.GlobalDataCallBack;
@@ -32,6 +31,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -111,7 +111,7 @@ public class FavoriteProductFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        RequestParams params = ClientDiscoverAPI.getgetCollectOrderedRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT);
+        HashMap<String, String> params = ClientDiscoverAPI.getgetCollectOrderedRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT);
         HttpRequest.post(params, URL.FAVORITE_GET_NEW_LIST, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getCollectOrdered(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT, new RequestCallBack<String>() {
             @Override

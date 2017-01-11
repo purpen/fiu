@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lidroid.xutils.http.HttpHandler;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 
