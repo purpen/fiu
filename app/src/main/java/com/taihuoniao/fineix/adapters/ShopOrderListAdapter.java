@@ -54,7 +54,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
 //    private AlertDialog.Builder alertDialog;
     private WaittingDialog mdialog;
 
-    private BitmapUtils bitmapUtils_listview = null;
+//    private BitmapUtils bitmapUtils_listview = null;
     private List<OrderEntity> list;
     private String optFragmentFlag;
 
@@ -67,14 +67,14 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
-        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
-                .configMemoryCacheEnabled(true)
-                .configDefaultCacheExpiry(1024 * 1024 * 4)
-                .configDefaultBitmapMaxSize(300, 300)
-                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-                .configThreadPoolSize(5)
-                .configDefaultImageLoadAnimation(
-                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
+//        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
+//                .configMemoryCacheEnabled(true)
+//                .configDefaultCacheExpiry(1024 * 1024 * 4)
+//                .configDefaultBitmapMaxSize(300, 300)
+//                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
+//                .configThreadPoolSize(5)
+//                .configDefaultImageLoadAnimation(
+//                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
         mdialog = new WaittingDialog(context);
     }
 

@@ -331,7 +331,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 dialog.dismiss();
                 //                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
                 if (nowConfirmBean.isSuccess()) {
-                    ToastUtils.showSuccess(nowConfirmBean.getMessage());
+//                    ToastUtils.showSuccess(nowConfirmBean.getMessage());
 //                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
 //                        netConfirmBean.getRid();     //订单rid
                     Intent intent;

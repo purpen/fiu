@@ -345,7 +345,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    private HttpHandler<String> commentsHander;
+//    private HttpHandler<String> commentsHander;
 
     //评论列表
     private void getComments(String page, String size, String target_id, String target_user_id, String type) {
@@ -516,8 +516,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
-        if (commentsHander != null)
-            commentsHander.cancel();
+//        if (commentsHander != null)
+//            commentsHander.cancel();
         if (delelteHandler != null)
             delelteHandler.cancel();
         if (sendHandler != null)

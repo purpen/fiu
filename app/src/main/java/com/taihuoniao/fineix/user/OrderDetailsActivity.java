@@ -501,7 +501,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
 
         mTotalMoney.setText("¥" + orderDetailBean.getTotal_money());//商品总额
         mFreight.setText("¥" + orderDetailBean.getFreight());//运费
-        if (!orderDetailBean.getExpress_no().isEmpty()) {
+        if (!TextUtils.isEmpty(orderDetailBean.getExpress_no())) {
             mLogisticsCompanyLayout.setVisibility(View.VISIBLE);
             mLogisticsNumberLayout.setVisibility(View.VISIBLE);
             mLogisticsNumber.setText(orderDetailBean.getExpress_no());

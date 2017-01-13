@@ -115,6 +115,8 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                                     map.put("keyTargetId", mList.get(i).getShopCartItemList().get(j).getTarget_id());
                                     map.put("keyProductId", mList.get(i).getShopCartItemList().get(j).getProduct_id());
                                     map.put("isFirstJD",mList.get(i).getShopCartItemList().get(j).isFirstJD);
+                                    map.put("storage_id",mList.get(i).getShopCartItemList().get(j).getStorage_id());
+                                    map.put("referral_code",mList.get(i).getShopCartItemList().get(j).getReferral_code());
                                     // 一开始，把所有的checkbox状态设为未勾选
                                     map.put("status", false);
                                     totalList.add(map);
@@ -289,12 +291,13 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                     StringBuilder addSubtractBuilder = new StringBuilder();
                     addSubtractBuilder.append("[");
                     for (int i = 0; i < ShopCartActivity.this.hashMap.size(); i++) {
+                        // TODO: 2017/1/13 添加推广码 店铺ID
                         addSubtractBuilder.append("{\"target_id\":")
                                 .append(totalList.get(i).get("keyTargetId"))
                                 .append(",\"n\":").append(ShopCartActivity.this.hashMap.get(i))
                                 .append(",\"type\":").append(1)
-                                .append(",\"storage_id\":").append("")
-                                .append(",\"referral_code\":").append("")
+                                .append(",\"storage_id\":").append("\"" + totalList.get(i).get("storage_id") + "\"")
+                                .append(",\"referral_code\":").append("\"" + totalList.get(i).get("referral_code") + "\"")
                                 .append("},");
                     }
                     addSubtractBuilder.append("]");
@@ -376,10 +379,11 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                 for (int i = 0; i < totalList.size(); i++) {
                     if ((boolean) totalList.get(i).get("status")) {
                         list_delete.add(totalList.get(i));
+                        // TODO: 2017/1/13 添加推广码 店铺ID
                         builder.append("{\"target_id\":").append(totalList.get(i).get("keyTargetId"))
                                 .append(",\"n\":").append(totalList.get(i).get("keyCount"))
                                 .append(",\"type\":").append(totalList.get(i).get("keyType"))
-                                .append(",\"referral_code\":").append("\"" + SPUtil.read("referral_code") + "\"")
+                                .append(",\"referral_code\":").append("\"" + totalList.get(i).get("referral_code") + "\"")
                                 .append(",\"storage_id\":").append("\"店铺ID\"")
                                 .append("},");
                     }

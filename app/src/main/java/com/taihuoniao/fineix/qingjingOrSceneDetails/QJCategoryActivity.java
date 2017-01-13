@@ -110,7 +110,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         hasSubsCount();
     }
 
-    private HttpHandler<String> userCenterHandler;
+//    private HttpHandler<String> userCenterHandler;
 
     //获取订阅情境主题个数
     private void hasSubsCount() {
@@ -257,8 +257,8 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void onDestroy() {
-        if (userCenterHandler != null)
-            userCenterHandler.cancel();
+//        if (userCenterHandler != null)
+//            userCenterHandler.cancel();
         if (cancelSubsHandler != null)
             cancelSubsHandler.cancel();
         if (subsHandler != null)

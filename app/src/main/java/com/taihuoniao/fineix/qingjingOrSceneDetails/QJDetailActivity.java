@@ -33,7 +33,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.HttpHandler;
+//import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -651,7 +651,7 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
-    private HttpHandler<String> deleteHandler;
+//    private HttpHandler<String> deleteHandler;
 
     //删除情景
     private void deleteScene() {
@@ -686,7 +686,7 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
-    private HttpHandler<String> cancelLoveHandler;
+//    private HttpHandler<String> cancelLoveHandler;
 
     //取消点赞
     private void cancelLoveQJ() {
@@ -764,7 +764,7 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
-    private HttpHandler<String> followHandler;
+//    private HttpHandler<String> followHandler;
 
     //关注用户
     private void fllow() {
@@ -833,7 +833,7 @@ public class QJDetailActivity extends BaseActivity {
         PopupWindowUtil.show(activity, view);
     }
 
-    private HttpHandler<String> cancelFollowHandler;
+//    private HttpHandler<String> cancelFollowHandler;
 
     //取消关注
     private void cancelFollow() {
@@ -975,18 +975,18 @@ public class QJDetailActivity extends BaseActivity {
             shoucangHandler.cancel();
         if (loveHandler != null)
             loveHandler.cancel();
-        if (followHandler != null)
-            followHandler.cancel();
+//        if (followHandler != null)
+//            followHandler.cancel();
         if (detailHandler != null)
             detailHandler.cancel();
-        if (deleteHandler != null)
-            deleteHandler.cancel();
+//        if (deleteHandler != null)
+//            deleteHandler.cancel();
         if (cancelShoucangHandler != null)
             cancelShoucangHandler.cancel();
-        if (cancelLoveHandler != null)
-            cancelLoveHandler.cancel();
-        if (cancelFollowHandler != null)
-            cancelFollowHandler.cancel();
+//        if (cancelLoveHandler != null)
+//            cancelLoveHandler.cancel();
+//        if (cancelFollowHandler != null)
+//            cancelFollowHandler.cancel();
         unregisterReceiver(qjDetailReceiver);
         super.onDestroy();
     }

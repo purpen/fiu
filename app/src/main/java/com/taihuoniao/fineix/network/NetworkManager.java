@@ -12,7 +12,7 @@ public class NetworkManager {
     /**
      * 网络请求栈
      */
-    private static List<HttpHandler<String>> networkList;
+//    private static List<HttpHandler<String>> networkList;
     /**
      * 网络请求标签集合
      */
@@ -27,24 +27,24 @@ public class NetworkManager {
     }
 
     private NetworkManager() {
-        networkList = new ArrayList<>();
+//        networkList = new ArrayList<>();
         tagList = new ArrayList<>();
     }
 
-    /**
-     * 强行结束所有在运行的网络请求
-     */
-    public void cancelAll() {
-        int size = networkList.size();
-        for (int i = size - 1; i >= 0; i--) {
-            HttpHandler<String> handler = networkList.get(i);
-            if (handler != null) {
-                handler.cancel();
-            }
-            networkList.remove(i);
-            tagList.remove(i);
-        }
-    }
+//    /**
+//     * 强行结束所有在运行的网络请求
+//     */
+//    public void cancelAll() {
+//        int size = networkList.size();
+//        for (int i = size - 1; i >= 0; i--) {
+//            HttpHandler<String> handler = networkList.get(i);
+//            if (handler != null) {
+//                handler.cancel();
+//            }
+//            networkList.remove(i);
+//            tagList.remove(i);
+//        }
+//    }
 
 
     /**
@@ -54,11 +54,11 @@ public class NetworkManager {
      */
     public void cancel(String name) {
         if (tagList == null) return;
-        if (networkList == null) return;
+//        if (networkList == null) return;
         for (int i = 0; i < tagList.size(); i++) {
             if (tagList.get(i).equals(name)) {
-                networkList.get(i).cancel();
-                networkList.remove(i);
+//                networkList.get(i).cancel();
+//                networkList.remove(i);
                 tagList.remove(i);
             }
         }
@@ -72,14 +72,14 @@ public class NetworkManager {
      */
     public void add(String name, HttpHandler<String> httpHandler) {
         if (tagList == null) return;
-        if (networkList == null) return;
+//        if (networkList == null) return;
         tagList.add(name);
-        networkList.add(httpHandler);
+//        networkList.add(httpHandler);
     }
 
-    public List<HttpHandler<String>> getNetworkList() {
-        return networkList;
-    }
+//    public List<HttpHandler<String>> getNetworkList() {
+//        return networkList;
+//    }
 
     public List<String> getTagList() {
         return tagList;

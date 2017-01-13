@@ -30,7 +30,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
     HashMap<Integer, String> hashMap = new HashMap<>();
     HashMap<Integer, String> hashMapRatingBar = new HashMap<>();
     private LayoutInflater inflater = null;
-    public BitmapUtils bitmapUtils_listview = null;
+    private BitmapUtils bitmapUtils_listview = null;
     private List<OrderDetailBean.ItemsBean> list = null;
     private OnTwoClickedListener listener = null;//用来传星条数和评价内容两个
 
