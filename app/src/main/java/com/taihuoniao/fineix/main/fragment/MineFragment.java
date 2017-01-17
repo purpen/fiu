@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.alliance.MyAccountActivity;
 import com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
@@ -103,7 +104,8 @@ public class MineFragment extends MyBaseFragment {
     ImageView riv_auth;
 
     public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects,
-            R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address, R.mipmap.icon_personal_chargeback};
+            R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address, R.mipmap.icon_personal_chargeback,
+    R.mipmap.icon_personal_geren_tuikuanshouhou};
     public static final String[] imgTxt = MainApplication.getContext().getResources().getStringArray(R.array.mine_gv_txt);
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
@@ -400,6 +402,9 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 8: //退款/售后
                         startActivity(new Intent(activity, ChargeBackAndServiceActivity.class));
+                        break;
+                    case 9: //分成管理
+                        startActivity(new Intent(activity, MyAccountActivity.class));
                         break;
                 }
             }

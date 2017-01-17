@@ -1239,4 +1239,8 @@ public class ClientDiscoverAPI {
         params.put("express_caty", express_caty);
         return params;
     }
+
+    public static HashMap<String, String> getallianceAccount() {
+        return new HashMap<>();
+    }
 }

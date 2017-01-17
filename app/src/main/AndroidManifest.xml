@@ -481,6 +481,14 @@
 
         <activity android:name="com.taihuoniao.fineix.user.OrderTrackActivity" />
 
+        <!--火鸟联盟-->
+        <activity android:name="com.taihuoniao.fineix.personal.alliance.MyAccountActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.alliance.SettlementRecordActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.alliance.SettlementRecordDetailsActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.alliance.TradeRecordActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.alliance.WithdrawActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.alliance.WithdrawRecordActivity" />
+
     </application>
 
 </manifest>

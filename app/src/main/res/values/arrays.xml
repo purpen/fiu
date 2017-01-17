@@ -10,6 +10,7 @@
         <item>红包</item>
         <item>收货地址</item>
         <item>退款/售后</item>
+        <item>分成管理</item>
     </string-array>
 
     <string-array name="partner_name">
