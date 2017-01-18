@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.personal.alliance.MyAccountActivity;
 import com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
@@ -150,7 +151,8 @@ public class MineFragment extends MyBaseFragment {
         if (imgIds.length == imgTxt.length) {
             gvList = new ArrayList<>();
             ImgTxtItem item;
-            for (int i = 0; i < imgIds.length; i++) {
+            int loadCount = imgIds.length - (TextUtils.isEmpty(AllianceRequstDeal.getAllianceValue()) ? 1 : 0);
+            for (int i = 0; i < loadCount; i++) {
                 item = new ImgTxtItem();
                 item.imgId = imgIds[i];
                 item.txt = imgTxt[i];

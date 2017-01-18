@@ -27,6 +27,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
@@ -302,6 +303,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                         instance.setMedium_avatar_url(avatarUrl);
                         instance.identify = thirdLogin.user.identify;
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
+                        AllianceRequstDeal.requestAllianceIdentify();
                         if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
                             updateUserIdentity();
                             startActivity(new Intent(activity, CompleteUserInfoActivity.class));
@@ -426,6 +428,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                     MainApplication.hasUser = true;
                     LoginInfo loginInfo = response.getData();
                     SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                    AllianceRequstDeal.requestAllianceIdentify();
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
                         startActivity(new Intent(activity, CompleteUserInfoActivity.class));

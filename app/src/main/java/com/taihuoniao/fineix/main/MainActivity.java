@@ -84,7 +84,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
             which = IndexFragment.class.getSimpleName();
             boolean exit = intent.getBooleanExtra("exit", false);
-            if (exit) tv_msg_indicator.setVisibility(View.GONE);
+            if (exit) {
+                tv_msg_indicator.setVisibility(View.GONE);
+            }
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
         } else if (intent.hasExtra(FindFragment.class.getSimpleName())) {
@@ -265,6 +267,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     MainApplication.which_activity = 0;
                     which = MineFragment.class.getSimpleName();
+
+                    // TODO: 2017/1/18 移除MineFragment
+                    removeMineFragment();
                     startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }
                 break;
@@ -485,6 +490,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             finish();
             System.exit(0);
+        }
+    }
+
+    private void removeMineFragment() {
+        Fragment fragment = fm.findFragmentByTag(MineFragment.class.getSimpleName());
+        if (fragment != null) {
+            fm.beginTransaction().remove(fragment).commitAllowingStateLoss();
+        }
+        for(int i = 0; i < fragments.size(); i++) {
+            if (fragments.get(i) instanceof MineFragment) {
+                fragments.remove(i);
+                break;
+            }
         }
     }
 }

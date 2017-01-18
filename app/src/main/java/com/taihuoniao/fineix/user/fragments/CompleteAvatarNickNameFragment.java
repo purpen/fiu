@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
@@ -182,6 +183,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                                 loginInfo.setSex(gender);
                                 loginInfo.setNickname(nickName);
                                 SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                                AllianceRequstDeal.requestAllianceIdentify();
                             }
                             if (activity instanceof CompleteUserInfoActivity) {
                                 ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();

@@ -22,6 +22,7 @@ import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -176,6 +177,7 @@ public class MainApplication extends Application {
             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
             if (TextUtils.equals(ConstantCfg.STATUS_NEED_LOGIN, response.getStatus())) {//需要登录
                 SPUtil.remove(DataConstants.LOGIN_INFO);
+                AllianceRequstDeal.removeAllianceValue();
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;
             }
@@ -183,6 +185,7 @@ public class MainApplication extends Application {
             NetBean netBean = JsonUtil.fromJson(json, NetBean.class);
             if (TextUtils.equals(ConstantCfg.STATUS_NEED_LOGIN, netBean.getStatus())) {//需要登录
                 SPUtil.remove(DataConstants.LOGIN_INFO);
+                AllianceRequstDeal.removeAllianceValue();
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;
             }

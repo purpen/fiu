@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.ToLoginActivity;
@@ -124,6 +125,7 @@ public class SetPasswordFragment extends MyBaseFragment {
                     if (response.isSuccess()) {
                         LoginInfo loginInfo = response.getData();
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                        AllianceRequstDeal.requestAllianceIdentify();
                         if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                             updateUserIdentity();
                             startActivity(new Intent(activity, CompleteUserInfoActivity.class));

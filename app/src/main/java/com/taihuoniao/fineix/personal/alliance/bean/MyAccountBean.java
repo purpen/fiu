@@ -8,50 +8,50 @@ package com.taihuoniao.fineix.personal.alliance.bean;
 public class MyAccountBean {
 
     /**
-     * _id : 58624d9c5c42ecae0a0041b2
-     * name : null
-     * code : tian
-     * kind : 2
-     * type : 1
+     * _id : 587dd1343ffca27e2a8baaec
+     * name : 田帅
+     * code : x518fe
+     * kind : 0
+     * type : 2
      * status : 5
-     * contact : {"name":"田帅","phone":"15001120509","email":"tianshuai@taihuoniao.com","position":"PHP","company_name":"太火鸟"}
-     * summary : 不想说话
-     * total_balance_amount : 0
+     * contact : {"name":"田帅 ","phone":"15001120509","email":"tianshuai@taihuoniao.com","position":"设计","company_name":"太火鸟"}
+     * summary : 尽供测试！！
+     * total_balance_amount : 591.5
      * total_cash_amount : 0
-     * wait_cash_amount : 0
+     * wait_cash_amount : 591.5
      * whether_apply_cash : 0
      * whether_balance_stat : 0
-     * total_count : 7
-     * success_count : 2
-     * created_on : 1482837404
-     * updated_on : 1483499040
-     * current_user_id : 36
+     * total_count : 11
+     * success_count : 7
+     * created_on : 1484640564
+     * updated_on : 1484646601
+     * current_user_id : 20448
      */
 
     private String _id;
-    private Object name;
+    private String name;
     private String code;
-    private int kind;
-    private int type;
-    private int status;
+    private String kind;
+    private String type;
+    private String status;
     private ContactEntity contact;
     private String summary;
-    private int total_balance_amount;
-    private int total_cash_amount;
-    private int wait_cash_amount;
-    private int whether_apply_cash;
-    private int whether_balance_stat;
-    private int total_count;
-    private int success_count;
-    private int created_on;
-    private int updated_on;
-    private int current_user_id;
+    private String total_balance_amount;
+    private String total_cash_amount;
+    private String wait_cash_amount;
+    private String whether_apply_cash;
+    private String whether_balance_stat;
+    private String total_count;
+    private String success_count;
+    private String created_on;
+    private String updated_on;
+    private String current_user_id;
 
     public void set_id(String _id) {
         this._id = _id;
     }
 
-    public void setName(Object name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -59,15 +59,15 @@ public class MyAccountBean {
         this.code = code;
     }
 
-    public void setKind(int kind) {
+    public void setKind(String kind) {
         this.kind = kind;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -79,43 +79,43 @@ public class MyAccountBean {
         this.summary = summary;
     }
 
-    public void setTotal_balance_amount(int total_balance_amount) {
+    public void setTotal_balance_amount(String total_balance_amount) {
         this.total_balance_amount = total_balance_amount;
     }
 
-    public void setTotal_cash_amount(int total_cash_amount) {
+    public void setTotal_cash_amount(String total_cash_amount) {
         this.total_cash_amount = total_cash_amount;
     }
 
-    public void setWait_cash_amount(int wait_cash_amount) {
+    public void setWait_cash_amount(String wait_cash_amount) {
         this.wait_cash_amount = wait_cash_amount;
     }
 
-    public void setWhether_apply_cash(int whether_apply_cash) {
+    public void setWhether_apply_cash(String whether_apply_cash) {
         this.whether_apply_cash = whether_apply_cash;
     }
 
-    public void setWhether_balance_stat(int whether_balance_stat) {
+    public void setWhether_balance_stat(String whether_balance_stat) {
         this.whether_balance_stat = whether_balance_stat;
     }
 
-    public void setTotal_count(int total_count) {
+    public void setTotal_count(String total_count) {
         this.total_count = total_count;
     }
 
-    public void setSuccess_count(int success_count) {
+    public void setSuccess_count(String success_count) {
         this.success_count = success_count;
     }
 
-    public void setCreated_on(int created_on) {
+    public void setCreated_on(String created_on) {
         this.created_on = created_on;
     }
 
-    public void setUpdated_on(int updated_on) {
+    public void setUpdated_on(String updated_on) {
         this.updated_on = updated_on;
     }
 
-    public void setCurrent_user_id(int current_user_id) {
+    public void setCurrent_user_id(String current_user_id) {
         this.current_user_id = current_user_id;
     }
 
@@ -123,7 +123,7 @@ public class MyAccountBean {
         return _id;
     }
 
-    public Object getName() {
+    public String getName() {
         return name;
     }
 
@@ -131,15 +131,15 @@ public class MyAccountBean {
         return code;
     }
 
-    public int getKind() {
+    public String getKind() {
         return kind;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -151,52 +151,52 @@ public class MyAccountBean {
         return summary;
     }
 
-    public int getTotal_balance_amount() {
+    public String getTotal_balance_amount() {
         return total_balance_amount;
     }
 
-    public int getTotal_cash_amount() {
+    public String getTotal_cash_amount() {
         return total_cash_amount;
     }
 
-    public int getWait_cash_amount() {
+    public String getWait_cash_amount() {
         return wait_cash_amount;
     }
 
-    public int getWhether_apply_cash() {
+    public String getWhether_apply_cash() {
         return whether_apply_cash;
     }
 
-    public int getWhether_balance_stat() {
+    public String getWhether_balance_stat() {
         return whether_balance_stat;
     }
 
-    public int getTotal_count() {
+    public String getTotal_count() {
         return total_count;
     }
 
-    public int getSuccess_count() {
+    public String getSuccess_count() {
         return success_count;
     }
 
-    public int getCreated_on() {
+    public String getCreated_on() {
         return created_on;
     }
 
-    public int getUpdated_on() {
+    public String getUpdated_on() {
         return updated_on;
     }
 
-    public int getCurrent_user_id() {
+    public String getCurrent_user_id() {
         return current_user_id;
     }
 
     public static class ContactEntity {
         /**
-         * name : 田帅
+         * name : 田帅 
          * phone : 15001120509
          * email : tianshuai@taihuoniao.com
-         * position : PHP
+         * position : 设计
          * company_name : 太火鸟
          */
 

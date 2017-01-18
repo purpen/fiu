@@ -78,5 +78,6 @@ public class User implements Serializable {
     public class Identify implements Serializable{
         public int is_expert;
         public int is_scene_subscribe;
+        public String alliance_id;
     }
 }

@@ -22,6 +22,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -174,6 +175,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                             LoginInfo loginInfo = response.getData();
                             loginInfo.setMedium_avatar_url(avatarUrl);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            AllianceRequstDeal.requestAllianceIdentify();
                             loginSuccess(loginInfo);
                         } else {
                             Util.makeToast(response.getMessage());
@@ -214,6 +216,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                             LoginInfo loginInfo = response.getData();
                             loginInfo.setMedium_avatar_url(avatarUrl);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            AllianceRequstDeal.requestAllianceIdentify();
                             loginSuccess(loginInfo);
                         } else {
                             Util.makeToast(response.getMessage());

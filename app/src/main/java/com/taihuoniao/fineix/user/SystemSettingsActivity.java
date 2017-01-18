@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetWorkUtils;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -175,6 +176,7 @@ public class SystemSettingsActivity extends BaseActivity {
                     ToastUtils.showSuccess("退出成功");
                 }
                 SPUtil.remove(DataConstants.LOGIN_INFO);
+                AllianceRequstDeal.removeAllianceValue();
                 ((MainApplication) getApplication()).removeUserId();
                 Intent intent = new Intent(activity, MainActivity.class);
                 intent.putExtra(IndexFragment.class.getSimpleName(), IndexFragment.class.getSimpleName());

@@ -1,9 +1,7 @@
 package com.taihuoniao.fineix.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
 import com.taihuoniao.fineix.utils.LogUtil;
 
@@ -15,8 +13,8 @@ import com.taihuoniao.fineix.utils.LogUtil;
 public class Base2Fragment extends Fragment {
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         LogUtil.e("taihuoniao", "---------->onCreate()" + getClass().getSimpleName());
-        super.onViewCreated(view, savedInstanceState);
+        super.onCreate(savedInstanceState);
     }
 }
