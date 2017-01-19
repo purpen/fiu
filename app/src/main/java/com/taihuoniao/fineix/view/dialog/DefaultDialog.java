@@ -24,4 +24,8 @@ public class DefaultDialog {
     public DefaultDialog(Context context, String title, String content, String[] operationTexts, IDialogListenerConfirmBack iDialogListenerConfirmBack) {
         new THNAlertDialog2(context, title, content, operationTexts, iDialogListenerConfirmBack);
     }
+
+    public DefaultDialog(Context context, String title, String content, String operationTexts, IDialogListenerConfirmBack iDialogListenerConfirmBack) {
+        new THNAlertDialog3(context, title, content, new String[]{operationTexts}, iDialogListenerConfirmBack);
+    }
 }

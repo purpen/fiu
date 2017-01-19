@@ -6,63 +6,131 @@
     android:orientation="vertical">
 
     <com.taihuoniao.fineix.view.CustomHeadView
-        android:id="@+id/custom_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:id="@+id/custom_head"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="154dp"
         android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="我的分城（元）" />
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="84dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="19320.24"
-                android:textColor="#BE8914"
-                android:textSize="30sp" />
+                android:layout_marginTop="25dp"
+                android:text="可提现金额" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="昨日收益（元）" />
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="19320.24"
+                    android:textColor="#BE8914"
+                    android:textSize="30sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/icon_alliance_arrow" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#E4E2DF" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="+1.00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="我的收益" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:text="+1.00" />
+                android:background="#E4E2DF" />
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="+1.00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:text="已提现金额" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="15dp"
         android:background="@color/white"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -79,7 +147,6 @@
             android:src="@mipmap/icon_alliance_withdraw" />
 
         <TextView
-            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
@@ -129,9 +196,9 @@
         android:background="#E4E2DF" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:id="@+id/linearLayout3"
         android:background="@color/white"
         android:gravity="center_vertical">
 
@@ -152,9 +219,9 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:id="@+id/linearLayout4"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:gravity="center_vertical">
@@ -170,6 +237,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
             android:src="@mipmap/icon_alliance_arrow" />
 

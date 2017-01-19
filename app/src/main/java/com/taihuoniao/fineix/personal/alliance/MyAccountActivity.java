@@ -79,7 +79,7 @@ public class MyAccountActivity extends BaseActivity {
                 HttpResponse<MyAccountBean> httpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<MyAccountBean>>() {
                 });
                 if (httpResponse.isSuccess()) {
-                    MyAccountBean myAccountBean = httpResponse.getData();
+                    dealUI(httpResponse.getData());
                 }
             }
 
@@ -102,7 +102,9 @@ public class MyAccountActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.linearLayout1:
 //                Toast.makeText(this, "可提现金额", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MyAccountActivity.this, WithdrawActivity.class));
+                Intent intent = new Intent(MyAccountActivity.this, WithdrawActivity.class);
+                intent.putExtra("balance", myAccountBean.getWait_cash_amount());
+                startActivity(intent);
                 break;
             case R.id.linearLayout2:
 //                Toast.makeText(this, "交易记录", Toast.LENGTH_SHORT).show();
@@ -123,5 +125,17 @@ public class MyAccountActivity extends BaseActivity {
                 Toast.makeText(this, "交易手续费说明", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private MyAccountBean myAccountBean;
+
+    private void dealUI(MyAccountBean myAccountBean){
+        if (myAccountBean == null) {
+            return;
+        }
+        textView1.setText(String.format("¥ %s", myAccountBean.getWait_cash_amount()));
+        textView2.setText(String.format("¥ %s", myAccountBean.getTotal_balance_amount()));
+        textView3.setText(String.format("¥ %s", myAccountBean.getTotal_cash_amount()));
+        this.myAccountBean = myAccountBean;
     }
 }

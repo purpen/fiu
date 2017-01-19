@@ -1243,4 +1243,25 @@ public class ClientDiscoverAPI {
     public static HashMap<String, String> getallianceAccount() {
         return new HashMap<>();
     }
+
+    public static HashMap<String, String> getWithdraw_cash(String id, String amount) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("amount", amount);
+        return params;
+    }
+
+    public static HashMap<String, String> getTradeRecordelist(String page, String size, String sort) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("page", page);
+        params.put("size", size);
+        params.put("sort", sort);
+        return params;
+    }
+
+    public static HashMap<String, String> getTradeRecordedetails(String _id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", _id);
+        return params;
+    }
 }
