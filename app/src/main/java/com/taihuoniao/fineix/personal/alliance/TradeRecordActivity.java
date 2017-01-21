@@ -66,16 +66,20 @@ public class TradeRecordActivity extends BaseActivity {
         pullToRefreshListViewReturn.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                curPage = 1;
-//                orderListParser();
+                curPage = 1;
+                requestNet();
             }
         });
         // 设置上拉加载下一页
         pullToRefreshListViewReturn.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-//                curPage++;
-//                orderListParser();
+                if (isLoadMore) {
+                    curPage++;
+                    requestNet();
+                } else {
+                    isLoadMore = true;
+                }
             }
         });
 
@@ -84,8 +88,9 @@ public class TradeRecordActivity extends BaseActivity {
         listView_show.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO: 2017/1/19 进入交易记录详情
-                Intent intent = new Intent(TradeRecordActivity.this, TradeRecordeDetailsActivity.class);
+                Intent intent = new Intent(TradeRecordActivity.this, TradeRecordeDetailsActivity .class);
+                String id1 = ((TradeRecordBean.RowsEntity) adapter.getItem(position)).get_id();
+                intent.putExtra("_id", id1);
                 startActivity(intent);
             }
         });
@@ -104,10 +109,11 @@ public class TradeRecordActivity extends BaseActivity {
     }
 
     private void requestDataList(){
-        HashMap<String, String> tradeRecordelist = ClientDiscoverAPI.getTradeRecordelist("1", "8", "0");
+        HashMap<String, String> tradeRecordelist = ClientDiscoverAPI.getTradeRecordelist(String.valueOf(curPage), "8", "0");
         HttpRequest.post(tradeRecordelist, URL.ALLIANCE_BALANCE_LIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
+                pullToRefreshListViewReturn.onRefreshComplete();
                 HttpResponse<TradeRecordBean> tradeRecordeBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<TradeRecordBean>>() {
                 });
                 if (tradeRecordeBeanHttpResponse.isSuccess()) {
@@ -126,4 +132,7 @@ public class TradeRecordActivity extends BaseActivity {
         List<TradeRecordBean.RowsEntity> rows = tradeRecordeBeanHttpResponse.getData().getRows();
         adapter.setList(rows);
     }
+
+    private int curPage = 1;
+    private boolean isLoadMore;
 }

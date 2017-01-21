@@ -1,20 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F7F7"
-    android:fitsSystemWindows="true"
+    android:background="#FFFFFF"
     android:orientation="vertical">
 
-    <com.taihuoniao.fineix.view.CustomHeadView
-        android:id="@+id/custom_head"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:background="#f4f4f4"
+        android:layout_height="10dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
         android:background="#E4E2DF" />
 
     <LinearLayout
@@ -172,14 +169,12 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="分成收益" />
+            android:layout_weight="1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#BE8914"
-            android:text="¥333333" />
+            android:textColor="#BE8914" />
     </LinearLayout>
 
     <View

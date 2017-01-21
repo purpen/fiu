@@ -5,7 +5,7 @@ package com.taihuoniao.fineix.network;
  * 网络请求url封装
  */
 public class URL {
-    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
+    public static final String BASE_URL = "https://api.taihuoniao.com/app/api"; //线上
 //    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";//生产环境
 //    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
@@ -166,7 +166,9 @@ public class URL {
     public static final String ALLIANCE_BALANCE_LIST = BASE_URL + "/balance/getlist";
     public static final String ALLIANCE_BALANCE_VIEW = BASE_URL + "/balance/view";
     public static final String ALLIANCE_BALANCE_RECORD_LIST = BASE_URL + "/balance_record/getlist";
+    public static final String ALLIANCE_BALANCE_RECORD_ITEM = BASE_URL + "/balance_record/item_list";
     public static final String ALLIANCE_BALANCE_WITHDRAW_CASH_LIST = BASE_URL + "/withdraw_cash/getlist";
     public static final String ALLIANCE_BALANCE_WITHDRAW_CASH_VIEW = BASE_URL + "/withdraw_cash/view";
     public static final String ALLIANCE_BALANCE_WITHDRAW_CASH_APPLY_CASH = BASE_URL + "/withdraw_cash/apply_cash";
+    public static final String ALLIANCE_BALANCE_PRIVACY_POLICY = BASE_URL + "/alliance/info";
 }

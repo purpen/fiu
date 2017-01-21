@@ -6,9 +6,9 @@
     android:orientation="vertical">
 
     <com.taihuoniao.fineix.view.CustomHeadView
-    android:id="@+id/custom_head"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -18,25 +18,25 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="可提现金额" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="可提现金额" />
 
                 <TextView
                     android:id="@+id/textView1"
@@ -45,19 +45,19 @@
                     android:layout_marginTop="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="19320.24"
                     android:textColor="#BE8914"
                     android:textSize="30sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="15dp"
-                    android:src="@mipmap/icon_alliance_arrow" />
-
             </LinearLayout>
-        </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/icon_alliance_arrow" />
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -66,13 +66,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:orientation="horizontal">
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -80,14 +80,14 @@
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
+                    android:textColor="#222222"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="+1.00" />
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="我的收益" />
 
             </LinearLayout>
@@ -101,7 +101,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -109,16 +109,16 @@
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
+                    android:textColor="#222222"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="+1.00" />
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:text="已提现金额" />
+                    android:layout_marginTop="5dp"
+                    android:text="已提现金额"
+                    android:id="@+id/textView" />
             </LinearLayout>
         </LinearLayout>
 
@@ -249,7 +249,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:text="店铺销售收入将显示在这里，已结算收入可以随时申请提现"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -263,7 +264,7 @@
             android:layout_marginLeft="15dp"
             android:text="收入结算规则"
             android:textColor="#0D79FD"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/textView_link2"
@@ -272,6 +273,7 @@
             android:layout_marginLeft="10dp"
             android:text="交易手续费说明"
             android:textColor="#0D79FD"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

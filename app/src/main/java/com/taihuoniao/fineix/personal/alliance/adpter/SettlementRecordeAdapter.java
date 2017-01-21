@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.personal.alliance.bean.SettlementRecordeListBean;
+import com.taihuoniao.fineix.utils.StringFormatUtils;
 
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class SettlementRecordeAdapter extends BaseAdapter {
         if (rowsEntity != null) {
             viewHolder.textView1.setText(rowsEntity.getCreated_at());
             viewHolder.textView2.setText(rowsEntity.getBalance_count());
-            viewHolder.textView3.setText(String.format("¥ %s", rowsEntity.getAmount()));
+            viewHolder.textView3.setText(StringFormatUtils.formatMoney(rowsEntity.getAmount()));
         }
         return convertView;
     }

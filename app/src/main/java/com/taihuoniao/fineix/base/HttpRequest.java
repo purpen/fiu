@@ -43,9 +43,9 @@ public class HttpRequest {
         return post(getSignedList(params), requestUrl, callBack, true);
     }
 
-    private static Call post(List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
+    private static Call post(final List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
         final BaseHandler handler = new BaseHandler(null, callBack);
-        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString());
+//        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
             requestUrlreal = URL.BASE_URL + requestUrl;
@@ -55,6 +55,7 @@ public class HttpRequest {
             public void onFailure(Call call, IOException e) {
                 Message msg = Message.obtain();
                 msg.what = BaseHandler.CALLBACK_FAILURE;
+                LogUtil.e("请求接口为" + requestUrl + "\n" + "请求失败");
                 handler.sendMessage(msg);
             }
 
@@ -63,7 +64,7 @@ public class HttpRequest {
                 Message msg = Message.obtain();
                 msg.what = BaseHandler.CALLBACK_SUCCESS;
                 msg.obj = response.body().string();
-                LogUtil.e("请求接口为" + requestUrl + "\n" + "返回数据为" + msg.obj);
+                LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString() + "\n" + "返回数据为" + msg.obj);
                 handler.sendMessage(msg);
             }
         });

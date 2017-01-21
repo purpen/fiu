@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#ffffff"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -21,14 +22,14 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$199.60" />
+                android:textColor="#262726" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="2017-01-18 18:29" />
+                android:textColor="#666460"/>
         </LinearLayout>
 
         <TextView
@@ -38,7 +39,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:drawablePadding="5dp"
-            android:text="已结算" />
+            android:textColor="#262726" />
     </RelativeLayout>
 
     <View

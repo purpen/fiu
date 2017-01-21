@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.personal.alliance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -109,7 +110,10 @@ public class WithdrawActivity extends BaseActivity {
             public void onSuccess(String json) {
                 HttpResponse httpResponse = JsonUtil.fromJson(json, HttpResponse.class);
                 if (httpResponse.isSuccess()) {
+
                     // TODO: 2017/1/19 提现成功
+                    startActivity(new Intent(WithdrawActivity.this, MyAccountActivity.class));
+                    WithdrawActivity.this.finish();
                 }
             }
 
@@ -147,6 +151,7 @@ public class WithdrawActivity extends BaseActivity {
                 textView1.setVisibility(View.INVISIBLE);
                 buttonCommit.setEnabled(true);
             }
+            amount = editText1.getText().toString();
         }
 
         @Override

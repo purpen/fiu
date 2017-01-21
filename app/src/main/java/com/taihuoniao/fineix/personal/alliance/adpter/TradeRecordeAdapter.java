@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.personal.alliance.bean.TradeRecordBean;
+import com.taihuoniao.fineix.utils.StringFormatUtils;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class TradeRecordeAdapter extends BaseAdapter {
 
         TradeRecordBean.RowsEntity rowsEntity = mRows.get(position);
         if (rowsEntity != null) {
-            viewHolder.textView1.setText(String.format("¥ %s", rowsEntity.getTotal_price()));
+            viewHolder.textView1.setText(StringFormatUtils.formatMoney(rowsEntity.getTotal_price()));
             viewHolder.textView2.setText(rowsEntity.getCreated_at());
             viewHolder.textView3.setText(rowsEntity.getStatus_label());
         }

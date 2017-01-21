@@ -1259,9 +1259,29 @@ public class ClientDiscoverAPI {
         return params;
     }
 
+    /**
+     * @param _id 佣金ID
+     * @return
+     */
     public static HashMap<String, String> getTradeRecordedetails(String _id) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id", _id);
+        return params;
+    }
+
+    public static HashMap<String, String> getSettlementRecordedetails(String page, String size, String sort, String balance_record_id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("page", page);
+        params.put("size", size);
+        params.put("sort", sort);
+        params.put("balance_record_id", balance_record_id);
+        return params;
+    }
+
+    public static HashMap<String, String> getWithdrawRecordedetails(String id, String amount) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("amount", amount);
         return params;
     }
 }
