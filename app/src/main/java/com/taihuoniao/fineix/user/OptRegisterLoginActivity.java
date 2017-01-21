@@ -15,7 +15,8 @@ import android.widget.LinearLayout;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -238,7 +239,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
                 if (response.isSuccess()) {
-                    ThirdLogin thirdLogin = response.getData();
+                    final ThirdLogin thirdLogin = response.getData();
                     if (thirdLogin == null) return;
                     if (thirdLogin.has_user == 0) { //跳转去绑定用户
                         MainApplication.hasUser = false;
@@ -261,24 +262,12 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
                         instance.setMedium_avatar_url(avatarUrl);
                         instance.identify = thirdLogin.user.identify;
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
-                        AllianceRequstDeal.requestAllianceIdentify();
-                        if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
-                            updateUserIdentity();
-//                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
-                            startActivity(new Intent(activity, CompleteUserInfoActivity.class));
-                            if (ToRegisterActivity.instance != null) {
-                                ToRegisterActivity.instance.finish();
+                        AllianceRequstDeal.requestAllianceIdentify(new GlobalCallBack() {
+                            @Override
+                            public void callBack(Object object) {
+                                loginSuccess(thirdLogin);
                             }
-                            if (OptRegisterLoginActivity.instance != null) {
-                                OptRegisterLoginActivity.instance.finish();
-                            }
-                            if (ToLoginActivity.instance != null) {
-                                ToLoginActivity.instance.finish();
-                            }
-                            finish();
-                        } else {
-                            LoginCompleteUtils.goFrom(activity,null,thirdLogin);
-                        }
+                        });
                     }
                 } else {
                     ToastUtils.showError(response.getMessage());
@@ -296,6 +285,26 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
                 ToastUtils.showError(R.string.network_err);
             }
         });
+    }
+
+    void loginSuccess(ThirdLogin thirdLogin) {
+        if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
+            updateUserIdentity();
+//                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+            startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+            if (ToRegisterActivity.instance != null) {
+                ToRegisterActivity.instance.finish();
+            }
+            if (OptRegisterLoginActivity.instance != null) {
+                OptRegisterLoginActivity.instance.finish();
+            }
+            if (ToLoginActivity.instance != null) {
+                ToLoginActivity.instance.finish();
+            }
+            finish();
+        } else {
+            LoginCompleteUtils.goFrom(activity,null,thirdLogin);
+        }
     }
 
     private void updateUserIdentity() {

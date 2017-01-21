@@ -21,7 +21,7 @@ import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AuthData;
 import com.taihuoniao.fineix.beans.HttpResponse;

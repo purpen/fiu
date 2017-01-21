@@ -15,7 +15,8 @@ import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BindPhonePagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -172,11 +173,15 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         });
 
                         if (response.isSuccess()) {
-                            LoginInfo loginInfo = response.getData();
+                            final LoginInfo loginInfo = response.getData();
                             loginInfo.setMedium_avatar_url(avatarUrl);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
-                            AllianceRequstDeal.requestAllianceIdentify();
-                            loginSuccess(loginInfo);
+                            AllianceRequstDeal.requestAllianceIdentify(new GlobalCallBack() {
+                                @Override
+                                public void callBack(Object object) {
+                                    loginSuccess(loginInfo);
+                                }
+                            });
                         } else {
                             Util.makeToast(response.getMessage());
                         }
@@ -213,11 +218,15 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         });
 
                         if (response.isSuccess()) {
-                            LoginInfo loginInfo = response.getData();
+                            final LoginInfo loginInfo = response.getData();
                             loginInfo.setMedium_avatar_url(avatarUrl);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
-                            AllianceRequstDeal.requestAllianceIdentify();
-                            loginSuccess(loginInfo);
+                            AllianceRequstDeal.requestAllianceIdentify(new GlobalCallBack() {
+                                @Override
+                                public void callBack(Object object) {
+                                    loginSuccess(loginInfo);
+                                }
+                            });
                         } else {
                             Util.makeToast(response.getMessage());
                         }

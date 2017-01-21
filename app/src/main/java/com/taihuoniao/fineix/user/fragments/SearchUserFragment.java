@@ -20,7 +20,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchUserAdapter;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.DataUserSearch;
 import com.taihuoniao.fineix.beans.HttpResponse;

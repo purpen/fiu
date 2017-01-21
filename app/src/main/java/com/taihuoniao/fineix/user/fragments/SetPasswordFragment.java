@@ -16,7 +16,8 @@ import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -123,31 +124,39 @@ public class SetPasswordFragment extends MyBaseFragment {
                 });
                 if (response.isSuccess()) {
                     if (response.isSuccess()) {
-                        LoginInfo loginInfo = response.getData();
+                        final LoginInfo loginInfo = response.getData();
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
-                        AllianceRequstDeal.requestAllianceIdentify();
-                        if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
-                            updateUserIdentity();
-                            startActivity(new Intent(activity, CompleteUserInfoActivity.class));
-                        } else {
-                            startActivity(new Intent(activity, MainActivity.class));
-                        }
-
-                        if (OptRegisterLoginActivity.instance != null) {
-                            OptRegisterLoginActivity.instance.finish();
-                        }
-                        if (ToLoginActivity.instance != null) {
-                            ToLoginActivity.instance.finish();
-                        }
-                        if (ToRegisterActivity.instance != null) {
-                            ToRegisterActivity.instance.finish();
-                        }
-                        activity.finish();
+                        AllianceRequstDeal.requestAllianceIdentify(new GlobalCallBack() {
+                            @Override
+                            public void callBack(Object object) {
+                                loginSuccess(loginInfo);
+                            }
+                        });
                         return;
                     }
                     return;
                 }
                 ToastUtils.showError(response.getMessage());
+            }
+
+            void loginSuccess(LoginInfo loginInfo) {
+                if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
+                    updateUserIdentity();
+                    startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+                } else {
+                    startActivity(new Intent(activity, MainActivity.class));
+                }
+
+                if (OptRegisterLoginActivity.instance != null) {
+                    OptRegisterLoginActivity.instance.finish();
+                }
+                if (ToLoginActivity.instance != null) {
+                    ToLoginActivity.instance.finish();
+                }
+                if (ToRegisterActivity.instance != null) {
+                    ToRegisterActivity.instance.finish();
+                }
+                activity.finish();
             }
 
             @Override

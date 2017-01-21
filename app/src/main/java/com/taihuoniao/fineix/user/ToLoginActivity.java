@@ -18,7 +18,8 @@ import android.widget.ImageView;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -280,7 +281,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
                 if (response.isSuccess()) {
-                    ThirdLogin thirdLogin = response.getData();
+                    final ThirdLogin thirdLogin = response.getData();
                     if (thirdLogin == null) return;
                     if (thirdLogin.has_user == 0) { //跳转去绑定用户
                         MainApplication.hasUser = false;
@@ -303,26 +304,34 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                         instance.setMedium_avatar_url(avatarUrl);
                         instance.identify = thirdLogin.user.identify;
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
-                        AllianceRequstDeal.requestAllianceIdentify();
-                        if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
-                            updateUserIdentity();
-                            startActivity(new Intent(activity, CompleteUserInfoActivity.class));
-                            if (ToRegisterActivity.instance != null) {
-                                ToRegisterActivity.instance.finish();
+                        AllianceRequstDeal.requestAllianceIdentify(new GlobalCallBack() {
+                            @Override
+                            public void callBack(Object object) {
+                                loginSuccess(thirdLogin);
                             }
-                            if (OptRegisterLoginActivity.instance != null) {
-                                OptRegisterLoginActivity.instance.finish();
-                            }
-                            if (ToLoginActivity.instance != null) {
-                                ToLoginActivity.instance.finish();
-                            }
-                            finish();
-                        } else {
-                            LoginCompleteUtils.goFrom(activity,null,thirdLogin);
-                        }
+                        });
                     }
                 } else {
                     ToastUtils.showError(response.getMessage());
+                }
+            }
+
+            void loginSuccess(ThirdLogin thirdLogin) {
+                if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
+                    updateUserIdentity();
+                    startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+                    if (ToRegisterActivity.instance != null) {
+                        ToRegisterActivity.instance.finish();
+                    }
+                    if (OptRegisterLoginActivity.instance != null) {
+                        OptRegisterLoginActivity.instance.finish();
+                    }
+                    if (ToLoginActivity.instance != null) {
+                        ToLoginActivity.instance.finish();
+                    }
+                    finish();
+                } else {
+                    LoginCompleteUtils.goFrom(activity,null,thirdLogin);
                 }
             }
 
@@ -426,30 +435,37 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                 LogUtil.e("LOGIN_INFO", json);
                 if (response.isSuccess()) {//登录界面登录成功
                     MainApplication.hasUser = true;
-                    LoginInfo loginInfo = response.getData();
+                    final LoginInfo loginInfo = response.getData();
                     SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
-                    AllianceRequstDeal.requestAllianceIdentify();
-                    if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
-                        updateUserIdentity();
-                        startActivity(new Intent(activity, CompleteUserInfoActivity.class));
-                        if (ToRegisterActivity.instance != null) {
-                            ToRegisterActivity.instance.finish();
+                    AllianceRequstDeal.requestAllianceIdentify(new GlobalCallBack() {
+                        @Override
+                        public void callBack(Object object) {
+                            loginSuccess(loginInfo);
                         }
-                        if (OptRegisterLoginActivity.instance != null) {
-                            OptRegisterLoginActivity.instance.finish();
-                        }
-                        if (ToLoginActivity.instance != null) {
-                            ToLoginActivity.instance.finish();
-                        }
-                        finish();
-                    } else {
-//                        startActivity(new Intent(activity, MainActivity.class));
-                        LoginCompleteUtils.goFrom(ToLoginActivity.this,loginInfo,null);
-                    }
-
+                    });
                     return;
                 }
                 ToastUtils.showError(response.getMessage());
+            }
+
+            void loginSuccess(LoginInfo loginInfo) {
+                if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
+                    updateUserIdentity();
+                    startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+                    if (ToRegisterActivity.instance != null) {
+                        ToRegisterActivity.instance.finish();
+                    }
+                    if (OptRegisterLoginActivity.instance != null) {
+                        OptRegisterLoginActivity.instance.finish();
+                    }
+                    if (ToLoginActivity.instance != null) {
+                        ToLoginActivity.instance.finish();
+                    }
+                    finish();
+                } else {
+//                        startActivity(new Intent(activity, MainActivity.class));
+                    LoginCompleteUtils.goFrom(ToLoginActivity.this,loginInfo,null);
+                }
             }
 
             @Override

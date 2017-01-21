@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
+
 /**
  * Created by Stephen on 2017/1/9 15:00
  * Email: 895745843@qq.com

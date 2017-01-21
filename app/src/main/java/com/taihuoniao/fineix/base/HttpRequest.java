@@ -3,13 +3,13 @@ package com.taihuoniao.fineix.base;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 import com.taihuoniao.fineix.utils.OkHttpUtils;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;

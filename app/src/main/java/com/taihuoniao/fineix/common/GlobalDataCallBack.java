@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.base;
+package com.taihuoniao.fineix.common;
 
 /**
  * Created by Stephen on 2017/1/4 16:23

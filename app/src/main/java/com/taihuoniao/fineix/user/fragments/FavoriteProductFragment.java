@@ -15,7 +15,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FavoriteProductGVAdapter;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.DataProductCollect;
 import com.taihuoniao.fineix.beans.HttpResponse;

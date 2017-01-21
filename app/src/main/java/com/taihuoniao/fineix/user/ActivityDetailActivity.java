@@ -25,7 +25,7 @@
  import com.taihuoniao.fineix.adapters.ParticipateQJListAdapter;
  import com.taihuoniao.fineix.adapters.RuleContentAdapter;
  import com.taihuoniao.fineix.base.BaseActivity;
- import com.taihuoniao.fineix.base.GlobalDataCallBack;
+ import com.taihuoniao.fineix.common.GlobalDataCallBack;
  import com.taihuoniao.fineix.base.HttpRequest;
  import com.taihuoniao.fineix.beans.ActivityPrizeData;
  import com.taihuoniao.fineix.beans.DataParticipateQJ;

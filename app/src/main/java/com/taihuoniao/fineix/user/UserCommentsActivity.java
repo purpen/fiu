@@ -10,7 +10,7 @@ import android.widget.ListView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UserCommentsAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;

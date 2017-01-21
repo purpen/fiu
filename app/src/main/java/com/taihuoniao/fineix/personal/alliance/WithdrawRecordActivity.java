@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.personal.alliance;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,14 +9,12 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
-import com.taihuoniao.fineix.personal.alliance.adpter.TradeRecordeAdapter;
 import com.taihuoniao.fineix.personal.alliance.adpter.WithDrawRecordAdapter;
-import com.taihuoniao.fineix.personal.alliance.bean.TradeRecordBean;
 import com.taihuoniao.fineix.personal.alliance.bean.WithDrawRecordBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;

@@ -20,7 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodDetailsSceneListAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
-import com.taihuoniao.fineix.base.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
