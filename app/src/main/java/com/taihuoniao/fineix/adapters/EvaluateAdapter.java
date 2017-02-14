@@ -1,22 +1,18 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 
-import com.lidroid.xutils.BitmapUtils;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +26,6 @@ public class EvaluateAdapter extends THNBaseAdapter {
     HashMap<Integer, String> hashMap = new HashMap<>();
     HashMap<Integer, String> hashMapRatingBar = new HashMap<>();
     private LayoutInflater inflater = null;
-    private BitmapUtils bitmapUtils_listview = null;
     private List<OrderDetailBean.ItemsBean> list = null;
     private OnTwoClickedListener listener = null;//用来传星条数和评价内容两个
 
@@ -47,20 +42,8 @@ public class EvaluateAdapter extends THNBaseAdapter {
     public EvaluateAdapter(List<OrderDetailBean.ItemsBean> list, Context context) {
         super(list, context);
         this.list = list;
-        Context context1 = context;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
-        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
-                .configMemoryCacheEnabled(true)
-                .configDefaultCacheExpiry(1024 * 1024 * 4)
-                .configDefaultBitmapMaxSize(300, 300)
-                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-//                .configDefaultLoadingImage(R.mipmap.recommendnews_home)
-//                .configDefaultLoadFailedImage(R.mipmap.recommendnews_home)
-                .configThreadPoolSize(5)
-                .configDefaultImageLoadAnimation(
-                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
     }
 
     @Override
@@ -76,7 +59,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
         } else {
             mHolder = (ViewHolder) convertView.getTag();
         }
-        bitmapUtils_listview.display(mHolder.mImage, list.get(position).getCover_url());
+        GlideUtils.displayImage(list.get(position).getCover_url(), mHolder.mImage);
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}

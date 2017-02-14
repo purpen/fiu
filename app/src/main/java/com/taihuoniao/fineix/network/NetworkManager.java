@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.network;
 
-import com.lidroid.xutils.http.HttpHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,18 +63,18 @@ public class NetworkManager {
         }
     }
 
-    /**
-     * 添加任务
-     *
-     * @param name        任务名
-     * @param httpHandler 任务
-     */
-    public void add(String name, HttpHandler<String> httpHandler) {
-        if (tagList == null) return;
-//        if (networkList == null) return;
-        tagList.add(name);
-//        networkList.add(httpHandler);
-    }
+//    /**
+//     * 添加任务
+//     *
+//     * @param name        任务名
+//     * @param httpHandler 任务
+//     */
+//    public void add(String name, HttpHandler<String> httpHandler) {
+//        if (tagList == null) return;
+////        if (networkList == null) return;
+//        tagList.add(name);
+////        networkList.add(httpHandler);
+//    }
 
 //    public List<HttpHandler<String>> getNetworkList() {
 //        return networkList;
