@@ -13,6 +13,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EvaluateAdapter;
+import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PublishEvaluateActivity extends Activity {
+public class PublishEvaluateActivity extends Base2Activity {
     private static final String TAG = "PublishEvaluateActivity";
 
     private EvaluateAdapter mAdapter;

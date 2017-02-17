@@ -33,7 +33,6 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-//import com.lidroid.xutils.http.HttpHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
