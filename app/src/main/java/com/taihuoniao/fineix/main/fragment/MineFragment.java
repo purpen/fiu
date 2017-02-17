@@ -56,6 +56,7 @@ import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.zone.ZoneDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -359,6 +360,8 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(new Intent(activity, FeedbackActivity.class));
                 break;
             case R.id.btn:
+                startActivity(new Intent(activity, ZoneDetailActivity.class));
+                break;
         }
     }
 

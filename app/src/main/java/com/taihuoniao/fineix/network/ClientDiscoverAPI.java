@@ -1284,4 +1284,28 @@ public class ClientDiscoverAPI {
         params.put("amount", amount);
         return params;
     }
+
+    public static HashMap<String, String> getZoneDetailParams(String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", id);
+        return params;
+    }
+
+    public static HashMap getRelateScene(int curPage,String scene_id,String sort,String stick) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("scene_id",scene_id);
+        params.put("page", curPage+"");
+        params.put("size",Constants.PAGE_SIZE);
+        params.put("sort",sort);
+        params.put("stick",stick);
+        return params;
+    }
+
+    public static HashMap getRelateProducts(int curPage, String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("scene_id",id);
+        params.put("page", curPage+"");
+        params.put("size",Constants.PAGE_SIZE);
+        return params;
+    }
 }

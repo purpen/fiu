@@ -283,7 +283,11 @@ public class Util {
                 ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
                 if (applicationInfo != null) {
                     if (applicationInfo.metaData != null) {
-                        resultData = applicationInfo.metaData.getString(key);
+                        if (applicationInfo.metaData.containsKey(key)){
+                            resultData = applicationInfo.metaData.getInt(key)+"";
+                        }else {
+                            resultData=null;
+                        }
                     } else {
                         Log.e("<<<", "applicationInfo.metaData为空");
                     }
@@ -293,7 +297,7 @@ public class Util {
             } else {
                 Log.e("<<<", "packageManager为空");
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             Log.e("<<<", "异常");
             e.printStackTrace();
         }

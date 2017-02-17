@@ -22,4 +22,8 @@ public class Constants {
     public static final String TH = "D";
     public static final String DH = "E";
     public static final String PAGE_SIZE = "8";
+    public static final String SEPERATOR =":!";
+    public static final String TEXT_TYPE ="[text]";
+    public static final String IMAGE_TYPE ="[img]";
+
 }

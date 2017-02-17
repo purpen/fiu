@@ -15,9 +15,9 @@ android {
         renderscriptSupportModeEnabled true
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
     }
-    signingConfigs {
+    signingConfigs {//C:/AndroidStudioProjects/fiu/app/fiu.jks
         release {
-            storeFile file('C:/AndroidStudioProjects/fiu/app/fiu.jks')
+            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
             keyPassword 'taihuoniao798'
@@ -48,14 +48,14 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    compile project(':PushSDK')
+    compile project(':Gpu-Image')
+    compile project(':pullrefreshlib')
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile project(':PushSDK')
-    compile project(':Gpu-Image')
-    compile project(':pullrefreshlib')
     compile 'com.google.zxing:core:3.2.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.jakewharton:butterknife:7.0.1'

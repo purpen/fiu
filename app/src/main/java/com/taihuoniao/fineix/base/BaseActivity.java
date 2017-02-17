@@ -9,6 +9,7 @@ import android.view.Window;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
@@ -123,7 +124,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        MobclickAgent.onKillProcess(this);
+        if (this instanceof MainActivity) MobclickAgent.onKillProcess(this);
     }
 
     @Override

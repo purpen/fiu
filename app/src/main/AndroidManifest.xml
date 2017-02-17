@@ -32,7 +32,6 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".user.UserGuideActivity"
             android:label="@string/app_name"
@@ -92,9 +91,9 @@
         <activity
             android:name=".product.ConfirmOrderActivity"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-        <!--android:name=".product.GoodsCommentsActivity"-->
-        <!--android:screenOrientation="portrait"/>-->
+        <!-- <activity -->
+        <!-- android:name=".product.GoodsCommentsActivity" -->
+        <!-- android:screenOrientation="portrait"/> -->
         <activity
             android:name=".product.PayWayActivity"
             android:screenOrientation="portrait" />
@@ -114,16 +113,13 @@
         <activity
             android:name=".user.NoticeActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".user.CollectionsActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".user.ImageCropActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".user.CertificateStatusActivity"
             android:screenOrientation="portrait" />
@@ -172,17 +168,14 @@
             android:name=".user.FindFriendsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.ArticalDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.UserCenterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.EditUserInfoActivity"
             android:screenOrientation="portrait"
@@ -195,17 +188,14 @@
             android:name=".user.ActivityDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.SalePromotionDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.UserEditNameActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.OrderQJActivity"
             android:screenOrientation="portrait"
@@ -214,13 +204,11 @@
             android:name=".user.SystemNoticeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.PrivateMessageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
         <activity
             android:name=".user.PrivateMessageListActivity"
             android:screenOrientation="portrait"
@@ -253,22 +241,18 @@
             android:name=".user.BindPhoneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.FocusActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.FansActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.UserCommentsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.SystemSettingsActivity"
             android:screenOrientation="portrait"
@@ -297,13 +281,11 @@
             android:name=".user.PayDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".user.RankTagActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-
         <activity
             android:name=".user.OfficialCertificateActivity"
             android:screenOrientation="portrait"
@@ -316,13 +298,10 @@
             android:name=".user.UnUsableRedPacketActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-
         <activity
             android:name=".scene.SelectPhotoOrCameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen" />
-
         <activity
             android:name=".qingjingOrSceneDetails.CommentListActivity"
             android:screenOrientation="portrait"
@@ -332,10 +311,10 @@
             android:name=".scene.AddLabelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen" />
-        <!--<activity-->
-        <!--android:name=".map.HotCitiesActivity"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:theme="@style/AppTheme"/>-->
+        <!-- <activity -->
+        <!-- android:name=".map.HotCitiesActivity" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/AppTheme"/> -->
         <activity
             android:name=".map.MapAddressDetailActivity"
             android:screenOrientation="portrait"
@@ -346,7 +325,6 @@
         <activity
             android:name=".scene.SearchBrandActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".map.MapSearchAddressActivity"
             android:screenOrientation="portrait"
@@ -356,7 +334,6 @@
             android:name=".map.SelectOrSearchQJActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".map.DisplayOverlayerActivity"
             android:screenOrientation="portrait"
@@ -395,12 +372,13 @@
             android:permission="android.permission.BAIDU_LOCATION_SERVICE"
             android:process=":remote" />
 
-        <!--此处为测试value，线上版本务必更换-->
-        <!--<meta-data-->
-        <!--android:name="com.baidu.lbsapi.API_KEY"-->
-        <!--android:value="muQDLN6lCST6qMDvTAydAilM"/>-->
+        <!-- 此处为测试value，线上版本务必更换 -->
+         <!--<meta-data-->
+         <!--android:name="com.baidu.lbsapi.API_KEY"-->
+         <!--android:value="muQDLN6lCST6qMDvTAydAilM"/> -->
 
-        <!--百度地图线上API_KEY-->
+
+        <!-- 百度地图线上API_KEY -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4" />
@@ -471,27 +449,26 @@
             android:name=".pay.jdpay.JDPayActivity"
             android:screenOrientation="portrait" />
 
-        <!--退款/售后-->
-        <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackDetailsActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.salesevice.SalesReturnActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.salesevice.SalesReturnDetailsActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackResultActivity" />
+        <!-- 退款/售后 -->
+        <activity android:name=".personal.salesevice.ChargeBackAndServiceActivity" />
+        <activity android:name=".personal.salesevice.ChargeBackActivity" />
+        <activity android:name=".personal.salesevice.ChargeBackDetailsActivity" />
+        <activity android:name=".personal.salesevice.SalesReturnActivity" />
+        <activity android:name=".personal.salesevice.SalesReturnDetailsActivity" />
+        <activity android:name=".personal.salesevice.ChargeBackResultActivity" />
+        <activity android:name=".user.OrderTrackActivity" />
 
-        <activity android:name="com.taihuoniao.fineix.user.OrderTrackActivity" />
-
-        <!--火鸟联盟-->
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.MyAccountActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.SettlementRecordActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.SettlementRecordDetailsActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.TradeRecordActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.TradeRecordeDetailsActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.WithdrawActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.WithdrawRecordActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.WithdrawRecordDetailsActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.alliance.PrivacyPolicyActivity" />
-
+        <!-- 火鸟联盟 -->
+        <activity android:name=".personal.alliance.MyAccountActivity" />
+        <activity android:name=".personal.alliance.SettlementRecordActivity" />
+        <activity android:name=".personal.alliance.SettlementRecordDetailsActivity" />
+        <activity android:name=".personal.alliance.TradeRecordActivity" />
+        <activity android:name=".personal.alliance.TradeRecordeDetailsActivity" />
+        <activity android:name=".personal.alliance.WithdrawActivity" />
+        <activity android:name=".personal.alliance.WithdrawRecordActivity" />
+        <activity android:name=".personal.alliance.WithdrawRecordDetailsActivity" />
+        <activity android:name=".personal.alliance.PrivacyPolicyActivity" />
+        <activity android:name=".zone.ZoneDetailActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

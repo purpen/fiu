@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TabItem;
 import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
+import com.taihuoniao.fineix.main.fragment.DiscoverFragment;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
@@ -89,8 +90,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
-        } else if (intent.hasExtra(FindFragment.class.getSimpleName())) {
-            which = FindFragment.class.getSimpleName();
+        } else if (intent.hasExtra(DiscoverFragment.class.getSimpleName())) {
+            which = DiscoverFragment.class.getSimpleName();
         }
         which2Switch();
         super.onNewIntent(intent);
@@ -103,8 +104,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(MineFragment.class);
         } else if (TextUtils.equals(WellGoodsFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(WellGoodsFragment.class);
-        } else if (TextUtils.equals(FindFragment.class.getSimpleName(), which)) {
-            switchFragmentandImg(FindFragment.class);
+        } else if (TextUtils.equals(DiscoverFragment.class.getSimpleName(), which)) {
+            switchFragmentandImg(DiscoverFragment.class);
         }
     }
 
@@ -172,7 +173,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void recoverAllState(Bundle savedInstanceState) {
         Fragment indexFragment = fm.getFragment(savedInstanceState, IndexFragment.class.getSimpleName());
         addFragment2List(indexFragment);
-        Fragment findFragment = fm.getFragment(savedInstanceState, FindFragment.class.getSimpleName());
+        Fragment findFragment = fm.getFragment(savedInstanceState, DiscoverFragment.class.getSimpleName());
         addFragment2List(findFragment);
         Fragment wellGoodsFragment = fm.getFragment(savedInstanceState, WellGoodsFragment.class.getSimpleName());
         addFragment2List(wellGoodsFragment);
@@ -220,7 +221,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tabList = new ArrayList<>();
         }
         initTabItem(homepageImg, tv_nav0, IndexFragment.class, R.mipmap.home_red, R.mipmap.home_gray);
-        initTabItem(findImg, tv_nav1, FindFragment.class, R.mipmap.find_red, R.mipmap.find_gray);
+        initTabItem(findImg, tv_nav1, DiscoverFragment.class, R.mipmap.find_red, R.mipmap.find_gray);
         initTabItem(shopImg, tv_nav3, WellGoodsFragment.class, R.mipmap.shop_red, R.mipmap.shop_gray);
         initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.mine_red, R.mipmap.mine_gray);
     }
@@ -251,7 +252,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 switchFragmentandImg(IndexFragment.class);
                 break;
             case R.id.ll_nav1: //景
-                switchFragmentandImg(FindFragment.class);
+                switchFragmentandImg(DiscoverFragment.class);
                 onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav3:  //品
@@ -393,7 +394,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     editor.putBoolean(DataConstants.FIRST_IN_QING, false);
                     editor.apply();
                 }
-            } else if (showFragment instanceof FindFragment) {
+            } else if (showFragment instanceof DiscoverFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
