@@ -44,6 +44,7 @@ import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -164,26 +165,17 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         });
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
     @Override
     protected void initList() {
         int goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + getStatusBarHeight() / 2,
+            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + App.getStatusBarHeight() / 2,
                     recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
-            titleRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+            titleRelative.setPadding(0, App.getStatusBarHeight(), 0, 0);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) goneRelative.getLayoutParams();
-            layoutParams.height = (int) (getResources().getDimension(R.dimen.gone_height) + getStatusBarHeight());
+            layoutParams.height = (int) (getResources().getDimension(R.dimen.gone_height) + App.getStatusBarHeight());
             goneRelative.setLayoutParams(layoutParams);
-            goneTranslation = (int) (-getStatusBarHeight() - getResources().getDimension(R.dimen.gone_height));
+            goneTranslation = (int) (-App.getStatusBarHeight() - getResources().getDimension(R.dimen.gone_height));
         }
         goneRelative.setTranslationY(goneTranslation);
         listView.setOnTouchListener(this);

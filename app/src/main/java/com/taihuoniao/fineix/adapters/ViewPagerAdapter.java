@@ -15,12 +15,13 @@ import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.common.bean.BannerBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IsInviteData;
 import com.taihuoniao.fineix.beans.SubjectData;
+import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -109,8 +110,8 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         }
         final T content = list.get(getPosition(position));
 
-        if (content instanceof Banner) {
-            ImageLoader.getInstance().displayImage(((Banner) content).cover_url, holder.imageView, options);
+        if (content instanceof BannerBean.RowsEntity) {
+            ImageLoader.getInstance().displayImage(((BannerBean.RowsEntity) content).getCover_url(), holder.imageView, options);
         }
 
         if (content instanceof Integer) {
@@ -149,39 +150,39 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Banner banner = (Banner) content;
-                    Intent intent;
-                    Log.e("<<<", "banner.type=" + banner.type + ",web_url=" + banner.web_url + ",title=" + banner.title);
-                    switch (banner.type) {
+                    final BannerBean.RowsEntity banner = (BannerBean.RowsEntity) content;
+                    GoToNextUtils.goToIntent(activity, Integer.valueOf(banner.getType()), banner.getWeb_url());
+/*                      Intent intent;
+                  switch (Integer.valueOf(banner.getType())) {
                         case 1:      //url地址
-                            Uri uri = Uri.parse(banner.web_url);
+                            Uri uri = Uri.parse(banner.getWeb_url());
                             intent = new Intent(Intent.ACTION_VIEW, uri);
                             activity.startActivity(intent);
                             break;
                         case 2://商品
                             intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                            intent.putExtra("id", banner.web_url);
+                            intent.putExtra("id", banner.getWeb_url());
                             activity.startActivity(intent);
                             break;
                         case 4://app专题
                             intent = new Intent(activity, SubjectActivity.class);
-                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.web_url);
-                            intent.putExtra(SubjectActivity.class.getName(), banner.title);
+                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.getWeb_url());
+                            intent.putExtra(SubjectActivity.class.getName(), banner.getTitle());
                             activity.startActivity(intent);
                             break;
                         case 8:     //情境
                             intent = new Intent(activity, QJDetailActivity.class);
-                            intent.putExtra("id", banner.web_url);
+                            intent.putExtra("id", banner.getWeb_url());
                             activity.startActivity(intent);
                             break;
                         case 9:     //产品
                             intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                            intent.putExtra("id", banner.web_url);
+                            intent.putExtra("id", banner.getWeb_url());
                             activity.startActivity(intent);
                             break;
                         case 11:    //情境专题
                             Log.e("<<<", "banner.toString=" + banner.toString());
-                            HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(banner.web_url);
+                            HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(banner.getWeb_url());
                             HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //                            ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
                                 @Override
@@ -195,22 +196,22 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                                         switch (data.type) {
                                             case 1: //文章详情
                                                 intent = new Intent(activity, ArticalDetailActivity.class);
-                                                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), banner.web_url);
+                                                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), banner.getWeb_url());
                                                 activity.startActivity(intent);
                                                 break;
                                             case 2: //活动详情
                                                 intent = new Intent(activity, ActivityDetailActivity.class);
-                                                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), banner.web_url);
+                                                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), banner.getWeb_url());
                                                 activity.startActivity(intent);
                                                 break;
                                             case 4: //新品
                                                 intent = new Intent(activity, NewProductDetailActivity.class);
-                                                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), banner.web_url);
+                                                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), banner.getWeb_url());
                                                 activity.startActivity(intent);
                                                 break;
                                             case 3: //促销
                                                 intent = new Intent(activity, SalePromotionDetailActivity.class);
-                                                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), banner.web_url);
+                                                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), banner.getWeb_url());
                                                 activity.startActivity(intent);
                                                 break;
                                         }
@@ -225,7 +226,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                                 }
                             });
                             break;
-                    }
+                    }*/
 
                 }
             });

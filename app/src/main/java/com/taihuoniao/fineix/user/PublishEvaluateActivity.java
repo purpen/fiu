@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;

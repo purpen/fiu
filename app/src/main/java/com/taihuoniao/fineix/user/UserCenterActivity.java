@@ -40,6 +40,7 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCJListData;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
@@ -164,7 +165,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 .build();
         WindowUtils.showStatusBar(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            rl_head.setPadding(0, getStatusBarHeight(), 0, 0);
+            rl_head.setPadding(0, App.getStatusBarHeight(), 0, 0);
         }
         rl_head.getBackground().mutate().setAlpha(10);
         headView = Util.inflateView(R.layout.user_center_headview, null);
@@ -201,14 +202,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     @Override
     protected void requestNet() {

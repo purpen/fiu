@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.NetBean;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -167,10 +168,10 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 //                Log.e("<<<评论布局改变", "left=" + left + ",top=" + top + ",right=" + right + ",bottom=" + bottom + ",oldLeft=" + oldLeft
 //                        + ",oldTop=" + oldTop + ",oldRight=" + oldRight + ",oldBottom=" + oldBottom);
                 if (oldRight != 0 && oldBottom != 0) {
-                    if (oldBottom - bottom > getStatusBarHeight()) {
+                    if (oldBottom - bottom > App.getStatusBarHeight()) {
 //                        Log.e("<<<", "弹起");
                         isOpen = true;
-                    } else if (bottom - oldBottom > getStatusBarHeight()) {
+                    } else if (bottom - oldBottom > App.getStatusBarHeight()) {
 //                        Log.e("<<<", "键盘隐藏");
                         isOpen = false;
                     }
@@ -196,14 +197,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     @Override
     protected void requestNet() {

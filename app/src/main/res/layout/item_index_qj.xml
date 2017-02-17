@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/white"
-              android:orientation="vertical"
-              android:paddingBottom="15dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="15dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/user_recycler"
@@ -15,8 +15,54 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="20dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <ImageView
+            android:id="@+id/qj_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/qj_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:background="@color/black_touming_80"
+            android:maxWidth="188dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="12dp"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/qj_title_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/qj_title_tv"
+            android:layout_marginBottom="3dp"
+            android:background="@color/black_touming_80"
+            android:maxWidth="188dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="12dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/label_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <!--个人信息-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="49dp"
@@ -35,7 +81,7 @@
                 android:layout_height="match_parent"
                 app:riv_border_color="@color/white"
                 app:riv_border_width="1px"
-                app:riv_corner_radius="100dp"/>
+                app:riv_corner_radius="100dp" />
 
             <ImageView
                 android:id="@+id/v_img"
@@ -44,7 +90,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:src="@mipmap/v"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
         <Button
@@ -56,7 +102,7 @@
             android:layout_marginRight="16dp"
             android:background="@mipmap/index_attention"
             android:textColor="@color/white"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -74,7 +120,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <LinearLayout
                 android:id="@+id/map_linear"
@@ -89,7 +135,7 @@
                     android:id="@+id/img"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:src="@mipmap/index_time"/>
+                    android:src="@mipmap/index_time" />
 
                 <TextView
                     android:id="@+id/publish_time"
@@ -98,80 +144,35 @@
                     android:layout_marginLeft="6dp"
                     android:singleLine="true"
                     android:textColor="#8e8e8e"
-                    android:textSize="10sp"/>
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:id="@+id/location_img"
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/index_location"/>
+                    android:src="@mipmap/index_location" />
 
                 <TextView
                     android:id="@+id/location_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
-                    android:singleLine="true"
                     android:ellipsize="end"
+                    android:singleLine="true"
                     android:textColor="#8e8e8e"
-                    android:textSize="10sp"/>
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:layout_width="5dp"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
-                    android:src="@mipmap/index_arrow_right"/>
+                    android:src="@mipmap/index_arrow_right"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="300dp">
-
-        <ImageView
-            android:id="@+id/qj_img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
-
-        <TextView
-            android:id="@+id/qj_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
-            android:background="@color/black_touming_80"
-            android:maxWidth="188dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="12dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/qj_title_tv2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/qj_title_tv"
-            android:layout_marginBottom="3dp"
-            android:background="@color/black_touming_80"
-            android:maxWidth="188dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="12dp"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:visibility="gone"/>
-
-        <RelativeLayout
-            android:id="@+id/label_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -184,7 +185,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:src="@mipmap/index_eye"/>
+            android:src="@mipmap/index_eye" />
 
         <TextView
             android:id="@+id/view_count"
@@ -194,7 +195,7 @@
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/img1"
             android:textColor="#666666"
-            android:textSize="10sp"/>
+            android:textSize="10sp" />
 
         <ImageView
             android:id="@+id/more_img"
@@ -203,7 +204,7 @@
             android:layout_alignParentRight="true"
             android:paddingLeft="10dp"
             android:paddingRight="15dp"
-            android:src="@mipmap/index_more"/>
+            android:src="@mipmap/index_more" />
 
         <ImageView
             android:id="@+id/share_img"
@@ -212,7 +213,7 @@
             android:layout_toLeftOf="@id/more_img"
             android:paddingLeft="9dp"
             android:paddingRight="10dp"
-            android:src="@mipmap/index_share"/>
+            android:src="@mipmap/index_share" />
 
         <ImageView
             android:id="@+id/comment_img"
@@ -221,7 +222,7 @@
             android:layout_toLeftOf="@id/share_img"
             android:paddingLeft="11dp"
             android:paddingRight="9dp"
-            android:src="@mipmap/index_comment"/>
+            android:src="@mipmap/index_comment" />
 
         <RelativeLayout
             android:id="@+id/love_container"
@@ -234,7 +235,7 @@
                 android:layout_width="24dp"
                 android:layout_height="match_parent"
                 android:paddingLeft="5dp"
-                android:src="@mipmap/index_love"/>
+                android:src="@mipmap/index_love" />
 
             <TextView
                 android:id="@+id/love_count"
@@ -245,7 +246,7 @@
                 android:paddingLeft="5dp"
                 android:paddingTop="8dp"
                 android:textColor="#666666"
-                android:textSize="10sp"/>
+                android:textSize="10sp" />
         </RelativeLayout>
 
     </RelativeLayout>
@@ -270,7 +271,14 @@
             android:maxLines="3"
             android:singleLine="false"
             android:textColor="#666666"
-            android:textSize="11sp"/>
+            android:textSize="11sp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_below="@+id/qj_des_tv"
+            android:id="@+id/linearLayout_index_qj_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
     <com.taihuoniao.fineix.view.ListViewForScrollView
@@ -281,21 +289,21 @@
         android:layout_marginRight="15dp"
         android:background="#f4f4f4"
         android:divider="@null"
+        android:visibility="gone"
         android:dividerHeight="0dp"
         android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        />
+        android:paddingRight="11dp" />
 
     <TextView
         android:id="@+id/more_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:background="#f4f4f4"
         android:paddingBottom="15dp"
         android:paddingLeft="11dp"
         android:textColor="#999999"
-        android:textSize="10sp"/>
+        android:textSize="10sp"
+        android:visibility="gone" />
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.personal;
 
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.common.GlobalCallBack;
@@ -9,7 +8,6 @@ import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.User;
-import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;

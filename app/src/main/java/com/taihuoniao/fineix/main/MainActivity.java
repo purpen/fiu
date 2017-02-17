@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TabItem;
 import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
+import com.taihuoniao.fineix.main.fragment.CartFragment;
 import com.taihuoniao.fineix.main.fragment.DiscoverFragment;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
@@ -32,7 +33,6 @@ import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetWorkUtils;
-import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -54,15 +54,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.ll_nav4)LinearLayout ll_nav4;
     @Bind(R.id.activity_main_fragment_group)FrameLayout fragmetnContainer;
     @Bind(R.id.activity_main_bottomlinear)LinearLayout bottomLinear;
-    @Bind(R.id.activity_main_homepagebtn)ImageView homepageImg;
+
+    @Bind(R.id.activity_main_homebtn)ImageView homeImg;
     @Bind(R.id.activity_main_findbtn)ImageView findImg;
     @Bind(R.id.activity_main_shopbtn)ImageView shopImg;
     @Bind(R.id.activity_main_minebtn)ImageView mineImg;
+    @Bind(R.id.activity_main_cartbtn)ImageView cartImg;
 
     @Bind(R.id.tv_nav0)TextView tv_nav0;
     @Bind(R.id.tv_nav1)TextView tv_nav1;
     @Bind(R.id.tv_nav3)TextView tv_nav3;
     @Bind(R.id.tv_nav4)TextView tv_nav4;
+    @Bind(R.id.tv_nav2)TextView tv_nav2;
 
     //用户第一次进入app会用到
     @Bind(R.id.activity_main_first_relative)RelativeLayout firstRelative;
@@ -106,6 +109,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(WellGoodsFragment.class);
         } else if (TextUtils.equals(DiscoverFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(DiscoverFragment.class);
+        } else if(TextUtils.equals(CartFragment.class.getSimpleName(),which)) {
+            switchFragmentandImg(CartFragment.class);
         }
     }
 
@@ -136,7 +141,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 //            WindowUtils.show(this);
             WindowUtils.showStatusBar(this);
-            firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+            firstRelative.setPadding(0, App.getStatusBarHeight(), 0, 0);
         }
 
         NetWorkUtils netWorkUtils = new NetWorkUtils(this);
@@ -161,15 +166,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 .start();
     }
 
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
     private void recoverAllState(Bundle savedInstanceState) {
         Fragment indexFragment = fm.getFragment(savedInstanceState, IndexFragment.class.getSimpleName());
         addFragment2List(indexFragment);
@@ -179,6 +175,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         addFragment2List(wellGoodsFragment);
         Fragment mineFragment = fm.getFragment(savedInstanceState, MineFragment.class.getSimpleName());
         addFragment2List(mineFragment);
+        Fragment cartFragment = fm.getFragment(savedInstanceState, CartFragment.class.getSimpleName());
+        addFragment2List(cartFragment);
         Class clazz = (Class) savedInstanceState.getSerializable(MainActivity.class.getSimpleName());
         if (clazz == null) return;
         LogUtil.e(TAG, clazz.getSimpleName() + "///////////");
@@ -220,10 +218,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             tabList = new ArrayList<>();
         }
-        initTabItem(homepageImg, tv_nav0, IndexFragment.class, R.mipmap.home_red, R.mipmap.home_gray);
-        initTabItem(findImg, tv_nav1, DiscoverFragment.class, R.mipmap.find_red, R.mipmap.find_gray);
-        initTabItem(shopImg, tv_nav3, WellGoodsFragment.class, R.mipmap.shop_red, R.mipmap.shop_gray);
-        initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.mine_red, R.mipmap.mine_gray);
+        initTabItem(homeImg, tv_nav0, IndexFragment.class, R.mipmap.icon_home_pressed, R.mipmap.icon_home_normal);
+        initTabItem(findImg, tv_nav1, DiscoverFragment.class, R.mipmap.icon_discover_pressed, R.mipmap.icon_discover_normal);
+        initTabItem(shopImg, tv_nav3, WellGoodsFragment.class, R.mipmap.icon_shop_pressed, R.mipmap.icon_shop_normal);
+        initTabItem(cartImg, tv_nav2, CartFragment.class, R.mipmap.icon_cart_pressed, R.mipmap.icon_cart_normal);
+        initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.icon_mine_pressed, R.mipmap.icon_mine_normal);
     }
 
 
@@ -241,12 +240,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
-                if (LoginInfo.isUserLogin()) {
+                switchFragmentandImg(CartFragment.class);
+
+                // TODO: 2017/2/14 发布情境
+                /*if (LoginInfo.isUserLogin()) {
                     startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 } else {
                     MainApplication.which_activity = 0;
                     startActivity(new Intent(activity, OptRegisterLoginActivity.class));
-                }
+                }*/
                 break;
             case R.id.ll_nav0://情
                 switchFragmentandImg(IndexFragment.class);

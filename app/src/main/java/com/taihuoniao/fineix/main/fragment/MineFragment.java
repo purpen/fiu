@@ -27,6 +27,7 @@ import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -167,18 +168,9 @@ public class MineFragment extends MyBaseFragment {
         super.setFragmentLayout(R.layout.fragment_personalcenter);
         super.onCreateView(inflater, container, savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            rl.setPadding(0, getStatusBarHeight(), 0, 0);
+            rl.setPadding(0, App.getStatusBarHeight(), 0, 0);
         }
         return view;
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     @Override

@@ -1,43 +1,35 @@
-<RelativeLayout android:id="@+id/activity_main_container"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                tools:context="com.taihuoniao.fineix.main.MainActivity">
-
-    <!--<com.taihuoniao.fineix.view.CustomHeadView-->
-    <!--android:id="@+id/custom_head"-->
-    <!--android:visibility="gone"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content" />-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    tools:context="com.taihuoniao.fineix.main.MainActivity">
 
     <FrameLayout
         android:id="@+id/activity_main_fragment_group"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        />
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:id="@+id/activity_main_bottomlinear"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:alpha="0.8"
+        android:layout_height="49dp"
         android:layout_alignParentBottom="true"
-        android:background="@mipmap/main_nav_bg"
+        android:alpha="1"
+        android:background="#000000"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/ll_nav0"
-            style="@style/MainButtonStyle"
-            android:layout_marginTop="10dp">
+            style="@style/MainButtonStyle">
 
             <ImageView
-                android:id="@+id/activity_main_homepagebtn"
+                android:id="@+id/activity_main_homebtn"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:src="@mipmap/home_gray"/>
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_home_normal" />
 
             <TextView
                 android:id="@+id/tv_nav0"
@@ -47,19 +39,18 @@
                 android:gravity="center_horizontal"
                 android:text="@string/qing"
                 android:textColor="@color/white"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_nav1"
-            style="@style/MainButtonStyle"
-            android:layout_marginTop="10dp">
+            style="@style/MainButtonStyle">
 
             <ImageView
                 android:id="@+id/activity_main_findbtn"
-                android:layout_width="match_parent"
-                android:layout_height="12.5dp"
-                android:src="@mipmap/find_gray"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_discover_normal" />
 
             <TextView
                 android:id="@+id/tv_nav1"
@@ -69,26 +60,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/jing"
                 android:textColor="@color/white"
-                android:textSize="11sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_nav2"
-            style="@style/MainButtonStyle">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:src="@mipmap/create_sight"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:gravity="center_horizontal"
-                android:text="@string/fiu"
-                android:textColor="@color/white"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,19 +69,40 @@
 
             <ImageView
                 android:id="@+id/activity_main_shopbtn"
-                android:layout_width="match_parent"
-                android:layout_height="19dp"
-                android:src="@mipmap/shop_gray"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_shop_normal" />
 
             <TextView
                 android:id="@+id/tv_nav3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/pin"
                 android:textColor="@color/white"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_nav2"
+            style="@style/MainButtonStyle">
+
+            <ImageView
+                android:id="@+id/activity_main_cartbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_cart_normal" />
+
+            <TextView
+                android:id="@+id/tv_nav2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center_horizontal"
+                android:text="@string/fiu"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,8 +116,8 @@
                 <ImageView
                     android:id="@+id/activity_main_minebtn"
                     android:layout_width="match_parent"
-                    android:layout_height="16.5dp"
-                    android:src="@mipmap/mine_gray"/>
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_mine_normal" />
 
                 <TextView
                     android:id="@+id/tv_msg_indicator"
@@ -133,8 +126,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/dp20"
                     android:background="@drawable/msg_indicator"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <TextView
@@ -145,9 +137,10 @@
                 android:gravity="center_horizontal"
                 android:text="@string/mine"
                 android:textColor="@color/white"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/activity_main_first_relative"
         android:layout_width="match_parent"
@@ -159,14 +152,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-24dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/activity_main_first_right_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="-24dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -40,6 +40,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -77,6 +78,12 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     ImageView titleLeft;
     @Bind(R.id.title_right)
     RelativeLayout titleRight;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     @Bind(R.id.cart_number)
     TextView cartNumber;
     @Bind(R.id.search_linear)
@@ -123,26 +130,17 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         return view;
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
     @Override
     protected void initList() {
         int goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + getStatusBarHeight() / 2,
+            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + App.getStatusBarHeight() / 2,
                     recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
-            titleRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+            titleRelative.setPadding(0, App.getStatusBarHeight(), 0, 0);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) goneRelative.getLayoutParams();
-            layoutParams.height = (int) (getResources().getDimension(R.dimen.gone_height) + getStatusBarHeight());
+            layoutParams.height = (int) (getResources().getDimension(R.dimen.gone_height) + App.getStatusBarHeight());
             goneRelative.setLayoutParams(layoutParams);
-            goneTranslation = (int) (-getStatusBarHeight() - getResources().getDimension(R.dimen.gone_height));
+            goneTranslation = (int) (-App.getStatusBarHeight() - getResources().getDimension(R.dimen.gone_height));
         }
         goneRelative.setTranslationY(goneTranslation);
         titleLeft.setOnClickListener(this);

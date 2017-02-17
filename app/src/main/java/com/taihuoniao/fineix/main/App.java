@@ -24,4 +24,9 @@ public class App {
     public static String[] getStringArray(int id){
         return MainApplication.getContext().getResources().getStringArray(id);
     }
+
+    public static int getStatusBarHeight() {
+        int resourceId = MainApplication.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return (resourceId <= 0) ? 0 : MainApplication.getContext().getResources().getDimensionPixelSize(resourceId);
+    }
 }

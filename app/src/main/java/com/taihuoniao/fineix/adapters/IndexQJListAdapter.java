@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -417,6 +418,31 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
             }
         });
+
+
+        SceneList.DataBean.RowsBean rowsBean = sceneList.get(position);
+        List<String> tags = rowsBean.getTags();
+        if (tags != null && tags.size() > 0) {
+            for(int i = 0 ; i< tags.size(); i++) {
+                TextView textView = new TextView(activity);
+                textView.setBackgroundColor(Color.parseColor("#4f4f4f4f"));
+                textView.setText(tags.get(i));
+                textView.setTag(tags.get(i));
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(10,0,0,0);
+                textView.setLayoutParams(layoutParams);
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(activity, SearchActivity.class);
+                        intent.putExtra("q", ((TextView)v).getTag().toString());
+                        intent.putExtra("t", 9);
+                        activity.startActivity(intent);
+                    }
+                });
+                holder.linearLayoutIndexQjTags.addView(textView);
+            }
+        }
         return convertView;
     }
 
@@ -625,6 +651,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         ListViewForScrollView commentList;
         @Bind(R.id.more_comment)
         TextView moreComment;
+        @Bind(R.id.linearLayout_index_qj_tags)
+        LinearLayout linearLayoutIndexQjTags;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
