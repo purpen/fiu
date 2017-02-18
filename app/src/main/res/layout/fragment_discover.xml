@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_discover"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -59,7 +60,7 @@
     </RelativeLayout>
 
     <LinearLayout
-
+        android:layout_marginBottom="@dimen/dp48"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
