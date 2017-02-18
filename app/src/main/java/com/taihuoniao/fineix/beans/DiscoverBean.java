@@ -172,7 +172,7 @@ public class DiscoverBean {
          * is_follow : 0
          */
 
-        public int _id;
+        public long _id;
         public String nickname;
         public String avatar_url;
         public int is_follow;

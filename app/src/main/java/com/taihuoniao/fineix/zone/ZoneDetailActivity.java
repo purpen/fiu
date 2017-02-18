@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,6 +36,7 @@ import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.ScrollableView;
@@ -54,13 +56,18 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 地盘详情
  */
 public class ZoneDetailActivity extends BaseActivity implements View.OnClickListener {
-    @Bind(R.id.head_view)
-    CustomHeadView headView;
+//    @Bind(R.id.head_view)
+//    CustomHeadView headView;
+    @Bind(R.id.tv_title)
+    TextView tvTitle;
+    @Bind(R.id.ibtn_shoucang)
+    ImageButton ibtnShouCang;
     @Bind(R.id.relate_scene)
     ListView relateScene;
     @Bind(R.id.relate_products)
@@ -123,7 +130,7 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
-        headView.setHeadCenterTxtShow(true,title);
+        tvTitle.setText(title);
         dialog = new WaittingDialog(this);
         View view = Util.inflateView(activity, R.layout.zone_detail_head_layout, null);
         scrollableView = ButterKnife.findById(view, R.id.scrollableView);
@@ -261,6 +268,76 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                 merchantInfo.setVisibility(View.VISIBLE);
                 lineResult.setVisibility(View.VISIBLE);
                 tvResult.setTextColor(getResources().getColor(R.color.yellow_bd8913));
+                break;
+        }
+    }
+
+    @OnClick({R.id.head_goback,R.id.ibtn_shoucang,R.id.ibtn_share})
+    void click(final View v){
+        switch (v.getId()){
+            case R.id.head_goback:
+                finish();
+                break;
+            case R.id.ibtn_shoucang: //收藏
+                if (zoneDetailBean.is_love==0){
+                    HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams("62", "11");
+                    HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
+                        @Override
+                        public void onStart() {
+                            v.setEnabled(false);
+                        }
+
+                        @Override
+                        public void onSuccess(String json) {
+                            v.setEnabled(true);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                            if (response.isSuccess()) {
+                                zoneDetailBean.is_love = 1;
+                                ibtnShouCang.setImageResource(R.mipmap.shoucang_yes);
+                            }else {
+                                ToastUtils.showError(R.string.network_err);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            v.setEnabled(true);
+                        }
+                    });
+                }else { //取消收藏
+                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams("62", "11");
+                    HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
+                        @Override
+                        public void onStart() {
+                            v.setEnabled(false);
+                        }
+
+                        @Override
+                        public void onSuccess(String json) {
+                            v.setEnabled(true);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                            if (response.isSuccess()) {
+                                zoneDetailBean.is_love = 0;
+                                ibtnShouCang.setImageResource(R.mipmap.shoucang_white);
+                            }else {
+                                ToastUtils.showError(R.string.network_err);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            v.setEnabled(true);
+                        }
+                    });
+
+                }
+                break;
+            case R.id.ibtn_share: //分享
+                ToastUtils.showInfo("分享");
+                break;
+            default:
                 break;
         }
     }

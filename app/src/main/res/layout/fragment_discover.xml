@@ -2,8 +2,8 @@
     android:id="@+id/ll_discover"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
@@ -20,49 +20,30 @@
                 android:layout_height="45dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:src="@mipmap/find_title_left" />
+                android:src="@mipmap/wellgoods_saomiao" />
 
             <ImageView
                 android:id="@+id/title_right"
-                android:layout_width="48dp"
+                android:layout_width="wrap_content"
                 android:layout_height="45dp"
-                android:layout_alignParentRight="true"
-                android:paddingLeft="19dp"
+                android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:src="@mipmap/find_title_right" />
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/head_search_white"/>
 
-            <LinearLayout
-                android:id="@+id/search_linear"
-                android:layout_width="match_parent"
-                android:layout_height="26dp"
+            <ImageView
+                android:layout_width="38dp"
+                android:layout_height="45dp"
                 android:layout_centerInParent="true"
-                android:layout_toLeftOf="@id/title_right"
-                android:layout_toRightOf="@id/title_left"
-                android:background="@drawable/background_corner_gray"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="13dp"
-                    android:src="@mipmap/search_height_26px" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
-                    android:text="@string/search_qj_and_user"
-                    android:textColor="#878787"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                android:src="@mipmap/logo_white"/>
         </RelativeLayout>
 
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_marginBottom="@dimen/dp48"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp48">
 
         <ListView
             android:id="@+id/lv_index"

@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,14 +23,17 @@ import com.taihuoniao.fineix.beans.DiscoverIndexBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 
 public class DiscoverFragment extends BaseFragment {
@@ -86,6 +90,22 @@ public class DiscoverFragment extends BaseFragment {
         dialog = new WaittingDialog(activity);
         View view = View.inflate(activity, R.layout.fragment_discover, null);
         return view;
+    }
+
+    @OnClick({R.id.title_left,R.id.title_right})
+    void onClick(View v){
+        switch (v.getId()){
+            case R.id.title_left:
+                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                break;
+            case R.id.title_right:
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("t", 9);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
