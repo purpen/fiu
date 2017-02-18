@@ -1,16 +1,88 @@
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <ListView
-        android:id="@+id/lv_index"
-        android:layout_width="@dimen/dp80"
-        android:layout_height="match_parent"/>
-    <ListView
-        android:id="@+id/lv_content"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
+        android:id="@+id/relative"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
+        android:layout_height="wrap_content"
+        android:background="@color/black">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/title_left"
+                android:layout_width="48dp"
+                android:layout_height="45dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:src="@mipmap/find_title_left" />
+
+            <ImageView
+                android:id="@+id/title_right"
+                android:layout_width="48dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="19dp"
+                android:paddingRight="15dp"
+                android:src="@mipmap/find_title_right" />
+
+            <LinearLayout
+                android:id="@+id/search_linear"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/title_right"
+                android:layout_toRightOf="@id/title_left"
+                android:background="@drawable/background_corner_gray"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="13dp"
+                    android:src="@mipmap/search_height_26px" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="@string/search_qj_and_user"
+                    android:textColor="#878787"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv_index"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:scrollbars="none" />
+
+        <View
+            android:layout_width="@dimen/dp1"
+            android:layout_height="match_parent"
+            android:background="@color/color_eee" />
+
+        <ListView
+            android:id="@+id/lv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="@null"
+            android:paddingLeft="@dimen/dp15"
+            android:paddingRight="@dimen/dp15"
+            android:scrollbars="none" />
+    </LinearLayout>
 </LinearLayout>

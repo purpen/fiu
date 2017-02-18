@@ -244,7 +244,9 @@
             android:layout_toLeftOf="@id/share_img"
             android:paddingLeft="11dp"
             android:paddingRight="9dp"
-            android:src="@mipmap/index_comment" />
+            android:src="@mipmap/index_comment"
+            android:visibility="gone"
+            />
 
         <RelativeLayout
             android:id="@+id/love_container"

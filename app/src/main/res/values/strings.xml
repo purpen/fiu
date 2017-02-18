@@ -424,7 +424,7 @@
     <string name="look_shrink">收起</string>
     <string name="take_coupon">领取%s优惠券</string>
     <string name="high_light">亮点</string>
-    <string name="relate_scene">相关情景</string>
+    <string name="relate_scene">相关情境</string>
     <string name="relate_products">相关产品</string>
     <string name="shop_info">商家详情</string>
     <string name="business_hour">营业时间:</string>
@@ -434,9 +434,10 @@
     <string-array name="discover_index">
         <item>为你推荐</item>
         <item>分类</item>
-        <item>地盘</item>
+        <!--<item>地盘</item>-->
         <item>情境</item>
         <item>品牌</item>
         <item>专辑</item>
+        <item>发现好友</item>
     </string-array>
 </resources>
