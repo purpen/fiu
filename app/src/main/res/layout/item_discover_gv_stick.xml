@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp70"
+        android:scaleType="centerCrop"
+        app:riv_corner_radius="@dimen/dp5"
+        android:layout_marginBottom="@dimen/dp5"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/transparent30_bg_radius"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingRight="@dimen/dp10"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp14"
+        />
+</RelativeLayout>

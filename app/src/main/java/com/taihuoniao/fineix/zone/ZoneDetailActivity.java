@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.zone;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,10 +31,12 @@ import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.ScrollableView;
@@ -52,13 +56,18 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 地盘详情
  */
 public class ZoneDetailActivity extends BaseActivity implements View.OnClickListener {
-    @Bind(R.id.head_view)
-    CustomHeadView headView;
+//    @Bind(R.id.head_view)
+//    CustomHeadView headView;
+    @Bind(R.id.tv_title)
+    TextView tvTitle;
+    @Bind(R.id.ibtn_shoucang)
+    ImageButton ibtnShouCang;
     @Bind(R.id.relate_scene)
     ListView relateScene;
     @Bind(R.id.relate_products)
@@ -74,16 +83,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     TextView shopDesc;
     Button btnSpread;
     TextView highLight;
-    //    TextView light0;
-//    TextView light0Desc;
-//    ImageView imgLight0;
-//    TextView light1;
-//    TextView light1Desc;
-//    ImageView imgLight1;
-//    TextView light2;
-//    TextView light2Desc;
-//    ImageView imgLeft;
-//    ImageView imgRight;
     Button highLightDetail;
     TextView tvRule;
     View lineRule;
@@ -112,13 +111,26 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     private static final int SHRINK=0;
     private static final int SPREAD=1;
     private int mState = SHRINK;
+    private String qjId="";
+    private String title="";
     public ZoneDetailActivity() {
         super(R.layout.activity_zone_detial);
     }
 
     @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra("id")) {
+            qjId = intent.getStringExtra("id");
+        }
+        if (intent.hasExtra("title")) {
+            title = intent.getStringExtra("title");
+        }
+    }
+
+    @Override
     protected void initView() {
-        headView.setHeadCenterTxtShow(true, "活动详情");
+        tvTitle.setText(title);
         dialog = new WaittingDialog(this);
         View view = Util.inflateView(activity, R.layout.zone_detail_head_layout, null);
         scrollableView = ButterKnife.findById(view, R.id.scrollableView);
@@ -136,18 +148,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
         highLight = ButterKnife.findById(view, R.id.high_light);
         llContainer = ButterKnife.findById(view, R.id.ll_container);
 
-//        light0 = ButterKnife.findById(view, R.id.light0);
-//        light0Desc = ButterKnife.findById(view, R.id.light0_desc);
-//        imgLight0 = ButterKnife.findById(view, R.id.img_light0);
-//
-//        light1 = ButterKnife.findById(view, R.id.light1);
-//        light1Desc = ButterKnife.findById(view, R.id.light1_desc);
-//        imgLight1 = ButterKnife.findById(view, R.id.img_light1);
-//
-//        light2 = ButterKnife.findById(view, R.id.light1);
-//        light2Desc = ButterKnife.findById(view, R.id.light1_desc);
-//        imgLeft = ButterKnife.findById(view, R.id.img_left);
-//        imgRight = ButterKnife.findById(view, R.id.img_right);
         highLightDetail = ButterKnife.findById(view, R.id.high_light_detail);
 
         rlRule = ButterKnife.findById(view, R.id.rl_rule);
@@ -162,7 +162,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
         rlResult = ButterKnife.findById(view, R.id.rl_result);
         tvResult = ButterKnife.findById(view, R.id.tv_result);
         lineResult = ButterKnife.findById(view, R.id.line_result);
-//        mapView = (MapView) view.findViewById(R.id.mapView);
 
         relateScene.addHeaderView(view);
         relateProducts.addHeaderView(view);
@@ -189,7 +188,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
         rlRule.setOnClickListener(this);
         rlParticipate.setOnClickListener(this);
         rlResult.setOnClickListener(this);
-//        btn_participate.setOnClickListener(this);
 
         relateScene.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -257,7 +255,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                 relateScene.setVisibility(View.VISIBLE);
                 lineRule.setVisibility(View.VISIBLE);
                 tvRule.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-//                btn_participate.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_participate:// 点击后为空去加载相关产品
                 if (relateProductList.size() == 0) loadRelateProducts();
@@ -268,7 +265,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.rl_result:
                 resetUI();
-//                if (!mapView.isShown()) mapView.setVisibility(View.VISIBLE);
                 merchantInfo.setVisibility(View.VISIBLE);
                 lineResult.setVisibility(View.VISIBLE);
                 tvResult.setTextColor(getResources().getColor(R.color.yellow_bd8913));
@@ -276,12 +272,80 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    @OnClick({R.id.head_goback,R.id.ibtn_shoucang,R.id.ibtn_share})
+    void click(final View v){
+        switch (v.getId()){
+            case R.id.head_goback:
+                finish();
+                break;
+            case R.id.ibtn_shoucang: //收藏
+                if (zoneDetailBean.is_love==0){
+                    HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams("62", "11");
+                    HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
+                        @Override
+                        public void onStart() {
+                            v.setEnabled(false);
+                        }
+
+                        @Override
+                        public void onSuccess(String json) {
+                            v.setEnabled(true);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                            if (response.isSuccess()) {
+                                zoneDetailBean.is_love = 1;
+                                ibtnShouCang.setImageResource(R.mipmap.shoucang_yes);
+                            }else {
+                                ToastUtils.showError(R.string.network_err);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            v.setEnabled(true);
+                        }
+                    });
+                }else { //取消收藏
+                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams("62", "11");
+                    HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
+                        @Override
+                        public void onStart() {
+                            v.setEnabled(false);
+                        }
+
+                        @Override
+                        public void onSuccess(String json) {
+                            v.setEnabled(true);
+                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                            if (response.isSuccess()) {
+                                zoneDetailBean.is_love = 0;
+                                ibtnShouCang.setImageResource(R.mipmap.shoucang_white);
+                            }else {
+                                ToastUtils.showError(R.string.network_err);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            v.setEnabled(true);
+                        }
+                    });
+
+                }
+                break;
+            case R.id.ibtn_share: //分享
+                ToastUtils.showInfo("分享");
+                break;
+            default:
+                break;
+        }
+    }
+
     private void resetUI() {
-//        btn_participate.setVisibility(View.GONE);
         relateScene.setVisibility(View.GONE);
         relateProducts.setVisibility(View.GONE);
         merchantInfo.setVisibility(View.GONE);
-//        mapView.setVisibility(View.GONE);
         lineRule.setVisibility(View.INVISIBLE);
         lineParticipate.setVisibility(View.INVISIBLE);
         lineResult.setVisibility(View.INVISIBLE);
@@ -309,7 +373,7 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void requestNet() {
-        //TODO
+        //TODO 62换成情境id
         HashMap param = ClientDiscoverAPI.getZoneDetailParams("62");
         HttpRequest.post(param, URL.ZONE_DETAIL, new GlobalDataCallBack() {
             @Override
@@ -381,7 +445,7 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     /**
-     * 加载相关情景
+     * 加载相关情境
      */
     private void loadRelateScene() {
         HashMap param = ClientDiscoverAPI.getRelateScene(currentPageScene, zoneDetailBean._id, sort, stick);
@@ -394,7 +458,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(String json) {
                 if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-                LogUtil.e(json);
 //                HttpResponse<ZoneRelateSceneBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ZoneRelateSceneBean>>() {
 //                });
                 SceneList sceneL = new SceneList();

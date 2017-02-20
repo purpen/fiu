@@ -351,17 +351,17 @@ public class ZoneRelateSceneAdapter extends BaseAdapter {
             }
         });
         //跳转到评论界面
-        holder.commentImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent3 = new Intent(activity, CommentListActivity.class);
-                intent3.putExtra("target_id", sceneList.get(position).get_id());
-                intent3.putExtra("type", 12 + "");
-                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivityForResult(intent3, 1);
-                pos = position;
-            }
-        });
+//        holder.commentImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent3 = new Intent(activity, CommentListActivity.class);
+//                intent3.putExtra("target_id", sceneList.get(position).get_id());
+//                intent3.putExtra("type", 12 + "");
+//                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
+//                activity.startActivityForResult(intent3, 1);
+//                pos = position;
+//            }
+//        });
         holder.commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> pare, View vie, int positi, long d) {

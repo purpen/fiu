@@ -13,6 +13,8 @@
     <color name="yellow_bd8913">#bd8913</color>
     <color name="black_touming_60">#99000000</color>
     <color name="black_touming_80">#cc000000</color>
+    <color name="transparent15">#26000000</color>
+    <color name="transparent30">#4d000000</color>
     <!-- selectactivity -->
     <color name="black">#000000</color>
     <color name="red">#ffff3366</color>

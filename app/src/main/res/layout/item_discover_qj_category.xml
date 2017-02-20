@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
+
+    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+        android:id="@+id/iv"
+        android:layout_width="@dimen/dp60"
+        android:layout_height="@dimen/dp60"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        app:riv_corner_radius="@dimen/dp100"
+        android:src="@mipmap/default_load"
+        />
+
+    <View
+        android:layout_width="@dimen/dp60"
+        android:layout_height="@dimen/dp60"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/transparent30_bg_radius"
+        android:visibility="gone" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        >
+
+        <TextView
+            android:id="@+id/tv_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp12" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginTop="@dimen/dp3"
+            android:layout_alignLeft="@+id/tv_tag"
+            android:layout_alignRight="@+id/tv_tag"
+            android:layout_below="@+id/tv_tag"
+            android:background="@color/white" />
+    </RelativeLayout>
+</RelativeLayout>
