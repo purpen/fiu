@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.home;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
@@ -22,6 +21,7 @@ import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.user.SubjectActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.zone.ZoneDetailActivity;
 
 import java.util.HashMap;
 
@@ -80,6 +80,11 @@ public class GoToNextUtils {
                         ToastUtils.showError(R.string.network_err);
                     }
                 });
+                break;
+            case 12: //地盘详情
+                intent = new Intent(context, ZoneDetailActivity.class);
+                intent.putExtra("id", url);
+                context.startActivity(intent);
                 break;
         }
     }

@@ -97,7 +97,7 @@ public class BannerBean implements Parcelable {
         return rows;
     }
 
-    public static class RowsEntity {
+    public static class RowsEntity implements Parcelable {
         /**
          * _id : 101931301
          * title : test
@@ -231,6 +231,59 @@ public class BannerBean implements Parcelable {
         public String getCover_url() {
             return cover_url;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeString(this.title);
+            dest.writeString(this.space_id);
+            dest.writeString(this.sub_title);
+            dest.writeString(this.web_url);
+            dest.writeString(this.summary);
+            dest.writeString(this.cover_id);
+            dest.writeString(this.type);
+            dest.writeString(this.ordby);
+            dest.writeString(this.kind);
+            dest.writeString(this.created_on);
+            dest.writeString(this.state);
+            dest.writeString(this.cover_url);
+        }
+
+        public RowsEntity() {
+        }
+
+        protected RowsEntity(Parcel in) {
+            this._id = in.readString();
+            this.title = in.readString();
+            this.space_id = in.readString();
+            this.sub_title = in.readString();
+            this.web_url = in.readString();
+            this.summary = in.readString();
+            this.cover_id = in.readString();
+            this.type = in.readString();
+            this.ordby = in.readString();
+            this.kind = in.readString();
+            this.created_on = in.readString();
+            this.state = in.readString();
+            this.cover_url = in.readString();
+        }
+
+        public static final Creator<RowsEntity> CREATOR = new Creator<RowsEntity>() {
+            @Override
+            public RowsEntity createFromParcel(Parcel source) {
+                return new RowsEntity(source);
+            }
+
+            @Override
+            public RowsEntity[] newArray(int size) {
+                return new RowsEntity[size];
+            }
+        };
     }
 
     @Override

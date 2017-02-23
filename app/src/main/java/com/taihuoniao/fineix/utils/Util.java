@@ -31,8 +31,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.Proxy;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -323,4 +325,16 @@ public class Util {
             PackageInfo info = manager.getPackageInfo(MainApplication.getContext().getPackageName(), 0);
             return info.versionName;
     }
+
+    public static final String getUUID(Context context){
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            final String tmDevice, tmSerial, androidId;
+            tmDevice = "" + tm.getDeviceId();
+            tmSerial = "" + tm.getSimSerialNumber();
+            androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+            String uniqueId = deviceUuid.toString();
+            return uniqueId;
+    }
+
 }

@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/navigation_elevation"
+        android:layout_height="@dimen/dp45"
         android:layout_gravity="center">
 
         <ImageView

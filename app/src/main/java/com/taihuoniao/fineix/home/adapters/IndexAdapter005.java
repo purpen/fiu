@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.common.bean.BannerBean;
+import com.taihuoniao.fineix.interfaces.IRecycleViewItemClickListener;
 import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
@@ -23,13 +23,10 @@ import java.util.List;
 public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
     private LayoutInflater mLayoutInflater;
     private List<BannerBean.RowsEntity> rowsEntities;
-    private GlobalCallBack mGlobalCallBack;
-
-    public IndexAdapter005(Context context, GlobalCallBack globalCallBack) {
-        this.mGlobalCallBack = globalCallBack;
-        mLayoutInflater = LayoutInflater.from(context);
+    private IRecycleViewItemClickListener itemClickListener;
+    public void setOnItemClickListener(IRecycleViewItemClickListener listener){
+        this.itemClickListener = listener;
     }
-
     public IndexAdapter005(Context context, List<BannerBean.RowsEntity> rowsEntities) {
         this.rowsEntities = rowsEntities;
         mLayoutInflater = LayoutInflater.from(context);
@@ -42,12 +39,12 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
     }
 
     @Override
-    public void onBindViewHolder(final VH holder, int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mGlobalCallBack != null) {
-                    mGlobalCallBack.callBack(holder.getAdapterPosition());
+                if (itemClickListener != null) {
+                    itemClickListener.onItemClick(v,position);
                 }
             }
         });
@@ -65,6 +62,8 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
     public int getItemCount() {
         return rowsEntities == null ? 0 : rowsEntities.size();
     }
+
+
 
     class VH extends RecyclerView.ViewHolder {
         private ImageView imageViewPicture;
@@ -86,5 +85,10 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
     public void setRowsEntities(List<BannerBean.RowsEntity> rowsEntities){
         this.rowsEntities = rowsEntities;
         notifyDataSetChanged();
+    }
+
+    public BannerBean.RowsEntity getItem(int position){
+        if (rowsEntities==null || rowsEntities.size()==0) return null;
+        return rowsEntities.get(position);
     }
 }

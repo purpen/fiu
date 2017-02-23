@@ -44,6 +44,7 @@ public class ZoneDetailBean implements Serializable{
     public String address;
     public LocationBean location;
     public int is_love;
+    public int is_favorite;
     public ExtraBean extra;
     public int score_average;
     public int current_user_id;

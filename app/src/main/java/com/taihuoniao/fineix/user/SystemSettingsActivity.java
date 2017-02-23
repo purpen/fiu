@@ -28,6 +28,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
@@ -127,7 +128,7 @@ public class SystemSettingsActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.item_service:
-                String url1 = URL.BASE_URL + "/view/fiu_service_term?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
+                String url1 = URL.BASE_URL + "/view/fiu_service_term?uuid=" + Util.getUUID(activity) + "&from_to=2&app_type=2";
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(), url1);
                 intent.putExtra(AboutUsActivity.class.getName(), "服务条款");

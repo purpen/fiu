@@ -469,6 +469,8 @@
         <activity android:name=".personal.alliance.WithdrawRecordDetailsActivity" />
         <activity android:name=".personal.alliance.PrivacyPolicyActivity" />
         <activity android:name=".zone.ZoneDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".main.PermissionsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ShareDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

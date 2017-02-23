@@ -86,9 +86,9 @@ public class ShopOrderFragment extends Base2Fragment {
         if (!isVisibleToUser) {
             mHandler.removeCallbacks(mLoadData);
         } else {
-            mDialog = new WaittingDialog(getActivity());
+
             if (curPage == 1) {
-                if(!mDialog.isShowing()){
+                if(mDialog!=null&&!mDialog.isShowing()){
                     mDialog.show();
                 }
             }
@@ -128,6 +128,7 @@ public class ShopOrderFragment extends Base2Fragment {
     }
 
     private void initView(View view) {
+        mDialog = new WaittingDialog(getActivity());
         pullToRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pullToRefreshListView_order);
 //        progressBar_order = (ProgressBar) view.findViewById(R.id.order_progressBar);
         TextView textView_empty = (TextView) view.findViewById(R.id.order_textView_empty);

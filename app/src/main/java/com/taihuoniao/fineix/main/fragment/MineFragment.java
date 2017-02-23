@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,16 +15,14 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
@@ -53,11 +50,11 @@ import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.zone.ZoneDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,10 +102,11 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_label;
     @Bind(R.id.riv_auth)
     ImageView riv_auth;
-
+    @Bind(R.id.tv_bonus)
+    TextView tvBonus;
     public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects,
             R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address, R.mipmap.icon_personal_chargeback,
-    R.mipmap.icon_personal_geren_tuikuanshouhou};
+            R.mipmap.icon_personal_geren_tuikuanshouhou};
     public static final String[] imgTxt = MainApplication.getContext().getResources().getStringArray(R.array.mine_gv_txt);
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
@@ -118,7 +116,6 @@ public class MineFragment extends MyBaseFragment {
     private boolean isInitLoad = true;
     private PersonalCenterGVAdapter adapter;
     private WaittingDialog dialog;
-    private DisplayImageOptions options;
     private User user;
 
     public static void setOnMessageCountChangeListener(OnMessageCountChangeListener listener) {
@@ -128,16 +125,6 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.user_center_bg)
-                .showImageForEmptyUri(R.mipmap.user_center_bg)
-                .showImageOnFail(R.mipmap.user_center_bg)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
         initData();
     }
 
@@ -185,8 +172,8 @@ public class MineFragment extends MyBaseFragment {
             return;
         }
         HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onStart() {
 //                if (!activity.isFinishing() && dialog != null) dialog.show();
@@ -316,10 +303,32 @@ public class MineFragment extends MyBaseFragment {
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-    @OnClick({R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
+    @OnClick({R.id.rl_bonus, R.id.tv_all_order, R.id.tv_wait_pay, R.id.tv_wait_send, R.id.tv_wait_receive, R.id.tv_wait_comment, R.id.tv_wait_shouhou, R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.tv_bonus:
+                //我的分成界面
+                startActivity(new Intent(activity, MyAccountActivity.class));
+                break;
+            case R.id.tv_all_order:
+                startActivity(new Intent(activity, ShopOrderListActivity.class));
+                break;
+            case R.id.tv_wait_pay:
+                toOrderListPage(R.string.wait_pay);
+                break;
+            case R.id.tv_wait_send:
+                toOrderListPage(R.string.wait_send);
+                break;
+            case R.id.tv_wait_receive:
+                toOrderListPage(R.string.wait_receive);
+                break;
+            case R.id.tv_wait_comment:
+                toOrderListPage(R.string.wait_comment);
+                break;
+            case R.id.tv_wait_shouhou:
+                toOrderListPage(R.string.shou_hou);
+                break;
             case R.id.ll_box:
                 startActivity(new Intent(activity, UserCenterActivity.class));
                 break;
@@ -351,10 +360,20 @@ public class MineFragment extends MyBaseFragment {
             case R.id.item_feedback:
                 startActivity(new Intent(activity, FeedbackActivity.class));
                 break;
-            case R.id.btn:
-                startActivity(new Intent(activity, ZoneDetailActivity.class));
+//            case R.id.btn:
+//                startActivity(new Intent(activity, ZoneDetailActivity.class));
+//                break;
+            default:
                 break;
         }
+    }
+
+    private void toOrderListPage(int res) {
+        Intent intent;
+        intent = new Intent(activity, ShopOrderListActivity.class);
+        String string = getResources().getString(res);
+        intent.putExtra("orderStatus", string);
+        startActivity(intent);
     }
 
     @Override
@@ -385,7 +404,7 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(new Intent(activity, CollectionsActivity.class));
                         break;
                     case 5:
-                        String url = URL.BASE_URL + "/view/fiu_point?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
+                        String url = URL.BASE_URL + "/view/fiu_point?uuid=" + Util.getUUID(activity) + "&from_to=2&app_type=2";
                         intent = new Intent(activity, AboutUsActivity.class);
                         intent.putExtra(AboutUsActivity.class.getSimpleName(), url);
                         intent.putExtra(AboutUsActivity.class.getName(), "积分");

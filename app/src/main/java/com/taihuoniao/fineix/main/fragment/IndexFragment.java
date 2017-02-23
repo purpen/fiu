@@ -26,26 +26,24 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
-import com.taihuoniao.fineix.adapters.IndexSubjectAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
-import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
-import com.taihuoniao.fineix.beans.CategoryListBean;
-import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.SearchBean;
-import com.taihuoniao.fineix.common.bean.BannerBean;
-import com.taihuoniao.fineix.common.GlobalCallBack;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IndexUserListBean;
+import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SceneList;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubjectListBean;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.bean.BannerBean;
 import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.home.adapters.IndexAdapter001;
 import com.taihuoniao.fineix.home.adapters.IndexAdapter004;
 import com.taihuoniao.fineix.home.adapters.IndexAdapter005;
 import com.taihuoniao.fineix.home.adapters.ProductAlbumAdapter;
+import com.taihuoniao.fineix.interfaces.IRecycleViewItemClickListener;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -54,16 +52,10 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
-import com.taihuoniao.fineix.user.ActivityDetailActivity;
-import com.taihuoniao.fineix.user.ArticalDetailActivity;
-import com.taihuoniao.fineix.user.ChooseSubjectActivity;
-import com.taihuoniao.fineix.user.NewProductDetailActivity;
-import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
-import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -533,13 +525,27 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         });
         recyclerView004.setAdapter(indexAdapter004);
 
+
+        //地盘
         RecyclerView recyclerView005 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_005);
         recyclerView005.setHasFixedSize(true);
         recyclerView005.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        indexAdapter005 = new IndexAdapter005(getActivity(), new GlobalCallBack() {
+        indexAdapter005=new IndexAdapter005(activity,null);
+        indexAdapter005.setOnItemClickListener(new IRecycleViewItemClickListener() {
             @Override
-            public void callBack(Object object) {
-                Toast.makeText(activity, "点击了" + ((Integer) object), Toast.LENGTH_SHORT).show();
+            public void onItemClick(View view, int position) {
+                BannerBean.RowsEntity item = indexAdapter005.getItem(position);
+                if (item==null) return;
+                GoToNextUtils.goToIntent(activity,Integer.valueOf(item.getType()),item.getWeb_url());
+//                Intent intent = new Intent(activity, ZoneDetailActivity.class);
+//                intent.putExtra("id",item.getSpace_id());
+//                intent.putExtra("title",item.getTitle());
+//                activity.startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
             }
         });
         recyclerView005.setAdapter(indexAdapter005);

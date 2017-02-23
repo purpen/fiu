@@ -15,9 +15,9 @@ import android.widget.VideoView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -59,7 +59,6 @@ public class UserGuideActivity extends BaseActivity {
     private boolean empty;
     private boolean taskRoot;
     private boolean readBool;
-
     public UserGuideActivity() {
         super(R.layout.activity_user_guide_layout);
     }
@@ -165,7 +164,6 @@ public class UserGuideActivity extends BaseActivity {
     private void initGuide() {
         HashMap<String, String> params = ClientDiscoverAPI.getactiveStatusRequestParams();
         HttpRequest.post(params, URL.GATEWAY_RECORD_FIU_USER_ACTIVE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.activeStatus(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 LogUtil.e(TAG,json);

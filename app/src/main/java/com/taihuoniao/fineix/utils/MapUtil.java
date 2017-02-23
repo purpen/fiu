@@ -16,6 +16,7 @@ import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.poi.PoiSortType;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.taihuoniao.fineix.main.MainApplication;
 
 /**
@@ -144,5 +145,16 @@ public class MapUtil {
             mLocationClient.stop();
             mLocationClient=null;
         }
+    }
+
+
+    /**
+     * 单位米
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static double getDistance(LatLng p1,LatLng p2) {
+       return DistanceUtil.getDistance(p1,p2);
     }
 }

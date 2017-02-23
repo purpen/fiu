@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Vibrator;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -37,8 +36,6 @@ import com.umeng.message.entity.UMessage;
 
 import java.io.File;
 import java.util.List;
-import java.util.UUID;
-
 
 
 /**
@@ -55,7 +52,6 @@ public class MainApplication extends Application {
     public static int which_activity;//判断是从哪个界面跳转到登录界面,0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
     public static String systemPhotoPath = null;//系统相册路径
-    public static String uuid = null;
     public static boolean hasUser;
     //编辑好的图片标签的list
     public static List<TagItem> tagInfoList;
@@ -90,7 +86,6 @@ public class MainApplication extends Application {
         UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_background_750_1334);
 
         JsonUtil.init();
-        uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
 //        fiuPath = Environment.getRootDirectory().getAbsolutePath() + "/DCIM/Fiu浮游";
 //        try {
@@ -156,18 +151,6 @@ public class MainApplication extends Application {
             }
         }
         return getCacheDir();
-    }
-
-    //UUID+设备号序列号 唯一识别码（不可变）
-    private String getMyUUID() {
-        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-        final String tmDevice, tmSerial, androidId;
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(this.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        String uniqueId = deviceUuid.toString();
-        return uniqueId;
     }
 
 

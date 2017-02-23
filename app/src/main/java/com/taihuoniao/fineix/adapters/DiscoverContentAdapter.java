@@ -12,8 +12,13 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DiscoverBean;
 import com.taihuoniao.fineix.beans.DiscoverIndexBean;
+import com.taihuoniao.fineix.home.GoToNextUtils;
+import com.taihuoniao.fineix.product.BrandDetailActivity;
+import com.taihuoniao.fineix.product.GoodsListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJCategoryActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.CustomGridView;
 
 import java.util.List;
@@ -53,13 +58,20 @@ public class DiscoverContentAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         switch (position) {
             case 0: //推荐
                 convertView = View.inflate(activity, R.layout.item_discover_recommend, null);
                 ((TextView)ButterKnife.findById(convertView, R.id.tv)).setText(titles.get(position).indexName);
-                GlideUtils.displayImageFadein(discoverBean.stick.cover_url, (ImageView) ButterKnife.findById(convertView, R.id.iv_cover));
+                ImageView imageView=ButterKnife.findById(convertView, R.id.iv_cover);
+                GlideUtils.displayImageFadein(discoverBean.stick.cover_url, imageView);
                 ((TextView) ButterKnife.findById(convertView, R.id.tv_title)).setText(discoverBean.stick.sub_title);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        GoToNextUtils.goToIntent(activity,Integer.valueOf(discoverBean.stick.type),discoverBean.stick.web_url);
+                    }
+                });
                 break;
             case 1: //分类
                 convertView = View.inflate(activity, R.layout.item_discover_category, null);
@@ -70,7 +82,10 @@ public class DiscoverContentAdapter extends BaseAdapter {
                 gv_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //TODO 跳转
+                        Intent intent = new Intent(activity, GoodsListActivity.class);
+                        intent.putExtra("id", discoverBean.pro_category.get(i)._id);
+                        intent.putExtra("name", discoverBean.pro_category.get(i).title);
+                        activity.startActivity(intent);
                     }
                 });
                 break;
@@ -80,19 +95,24 @@ public class DiscoverContentAdapter extends BaseAdapter {
                 CustomGridView qj_gv_stick = ButterKnife.findById(convertView, R.id.gv_stick);
                 qj_gv_stick.setVisibility(View.VISIBLE);
                 qj_gv_stick.setAdapter(new DiscoverQJRecommendAdapter(discoverBean.sight.stick,activity));
-                qj_gv_stick.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                qj_gv_stick.setOnItemClickListener(new AdapterView.OnItemClickListener() { //banner
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //TODO 情境详情
+                        DiscoverBean.SightBean.StickBeanXX beanXX = discoverBean.sight.stick.get(i);
+                        LogUtil.e("i==="+i+"get(i)=="+beanXX);
+                        GoToNextUtils.goToIntent(activity,Integer.valueOf(discoverBean.sight.stick.get(i).type),discoverBean.sight.stick.get(i).web_url);
                     }
                 });
                 CustomGridView qj_gv_category = ButterKnife.findById(convertView, R.id.gv_category);
-                qj_gv_category.setVisibility(View.VISIBLE);
+                qj_gv_category.setVisibility(View.VISIBLE); //情境分类
                 qj_gv_category.setAdapter(new DiscoverQJCategoryAdapter(discoverBean.sight.category, activity));
                 qj_gv_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //TODO
+                        Intent intent = new Intent(activity, QJCategoryActivity.class);
+                        intent.putExtra("id", discoverBean.sight.category.get(i)._id);
+                        intent.putExtra("name", discoverBean.sight.category.get(i).title);
+                        activity.startActivity(intent);
                     }
                 });
                 break;
@@ -105,7 +125,9 @@ public class DiscoverContentAdapter extends BaseAdapter {
                 brand_gv_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //TODO 品牌分类
+                        Intent intent = new Intent(activity, BrandDetailActivity.class);
+                        intent.putExtra("id", discoverBean.brand.get(i)._id);
+                        activity.startActivity(intent);
                     }
                 });
                 break;
@@ -118,7 +140,7 @@ public class DiscoverContentAdapter extends BaseAdapter {
                 zj_gv_stick.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //TODO 专题分类
+                        GoToNextUtils.goToIntent(activity,Integer.valueOf(discoverBean.sight.stick.get(i).type),discoverBean.sight.stick.get(i).web_url);
                     }
                 });
                 break;

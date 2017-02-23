@@ -2,7 +2,7 @@ package com.taihuoniao.fineix.utils;
 
 /**
  * @author lilin
- * created at 2016/3/30 15:10
+ *         created at 2016/3/30 15:10
  */
 public class Constants {
     public static final String CHARSET = "UTF-8";
@@ -22,8 +22,14 @@ public class Constants {
     public static final String TH = "D";
     public static final String DH = "E";
     public static final String PAGE_SIZE = "8";
-    public static final String SEPERATOR =":!";
-    public static final String TEXT_TYPE ="[text]";
-    public static final String IMAGE_TYPE ="[img]";
+    public static final String SEPERATOR = ":!";
+    public static final String TEXT_TYPE = "[text]";
+    public static final String IMAGE_TYPE = "[img]";
+
+    public static final String URL_TYPE = "1";  //URL
+    public static final String GOODS_TYPE = "2"; //商品
+    public static final String QJ_TYPE = "8"; //情境
+    public static final String QJ_THEME_TYPE = "11"; //情境专题
+    public static final String QJ_DETAIL_TYPE = "12"; //情境详情
 
 }

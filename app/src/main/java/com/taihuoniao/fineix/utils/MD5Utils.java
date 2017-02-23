@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.utils;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,7 +53,7 @@ public class MD5Utils {
     public static List<NameValuePair> getSignedNameValuePairs(Map<String, String> params) {
         params.put("app_type", "2");
         params.put("client_id", "1415289600");
-        params.put("uuid", MainApplication.uuid);
+        params.put("uuid", Util.getUUID(MainApplication.getContext()));
         params.put("channel", Util.getAppMetaData(App.getString(R.string.channel_name)));
         params.put("time", String.valueOf(System.currentTimeMillis() / 1000));
         params.put("sign", generateSign(sortHashMapToList(params)));

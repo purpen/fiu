@@ -2,117 +2,102 @@ package com.taihuoniao.fineix.zone;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.MapView;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
-import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.ScrollableView;
-import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.zone.adapter.ZoneRelateProductsAdapter;
-import com.taihuoniao.fineix.zone.adapter.ZoneRelateSceneAdapter;
-import com.taihuoniao.fineix.zone.adapter.ZoneShopInfoAdapter;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
-import com.taihuoniao.fineix.zone.bean.ZoneRelateProductsBean;
-import com.taihuoniao.fineix.zone.bean.ZoneRelateSceneBean;
+import com.taihuoniao.fineix.zone.fragment.ZoneRelateProductsFragment;
+import com.taihuoniao.fineix.zone.fragment.ZoneRelateSceneFragment;
+import com.taihuoniao.fineix.zone.fragment.ZoneShopInfoFragment;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * 地盘详情
  */
 public class ZoneDetailActivity extends BaseActivity implements View.OnClickListener {
-//    @Bind(R.id.head_view)
-//    CustomHeadView headView;
+    @Bind(R.id.head_goback)
+    ImageButton headGoback;
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.ibtn_shoucang)
-    ImageButton ibtnShouCang;
-    @Bind(R.id.relate_scene)
-    ListView relateScene;
-    @Bind(R.id.relate_products)
-    ListView relateProducts;
-    @Bind(R.id.merchant_info)
-    ListView merchantInfo;
+    ImageButton ibtnShoucang;
+    @Bind(R.id.ibtn_share)
+    ImageButton ibtnShare;
+    @Bind(R.id.scrollableView)
     ScrollableView scrollableView;
+    @Bind(R.id.zone_logo)
     RoundedImageView zoneLogo;
+    @Bind(R.id.shop_name)
     TextView shopName;
+    @Bind(R.id.ratingbar)
     RatingBar ratingbar;
+    @Bind(R.id.average_spend)
     TextView averageSpend;
+    @Bind(R.id.take_coupon)
     TextView takeCoupon;
+    @Bind(R.id.shop_desc)
     TextView shopDesc;
+    @Bind(R.id.btn_spread)
     Button btnSpread;
+    @Bind(R.id.high_light)
     TextView highLight;
+    @Bind(R.id.ll_container)
+    LinearLayout llContainer;
+    @Bind(R.id.high_light_detail)
     Button highLightDetail;
-    TextView tvRule;
-    View lineRule;
-    RelativeLayout rlRule;
-    TextView tvParticipate;
-    View lineParticipate;
-    RelativeLayout rlParticipate;
-    TextView tvResult;
-    View lineResult;
-    RelativeLayout rlResult;
-    private LinearLayout llContainer;
-    private ZoneRelateSceneAdapter relateSceneAdapter;
-    private ZoneRelateProductsAdapter relateProductsAdapter;
-    private ZoneShopInfoAdapter shopInfoAdapter;
-    private List<SceneList.DataBean.RowsBean> relateSceneList;
-    private List<ZoneRelateProductsBean.RowsBean> relateProductList;
-    private List commentList;
+    @Bind(R.id.tab_layout)
+    TabLayout tabLayout;
+    @Bind(R.id.viewpager)
+    ViewPager viewpager;
+    private boolean isFirstLoc = true;
     private ZoneDetailBean zoneDetailBean;
     private Dialog dialog;
-    private int currentPageScene = 1;
-    private int currentPageProducts = 1;
-    private String stick = "1";//默认是推荐
-    private String sort = "1"; //默认是推荐
-    private boolean isSceneBottom;
-    private boolean isProductsBottom;
-    private static final int SHRINK=0;
-    private static final int SPREAD=1;
+    private static final int SHRINK = 0;
+    private static final int SPREAD = 1;
     private int mState = SHRINK;
-    private String qjId="";
-    private String title="";
+    private String sZoneId = ""; //地盘ID
+    private String title = "";
+    private TabViewPagerAdapter adapter;
+
     public ZoneDetailActivity() {
         super(R.layout.activity_zone_detial);
     }
@@ -121,7 +106,7 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     protected void getIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra("id")) {
-            qjId = intent.getStringExtra("id");
+            sZoneId = intent.getStringExtra("id");
         }
         if (intent.hasExtra("title")) {
             title = intent.getStringExtra("title");
@@ -130,110 +115,110 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
-        tvTitle.setText(title);
-        dialog = new WaittingDialog(this);
-        View view = Util.inflateView(activity, R.layout.zone_detail_head_layout, null);
-        scrollableView = ButterKnife.findById(view, R.id.scrollableView);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width;
         scrollableView.setLayoutParams(lp);
-        zoneLogo = ButterKnife.findById(view, R.id.zone_logo);
-        shopName = ButterKnife.findById(view, R.id.shop_name);
-        ratingbar = ButterKnife.findById(view, R.id.ratingbar);
-        averageSpend = ButterKnife.findById(view, R.id.average_spend);
-        takeCoupon = ButterKnife.findById(view, R.id.take_coupon);
-        shopDesc = ButterKnife.findById(view, R.id.shop_desc);
-        btnSpread = ButterKnife.findById(view, R.id.btn_spread);
-        highLight = ButterKnife.findById(view, R.id.high_light);
-        llContainer = ButterKnife.findById(view, R.id.ll_container);
-
-        highLightDetail = ButterKnife.findById(view, R.id.high_light_detail);
-
-        rlRule = ButterKnife.findById(view, R.id.rl_rule);
-        tvRule = ButterKnife.findById(view, R.id.tv_rule);
-        tvRule.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-        lineRule = ButterKnife.findById(view, R.id.line_rule);
-
-        rlParticipate = ButterKnife.findById(view, R.id.rl_participate);
-        tvParticipate = ButterKnife.findById(view, R.id.tv_participate);
-        lineParticipate = ButterKnife.findById(view, R.id.line_participate);
-
-        rlResult = ButterKnife.findById(view, R.id.rl_result);
-        tvResult = ButterKnife.findById(view, R.id.tv_result);
-        lineResult = ButterKnife.findById(view, R.id.line_result);
-
-        relateScene.addHeaderView(view);
-        relateProducts.addHeaderView(view);
-        merchantInfo.addHeaderView(view);
-
-        relateSceneList = new ArrayList();
-        relateSceneAdapter = new ZoneRelateSceneAdapter(activity, relateSceneList);
-        relateScene.setAdapter(relateSceneAdapter);
-
-        relateProductList = new ArrayList();
-        relateProductsAdapter = new ZoneRelateProductsAdapter(activity, relateProductList);
-        relateProducts.setAdapter(relateProductsAdapter);
+        setupViewPager(viewpager);
+        tabLayout.setupWithViewPager(viewpager);
     }
 
-    private void setShopInfo() {
-        commentList = new ArrayList();
-        shopInfoAdapter = new ZoneShopInfoAdapter(activity, commentList, zoneDetailBean);
-        merchantInfo.setAdapter(shopInfoAdapter);
+
+    private void setupViewPager(ViewPager viewPager) {
+
+        adapter = new TabViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(ZoneRelateSceneFragment.newInstance(sZoneId), getResources().getString(R.string.relate_scene));
+        adapter.addFrag(ZoneRelateProductsFragment.newInstance(sZoneId), getResources().getString(R.string.relate_products));
+        adapter.addFrag(ZoneShopInfoFragment.newInstance(sZoneId), getResources().getString(R.string.shop_info));
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
+    }
+
+    static class TabViewPagerAdapter extends FragmentPagerAdapter {
+
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public TabViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        public Fragment getFragment(int position) {
+            if (mFragmentList.size() > position) {
+                return mFragmentList.get(position);
+            }
+            return null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
     @Override
     protected void installListener() {
         btnSpread.setOnClickListener(this);
-        rlRule.setOnClickListener(this);
-        rlParticipate.setOnClickListener(this);
-        rlResult.setOnClickListener(this);
+//        relateScene.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView absListView, int i) {
+//                LogUtil.e(relateScene.getLastVisiblePosition() + ";;;;" + relateSceneList.size());
+//                if (!isSceneBottom && relateScene.getLastVisiblePosition() == relateSceneList.size()) {
+//                    loadRelateScene();
+//                }
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+//
+//            }
+//        });
 
-        relateScene.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-                LogUtil.e(relateScene.getLastVisiblePosition() + ";;;;" + relateSceneList.size());
-                if (!isSceneBottom && relateScene.getLastVisiblePosition() == relateSceneList.size()) {
-                    loadRelateScene();
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
-            }
-        });
-
-        relateProducts.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING) {
-                    if (relateProductList.size() % 2 == 0) {
-                        if (view.getLastVisiblePosition() == relateSceneList.size() / 2) {
-                            LogUtil.e("curPage==偶数", currentPageProducts + "");
-//                            loadData();
-                        }
-                    } else {
-                        if (view.getLastVisiblePosition() == relateSceneList.size() / 2 + 1) {
-                            LogUtil.e("curPage==奇数", currentPageProducts + "");
-//                            loadData();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
+//        relateProducts.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING) {
+//                    if (relateProductList.size() % 2 == 0) {
+//                        if (view.getLastVisiblePosition() == relateSceneList.size() / 2) {
+//                            LogUtil.e("curPage==偶数", currentPageProducts + "");
+////                            loadData();
+//                        }
+//                    } else {
+//                        if (view.getLastVisiblePosition() == relateSceneList.size() / 2 + 1) {
+//                            LogUtil.e("curPage==奇数", currentPageProducts + "");
+////                            loadData();
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//
+//            }
+//        });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_spread:
-                switch (mState){
+                switch (mState) {
                     case SHRINK:
                         shopDesc.setMaxLines(Integer.MAX_VALUE);
                         shopDesc.requestLayout();
@@ -250,37 +235,20 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                         break;
                 }
                 break;
-            case R.id.rl_rule:
-                resetUI();
-                relateScene.setVisibility(View.VISIBLE);
-                lineRule.setVisibility(View.VISIBLE);
-                tvRule.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-                break;
-            case R.id.rl_participate:// 点击后为空去加载相关产品
-                if (relateProductList.size() == 0) loadRelateProducts();
-                resetUI();
-                relateProducts.setVisibility(View.VISIBLE);
-                lineParticipate.setVisibility(View.VISIBLE);
-                tvParticipate.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-                break;
-            case R.id.rl_result:
-                resetUI();
-                merchantInfo.setVisibility(View.VISIBLE);
-                lineResult.setVisibility(View.VISIBLE);
-                tvResult.setTextColor(getResources().getColor(R.color.yellow_bd8913));
+            default:
                 break;
         }
     }
 
-    @OnClick({R.id.head_goback,R.id.ibtn_shoucang,R.id.ibtn_share})
-    void click(final View v){
-        switch (v.getId()){
+    @OnClick({R.id.head_goback, R.id.ibtn_shoucang, R.id.ibtn_share})
+    void click(final View v) {
+        switch (v.getId()) {
             case R.id.head_goback:
                 finish();
                 break;
             case R.id.ibtn_shoucang: //收藏
-                if (zoneDetailBean.is_love==0){
-                    HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams("62", "11");
+                if (zoneDetailBean.is_favorite == 0) {
+                    HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams(sZoneId, "11");
                     HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
                         @Override
                         public void onStart() {
@@ -292,9 +260,9 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                             v.setEnabled(true);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
-                                zoneDetailBean.is_love = 1;
-                                ibtnShouCang.setImageResource(R.mipmap.shoucang_yes);
-                            }else {
+                                zoneDetailBean.is_favorite = 1;
+                                ibtnShoucang.setImageResource(R.mipmap.shoucang_yes);
+                            } else {
                                 ToastUtils.showError(R.string.network_err);
                             }
 
@@ -305,8 +273,8 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                             v.setEnabled(true);
                         }
                     });
-                }else { //取消收藏
-                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams("62", "11");
+                } else { //取消收藏
+                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams(sZoneId, "11");
                     HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
                         @Override
                         public void onStart() {
@@ -318,9 +286,9 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                             v.setEnabled(true);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
-                                zoneDetailBean.is_love = 0;
-                                ibtnShouCang.setImageResource(R.mipmap.shoucang_white);
-                            }else {
+                                zoneDetailBean.is_favorite = 0;
+                                ibtnShoucang.setImageResource(R.mipmap.shoucang_white);
+                            } else {
                                 ToastUtils.showError(R.string.network_err);
                             }
 
@@ -335,23 +303,13 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
             case R.id.ibtn_share: //分享
-                ToastUtils.showInfo("分享");
+                Intent intent = new Intent(activity, ShareDialogActivity.class);
+//                intent.putExtra(ShareDialogActivity.class.getSimpleName(), item);
+                activity.startActivity(intent);
                 break;
             default:
                 break;
         }
-    }
-
-    private void resetUI() {
-        relateScene.setVisibility(View.GONE);
-        relateProducts.setVisibility(View.GONE);
-        merchantInfo.setVisibility(View.GONE);
-        lineRule.setVisibility(View.INVISIBLE);
-        lineParticipate.setVisibility(View.INVISIBLE);
-        lineResult.setVisibility(View.INVISIBLE);
-        tvRule.setTextColor(getResources().getColor(R.color.color_666));
-        tvParticipate.setTextColor(getResources().getColor(R.color.color_666));
-        tvResult.setTextColor(getResources().getColor(R.color.color_666));
     }
 
     @Override
@@ -373,8 +331,7 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void requestNet() {
-        //TODO 62换成情境id
-        HashMap param = ClientDiscoverAPI.getZoneDetailParams("62");
+        HashMap param = ClientDiscoverAPI.getZoneDetailParams(sZoneId);
         HttpRequest.post(param, URL.ZONE_DETAIL, new GlobalDataCallBack() {
             @Override
             public void onStart() {
@@ -384,13 +341,16 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(String json) {
                 if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-                LogUtil.e(json);
                 HttpResponse<ZoneDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ZoneDetailBean>>() {
                 });
-                zoneDetailBean = response.getData();
-                loadRelateScene();
-                setShopInfo();
-                refreshUI();
+                if (response.isSuccess()) {
+                    zoneDetailBean = response.getData();
+                    ((ZoneShopInfoFragment) adapter.getFragment(2)).setData(zoneDetailBean);
+
+                    refreshUI();
+                } else {
+                    ToastUtils.showError(response.getMessage());
+                }
             }
 
             @Override
@@ -402,106 +362,40 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     /**
-     * 加载相关产品
+     * 获得距离
      */
-    private void loadRelateProducts() {
-        HashMap param = ClientDiscoverAPI.getRelateProducts(currentPageProducts, zoneDetailBean._id);
-        HttpRequest.post(param, URL.ZONE_RELATE_PRODUCTS, new GlobalDataCallBack() {
+    private void getDistance() {
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
             @Override
-            public void onStart() {
-                if (dialog != null && !activity.isFinishing()) dialog.show();
-            }
-
-            @Override
-            public void onSuccess(String json) {
-                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-                LogUtil.e(json);
-                HttpResponse<ZoneRelateProductsBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ZoneRelateProductsBean>>() {
-                });
-
-                if (response.getData().rows.size() > 0) {
-                    currentPageProducts++;
-                    relateProductList.addAll(response.getData().rows);
-                    refreshRelateProductsUI();
-                } else {
-                    isProductsBottom = true;
+            public void onReceiveLocation(BDLocation bdLocation) {
+                if (isFirstLoc) {
+                    isFirstLoc = false;
+                    LatLng p1 = new LatLng(bdLocation.getLatitude(),
+                            bdLocation.getLongitude());
+                    LatLng p2 = new LatLng(zoneDetailBean.location.coordinates.get(1), zoneDetailBean.location.coordinates.get(0));
+                    double distance = MapUtil.getDistance(p1, p2);
+                    LogUtil.e(distance+"");
+                    if (distance < 1000) {
+                        scrollableView.showDistance((int) distance + "m");
+                    } else {
+                        scrollableView.showDistance((int) (distance / 1000) + "km");
+                    }
                 }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                LogUtil.e(error);
-                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
             }
         });
-    }
-
-    private void refreshRelateProductsUI() {
-        if (relateProductsAdapter == null) {
-            relateProducts.setAdapter(relateProductsAdapter);
-        } else {
-            relateProductsAdapter.notifyDataSetChanged();
-        }
-    }
-
-    /**
-     * 加载相关情境
-     */
-    private void loadRelateScene() {
-        HashMap param = ClientDiscoverAPI.getRelateScene(currentPageScene, zoneDetailBean._id, sort, stick);
-        HttpRequest.post(param, URL.ZONE_RELATE_SCENE, new GlobalDataCallBack() {
-            @Override
-            public void onStart() {
-                if (dialog != null && !activity.isFinishing()) dialog.show();
-            }
-
-            @Override
-            public void onSuccess(String json) {
-                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-//                HttpResponse<ZoneRelateSceneBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ZoneRelateSceneBean>>() {
-//                });
-                SceneList sceneL = new SceneList();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneList>() {
-                    }.getType();
-                    sceneL = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "情景列表解析异常" + e.toString());
-                }
-                if (sceneL.getData().getRows().size() > 0) {
-                    currentPageScene++;
-                    relateSceneList.addAll(sceneL.getData().getRows());
-                    refreshRelateSceneUI();
-                } else {
-                    isSceneBottom = true;
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                LogUtil.e(error);
-                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-            }
-        });
-    }
-
-    private void refreshRelateSceneUI() {
-        if (relateSceneAdapter == null) {
-            relateScene.setAdapter(relateSceneAdapter);
-        } else {
-            relateSceneAdapter.notifyDataSetChanged();
-        }
     }
 
     @Override
     protected void refreshUI() {
         if (zoneDetailBean == null) return;
+        getDistance();
+        tvTitle.setText(zoneDetailBean.title);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(activity, zoneDetailBean.banners);
         scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
         scrollableView.setAutoScrollDurationFactor(8);
         scrollableView.setInterval(4000);
-        scrollableView.showIndicators();
+//        scrollableView.showIndicators();
+        scrollableView.showIndicatorRight();
         scrollableView.start();
         setBrightSpots(zoneDetailBean.bright_spot);
         GlideUtils.displayImageFadein(zoneDetailBean.avatar_url, zoneLogo);
@@ -513,24 +407,27 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
 
     private void setBrightSpots(List<String> brightSpot) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.bottomMargin =getResources().getDimensionPixelSize(R.dimen.dp10);
+        params.bottomMargin = getResources().getDimensionPixelSize(R.dimen.dp10);
         for (String str : brightSpot) {
             if (!str.contains(Constants.SEPERATOR)) continue;
             String[] split = str.split(Constants.SEPERATOR);
-            if (TextUtils.equals(split[0],Constants.TEXT_TYPE)){
+            if (TextUtils.equals(split[0], Constants.TEXT_TYPE)) {
                 TextView textView = new TextView(activity);
                 textView.setLayoutParams(params);
                 textView.setText(split[1]);
-                textView.setLineSpacing(getResources().getDimensionPixelSize(R.dimen.dp3),1);
+                textView.setLineSpacing(getResources().getDimensionPixelSize(R.dimen.dp3), 1);
                 textView.setTextColor(getResources().getColor(R.color.color_666));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 llContainer.addView(textView);
-            }else if(TextUtils.equals(split[0],Constants.IMAGE_TYPE)){
+            } else if (TextUtils.equals(split[0], Constants.IMAGE_TYPE)) {
                 ImageView imageView = new ImageView(activity);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setLayoutParams(params);
-                GlideUtils.displayImageFadein(split[1],imageView);
+                GlideUtils.displayImageFadein(split[1], imageView);
                 llContainer.addView(imageView);
             }
         }
     }
+
+
 }

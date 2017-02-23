@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.base;
 
+import android.app.Activity;
 import android.os.Message;
 import android.text.TextUtils;
 

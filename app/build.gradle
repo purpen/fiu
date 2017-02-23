@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '23.0.3'
-
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 30
         versionName "1.8.3"
         multiDexEnabled true
-        renderscriptTargetApi 23
+        renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
     }
@@ -44,18 +44,20 @@ android {
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+
 }
 
 dependencies {
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     compile project(':PushSDK')
     compile project(':Gpu-Image')
     compile project(':pullrefreshlib')
-    compile 'com.android.support:design:22.2.1'
-    compile 'com.android.support:support-v4:22.2.1'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
     compile 'com.google.zxing:core:3.2.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.jakewharton:butterknife:7.0.1'

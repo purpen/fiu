@@ -41,24 +41,33 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     private ViewPager mPager;
     private TabLayout tabBar;
 
-    private static final String[] TITLES = {"全部", "待付款", "待发货", "待收货", "待评价"/*, "退款/售后"*/};
+    //    private static final String[] TITLES = {"全部", "待付款", "待发货", "待收货", "待评价"/*, "退款/售后"*/};
     private boolean isRestart = false;
     private ArrayList<String> mTitles;
     private User user;
     public ArrayList<BadgeView> badgeViewList;
-
+    private String title;
 
     public ShopOrderListActivity() {
         super(R.layout.activity_shop_order_list);
     }
 
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra("orderStatus")) {
+            title = intent.getStringExtra("orderStatus");
+        }
+    }
+
     protected void initView() {
+        String[] titles = getResources().getStringArray(R.array.order_status);
         custom_head.setContinueTvVisible(false);
-        custom_head.setTitle("我的订单");
+
         tabBar = (TabLayout) findViewById(R.id.tab_order);
         mPager = (ViewPager) findViewById(R.id.viewpaer_order);
         mTitles = new ArrayList<>();
-        Collections.addAll(mTitles, TITLES);
+        Collections.addAll(mTitles, titles);
         List<Fragment> mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.size(); i++) {
             mFragments.add(ShopOrderFragment.getInstance(i));
@@ -69,6 +78,18 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
         OrderViewpagerAdapter mAdapter = new OrderViewpagerAdapter(getSupportFragmentManager(), mFragments, mTitles);
         mPager.setAdapter(mAdapter);
         tabBar.setupWithViewPager(mPager);
+        if (!TextUtils.isEmpty(title)) {
+            custom_head.setTitle(title);
+            for (int i = 0; i < titles.length; i++) {
+                if (TextUtils.equals(title, titles[i])) {
+                    tabBar.setScrollPosition(i,0f,true);
+                    mPager.setCurrentItem(i);
+                    break;
+                }
+            }
+        }else {
+            custom_head.setTitle("我的订单");
+        }
 
         //tabBar设置点击联动
         tabBar.setOnTabSelectedListener(ShopOrderListActivity.this);
@@ -157,12 +178,13 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     @Override
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
-                HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() { });
+                HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
+                });
                 if (response.isSuccess()) {
                     user = response.getData();
                     if (isRestart) {
@@ -186,7 +208,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
         //tabLayout滑动的时候，选中当前pager
         int position = tab.getPosition();
         mPager.setCurrentItem(position);
-        custom_head.setTitle(TITLES[position]);
+        custom_head.setTitle(mTitles.get(position));
     }
 
     @Override

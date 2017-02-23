@@ -1,66 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <!--<com.taihuoniao.fineix.view.CustomHeadView-->
-        <!--android:id="@+id/head_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-    <RelativeLayout
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp45"
-        android:background="@color/black"
-        >
-        <ImageButton
-            android:id="@+id/head_goback"
-            android:layout_width="@dimen/dp45"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:src="@mipmap/back_white" />
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="@dimen/sp17"
-            android:textColor="@android:color/white"
-            android:layout_centerInParent="true"
-            />
-        <ImageButton
-            android:layout_toLeftOf="@+id/ibtn_share"
-            android:id="@+id/ibtn_shoucang"
-            android:layout_width="@dimen/dp45"
-            android:layout_height="@dimen/dp45"
-            android:src="@mipmap/shoucang_white"
-            android:background="@null"
-            android:layout_centerVertical="true"
-            />
-        <ImageButton
-            android:id="@+id/ibtn_share"
-            android:layout_width="@dimen/dp45"
-            android:layout_height="@dimen/dp45"
-            android:src="@mipmap/head_share_white"
-            android:background="@null"
-            android:layout_alignParentRight="true"
-            />
-    </RelativeLayout>
-    <ListView
-        android:id="@+id/relate_scene"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <ListView
-        android:id="@+id/relate_products"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll">
+            <include layout="@layout/zone_detail_head_layout" />
+        </LinearLayout>
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp44"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            app:tabIndicatorColor="@color/yellow_bd8913"
+            app:tabIndicatorHeight="@dimen/dp2"
+            app:tabSelectedTextColor="@color/yellow_bd8913" />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        />
-    <ListView
-        android:id="@+id/merchant_info"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        />
-</LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -427,9 +427,17 @@
     <string name="relate_scene">相关情境</string>
     <string name="relate_products">相关产品</string>
     <string name="shop_info">商家详情</string>
-    <string name="business_hour">营业时间:</string>
+    <string name="business_hour">营业时间：</string>
     <string name="business_tel">电话：</string>
-    <string name="shop_tags">标签：</string>
+    <string name="shop_tags">地址：</string>
+    <string name="my_money">我的分成</string>
+    <string name="my_available_money">可提现金额</string>
+    <string name="look_all_order">查看全部订单</string>
+    <string name="wait_pay">未付款</string>
+    <string name="wait_send">待发货</string>
+    <string name="wait_receive">待收货</string>
+    <string name="wait_comment">待评价</string>
+    <string name="shou_hou">退款售后</string>
 
     <string-array name="discover_index">
         <item>为你推荐</item>
@@ -440,4 +448,21 @@
         <item>专辑</item>
         <item>发现好友</item>
     </string-array>
+
+    <string-array name="order_status">
+        <item>全部</item>
+        <item>未付款</item>
+        <item>待发货</item>
+        <item>待收货</item>
+        <item>待评价</item>
+        <item>退款售后</item>
+    </string-array>
+
+    <string name="permission">权限(permission)</string>
+    <string name="no_permissions">应用需要必要的运行权限</string>
+
+    <string name="settings">设置</string>
+    <string name="help">帮助</string>
+    <string name="string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。</string>
+    <string name="quit">退出</string>
 </resources>

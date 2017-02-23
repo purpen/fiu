@@ -3,17 +3,22 @@ package com.taihuoniao.fineix.view;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
+
+import static com.taihuoniao.fineix.R.dimen.dp10;
 
 /**
  * @author lilin
@@ -27,6 +32,8 @@ public class ScrollableView extends RelativeLayout {
     private ArrayList<ImageView> imageViews;
     private int currentItem;
     private LinearLayout ll;
+    private TextView tvNum;
+    private TextView tvDistance;
     private int size;
 
     public ScrollableView(Context context) {
@@ -52,6 +59,8 @@ public class ScrollableView extends RelativeLayout {
         View view = Util.inflateView(R.layout.scrollable_view, this);
         viewPager = (CustomAutoScrollViewPager) view.findViewById(R.id.casvp);
         ll = (LinearLayout) view.findViewById(R.id.ll);
+        tvNum = (TextView) view.findViewById(R.id.tv_num);
+        tvDistance = (TextView) view.findViewById(R.id.tv_distance);
     }
 
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener){
@@ -84,8 +93,9 @@ public class ScrollableView extends RelativeLayout {
     public void showIndicators() {
         imageViews = new ArrayList<>();
         LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        llp.setMargins(context.getResources().getDimensionPixelSize(R.dimen.dp5), 0, 0, context.getResources().getDimensionPixelSize(R.dimen.dp10));
+        llp.gravity =Gravity.CENTER_HORIZONTAL;
         ViewGroup.LayoutParams vlp = new ViewGroup.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        llp.setMargins(context.getResources().getDimensionPixelSize(R.dimen.dp5), 0, 0, context.getResources().getDimensionPixelSize(dp10));
         ImageView imageView;
         for (int i = 0; i < size; i++) {
             imageView = new ImageView(context);
@@ -101,15 +111,32 @@ public class ScrollableView extends RelativeLayout {
         addOnPageChangeListener(new CustomOnPageChangeListener());
     }
 
+    public void showIndicatorRight(){
+
+        tvNum.setVisibility(VISIBLE);
+        tvNum.setText("1/"+size);
+        tvNum.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        tvNum.setTextColor(context.getResources().getColor(android.R.color.white));
+        addOnPageChangeListener(new CustomOnPageChangeListener());
+    }
+
+    public void showDistance(String distance){
+        tvDistance.setVisibility(VISIBLE);
+        tvDistance.setText(distance);
+        tvDistance.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        tvDistance.setTextColor(context.getResources().getColor(android.R.color.white));
+    }
+
     private class CustomOnPageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
         public void onPageSelected(int position) {
-            currentItem=position = position % size;//mPagerList.size()
+            currentItem=position = position % size;
+            tvNum.setText((position+1)+"/"+size);
             setCurFocus(position);
-//            LogUtil.e("onPageSelected", position % size + "");
         }
 
         private void setCurFocus(int position) {
+            if (imageViews==null||imageViews.size()==0) return;
 //            LogUtil.e("setCurFocus", position + "");
             for (int i = 0; i < size; i++) {
                 if (i == position) {

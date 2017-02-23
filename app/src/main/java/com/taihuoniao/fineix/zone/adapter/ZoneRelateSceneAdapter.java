@@ -69,7 +69,6 @@ import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.zone.bean.ZoneRelateSceneBean;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -307,29 +306,29 @@ public class ZoneRelateSceneAdapter extends BaseAdapter {
             }
         });
         //关注或取消关注
-        holder.attentionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (LoginInfo.isUserLogin()) {
-                    //已经登录
-                    if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
-                        //过滤自己
-                        return;
-                    }
-                    if (sceneList.get(position).getUser_info().getIs_follow() == 0) {
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
-                        fllow(position, sceneList.get(position).getUser_id(), holder);
-                    } else {
-                        showFocusFansConfirmView(sceneList.get(position), "取消关注", holder);
-                    }
-                    return;
-                }
-                MainApplication.which_activity = DataConstants.IndexFragment;
-                activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
-            }
-        });
+//        holder.attentionBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (LoginInfo.isUserLogin()) {
+//                    //已经登录
+//                    if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
+//                        //过滤自己
+//                        return;
+//                    }
+//                    if (sceneList.get(position).getUser_info().getIs_follow() == 0) {
+//                        if (!dialog.isShowing()) {
+//                            dialog.show();
+//                        }
+//                        fllow(position, sceneList.get(position).getUser_id(), holder);
+//                    } else {
+//                        showFocusFansConfirmView(sceneList.get(position), "取消关注", holder);
+//                    }
+//                    return;
+//                }
+//                MainApplication.which_activity = DataConstants.IndexFragment;
+//                activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+//            }
+//        });
 
         //点赞或取消点赞
         holder.loveImg.setOnClickListener(new View.OnClickListener() {
@@ -475,22 +474,6 @@ public class ZoneRelateSceneAdapter extends BaseAdapter {
     }
 
     private void method1(final int position, final ViewHolder holder) {
-//        if (userList.size() > 0) {
-//            if (position == 6) {
-//                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
-//                holder.userRecycler.setVisibility(View.VISIBLE);
-//            } else if (position == 17) {
-//                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
-//                holder.userRecycler.setVisibility(View.VISIBLE);
-//            } else {
-//                holder.userRecycler.setAdapter(null);
-//                holder.userRecycler.setVisibility(View.GONE);
-//            }
-//        } else {
-//            holder.userRecycler.setAdapter(null);
-//            holder.userRecycler.setVisibility(View.GONE);
-//        }
-
         if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
         } else {
@@ -505,26 +488,6 @@ public class ZoneRelateSceneAdapter extends BaseAdapter {
             holder.locationTv.setText(sceneList.get(position).getCity() + " " + sceneList.get(position).getAddress());
             holder.locationImg.setVisibility(View.VISIBLE);
             holder.locationTv.setVisibility(View.VISIBLE);
-        }
-        Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
-        if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
-            //自己的话隐藏关注按钮
-            holder.attentionBtn.setVisibility(View.GONE);
-        } else {
-            holder.attentionBtn.setVisibility(View.VISIBLE);
-            if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
-//                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                holder.attentionBtn.setText("已关注");
-                holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
-                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
-                holder.attentionBtn.setTextColor(activity.getResources().getColor(R.color.white));
-            } else {
-                holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
-                holder.attentionBtn.setText("");
-                holder.attentionBtn.setPadding(0, 0, 0, 0);
-                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
         }
         holder.qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -585,8 +548,8 @@ public class ZoneRelateSceneAdapter extends BaseAdapter {
         RoundedImageView headImg;
         @Bind(R.id.v_img)
         ImageView vImg;
-        @Bind(R.id.attention_btn)
-        Button attentionBtn;
+//        @Bind(R.id.attention_btn)
+//        Button attentionBtn;
         @Bind(R.id.user_name_tv)
         TextView userNameTv;
         @Bind(R.id.map_linear)
@@ -656,7 +619,7 @@ public class ZoneRelateSceneAdapter extends BaseAdapter {
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
-                cancelFollow(item.getUser_info(), holder);
+//                cancelFollow(item.getUser_info(), holder);
             }
         });
         tv_album.setTag(item);
@@ -843,85 +806,85 @@ public class ZoneRelateSceneAdapter extends BaseAdapter {
     }
 
     //关注用户
-    private void fllow(final int position, String otherUserId, final ViewHolder holder) {
-        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
-        HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(String json) {
-                dialog.dismiss();
-                Log.e("<<<关注用户", json);
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
-                }
-                if (netBean.isSuccess()) {
-                    holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-                    holder.attentionBtn.setText("");
-                    holder.attentionBtn.setPadding(0, 0, 0, 0);
-                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
-                        if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
-                            rowsBean.getUser_info().setIs_follow(1);
-                        }
-                    }
-                } else {
-                    ToastUtils.showError(netBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                dialog.dismiss();
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
-    }
+//    private void fllow(final int position, String otherUserId, final ViewHolder holder) {
+//        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
+//        HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
+////        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(String json) {
+//                dialog.dismiss();
+//                Log.e("<<<关注用户", json);
+//                NetBean netBean = new NetBean();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<NetBean>() {
+//                    }.getType();
+//                    netBean = gson.fromJson(json, type);
+//                } catch (JsonSyntaxException e) {
+//                    Log.e("<<<", "解析异常");
+//                }
+//                if (netBean.isSuccess()) {
+//                    holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
+//                    holder.attentionBtn.setText("");
+//                    holder.attentionBtn.setPadding(0, 0, 0, 0);
+//                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+//                        if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
+//                            rowsBean.getUser_info().setIs_follow(1);
+//                        }
+//                    }
+//                } else {
+//                    ToastUtils.showError(netBean.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                dialog.dismiss();
+//                ToastUtils.showError(R.string.net_fail);
+//            }
+//        });
+//    }
 
     //取消关注
-    private void cancelFollow(final SceneList.DataBean.RowsBean.UserInfoBean userInfoBean, final ViewHolder holder) {
-        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userInfoBean.getUser_id());
-        HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelFocusOperate(userInfoBean.getUser_id(), new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(String json) {
-                dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
-                }
-                if (netBean.isSuccess()) {
-                    holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
-                    holder.attentionBtn.setText("");
-                    holder.attentionBtn.setPadding(0, 0, 0, 0);
-                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
-                        if (rowsBean.getUser_id().equals(userInfoBean.getUser_id())) {
-                            rowsBean.getUser_info().setIs_follow(0);
-                        }
-                    }
-                    return;
-                }
-                ToastUtils.showError(netBean.getMessage());
-            }
-
-            @Override
-            public void onFailure(String error) {
-                dialog.dismiss();
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
-    }
+//    private void cancelFollow(final SceneList.DataBean.RowsBean.UserInfoBean userInfoBean, final ViewHolder holder) {
+//        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userInfoBean.getUser_id());
+//        HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
+////        ClientDiscoverAPI.cancelFocusOperate(userInfoBean.getUser_id(), new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(String json) {
+//                dialog.dismiss();
+//                NetBean netBean = new NetBean();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<NetBean>() {
+//                    }.getType();
+//                    netBean = gson.fromJson(json, type);
+//                } catch (JsonSyntaxException e) {
+//                    Log.e("<<<", "解析异常");
+//                }
+//                if (netBean.isSuccess()) {
+//                    holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+//                    holder.attentionBtn.setText("");
+//                    holder.attentionBtn.setPadding(0, 0, 0, 0);
+//                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+//                        if (rowsBean.getUser_id().equals(userInfoBean.getUser_id())) {
+//                            rowsBean.getUser_info().setIs_follow(0);
+//                        }
+//                    }
+//                    return;
+//                }
+//                ToastUtils.showError(netBean.getMessage());
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                dialog.dismiss();
+//                ToastUtils.showError(R.string.net_fail);
+//            }
+//        });
+//    }
 
     //用户列表适配器
     class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
