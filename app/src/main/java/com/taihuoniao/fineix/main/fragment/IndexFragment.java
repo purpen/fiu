@@ -327,7 +327,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     //获取情景列表
     private void sceneNet() {
         dialog.show();
-        HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 2 + "", null, null, 2 + "", null, null, null);
+        HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 20 + "", null, null, 2 + "", null, null, null);
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
@@ -499,7 +499,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
         RecyclerView recyclerView003 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_003);
         recyclerView003.setHasFixedSize(true);
-        recyclerView003.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView003.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         subjectList003 = new ArrayList<>();
         indexAdapter003 = new ProductAlbumAdapter(getActivity(), subjectList003);
         recyclerView003.setAdapter(indexAdapter003);
@@ -582,6 +582,9 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         addNet(httpHandler);
     }
 
+    /**
+     * 新品
+     */
     private void getLasteProduct(){
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, null, String.valueOf(4), null, null, null, "1", null);
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){

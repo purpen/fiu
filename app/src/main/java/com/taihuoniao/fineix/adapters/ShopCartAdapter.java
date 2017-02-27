@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
     private int number = 0, maxNumber = 0, minNumber = 1;
     HashMap<Integer, String> hashMap = new HashMap<>();//装载item上商品加减变化的数目
     private OnTwoClickedListener listener = null;
+    private int change;
 
     public interface OnTwoClickedListener {
         void onLetterCliced(HashMap<Integer, String> hashMap);
@@ -52,9 +54,10 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
     }
     private LayoutInflater inflater = null;
     private DecimalFormat df = null;
-    public ShopCartAdapter(List<Map<String, Object>> list, ShopCartActivity activity, Context context) {
+    public ShopCartAdapter(List<Map<String, Object>> list, Activity activity, int change) {
        super(list,activity);
         this.list = list;
+        this.change = change;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
@@ -84,7 +87,7 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
             mHolder = (ViewHolder) convertView.getTag();
         }
         hashMap.put(position, list.get(position).get("keyCount") + "");
-        switch (((ShopCartActivity)activity).getChange()) {
+        switch (change) {
             case STATE_COMPLETE:
                 mHolder.mEditLayout.setVisibility(View.GONE);
                 mHolder.mCompleteLayout.setVisibility(View.VISIBLE);
@@ -99,7 +102,7 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
                 mHolder.mRightItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (((ShopCartActivity)activity).getChange() == STATE_COMPLETE) {
+                        if (change == STATE_COMPLETE) {
                             Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                             intent.putExtra("id", list.get(position).get("keyProductId") + "");
                             activity.startActivity(intent);

@@ -68,14 +68,6 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
     private RelativeLayout mFullLayout;
     private DecimalFormat df = null;
 
-    public int getChange() {
-        return change;
-    }
-
-    public void setChange(int change) {
-        this.change = change;
-    }
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -197,7 +189,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
         Button mStroll = (Button) findViewById(R.id.bt_stroll_shopcart_empty);
         mStroll.setOnClickListener(this);
         mFullLayout = (RelativeLayout) findViewById(R.id.relative_full_shopcart);
-        adapter = new ShopCartAdapter(totalList, ShopCartActivity.this, this);
+        adapter = new ShopCartAdapter(totalList, ShopCartActivity.this, change);
         pullLv.setAdapter(adapter);
         adapter.setOnTwoClickedListener(new ShopCartAdapter.OnTwoClickedListener() {
             @Override
@@ -285,7 +277,6 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                         }
                     });
                     change = 1;
-                    setChange(change);
                 } else {
                     StringBuilder addSubtractBuilder = new StringBuilder();
                     addSubtractBuilder.append("[");
@@ -347,7 +338,6 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                         }
                     });
                     change = 0;
-                    setChange(change);
                 }
                 break;
             case R.id.bt_stroll_shopcart_empty://购物车为空时，去逛逛

@@ -16,7 +16,7 @@ import com.taihuoniao.fineix.utils.GlideUtils;
 import java.util.List;
 
 /**
- * 新手指南
+ * 新手福利见面礼
  * Created by Stephen on 2017/2/15 18:06
  * Email: 895745843@qq.com
  */

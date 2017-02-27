@@ -78,9 +78,9 @@ public class MD5Utils {
                 return (lhs.getKey()).compareTo(rhs.getKey());
             }
         });
-        for (Map.Entry<String, String> entry: mapList){
-            Log.e("------------> key : ", entry.getKey());
-        }
+//        for (Map.Entry<String, String> entry: mapList){
+//            Log.e("------------> key : ", entry.getKey());
+//        }
         return mapList;
     }
 
