@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="mine_gv_txt">
-        <item>订单</item>
+        <!--<item>订单</item>-->
         <item>消息</item>
         <item>订阅</item>
         <item>收藏</item>
@@ -9,8 +9,9 @@
         <item>积分</item>
         <item>红包</item>
         <item>收货地址</item>
-        <item>退款/售后</item>
-        <item>分成管理</item>
+        <item>创建情境</item>
+        <!--<item>退款/售后</item>-->
+        <!--<item>分成管理</item>-->
     </string-array>
 
     <string-array name="partner_name">

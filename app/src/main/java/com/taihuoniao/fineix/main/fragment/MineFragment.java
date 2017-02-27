@@ -31,7 +31,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.personal.alliance.MyAccountActivity;
-import com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity;
+import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
 import com.taihuoniao.fineix.user.FansActivity;
@@ -104,9 +104,9 @@ public class MineFragment extends MyBaseFragment {
     ImageView riv_auth;
     @Bind(R.id.tv_bonus)
     TextView tvBonus;
-    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects,
-            R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address, R.mipmap.icon_personal_chargeback,
-            R.mipmap.icon_personal_geren_tuikuanshouhou};
+    public static final int[] imgIds = {/*R.mipmap.gv_order,*/ R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects,
+            R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address,R.mipmap.gv_qj/*, R.mipmap.icon_personal_chargeback,
+            R.mipmap.icon_personal_geren_tuikuanshouhou*/};
     public static final String[] imgTxt = MainApplication.getContext().getResources().getStringArray(R.array.mine_gv_txt);
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
@@ -385,42 +385,45 @@ public class MineFragment extends MyBaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:  //订单
-                        startActivity(new Intent(activity, ShopOrderListActivity.class));
-                        break;
-                    case 1:
+//                        startActivity(new Intent(activity, ShopOrderListActivity.class));
                         startActivity(new Intent(activity, MessageActivity.class));
                         break;
-                    case 2:  //订阅
+                    case 1: //订阅情境
                         intent = new Intent(activity, OrderQJActivity.class);
                         if (user != null && user.interest_scene_cate != null) {
                             intent.putStringArrayListExtra(OrderQJActivity.class.getSimpleName(), user.interest_scene_cate);
                         }
                         startActivity(intent);
                         break;
-                    case 4: //赞过
-                        startActivity(new Intent(activity, HasLoveActivity.class));
-                        break;
-                    case 3: //收藏
+                    case 2: //收藏
                         startActivity(new Intent(activity, CollectionsActivity.class));
                         break;
-                    case 5:
+                    case 3: //赞过
+                        startActivity(new Intent(activity, HasLoveActivity.class));
+                        break;
+                    case 4:
                         String url = URL.BASE_URL + "/view/fiu_point?uuid=" + Util.getUUID(activity) + "&from_to=2&app_type=2";
                         intent = new Intent(activity, AboutUsActivity.class);
                         intent.putExtra(AboutUsActivity.class.getSimpleName(), url);
                         intent.putExtra(AboutUsActivity.class.getName(), "积分");
                         startActivity(intent);
                         break;
-                    case 6: //礼券
+                    case 5: //礼券
                         startActivity(new Intent(getActivity(), UsableRedPacketActivity.class));
                         break;
-                    case 7:
+                    case 6:
                         startActivity(new Intent(activity, SelectAddressActivity.class));
                         break;
-                    case 8: //退款/售后
-                        startActivity(new Intent(activity, ChargeBackAndServiceActivity.class));
+                    case 7:
+                        startActivity(new Intent(activity, SelectPhotoOrCameraActivity.class));
                         break;
-                    case 9: //分成管理
-                        startActivity(new Intent(activity, MyAccountActivity.class));
+//                    case 8: //退款/售后
+//                        startActivity(new Intent(activity, ChargeBackAndServiceActivity.class));
+//                        break;
+//                    case 9: //分成管理
+//                        startActivity(new Intent(activity, MyAccountActivity.class));
+//                        break;
+                    default:
                         break;
                 }
             }
