@@ -104,7 +104,7 @@ public class CustomHeadView extends RelativeLayout {
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.head_goback:
-                    ((Activity)context).onBackPressed();
+                    ((Activity)context).finish();
                     break;
                 case R.id.iv_left:
                     //TODO

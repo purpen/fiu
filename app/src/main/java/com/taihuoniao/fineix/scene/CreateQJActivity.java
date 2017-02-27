@@ -435,7 +435,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                         Log.e("<<<", "压缩图片");
                         String tmp = Base64Utils.encodeLines(stream.toByteArray());
                         Log.e("<<<", "初始化活动标签");
-                        createQJ(qjId, title, des, null, tags.length() > 0 ? tags.toString() : null, products.toString(), address, city, tmp, lat, lng, MainApplication.subjectId);
+                        createQJ(qjId, title, des,MainApplication.zoneId, tags.length() > 0 ? tags.toString() : null, products.toString(), address, city, tmp, lat, lng, MainApplication.subjectId);
                     }
                 });
                 thread.start();
@@ -467,8 +467,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcreateSceneRequestParams(id, title, des, scene_id, tags, products, address, city,
                 tmp, lat, lng, subject_ids);
         Call httpHandler = HttpRequest.post(requestParams, URL.CREATE_SCENE, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,
-//                tmp, lat, lng, subject_ids, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(final String json) {
                         runOnUiThread(new Runnable() {
@@ -485,6 +483,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     Log.e("<<<", "解析异常");
                                 }
                                 if (createQJBean.isSuccess()) {
+                                    MainApplication.zoneId = null;
                                     MainApplication.cropBitmap = null;
                                     MainApplication.editBitmap = null;
                                     MainApplication.blurBitmap = null;
@@ -500,8 +499,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                         startActivity(intent);
                                     } else {
                                         ToastUtils.showSuccess("修改成功");
-//                                        Intent intent= new Intent(DataConstants.BroadRefreshQJ);
-//                                        sendBroadcast(intent);
                                         onBackPressed();
                                     }
                                 } else {

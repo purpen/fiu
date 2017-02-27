@@ -378,7 +378,7 @@
     <string name="detail_introduct">详情介绍</string>
     <string name="product_bright">产品亮点</string>
     <string name="choiceness_subject">精选主题</string>
-    <string name="choiceness_qingjing">精选情境</string>
+    <string name="choiceness_qingjing">大家都在看</string>
     <string name="select_product_to_pic">选择产品添加到当前图片中</string>
     <string name="or_input_message_self">或自行输入产品信息</string>
     <string name="product_name">产品名称</string>
@@ -423,14 +423,14 @@
     <string name="look_more">查看更多</string>
     <string name="look_shrink">收起</string>
     <string name="take_coupon">领取%s优惠券</string>
-    <string name="high_light">亮点</string>
-    <string name="relate_scene">相关情境</string>
-    <string name="relate_products">相关产品</string>
-    <string name="shop_info">商家详情</string>
+    <string name="high_light">地盘特色</string>
+    <string name="relate_scene">情境推荐</string>
+    <string name="relate_products">产品推荐</string>
+    <string name="shop_info">地盘详情</string>
     <string name="business_hour">营业时间：</string>
     <string name="business_tel">电话：</string>
     <string name="shop_tags">地址：</string>
-    <string name="my_money">我的分成</string>
+    <string name="my_money">我的钱包</string>
     <string name="my_available_money">可提现金额</string>
     <string name="look_all_order">查看全部订单</string>
     <string name="wait_pay">未付款</string>
@@ -457,7 +457,9 @@
         <item>待评价</item>
         <item>退款售后</item>
     </string-array>
-
+    <string name="invite_wechat">邀请微信好友</string>
+    <string name="link_weibo">连接微博</string>
+    <string name="link_contact">连接通讯录</string>
     <string name="permission">权限(permission)</string>
     <string name="no_permissions">应用需要必要的运行权限</string>
 

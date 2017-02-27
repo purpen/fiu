@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.zone.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,11 +17,13 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.MarginDecoration;
 import com.taihuoniao.fineix.zone.adapter.ZoneRelateProductsAdapter;
+import com.taihuoniao.fineix.zone.adapter.ZoneRelateSceneAdapter;
 import com.taihuoniao.fineix.zone.bean.ZoneRelateProductsBean;
 
 import java.util.ArrayList;
@@ -90,14 +93,6 @@ public class ZoneRelateProductsFragment extends BaseFragment {
 
     @Override
     protected void installListener() {
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//            }
-//        });
-
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -108,7 +103,20 @@ public class ZoneRelateProductsFragment extends BaseFragment {
 
             }
         });
+        productsAdapter.setOnItemClickListener(new ZoneRelateSceneAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (productList==null || productList.size()==0) return;
+                Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+                intent.putExtra("id",productList.get(position).product._id);
+                startActivity(intent);
+            }
 
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
     }
 
 

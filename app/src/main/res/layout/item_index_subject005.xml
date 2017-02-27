@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="320dp"
-    android:layout_height="180dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
+    android:layout_height="180dp">
 
     <ImageView
         android:id="@+id/imageView_picture"
@@ -15,6 +13,7 @@
         android:layout_width="320dp"
         android:layout_height="180dp"
         android:gravity="center"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <TextView
@@ -22,42 +21,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxWidth="130dp"
-            android:singleLine="true"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/dp15"
+            android:paddingRight="@dimen/dp15"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="24sp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <ImageView
-                android:id="@+id/i"
-                android:layout_width="7dp"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:src="@mipmap/subject_person" />
-
-            <TextView
-                android:id="@+id/textView_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/i"
-                android:textColor="@color/white"
-                android:textSize="10sp" />
-        </LinearLayout>
+            android:layout_marginTop="@dimen/dp5"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp12" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/label"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="130dp"
-        android:visibility="gone"
-        android:src="@mipmap/subject_wenzhang" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp5"
+        android:layout_marginTop="@dimen/dp5" />
 </RelativeLayout>

@@ -9,70 +9,16 @@
         android:id="@+id/scrollableView"
         android:layout_width="match_parent"
         android:layout_height="211dp" />
-
-    <!--  <RelativeLayout
-          android:layout_width="match_parent"
-          android:layout_height="45dp"
-          android:paddingTop="5dp">
-
-          <ImageView
-              android:id="@+id/img"
-              android:layout_width="17dp"
-              android:layout_height="match_parent"
-              android:layout_marginLeft="14dp"
-              android:src="@mipmap/star_index" />
-
-          <ImageView
-              android:id="@+id/more_theme_img"
-              android:layout_width="37dp"
-              android:layout_height="match_parent"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:paddingLeft="15dp"
-              android:paddingRight="15dp"
-              android:src="@mipmap/arrow_right" />
-
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              android:layout_marginLeft="8dp"
-              android:layout_toLeftOf="@id/more_theme_img"
-              android:layout_toRightOf="@id/img"
-              android:gravity="center_vertical"
-              android:text="@string/choiceness_subject"
-              android:textColor="@color/black"
-              android:textSize="14sp" />
-      </RelativeLayout>
-
-      <android.support.v7.widget.RecyclerView
-          android:id="@+id/recycler_view"
-          android:layout_width="match_parent"
-          android:layout_height="70dp"
-          android:paddingLeft="10dp"
-          android:paddingRight="10dp" />-->
-
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:paddingTop="5dp">
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="14dp"
-            android:visibility="gone"
-            android:src="@mipmap/diamond_index" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center_vertical"
-            android:text="新手指南"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp10"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dp15"
+        android:gravity="center_vertical"
+        android:text="新手福利见面礼"
+        android:textColor="@color/color_222"
+        android:textSize="14sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_index_001"
@@ -87,8 +33,18 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
+        android:paddingRight="10dp"
+        android:visibility="gone" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp15"
+        android:layout_marginTop="@dimen/dp15"
+        android:text="D3IN在这里"
+        android:textColor="@color/color_222"
+        android:textSize="@dimen/sp14" />
     <!--地盘推荐-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_index_005"
@@ -97,28 +53,16 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:paddingTop="5dp">
 
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="14dp"
-            android:visibility="gone"
-            android:src="@mipmap/diamond_index" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center_vertical"
-            android:text="新品"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp10"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dp15"
+        android:text="新鲜好货早知道"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
 
     <com.taihuoniao.fineix.view.GridViewForScrollView
         android:id="@+id/recyclerView_index_002"
@@ -131,28 +75,16 @@
         android:paddingRight="15dp"
         android:verticalSpacing="15dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:paddingTop="5dp">
 
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="14dp"
-            android:visibility="gone"
-            android:src="@mipmap/diamond_index" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center_vertical"
-            android:text="产品专辑"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dp15"
+        android:layout_marginBottom="@dimen/dp10"
+        android:text="好货合集"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_index_003"
@@ -164,22 +96,24 @@
     <!--精选情境-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:paddingTop="5dp">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp15"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/img2"
-            android:layout_width="18dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp15"
             android:src="@mipmap/diamond_index" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp5"
             android:text="@string/choiceness_qingjing"
             android:textColor="@color/black"
             android:textSize="14sp" />

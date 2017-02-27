@@ -1,12 +1,13 @@
 package com.taihuoniao.fineix.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lilin on 2017/2/17.
  */
 
-public class DiscoverBean {
+public class DiscoverBean implements Serializable{
 
     /**
      * stick : {"_id":"105110618","title":"测试好货第二内容长加在在人有人要工在要 ","sub_title":"第二内容长加在在人有人要工在要 ","web_url":"6","type":"11","cover_url":"https://p4.taihuoniao.com/asset/170214/58a2ca6e3ffca2c92f8b45b7-1"}
@@ -28,7 +29,7 @@ public class DiscoverBean {
     public List<ProductSubjectBean> product_subject;
     public List<UsersBean> users;
 
-    public static class StickBean {
+    public static class StickBean implements Serializable{
         /**
          * _id : 105110618
          * title : 测试好货第二内容长加在在人有人要工在要
@@ -44,13 +45,14 @@ public class DiscoverBean {
         public String web_url;
         public String type;
         public String cover_url;
+
     }
 
-    public static class SceneBean {
+    public static class SceneBean implements Serializable{
         public List<StickBeanX> stick;
         public List<CategoryBean> category;
 
-        public static class StickBeanX {
+        public static class StickBeanX implements Serializable{
             /**
              * _id : 105110815
              * title : 蓝牙耳机
@@ -68,7 +70,7 @@ public class DiscoverBean {
             public String cover_url;
         }
 
-        public static class CategoryBean {
+        public static class CategoryBean implements Serializable{
             /**
              * _id : 85
              * title : 体验店
@@ -83,11 +85,11 @@ public class DiscoverBean {
         }
     }
 
-    public static class SightBean {
+    public static class SightBean implements Serializable{
         public List<StickBeanXX> stick;
         public List<CategoryBeanX> category;
 
-        public static class StickBeanXX {
+        public static class StickBeanXX implements Serializable{
             /**
              * _id : 105110812
              * title : app商城首页推荐333
@@ -105,7 +107,7 @@ public class DiscoverBean {
             public String cover_url;
         }
 
-        public static class CategoryBeanX {
+        public static class CategoryBeanX implements Serializable{
             /**
              * _id : 89
              * title : 摄影1
@@ -113,14 +115,14 @@ public class DiscoverBean {
              * back_url : http://frbird.qiniudn.com/asset/160817/57b41c65fc8b12466b8b77ff-5-hu.jpg
              */
 
-            public int _id;
+            public String _id;
             public String title;
             public String app_cover_url;
             public String back_url;
         }
     }
 
-    public static class ProCategoryBean {
+    public static class ProCategoryBean implements Serializable{
         /**
          * _id : 30
          * title : 先锋智能2
@@ -128,13 +130,13 @@ public class DiscoverBean {
          * back_url :
          */
 
-        public int _id;
+        public String _id;
         public String title;
         public String app_cover_url;
         public String back_url;
     }
 
-    public static class BrandBean {
+    public static class BrandBean implements Serializable{
         /**
          * _id : 5764f2063ffca227798b47ef
          * title : 小米
@@ -146,7 +148,7 @@ public class DiscoverBean {
         public String cover_url;
     }
 
-    public static class ProductSubjectBean {
+    public static class ProductSubjectBean implements Serializable{
         /**
          * _id : 105117320
          * title : Fiu发现页地盘推荐
@@ -164,7 +166,7 @@ public class DiscoverBean {
         public String cover_url;
     }
 
-    public static class UsersBean {
+    public static class UsersBean implements Serializable{
         /**
          * _id : 719877
          * nickname : Fynn
@@ -176,5 +178,6 @@ public class DiscoverBean {
         public String nickname;
         public String avatar_url;
         public int is_follow;
+        public int pic;
     }
 }

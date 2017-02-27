@@ -3,9 +3,7 @@ package com.taihuoniao.fineix.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -15,12 +13,11 @@ import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.common.bean.BannerBean;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IsInviteData;
-import com.taihuoniao.fineix.beans.SubjectData;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.common.bean.BannerBean;
 import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -29,12 +26,6 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BannerActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
-import com.taihuoniao.fineix.user.ActivityDetailActivity;
-import com.taihuoniao.fineix.user.ArticalDetailActivity;
-import com.taihuoniao.fineix.user.NewProductDetailActivity;
-import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
-import com.taihuoniao.fineix.user.SubjectActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -110,8 +101,8 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         }
         final T content = list.get(getPosition(position));
 
-        if (content instanceof BannerBean.RowsEntity) {
-            ImageLoader.getInstance().displayImage(((BannerBean.RowsEntity) content).getCover_url(), holder.imageView, options);
+        if (content instanceof BannerBean.RowsBean) {
+            ImageLoader.getInstance().displayImage(((BannerBean.RowsBean) content).cover_url, holder.imageView, options);
         }
 
         if (content instanceof Integer) {
@@ -150,8 +141,8 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final BannerBean.RowsEntity banner = (BannerBean.RowsEntity) content;
-                    GoToNextUtils.goToIntent(activity, Integer.valueOf(banner.getType()), banner.getWeb_url());
+                    final BannerBean.RowsBean banner = (BannerBean.RowsBean) content;
+                    GoToNextUtils.goToIntent(activity, Integer.valueOf(banner.type), banner.web_url);
 /*                      Intent intent;
                   switch (Integer.valueOf(banner.getType())) {
                         case 1:      //url地址

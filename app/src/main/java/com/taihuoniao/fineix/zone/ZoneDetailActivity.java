@@ -1,7 +1,10 @@
 package com.taihuoniao.fineix.zone;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,11 +14,10 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -26,10 +28,13 @@ import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -42,7 +47,11 @@ import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 import com.taihuoniao.fineix.zone.fragment.ZoneRelateProductsFragment;
 import com.taihuoniao.fineix.zone.fragment.ZoneRelateSceneFragment;
 import com.taihuoniao.fineix.zone.fragment.ZoneShopInfoFragment;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +62,7 @@ import butterknife.OnClick;
 /**
  * 地盘详情
  */
-public class ZoneDetailActivity extends BaseActivity implements View.OnClickListener {
+public class ZoneDetailActivity extends BaseActivity {
     @Bind(R.id.head_goback)
     ImageButton headGoback;
     @Bind(R.id.tv_title)
@@ -68,32 +77,23 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     RoundedImageView zoneLogo;
     @Bind(R.id.shop_name)
     TextView shopName;
-    @Bind(R.id.ratingbar)
-    RatingBar ratingbar;
-    @Bind(R.id.average_spend)
-    TextView averageSpend;
-    @Bind(R.id.take_coupon)
-    TextView takeCoupon;
-    @Bind(R.id.shop_desc)
-    TextView shopDesc;
-    @Bind(R.id.btn_spread)
-    Button btnSpread;
     @Bind(R.id.high_light)
     TextView highLight;
     @Bind(R.id.ll_container)
     LinearLayout llContainer;
-    @Bind(R.id.high_light_detail)
-    Button highLightDetail;
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.viewpager)
     ViewPager viewpager;
+    @Bind(R.id.sub_title)
+    TextView subTitle;
+    @Bind(R.id.id_flowLayout)
+    TagFlowLayout idFlowLayout;
+    @Bind(R.id.shop_desc)
+    TextView shopDesc;
     private boolean isFirstLoc = true;
     private ZoneDetailBean zoneDetailBean;
     private Dialog dialog;
-    private static final int SHRINK = 0;
-    private static final int SPREAD = 1;
-    private int mState = SHRINK;
     private String sZoneId = ""; //地盘ID
     private String title = "";
     private TabViewPagerAdapter adapter;
@@ -115,17 +115,60 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
+        highLight.getPaint().setFakeBoldText(true);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width;
         scrollableView.setLayoutParams(lp);
         setupViewPager(viewpager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewpager);
     }
 
+    private void setIndicatorWidth() throws NoSuchFieldException, IllegalAccessException {
+        int margin = activity.getResources().getDimensionPixelSize(R.dimen.dp30);
+        Class<?> tablayout = tabLayout.getClass();
+        Field tabStrip = tablayout.getDeclaredField("mTabStrip");
+        tabStrip.setAccessible(true);
+        LinearLayout ll_tab = (LinearLayout) tabStrip.get(tabLayout);
+        for (int i = 0; i < ll_tab.getChildCount(); i++) {
+            View child = ll_tab.getChildAt(i);
+            child.setPadding(0, 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                params.setMarginStart(margin);
+                params.setMarginEnd(margin);
+            } else {
+                params.setMargins(margin, 0, margin, 0);
+            }
+            child.setLayoutParams(params);
+            child.invalidate();
+        }
+    }
+
+    @Override
+    protected void installListener() {
+        tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                LogUtil.e(TAG, "onGlobalLayout");
+                try {
+                    setIndicatorWidth();
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    tabLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    tabLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+    }
 
     private void setupViewPager(ViewPager viewPager) {
-
         adapter = new TabViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(ZoneRelateSceneFragment.newInstance(sZoneId), getResources().getString(R.string.relate_scene));
         adapter.addFrag(ZoneRelateProductsFragment.newInstance(sZoneId), getResources().getString(R.string.relate_products));
@@ -171,135 +214,76 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    @Override
-    protected void installListener() {
-        btnSpread.setOnClickListener(this);
-//        relateScene.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView absListView, int i) {
-//                LogUtil.e(relateScene.getLastVisiblePosition() + ";;;;" + relateSceneList.size());
-//                if (!isSceneBottom && relateScene.getLastVisiblePosition() == relateSceneList.size()) {
-//                    loadRelateScene();
-//                }
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-//
-//            }
-//        });
 
-//        relateProducts.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING) {
-//                    if (relateProductList.size() % 2 == 0) {
-//                        if (view.getLastVisiblePosition() == relateSceneList.size() / 2) {
-//                            LogUtil.e("curPage==偶数", currentPageProducts + "");
-////                            loadData();
-//                        }
-//                    } else {
-//                        if (view.getLastVisiblePosition() == relateSceneList.size() / 2 + 1) {
-//                            LogUtil.e("curPage==奇数", currentPageProducts + "");
-////                            loadData();
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//
-//            }
-//        });
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_spread:
-                switch (mState) {
-                    case SHRINK:
-                        shopDesc.setMaxLines(Integer.MAX_VALUE);
-                        shopDesc.requestLayout();
-                        btnSpread.setText(R.string.look_shrink);
-                        mState = SPREAD;
-                        break;
-                    case SPREAD:
-                        shopDesc.setMaxLines(3);
-                        shopDesc.requestLayout();
-                        btnSpread.setText(R.string.look_more);
-                        mState = SHRINK;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @OnClick({R.id.head_goback, R.id.ibtn_shoucang, R.id.ibtn_share})
+    @OnClick({R.id.head_goback, R.id.look_detail, R.id.ibtn_shoucang, R.id.ibtn_share})
     void click(final View v) {
         switch (v.getId()) {
+            case R.id.look_detail:
+                Intent intent1 = new Intent(activity, LightSpotDetailActivity.class);
+                intent1.putExtra(TAG,zoneDetailBean);
+                activity.startActivity(intent1);
             case R.id.head_goback:
                 finish();
                 break;
             case R.id.ibtn_shoucang: //收藏
-                if (zoneDetailBean.is_favorite == 0) {
-                    HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams(sZoneId, "11");
-                    HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
-                        @Override
-                        public void onStart() {
-                            v.setEnabled(false);
-                        }
-
-                        @Override
-                        public void onSuccess(String json) {
-                            v.setEnabled(true);
-                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                            if (response.isSuccess()) {
-                                zoneDetailBean.is_favorite = 1;
-                                ibtnShoucang.setImageResource(R.mipmap.shoucang_yes);
-                            } else {
-                                ToastUtils.showError(R.string.network_err);
+                if (LoginInfo.isUserLogin()) {
+                    if (zoneDetailBean.is_favorite == 0) {
+                        HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams(sZoneId, "11");
+                        HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
+                            @Override
+                            public void onStart() {
+                                v.setEnabled(false);
                             }
 
-                        }
+                            @Override
+                            public void onSuccess(String json) {
+                                v.setEnabled(true);
+                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                                if (response.isSuccess()) {
+                                    zoneDetailBean.is_favorite = 1;
+                                    ibtnShoucang.setImageResource(R.mipmap.shoucang_yes);
+                                } else {
+                                    ToastUtils.showError(R.string.network_err);
+                                }
 
-                        @Override
-                        public void onFailure(String error) {
-                            v.setEnabled(true);
-                        }
-                    });
-                } else { //取消收藏
-                    HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams(sZoneId, "11");
-                    HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
-                        @Override
-                        public void onStart() {
-                            v.setEnabled(false);
-                        }
-
-                        @Override
-                        public void onSuccess(String json) {
-                            v.setEnabled(true);
-                            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                            if (response.isSuccess()) {
-                                zoneDetailBean.is_favorite = 0;
-                                ibtnShoucang.setImageResource(R.mipmap.shoucang_white);
-                            } else {
-                                ToastUtils.showError(R.string.network_err);
                             }
 
-                        }
+                            @Override
+                            public void onFailure(String error) {
+                                v.setEnabled(true);
+                            }
+                        });
+                    } else { //取消收藏
+                        HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams(sZoneId, "11");
+                        HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
+                            @Override
+                            public void onStart() {
+                                v.setEnabled(false);
+                            }
 
-                        @Override
-                        public void onFailure(String error) {
-                            v.setEnabled(true);
-                        }
-                    });
+                            @Override
+                            public void onSuccess(String json) {
+                                v.setEnabled(true);
+                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                                if (response.isSuccess()) {
+                                    zoneDetailBean.is_favorite = 0;
+                                    ibtnShoucang.setImageResource(R.mipmap.shoucang_white);
+                                } else {
+                                    ToastUtils.showError(R.string.network_err);
+                                }
 
+                            }
+
+                            @Override
+                            public void onFailure(String error) {
+                                v.setEnabled(true);
+                            }
+                        });
+
+                    }
+                } else {
+                    MainApplication.which_activity = DataConstants.ZONE_DETAIL_ACTIVITY;
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }
                 break;
             case R.id.ibtn_share: //分享
@@ -346,7 +330,6 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                 if (response.isSuccess()) {
                     zoneDetailBean = response.getData();
                     ((ZoneShopInfoFragment) adapter.getFragment(2)).setData(zoneDetailBean);
-
                     refreshUI();
                 } else {
                     ToastUtils.showError(response.getMessage());
@@ -374,7 +357,7 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                             bdLocation.getLongitude());
                     LatLng p2 = new LatLng(zoneDetailBean.location.coordinates.get(1), zoneDetailBean.location.coordinates.get(0));
                     double distance = MapUtil.getDistance(p1, p2);
-                    LogUtil.e(distance+"");
+                    LogUtil.e(distance + "");
                     if (distance < 1000) {
                         scrollableView.showDistance((int) distance + "m");
                     } else {
@@ -389,7 +372,29 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     protected void refreshUI() {
         if (zoneDetailBean == null) return;
         getDistance();
+        if (zoneDetailBean.is_favorite == 1) {
+            ibtnShoucang.setImageResource(R.mipmap.shoucang_yes);
+        } else {
+            ibtnShoucang.setImageResource(R.mipmap.shoucang_white);
+        }
         tvTitle.setText(zoneDetailBean.title);
+        subTitle.setText(zoneDetailBean.sub_title);
+        idFlowLayout.setAdapter(new TagAdapter<String>(zoneDetailBean.tags) {
+            @Override
+            public View getView(FlowLayout parent, int position, String s) {
+                View view = View.inflate(activity, R.layout.item_tag, null);
+                ((TextView) view).setText(s);
+                return view;
+            }
+        });
+        idFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                // TODO
+                return true;
+            }
+        });
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(activity, zoneDetailBean.banners);
         scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
         scrollableView.setAutoScrollDurationFactor(8);
@@ -400,7 +405,8 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
         setBrightSpots(zoneDetailBean.bright_spot);
         GlideUtils.displayImageFadein(zoneDetailBean.avatar_url, zoneLogo);
         shopName.setText(zoneDetailBean.title);
-        ratingbar.setRating(zoneDetailBean.score_average);
+
+//        ratingbar.setRating(zoneDetailBean.score_average);
 //        averageSpend.setText(zoneDetailBean.);
         shopDesc.setText(zoneDetailBean.des);
     }
@@ -408,16 +414,18 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
     private void setBrightSpots(List<String> brightSpot) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.bottomMargin = getResources().getDimensionPixelSize(R.dimen.dp10);
+        int i=0;
         for (String str : brightSpot) {
             if (!str.contains(Constants.SEPERATOR)) continue;
+            if (i>1) break;
             String[] split = str.split(Constants.SEPERATOR);
             if (TextUtils.equals(split[0], Constants.TEXT_TYPE)) {
                 TextView textView = new TextView(activity);
                 textView.setLayoutParams(params);
                 textView.setText(split[1]);
                 textView.setLineSpacing(getResources().getDimensionPixelSize(R.dimen.dp3), 1);
-                textView.setTextColor(getResources().getColor(R.color.color_666));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                textView.setTextColor(getResources().getColor(R.color.color_222));
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 llContainer.addView(textView);
             } else if (TextUtils.equals(split[0], Constants.IMAGE_TYPE)) {
                 ImageView imageView = new ImageView(activity);
@@ -426,8 +434,18 @@ public class ZoneDetailActivity extends BaseActivity implements View.OnClickList
                 GlideUtils.displayImageFadein(split[1], imageView);
                 llContainer.addView(imageView);
             }
+            i++;
         }
     }
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (TextUtils.equals(DataConstants.ZONE_DETAIL_ACTIVITY_NAME, intent.getAction())) {
+                if (TextUtils.isEmpty(sZoneId)) return;
+                requestNet();
+            }
+        }
+    };
 
 }

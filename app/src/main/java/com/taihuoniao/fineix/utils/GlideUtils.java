@@ -120,4 +120,8 @@ public class GlideUtils {
                 override(lWidth,lHeight).
                 into(imageView);
     }
+
+    public static void displayImageWithId(int imgId,ImageView imageView){
+        Glide.with(getContext()).load(imgId).placeholder(DEFAULT_IMAGEID).error(ERROR_IMAGEID).into(imageView);
+    }
 }

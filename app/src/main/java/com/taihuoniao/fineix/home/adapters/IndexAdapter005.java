@@ -18,16 +18,17 @@ import java.util.List;
 /**
  * Created by Stephen on 2017/2/15 18:06
  * Email: 895745843@qq.com
+ * D3IN在这里
  */
 
 public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
     private LayoutInflater mLayoutInflater;
-    private List<BannerBean.RowsEntity> rowsEntities;
+    private List<BannerBean.RowsBean> rowsEntities;
     private IRecycleViewItemClickListener itemClickListener;
     public void setOnItemClickListener(IRecycleViewItemClickListener listener){
         this.itemClickListener = listener;
     }
-    public IndexAdapter005(Context context, List<BannerBean.RowsEntity> rowsEntities) {
+    public IndexAdapter005(Context context, List<BannerBean.RowsBean> rowsEntities) {
         this.rowsEntities = rowsEntities;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -49,11 +50,34 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
             }
         });
 
-        BannerBean.RowsEntity rowsEntity = rowsEntities.get(position);
+        BannerBean.RowsBean rowsEntity = rowsEntities.get(position);
         if (rowsEntity != null) {
-            GlideUtils.displayImage(rowsEntity.getCover_url(), holder.imageViewPicture);
-            holder.textViewTitle.setText(rowsEntity.getTitle());
-            holder.textViewDescription.setText(rowsEntity.getSummary());
+            GlideUtils.displayImage(rowsEntity.cover_url, holder.imageViewPicture);
+            holder.textViewTitle.setText(rowsEntity.title);
+            holder.textViewDescription.setText(rowsEntity.sub_title);
+            switch (rowsEntity.cate_title){
+                case "1":
+                    holder.label.setImageResource(R.mipmap.shop_ti_yan);
+                    break;
+                case "2":
+                    holder.label.setImageResource(R.mipmap.shop_chuang_yi);
+                    break;
+                case "3":
+                    holder.label.setImageResource(R.mipmap.shop_min_su);
+                    break;
+                case "4":
+                    holder.label.setImageResource(R.mipmap.shop_chuang_yi);
+                    break;
+                case "5":
+                    holder.label.setImageResource(R.mipmap.shop_cafe);
+                    break;
+                case "6":
+                    holder.label.setImageResource(R.mipmap.shop_foods);
+                    break;
+                default:
+                    break;
+            }
+
         }
 
     }
@@ -68,7 +92,6 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
     class VH extends RecyclerView.ViewHolder {
         private ImageView imageViewPicture;
         private TextView textViewTitle;
-        private ImageView i;
         private TextView textViewDescription;
         private ImageView label;
 
@@ -76,18 +99,17 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
             super(itemView);
             imageViewPicture = (ImageView) itemView.findViewById(R.id.imageView_picture);
             textViewTitle = (TextView)itemView. findViewById(R.id.textView_title);
-            i = (ImageView) itemView.findViewById(R.id.i);
             textViewDescription = (TextView) itemView.findViewById(R.id.textView_description);
             label = (ImageView) itemView.findViewById(R.id.label);
         }
     }
 
-    public void setRowsEntities(List<BannerBean.RowsEntity> rowsEntities){
+    public void setRowsEntities(List<BannerBean.RowsBean> rowsEntities){
         this.rowsEntities = rowsEntities;
         notifyDataSetChanged();
     }
 
-    public BannerBean.RowsEntity getItem(int position){
+    public BannerBean.RowsBean getItem(int position){
         if (rowsEntities==null || rowsEntities.size()==0) return null;
         return rowsEntities.get(position);
     }

@@ -36,7 +36,7 @@ public class DiscoverFreindsCategoryAdapter extends CommonBaseAdapter<DiscoverBe
             holder = (ViewHolder) convertView.getTag();
         }
 
-        GlideUtils.displayImage(item.avatar_url, holder.iv);
+        GlideUtils.displayImageWithId(item.pic, holder.iv);
 
         holder.tvTag.setText(item.nickname);
 

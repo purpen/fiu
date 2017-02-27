@@ -135,6 +135,8 @@ public class LoginCompleteUtils {
             case DataConstants.QJDetailActivity:
                 activity.sendBroadcast(new Intent(DataConstants.BroadQJDetail));
                 break;
+            case DataConstants.ZONE_DETAIL_ACTIVITY:
+                activity.sendBroadcast(new Intent(DataConstants.ZONE_DETAIL_ACTIVITY_NAME));
             default:
                 Intent intent = new Intent(activity, MainActivity.class);
                 activity.startActivity(intent);

@@ -15,222 +15,44 @@ public class BannerBean implements Parcelable {
 
     /**
      * total_rows : 2
-     * rows : [{"_id":101931301,"title":"test","space_id":25,"sub_title":"","web_url":"3","summary":"","cover_id":"572386a83ffca27d078bdc06","type":"8","ordby":0,"kind":1,"created_on":1461946032,"state":2,"cover_url":"https://p4.taihuoniao.com/asset/160430/572386993ffca268098c4bd3-1"},{"_id":101931304,"title":"test222","space_id":25,"sub_title":"","web_url":"4","summary":"","cover_id":"5851259b3ffca20a328b46a1","type":"8","ordby":0,"kind":1,"created_on":1461946061,"state":2,"cover_url":"https://p4.taihuoniao.com/asset/161214/585125943ffca20a328b469f-1"}]
-     * total_page : 1
-     * current_page : 1
-     * pager : 
-     * next_page : 0
-     * prev_page : 0
-     * current_user_id : 924912
+     * rows : [{"_id":105112336,"title":"D3IN线下体验训","space_id":42,"sub_title":"62","cate_title":"3","web_url":"62","summary":"","cover_id":"58a3bc6a3ffca2c92f8b489d","type":"12","ordby":0,"kind":1,"created_on":1487125620,"state":2,"cover_url":"https://p4.taihuoniao.com/asset/170215/58a3bc4a3ffca231378b4811-1"},{"_id":105112342,"title":"首页地盘推荐说明","space_id":42,"sub_title":"","cate_title":"1","web_url":"63","summary":"","cover_id":"58a3bcfe3ffca231378b4814","type":"12","ordby":0,"kind":1,"created_on":1487125787,"state":2,"cover_url":"https://p4.taihuoniao.com/asset/170215/58a3bc793ffca26a378b4816-2"}]
      */
 
-    private String total_rows;
-    private String total_page;
-    private String current_page;
-    private String pager;
-    private String next_page;
-    private String prev_page;
-    private String current_user_id;
-    private List<RowsEntity> rows;
+    public int total_rows;
+    public List<RowsBean> rows;
 
-    public void setTotal_rows(String total_rows) {
-        this.total_rows = total_rows;
-    }
-
-    public void setTotal_page(String total_page) {
-        this.total_page = total_page;
-    }
-
-    public void setCurrent_page(String current_page) {
-        this.current_page = current_page;
-    }
-
-    public void setPager(String pager) {
-        this.pager = pager;
-    }
-
-    public void setNext_page(String next_page) {
-        this.next_page = next_page;
-    }
-
-    public void setPrev_page(String prev_page) {
-        this.prev_page = prev_page;
-    }
-
-    public void setCurrent_user_id(String current_user_id) {
-        this.current_user_id = current_user_id;
-    }
-
-    public void setRows(List<RowsEntity> rows) {
-        this.rows = rows;
-    }
-
-    public String getTotal_rows() {
-        return total_rows;
-    }
-
-    public String getTotal_page() {
-        return total_page;
-    }
-
-    public String getCurrent_page() {
-        return current_page;
-    }
-
-    public String getPager() {
-        return pager;
-    }
-
-    public String getNext_page() {
-        return next_page;
-    }
-
-    public String getPrev_page() {
-        return prev_page;
-    }
-
-    public String getCurrent_user_id() {
-        return current_user_id;
-    }
-
-    public List<RowsEntity> getRows() {
-        return rows;
-    }
-
-    public static class RowsEntity implements Parcelable {
+    public static class RowsBean implements Parcelable {
         /**
-         * _id : 101931301
-         * title : test
-         * space_id : 25
-         * sub_title : 
-         * web_url : 3
-         * summary : 
-         * cover_id : 572386a83ffca27d078bdc06
-         * type : 8
+         * _id : 105112336
+         * title : D3IN线下体验训
+         * space_id : 42
+         * sub_title : 62
+         * cate_title : 3
+         * web_url : 62
+         * summary :
+         * cover_id : 58a3bc6a3ffca2c92f8b489d
+         * type : 12
          * ordby : 0
          * kind : 1
-         * created_on : 1461946032
+         * created_on : 1487125620
          * state : 2
-         * cover_url : https://p4.taihuoniao.com/asset/160430/572386993ffca268098c4bd3-1
+         * cover_url : https://p4.taihuoniao.com/asset/170215/58a3bc4a3ffca231378b4811-1
          */
 
-        private String _id;
-        private String title;
-        private String space_id;
-        private String sub_title;
-        private String web_url;
-        private String summary;
-        private String cover_id;
-        private String type;
-        private String ordby;
-        private String kind;
-        private String created_on;
-        private String state;
-        private String cover_url;
-
-        public void set_id(String _id) {
-            this._id = _id;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public void setSpace_id(String space_id) {
-            this.space_id = space_id;
-        }
-
-        public void setSub_title(String sub_title) {
-            this.sub_title = sub_title;
-        }
-
-        public void setWeb_url(String web_url) {
-            this.web_url = web_url;
-        }
-
-        public void setSummary(String summary) {
-            this.summary = summary;
-        }
-
-        public void setCover_id(String cover_id) {
-            this.cover_id = cover_id;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public void setOrdby(String ordby) {
-            this.ordby = ordby;
-        }
-
-        public void setKind(String kind) {
-            this.kind = kind;
-        }
-
-        public void setCreated_on(String created_on) {
-            this.created_on = created_on;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-
-        public void setCover_url(String cover_url) {
-            this.cover_url = cover_url;
-        }
-
-        public String get_id() {
-            return _id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getSpace_id() {
-            return space_id;
-        }
-
-        public String getSub_title() {
-            return sub_title;
-        }
-
-        public String getWeb_url() {
-            return web_url;
-        }
-
-        public String getSummary() {
-            return summary;
-        }
-
-        public String getCover_id() {
-            return cover_id;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public String getOrdby() {
-            return ordby;
-        }
-
-        public String getKind() {
-            return kind;
-        }
-
-        public String getCreated_on() {
-            return created_on;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public String getCover_url() {
-            return cover_url;
-        }
+        public int _id;
+        public String title;
+        public int space_id;
+        public String sub_title;
+        public String cate_title;
+        public String web_url;
+        public String summary;
+        public String cover_id;
+        public String type;
+        public int ordby;
+        public int kind;
+        public int created_on;
+        public int state;
+        public String cover_url;
 
         @Override
         public int describeContents() {
@@ -239,49 +61,51 @@ public class BannerBean implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(this._id);
+            dest.writeInt(this._id);
             dest.writeString(this.title);
-            dest.writeString(this.space_id);
+            dest.writeInt(this.space_id);
             dest.writeString(this.sub_title);
+            dest.writeString(this.cate_title);
             dest.writeString(this.web_url);
             dest.writeString(this.summary);
             dest.writeString(this.cover_id);
             dest.writeString(this.type);
-            dest.writeString(this.ordby);
-            dest.writeString(this.kind);
-            dest.writeString(this.created_on);
-            dest.writeString(this.state);
+            dest.writeInt(this.ordby);
+            dest.writeInt(this.kind);
+            dest.writeInt(this.created_on);
+            dest.writeInt(this.state);
             dest.writeString(this.cover_url);
         }
 
-        public RowsEntity() {
+        public RowsBean() {
         }
 
-        protected RowsEntity(Parcel in) {
-            this._id = in.readString();
+        protected RowsBean(Parcel in) {
+            this._id = in.readInt();
             this.title = in.readString();
-            this.space_id = in.readString();
+            this.space_id = in.readInt();
             this.sub_title = in.readString();
+            this.cate_title = in.readString();
             this.web_url = in.readString();
             this.summary = in.readString();
             this.cover_id = in.readString();
             this.type = in.readString();
-            this.ordby = in.readString();
-            this.kind = in.readString();
-            this.created_on = in.readString();
-            this.state = in.readString();
+            this.ordby = in.readInt();
+            this.kind = in.readInt();
+            this.created_on = in.readInt();
+            this.state = in.readInt();
             this.cover_url = in.readString();
         }
 
-        public static final Creator<RowsEntity> CREATOR = new Creator<RowsEntity>() {
+        public static final Creator<RowsBean> CREATOR = new Creator<RowsBean>() {
             @Override
-            public RowsEntity createFromParcel(Parcel source) {
-                return new RowsEntity(source);
+            public RowsBean createFromParcel(Parcel source) {
+                return new RowsBean(source);
             }
 
             @Override
-            public RowsEntity[] newArray(int size) {
-                return new RowsEntity[size];
+            public RowsBean[] newArray(int size) {
+                return new RowsBean[size];
             }
         };
     }
@@ -293,13 +117,7 @@ public class BannerBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.total_rows);
-        dest.writeString(this.total_page);
-        dest.writeString(this.current_page);
-        dest.writeString(this.pager);
-        dest.writeString(this.next_page);
-        dest.writeString(this.prev_page);
-        dest.writeString(this.current_user_id);
+        dest.writeInt(this.total_rows);
         dest.writeList(this.rows);
     }
 
@@ -307,22 +125,18 @@ public class BannerBean implements Parcelable {
     }
 
     protected BannerBean(Parcel in) {
-        this.total_rows = in.readString();
-        this.total_page = in.readString();
-        this.current_page = in.readString();
-        this.pager = in.readString();
-        this.next_page = in.readString();
-        this.prev_page = in.readString();
-        this.current_user_id = in.readString();
-        this.rows = new ArrayList<RowsEntity>();
-        in.readList(this.rows, List.class.getClassLoader());
+        this.total_rows = in.readInt();
+        this.rows = new ArrayList<RowsBean>();
+        in.readList(this.rows, RowsBean.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<BannerBean> CREATOR = new Parcelable.Creator<BannerBean>() {
+    public static final Creator<BannerBean> CREATOR = new Creator<BannerBean>() {
+        @Override
         public BannerBean createFromParcel(Parcel source) {
             return new BannerBean(source);
         }
 
+        @Override
         public BannerBean[] newArray(int size) {
             return new BannerBean[size];
         }

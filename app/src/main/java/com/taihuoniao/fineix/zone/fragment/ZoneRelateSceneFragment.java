@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.zone.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +17,13 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
-import com.taihuoniao.fineix.zone.MarginDecoration;
-import com.taihuoniao.fineix.zone.adapter._ZoneRelateSceneAdapter;
+import com.taihuoniao.fineix.zone.adapter.ZoneRelateSceneAdapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
     private OnFragmentInteractionListener mListener;
     private String stick = "1";//默认是推荐
     private String sort = "1"; //默认是推荐
-    private _ZoneRelateSceneAdapter relateSceneAdapter;
+    private ZoneRelateSceneAdapter relateSceneAdapter;
     private LinearLayoutManager linearLayoutManager;
     public ZoneRelateSceneFragment() {
         // Required empty public constructor
@@ -80,7 +82,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
     @Override
     protected void initList() {
         relateSceneList = new ArrayList();
-        relateSceneAdapter = new _ZoneRelateSceneAdapter(activity, relateSceneList);
+        relateSceneAdapter = new ZoneRelateSceneAdapter(activity, relateSceneList);
         linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -100,12 +102,34 @@ public class ZoneRelateSceneFragment extends BaseFragment {
 
             }
         });
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//            }
-//        });
+
+        relateSceneAdapter.setSortListener(new ZoneRelateSceneAdapter.ISortListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()){
+                    case R.id.tui_jian:
+                        stick ="1";
+                        sort = "1";
+                        curPage =1;
+                        relateSceneList.clear();
+                        requestNet();
+                        break;
+                    case R.id.zui_xin:
+                        sort = "0";
+                        stick = "";
+                        curPage = 1;
+                        relateSceneList.clear();
+                        requestNet();
+                        break;
+                    case R.id.btn_upload:
+                        MainApplication.zoneId = sZoneId;
+                        activity.startActivity(new Intent(activity, SelectPhotoOrCameraActivity.class));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
     }
 
@@ -139,10 +163,10 @@ public class ZoneRelateSceneFragment extends BaseFragment {
                 if (sceneL.getData().getRows().size() > 0) {
                     curPage++;
                     relateSceneList.addAll(sceneL.getData().getRows());
-                    refreshUI();
                 } else {
                     isBottom = true;
                 }
+                refreshUI();
             }
 
             @Override

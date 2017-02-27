@@ -693,6 +693,7 @@ public class SceneList extends NetBean implements Serializable {
             public static class ProductBean implements Serializable {
                 private String id;
                 private String title;
+                public String price;
                 private double x;
                 private double y;
                 private int loc;//1 点在右边 2点在左边

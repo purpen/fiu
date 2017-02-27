@@ -23,7 +23,7 @@ import java.util.List;
 
 public class IndexAdapter001 extends RecyclerView.Adapter<IndexAdapter001.VH> {
     private LayoutInflater mLayoutInflater;
-    private List<BannerBean.RowsEntity> rowsEntities;
+    private List<BannerBean.RowsBean> rowsEntities;
     private GlobalCallBack mGlobalCallBack;
 
     public IndexAdapter001(Context context, GlobalCallBack globalCallBack) {
@@ -31,7 +31,7 @@ public class IndexAdapter001 extends RecyclerView.Adapter<IndexAdapter001.VH> {
         mLayoutInflater = LayoutInflater.from(context);
     }
 
-    public IndexAdapter001(Context context, List<BannerBean.RowsEntity> rowsEntities) {
+    public IndexAdapter001(Context context, List<BannerBean.RowsBean> rowsEntities) {
         this.rowsEntities = rowsEntities;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -43,7 +43,7 @@ public class IndexAdapter001 extends RecyclerView.Adapter<IndexAdapter001.VH> {
 
     @Override
     public void onBindViewHolder(final VH holder, int position) {
-        final BannerBean.RowsEntity rowsEntity = rowsEntities.get(position);
+        final BannerBean.RowsBean rowsEntity = rowsEntities.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,9 +54,9 @@ public class IndexAdapter001 extends RecyclerView.Adapter<IndexAdapter001.VH> {
         });
 
         if (rowsEntity != null) {
-            GlideUtils.displayImage(rowsEntity.getCover_url(), holder.imageViewPicture);
-            holder.textViewTitle.setText(rowsEntity.getSub_title());
-            holder.textViewDescription.setText(rowsEntity.getSummary());
+            GlideUtils.displayImage(rowsEntity.cover_url, holder.imageViewPicture);
+            holder.textViewTitle.setText(rowsEntity.title);
+            holder.textViewDescription.setText(rowsEntity.sub_title);
         }
 
     }
@@ -83,7 +83,7 @@ public class IndexAdapter001 extends RecyclerView.Adapter<IndexAdapter001.VH> {
         }
     }
 
-    public void setRowsEntities(List<BannerBean.RowsEntity> rowsEntities){
+    public void setRowsEntities(List<BannerBean.RowsBean> rowsEntities){
         this.rowsEntities = rowsEntities;
         notifyDataSetChanged();
     }

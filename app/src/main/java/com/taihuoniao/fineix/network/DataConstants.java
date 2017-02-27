@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.network;
 
+import com.taihuoniao.fineix.zone.ZoneDetailActivity;
+
 /**
  * Created by taihuoniao on 2016/3/14.
  * 常量
@@ -22,6 +24,7 @@ public class DataConstants {
     public static final int ActivityDetail = 111;//活动详情
     public static final int QJCategoryActivity = 112;//情景分类
     public static final int BrandDetailsActivity = 114;//品牌详情
+    public static final int ZONE_DETAIL_ACTIVITY = 115;//地盘详情
     public static final String BroadBrandDetails = "com.taihuoniao.fiu.branddetails";
     public static final String BroadQJCategory = "com.taihuoniao.fiu.qjcategory";
     public static final String BroadBuyGoodDetails = "com.taihuoniao.fiu.buygooddetail";
@@ -33,6 +36,9 @@ public class DataConstants {
     //    public static final String BroadRefreshQJ = "com.taihuoniao.fiu.refresh";//刷新所有有情景的界面
     //跳转活动详情
     public static final String BroadSceneActivityDetail = "com.taihuoniao.fiu.activitydetail";
+
+    public static final String ZONE_DETAIL_ACTIVITY_NAME = ZoneDetailActivity.class.getName();
+
     public static final int NET_FAIL = 404;//网络请求失败
     //EditPictureActivity跳转到AddProductActivity界面的请求码和返回码
     public static final int REQUESTCODE_EDIT_ADDPRODUCT = 99;

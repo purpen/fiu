@@ -53,7 +53,7 @@ public class ZoneDetailBean implements Serializable{
     public List<?> sights;
     public List<?> products;
     public List<String> bright_spot;
-    public static class UserBean {
+    public static class UserBean implements Serializable{
         /**
          * _id : 10
          * nickname : 太火鸟

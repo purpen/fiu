@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/rl_upload"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp50"
+    android:background="@color/color_f8f8f8"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/tui_jian"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/dp15"
+        android:textSize="@dimen/sp14"
+        android:textColor="@color/yellow_bd8913"
+        android:text="推荐"
+        />
+    <TextView
+        android:id="@+id/zui_xin"
+        android:layout_toRightOf="@+id/tui_jian"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp20"
+        android:gravity="center"
+        android:textColor="@color/color_666"
+        android:textSize="@dimen/sp14"
+        android:text="最新"
+        />
+    <Button
+        android:id="@+id/btn_upload"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp30"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingRight="@dimen/dp10"
+        android:background="@drawable/border_radius5_pressed"
+        android:text="上传情境"
+        android:drawableLeft="@mipmap/add_upload"
+        android:drawablePadding="@dimen/dp5"
+        android:layout_marginRight="@dimen/dp16"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp14" />
+
+</RelativeLayout>

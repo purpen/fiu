@@ -54,6 +54,7 @@ dependencies {
     compile project(':PushSDK')
     compile project(':Gpu-Image')
     compile project(':pullrefreshlib')
+    compile project(':flowlayout')
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'
@@ -62,6 +63,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+//    compile 'com.zhy:flowlayout-lib:1.0.3'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'

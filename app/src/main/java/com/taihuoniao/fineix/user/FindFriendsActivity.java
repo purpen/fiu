@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
@@ -12,10 +10,10 @@ import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.fragments.SearchUserFragment;
@@ -195,23 +193,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             pull_lv.onRefreshComplete();
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 3:
-                    ToastUtils.showError("对不起，分享出错");
-                    break;
-                case 2:
-                    ToastUtils.showInfo("您取消了分享");
-                    break;
-                case 1:
-                    ToastUtils.showSuccess("分享成功");
-                    break;
-            }
-        }
-    };
-
     @Override
     public void onClick(View view) {
         Platform.ShareParams params;
@@ -262,17 +243,17 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        handler.sendEmptyMessage(1);
+        ToastUtils.showSuccess("分享成功");
     }
 
     @Override
     public void onCancel(Platform platform, int i) {
-        handler.sendEmptyMessage(2);
+        ToastUtils.showInfo("您取消了分享");
     }
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        handler.sendEmptyMessage(3);
+        ToastUtils.showError("对不起，分享出错");
     }
 
 }

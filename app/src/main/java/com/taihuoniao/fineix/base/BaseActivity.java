@@ -29,7 +29,7 @@ import okhttp3.Call;
  * Created by taihuoniao on 2016/3/14.
  */
 public abstract class BaseActivity<T> extends AppCompatActivity {
-    private static final int REQUEST_CODE = 0; // 请求码
+    private static final int REQUEST_CODE = 100; // 请求码
     protected final String TAG = getClass().getSimpleName();
     protected FragmentActivity activity;
     private int layoutResID;
@@ -140,15 +140,10 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (this instanceof MainActivity) MobclickAgent.onKillProcess(this);
-    }
-
-    @Override
     protected void onDestroy() {
         clearNet();
         super.onDestroy();
+        if (this instanceof MainActivity) MobclickAgent.onKillProcess(this);
     }
 
     private void startPermissionsActivity() {

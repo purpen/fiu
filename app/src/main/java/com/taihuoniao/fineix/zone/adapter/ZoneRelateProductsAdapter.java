@@ -25,8 +25,8 @@ public class ZoneRelateProductsAdapter extends RecyclerView.Adapter<ZoneRelatePr
     private int width;
     private Activity activity;
     private List<ZoneRelateProductsBean.RowsBean> list;
-    private _ZoneRelateSceneAdapter.OnItemClickListener mOnItemClickListener;
-    public void setOnItemClickListener(_ZoneRelateSceneAdapter.OnItemClickListener listener){
+    private ZoneRelateSceneAdapter.OnItemClickListener mOnItemClickListener;
+    public void setOnItemClickListener(ZoneRelateSceneAdapter.OnItemClickListener listener){
         this.mOnItemClickListener = listener;
     }
     public interface OnItemClickListener {

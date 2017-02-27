@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -40,12 +39,12 @@ import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.common.bean.BannerBean;
 import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.home.adapters.IndexAdapter001;
-import com.taihuoniao.fineix.home.adapters.IndexAdapter004;
 import com.taihuoniao.fineix.home.adapters.IndexAdapter005;
 import com.taihuoniao.fineix.home.adapters.ProductAlbumAdapter;
 import com.taihuoniao.fineix.interfaces.IRecycleViewItemClickListener;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.ShopMarginDecoration;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
@@ -99,14 +98,14 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private List<SubjectListBean.DataBean.RowsBean> subjectList002;//主题列表数据
     private List<SubjectListBean.DataBean.RowsBean> subjectList003;//主题列表数据
 
-    private IndexAdapter001 indexAdapter001;//主题列表适配器
+    private IndexAdapter001 indexAdapter001;//新手
     private AddProductGridAdapter indexAdapter002;//主题列表适配器
     private List<ProductBean.ProductListItem> productList;
     private List<SearchBean.Data.SearchItem> searchList;
 
     private ProductAlbumAdapter indexAdapter003;//主题列表适配器
-    private IndexAdapter004 indexAdapter004;//主题列表适配器
-    private IndexAdapter005 indexAdapter005;//主题列表适配器
+//    private IndexAdapter004 indexAdapter004;//主题列表适配器
+    private IndexAdapter005 indexAdapter005;//D3IN
 
     @Override
     protected View initView() {
@@ -171,7 +170,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         getBanners2();
         getLasteProduct();
         subjectList3();
-        getBanners4();
+//        getBanners4();
         getBanners5();
         if (indexQJListAdapter.isNoUser()) {
             userList.clear();
@@ -226,7 +225,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     }
 
 
-    protected void refreshUI(List<BannerBean.RowsEntity> list) {
+    protected void refreshUI(List<BannerBean.RowsBean> list) {
         if (viewPagerAdapter == null) {
             viewPagerAdapter = new ViewPagerAdapter(activity, list);
             scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
@@ -468,25 +467,16 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private View getHeadView(){
         View headerView = View.inflate(getActivity(), R.layout.header_index, null);
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
-//        ImageView moreThemeImg = (ImageView) headerView.findViewById(R.id.more_theme_img);
-//        moreThemeImg.setOnClickListener(this);
-
-//        RecyclerView recyclerView = (RecyclerView) headerView.findViewById(R.id.recycler_view);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-//        subjectList = new ArrayList<>();
-//        indexSubjectAdapter = new IndexSubjectAdapter(this, subjectList);
-//        recyclerView.setAdapter(indexSubjectAdapter);
-
         RecyclerView recyclerView001 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_001);
         recyclerView001.setHasFixedSize(true);
         recyclerView001.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView001.addItemDecoration(new ShopMarginDecoration(activity,R.dimen.dp5));
         indexAdapter001 = new IndexAdapter001(getActivity(), new GlobalCallBack() {
             @Override
             public void callBack(Object object) {
-                if (object instanceof BannerBean.RowsEntity) {
-                    BannerBean.RowsEntity rowsEntity = (BannerBean.RowsEntity) object;
-                    GoToNextUtils.goToIntent(getActivity(), Integer.valueOf(rowsEntity.getType()), rowsEntity.getWeb_url());
+                if (object instanceof BannerBean.RowsBean) {
+                    BannerBean.RowsBean rowsEntity = (BannerBean.RowsBean) object;
+                    GoToNextUtils.goToIntent(getActivity(), Integer.valueOf(rowsEntity.type), rowsEntity.web_url);
                 }
             }
         });
@@ -514,33 +504,30 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         indexAdapter003 = new ProductAlbumAdapter(getActivity(), subjectList003);
         recyclerView003.setAdapter(indexAdapter003);
 
-        RecyclerView recyclerView004 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_004);
-        recyclerView004.setHasFixedSize(true);
-        recyclerView004.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        indexAdapter004 = new IndexAdapter004(getActivity(), new GlobalCallBack() {
-            @Override
-            public void callBack(Object object) {
-                Toast.makeText(activity, "点击了" + ((Integer) object), Toast.LENGTH_SHORT).show();
-            }
-        });
-        recyclerView004.setAdapter(indexAdapter004);
+//        RecyclerView recyclerView004 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_004);
+//        recyclerView004.setHasFixedSize(true);
+//        recyclerView004.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+//        indexAdapter004 = new IndexAdapter004(getActivity(), new GlobalCallBack() {
+//            @Override
+//            public void callBack(Object object) {
+//                Toast.makeText(activity, "点击了" + ((Integer) object), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        recyclerView004.setAdapter(indexAdapter004);
 
 
         //地盘
         RecyclerView recyclerView005 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_005);
         recyclerView005.setHasFixedSize(true);
         recyclerView005.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView005.addItemDecoration(new ShopMarginDecoration(activity,R.dimen.dp5));
         indexAdapter005=new IndexAdapter005(activity,null);
         indexAdapter005.setOnItemClickListener(new IRecycleViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                BannerBean.RowsEntity item = indexAdapter005.getItem(position);
+                BannerBean.RowsBean item = indexAdapter005.getItem(position);
                 if (item==null) return;
-                GoToNextUtils.goToIntent(activity,Integer.valueOf(item.getType()),item.getWeb_url());
-//                Intent intent = new Intent(activity, ZoneDetailActivity.class);
-//                intent.putExtra("id",item.getSpace_id());
-//                intent.putExtra("title",item.getTitle());
-//                activity.startActivity(intent);
+                GoToNextUtils.goToIntent(activity,Integer.valueOf(item.type),item.web_url);
             }
 
             @Override
@@ -563,7 +550,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             public void onSuccess(String json) {
                 BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() { });
                 if (bannerData != null) {
-                    List<BannerBean.RowsEntity> rows = bannerData.getRows();
+                    List<BannerBean.RowsBean> rows = bannerData.rows;
                     refreshUI(rows);
                 }
             }
@@ -584,7 +571,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             public void onSuccess(String json) {
                 BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() { });
                 if (bannerData != null) {
-                    List<BannerBean.RowsEntity> rows = bannerData.getRows();
+                    List<BannerBean.RowsBean> rows = bannerData.rows;
                     indexAdapter001.setRowsEntities(rows);
                 }
             }
@@ -666,7 +653,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             public void onSuccess(String json) {
                 com.taihuoniao.fineix.home.beans.CategoryListBean  categoryListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<com.taihuoniao.fineix.home.beans.CategoryListBean >>() { });
                 if (categoryListBean != null) {
-                    indexAdapter004.setRowsEntities(categoryListBean.getRows());
+//                    indexAdapter004.setRowsEntities(categoryListBean.getRows());
                 }
             }
 
@@ -687,7 +674,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             public void onSuccess(String json) {
                 BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() { });
                 if (bannerData != null) {
-                    List<BannerBean.RowsEntity> rows = bannerData.getRows();
+                    List<BannerBean.RowsBean> rows = bannerData.rows;
                     indexAdapter005.setRowsEntities(rows);
                 }
             }

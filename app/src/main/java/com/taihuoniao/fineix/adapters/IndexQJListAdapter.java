@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +16,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -36,13 +37,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
@@ -70,6 +71,9 @@ import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -418,36 +422,54 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
             }
         });
-
-
         SceneList.DataBean.RowsBean rowsBean = sceneList.get(position);
         List<String> tags = rowsBean.getTags();
         if (tags != null && tags.size() > 0) {
-            for(int i = 0 ; i< tags.size(); i++) {
-                TextView textView = new TextView(activity);
-                textView.setBackgroundColor(Color.parseColor("#4f4f4f4f"));
-                textView.setText(tags.get(i));
-                textView.setTag(tags.get(i));
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(10,0,0,0);
-                textView.setLayoutParams(layoutParams);
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(activity, SearchActivity.class);
-                        intent.putExtra("q", ((TextView)v).getTag().toString());
+            holder.idTagFlowLayout.setVisibility(View.VISIBLE);
+            holder.idTagFlowLayout.setAdapter(new TagAdapter<String>(tags) {
+                @Override
+                public View getView(FlowLayout parent, int position, String s) {
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    TextView textView = new TextView(activity);
+                    params.setMargins(0, 0, activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0);
+                    if (position == 0) {
+                        textView.setText("# " + s);
+                    } else {
+                        textView.setText(s);
+                    }
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    textView.setTextColor(activity.getResources().getColor(R.color.color_666));
+                    textView.setLayoutParams(params);
+                    return textView;
+                }
+            });
+
+            holder.idTagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                @Override
+                public boolean onTagClick(View view, int position, FlowLayout parent) {
+                    Intent intent = new Intent(activity, SearchActivity.class);
+                    String s = ((TextView) view).getText().toString();
+                    if (!TextUtils.isEmpty(s)) {
+                        if (position == 0) {
+                            intent.putExtra("q", s.substring(2));
+                        } else {
+                            intent.putExtra("q", s);
+                        }
                         intent.putExtra("t", 9);
                         activity.startActivity(intent);
                     }
-                });
-                holder.linearLayoutIndexQjTags.addView(textView);
-            }
+                    return true;
+                }
+            });
+        }else {
+            holder.idTagFlowLayout.setVisibility(View.GONE);
         }
         return convertView;
     }
 
     /**
      * 添加商品标签
+     *
      * @param position
      * @param parent
      * @param holder
@@ -457,9 +479,11 @@ public class IndexQJListAdapter extends BaseAdapter {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(activity);
             labelView.nameTv.setText(productBean.getTitle());
+            labelView.price.setText("¥"+productBean.price);
             labelView.setLayoutParams(layoutParams);
             if (productBean.getLoc() == 2) {
-                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
+//                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
+                labelView.llTag.setBackgroundResource(R.drawable.label_left);
                 RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
                 labelView.pointContainer.setLayoutParams(layoutParams1);
@@ -467,15 +491,16 @@ public class IndexQJListAdapter extends BaseAdapter {
             labelView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (productBean.getLoc() == 2) {
+                    if (productBean.getLoc() == 2) { //左边
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
                         labelView.setLayoutParams(lp);
-                    } else {
-                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
+                    } else { //右边
+//                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
+                        labelView.llTag.setBackgroundResource(R.drawable.label_right);
                         RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
-                        layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
+                        layoutParams1.leftMargin = (int) (labelView.llTag.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
                         labelView.pointContainer.setLayoutParams(layoutParams1);
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
@@ -558,7 +583,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                 intent.putExtra("fine", sceneList.get(position).getFine() == 1);
                 intent.putExtra("stick", sceneList.get(position).getStick() == 1);
                 intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
-                intent.putExtra("id",sceneList.get(position).get_id());
+                intent.putExtra("id", sceneList.get(position).get_id());
                 activity.startActivity(intent);
             }
         });
@@ -602,7 +627,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.labelContainer.removeAllViews();
     }
 
-    class ViewHolder {
+    static class ViewHolder {
         @Bind(R.id.user_recycler)
         RecyclerView userRecycler;
         @Bind(R.id.head_img)
@@ -651,14 +676,13 @@ public class IndexQJListAdapter extends BaseAdapter {
         ListViewForScrollView commentList;
         @Bind(R.id.more_comment)
         TextView moreComment;
-        @Bind(R.id.linearLayout_index_qj_tags)
-        LinearLayout linearLayoutIndexQjTags;
+        @Bind(R.id.id_tagFlowLayout)
+        TagFlowLayout idTagFlowLayout;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
-
 
 
     //取消关注弹窗
@@ -698,8 +722,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     //取消收藏情景
     private void cancelShoucang(final int position) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(sceneList.get(position).get_id(), "12");
-        HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -731,8 +755,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     //收藏情景
     private void shoucang(final int position) {
         HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(sceneList.get(position).get_id(), "12");
-        HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -764,8 +788,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     //删除情景
     private void deleteScene(String i) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(i);
-        HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
+        HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -797,8 +821,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     //取消点赞
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
-        HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
+        HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.loveRelative.setEnabled(true);
@@ -834,8 +858,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     //点赞情景
     private void loveQJ(final int position, String id, final ViewHolder holder) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
-        HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
+        HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.loveRelative.setEnabled(true);
@@ -871,8 +895,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     //关注用户
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
-        HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -912,8 +936,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     //取消关注
     private void cancelFollow(final SceneList.DataBean.RowsBean.UserInfoBean userInfoBean, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userInfoBean.getUser_id());
-        HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelFocusOperate(userInfoBean.getUser_id(), new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack() {
+            //        ClientDiscoverAPI.cancelFocusOperate(userInfoBean.getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -1116,8 +1140,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         //关注用户
         private void fllow(final int position, String otherUserId, final VH holder) {
             HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
-            HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+            HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack() {
+                //            ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String json) {
                     dialog.dismiss();
@@ -1154,8 +1178,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         //取消关注
         private void cancelFollow(final IndexUserListBean.DataBean.UsersBean usersBean, final VH holder) {
             HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(usersBean.get_id());
-            HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.cancelFocusOperate(usersBean.get_id(), new RequestCallBack<String>() {
+            HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack() {
+                //            ClientDiscoverAPI.cancelFocusOperate(usersBean.get_id(), new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String json) {
                     dialog.dismiss();
@@ -1302,7 +1326,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
     }
 
-    private boolean compareble(List<SceneList.DataBean.RowsBean.ProductBean> list1, List<SceneList.DataBean.RowsBean.ProductBean> list2){
+    private boolean compareble(List<SceneList.DataBean.RowsBean.ProductBean> list1, List<SceneList.DataBean.RowsBean.ProductBean> list2) {
         return list1.equals(list2);
     }
 }

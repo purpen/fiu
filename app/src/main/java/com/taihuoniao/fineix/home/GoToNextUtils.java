@@ -86,6 +86,8 @@ public class GoToNextUtils {
                 intent.putExtra("id", url);
                 context.startActivity(intent);
                 break;
+            default:
+                break;
         }
     }
 
@@ -102,15 +104,18 @@ public class GoToNextUtils {
                 intent.putExtra(ActivityDetailActivity.class.getSimpleName(), url);
                 context.startActivity(intent);
                 break;
-            case 4: //新品
+            case 4: //新品详情
                 intent = new Intent(context, NewProductDetailActivity.class);
                 intent.putExtra(NewProductDetailActivity.class.getSimpleName(), url);
                 context.startActivity(intent);
                 break;
-            case 3: //促销
+            case 3: //促销详情
                 intent = new Intent(context, SalePromotionDetailActivity.class);
                 intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), url);
                 context.startActivity(intent);
+                break;
+            case 5:
+                ToastUtils.showInfo("跳转情境详情");
                 break;
         }
     }

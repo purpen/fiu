@@ -61,6 +61,7 @@ public class MainApplication extends Application {
     public static Bitmap editBitmap = null;//编辑好的图片
     public static Bitmap blurBitmap = null;//模糊的图片
     public static String subjectId = null;//活动id
+    public static String zoneId = null; //地盘id
     public static List<SceneList.DataBean.RowsBean> sceneList;//情景小图跳转大图列表 情景
     public static List<String> picList;//跳转PictureActivity
     private PushAgent mPushAgent;

@@ -32,6 +32,8 @@ public class LabelView extends LinearLayout {
     public TextView nameTv;
     public RelativeLayout pointContainer;
     public RelativeLayout waveContainer;
+    public LinearLayout llTag;
+    public TextView price;
     private ImageView deleteImg;
 
     public TagItem getTagInfo() {
@@ -56,14 +58,14 @@ public class LabelView extends LinearLayout {
     //切换左右
     public void setLeftOrRight() {
         if (isLeft) {
-            nameTv.setBackgroundResource(R.drawable.label_right);
+            llTag.setBackgroundResource(R.drawable.label_right);
             isLeft = false;
             tagInfo.setLoc(1);
-            nameTv.post(new Runnable() {
+            llTag.post(new Runnable() {
                 @Override
                 public void run() {
                     RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointContainer.getLayoutParams();
-                    layoutParams.leftMargin = (int) (nameTv.getMeasuredWidth() - pointWidth - labelMargin);
+                    layoutParams.leftMargin = (int) (llTag.getMeasuredWidth() - pointWidth - labelMargin);
                     pointContainer.setLayoutParams(layoutParams);
                     tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentWidth));
                     tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
@@ -72,10 +74,10 @@ public class LabelView extends LinearLayout {
                 }
             });
         } else {
-            nameTv.setBackgroundResource(R.drawable.label_left);
+            llTag.setBackgroundResource(R.drawable.label_left);
             isLeft = true;
             tagInfo.setLoc(2);
-            nameTv.post(new Runnable() {
+            llTag.post(new Runnable() {
                 @Override
                 public void run() {
                     RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointContainer.getLayoutParams();
@@ -99,6 +101,8 @@ public class LabelView extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_label, this);
+        llTag = (LinearLayout) findViewById(R.id.ll_tag);
+        price = (TextView) findViewById(R.id.price);
         nameTv = (TextView) findViewById(R.id.name);
         pointContainer = (RelativeLayout) findViewById(R.id.point_container);
         waveContainer = (RelativeLayout) findViewById(R.id.wave_container);

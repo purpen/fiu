@@ -6,8 +6,8 @@ package com.taihuoniao.fineix.network;
  */
 public class URL {
 //    public static final String BASE_URL = "https://api.taihuoniao.com/app/api"; //线上
-//    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";//生产环境
-    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
+    public static final String BASE_URL = "https://m.taihuoniao.com/app/api";//生产环境
+//    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     public static final String WANT_BUY = BASE_URL + "/scene_product/sight_click_stat";
     public static final String DELETE_PRODUCT = BASE_URL + "/product/deleted";
