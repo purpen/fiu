@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dp48"
         android:layout_centerInParent="true"
         android:gravity="center"
@@ -16,20 +16,8 @@
         android:id="@+id/badgeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tv_title"
-        android:layout_marginTop="@dimen/dp5"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp3"
         android:textSize="@dimen/sp10"
-        android:visibility="gone" />
-    <TextView
-        android:id="@+id/tv_num"
-        android:layout_width="@dimen/dp15"
-        android:layout_height="@dimen/dp15"
-        android:background="@drawable/cart_num_bg"
-        android:text="+99"
-        android:gravity="center"
-        android:textSize="@dimen/sp8"
-        android:textColor="@android:color/white"
-        android:layout_toRightOf="@+id/tv_title"
-
         android:visibility="gone" />
 </RelativeLayout>

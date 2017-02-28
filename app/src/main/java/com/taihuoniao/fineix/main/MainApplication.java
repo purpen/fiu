@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Vibrator;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -74,6 +75,7 @@ public class MainApplication extends Application {
 
     @Override
     public void onCreate() {
+        MultiDex.install(this);
         LogUtil.e("taihuoniao", "---------->onCreate()" + getClass().getSimpleName());
         super.onCreate();
 

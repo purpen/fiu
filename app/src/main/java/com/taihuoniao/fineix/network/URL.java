@@ -179,5 +179,10 @@ public class URL {
 
     //发现
     public static final String DISCOVER_URL = BASE_URL+"/gateway/find";
+    //企业轻定制
+    public static final String COMPANY_DZ_URL = BASE_URL+"/storage/custom?from=2";
+
+    //合伙人招募计划
+    public static final String COMPANY_PARTNER_URL = BASE_URL+"/storage/plan?from=2";
 
 }

@@ -455,7 +455,7 @@
         <item>待发货</item>
         <item>待收货</item>
         <item>待评价</item>
-        <item>退款售后</item>
+        <!--<item>退款售后</item>-->
     </string-array>
     <string name="invite_wechat">邀请微信好友</string>
     <string name="link_weibo">连接微博</string>
@@ -467,4 +467,8 @@
     <string name="help">帮助</string>
     <string name="string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。</string>
     <string name="quit">退出</string>
+    <string name="company_dz">企业轻定制</string>
+    <string name="company_partner">D3IN招募合伙人计划</string>
+    <string name="open_city">已开通城市</string>
+    <string name="title_switch_city">切换城市</string>
 </resources>

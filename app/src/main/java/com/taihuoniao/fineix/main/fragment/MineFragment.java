@@ -31,6 +31,8 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.personal.alliance.MyAccountActivity;
+import com.taihuoniao.fineix.personal.alliance.bean.MyAccountBean;
+import com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
@@ -104,6 +106,8 @@ public class MineFragment extends MyBaseFragment {
     ImageView riv_auth;
     @Bind(R.id.tv_bonus)
     TextView tvBonus;
+    @Bind(R.id.rl_bonus)
+    RelativeLayout rlBonus;
     public static final int[] imgIds = {/*R.mipmap.gv_order,*/ R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects,
             R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address,R.mipmap.gv_qj/*, R.mipmap.icon_personal_chargeback,
             R.mipmap.icon_personal_geren_tuikuanshouhou*/};
@@ -199,10 +203,27 @@ public class MineFragment extends MyBaseFragment {
 
             @Override
             public void onFailure(String error) {
-//                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
+
+        HashMap<String, String> hashMap = ClientDiscoverAPI.getallianceAccount();
+        HttpRequest.post(hashMap, URL.ALLIANCE_ACCOUNT, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                HttpResponse<MyAccountBean> httpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<MyAccountBean>>() {
+                });
+                if (httpResponse.isSuccess()) {
+                    tvBonus.setText(httpResponse.getData().getWait_cash_amount()+"元");
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                LogUtil.e(error);
+            }
+        });
+
     }
 
     @Override
@@ -225,6 +246,7 @@ public class MineFragment extends MyBaseFragment {
             adapter = new PersonalCenterGVAdapter(gvList, activity);
             gv.setAdapter(adapter);
         }
+        item_partner.setTVStyle(0,R.string.company_dz,R.color.color_333);
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
     }
@@ -303,11 +325,17 @@ public class MineFragment extends MyBaseFragment {
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-    @OnClick({R.id.rl_bonus, R.id.tv_all_order, R.id.tv_wait_pay, R.id.tv_wait_send, R.id.tv_wait_receive, R.id.tv_wait_comment, R.id.tv_wait_shouhou, R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
+    @OnClick({R.id.iv_plan,R.id.rl_bonus, R.id.tv_all_order, R.id.tv_wait_pay, R.id.tv_wait_send, R.id.tv_wait_receive, R.id.tv_wait_comment, R.id.tv_wait_shouhou, R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.tv_bonus:
+            case R.id.iv_plan:
+                intent = new Intent(activity, AboutUsActivity.class);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.COMPANY_PARTNER_URL);
+                intent.putExtra(AboutUsActivity.class.getName(), getString(R.string.company_partner));
+                startActivity(intent);
+                break;
+            case R.id.rl_bonus:
                 //我的分成界面
                 startActivity(new Intent(activity, MyAccountActivity.class));
                 break;
@@ -327,7 +355,7 @@ public class MineFragment extends MyBaseFragment {
                 toOrderListPage(R.string.wait_comment);
                 break;
             case R.id.tv_wait_shouhou:
-                toOrderListPage(R.string.shou_hou);
+                startActivity(new Intent(activity, ChargeBackAndServiceActivity.class));
                 break;
             case R.id.ll_box:
                 startActivity(new Intent(activity, UserCenterActivity.class));
@@ -359,6 +387,12 @@ public class MineFragment extends MyBaseFragment {
                 break;
             case R.id.item_feedback:
                 startActivity(new Intent(activity, FeedbackActivity.class));
+                break;
+            case R.id.item_partner:
+                intent = new Intent(activity, AboutUsActivity.class);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.COMPANY_DZ_URL);
+                intent.putExtra(AboutUsActivity.class.getName(), getString(R.string.company_dz));
+                startActivity(intent);
                 break;
 //            case R.id.btn:
 //                startActivity(new Intent(activity, ZoneDetailActivity.class));

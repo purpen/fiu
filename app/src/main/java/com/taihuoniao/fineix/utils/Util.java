@@ -31,9 +31,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.Proxy;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -337,4 +338,9 @@ public class Util {
             return uniqueId;
     }
 
+    public static final List<String> getPackageNames(Context context){
+        ArrayList<String> list = new ArrayList<>();
+        List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_ACTIVITIES);
+        return list;
+    }
 }
