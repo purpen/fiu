@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,27 +16,37 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.adapters.ShopCartAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
+import com.taihuoniao.fineix.beans.ProductBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.ShopCart;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ConfirmOrderActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +55,6 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
 
 /**
  * Created by Stephen on 2017/2/14 16:29
@@ -54,8 +65,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     @Bind(R.id.custom_head)
     CustomHeadView customHead;
-    @Bind(R.id.pull_lv)
-    PullToRefreshListView pullLv;
+    @Bind(R.id.pull_lvlsll)
+    com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView pullLvlsll;
+
+    com.handmark.pulltorefresh.library.PullToRefreshListView pullLv;
+
+
 
     private WaittingDialog mDialog = null;
     private List<ShopCart> mList = new ArrayList<>();
@@ -97,98 +112,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         }
     };
 
-    void method003(Message msg) {
-        if (msg.obj != null) {
-            if (msg.obj instanceof List) {
-                doOrderList.clear();
-                doOrderList.addAll((List<CartDoOrder>) msg.obj);
-                //用户以前加入购物车的商品现在已经下架了，购物车中还显示，这时点确认订单，就给他提示，让他删掉已经下架的商品，否则不能往下走
-                if ("false".equals(doOrderList.get(0).getSuccess())) {
-                    if (mDialog.isShowing()) {
-                        mDialog.dismiss();
-                    }
-                    new SVProgressHUD(getActivity()).showErrorWithStatus(doOrderList.get(0).getMessage());
-                } else {
-                    Intent intent = new Intent(getActivity(), ConfirmOrderActivity.class);
-                    intent.putExtra("cartBean", doOrderList.get(0));
-                    startActivity(intent);
-                }
-            }else if(msg.obj instanceof String){
-                if (mDialog.isShowing()) {
-                    mDialog.dismiss();
-                }
-                ToastUtils.showInfo(msg.obj.toString());
-            }
-        }
-    }
-
-    void method002(Message msg) {
-        if (pullLv!=null) pullLv.onRefreshComplete();
-        if (msg.obj != null) {
-            if (msg.obj instanceof List) {
-                totalList.clear();
-                mList.clear();
-                mList.addAll((List<ShopCart>) msg.obj);
-                for (int i = 0; i < mList.size(); i++) {
-                    for (int j = 0; j < mList.get(i).getShopCartItemList().size(); j++) {
-                        map = new HashMap<>();
-                        map.put("keyImage", mList.get(i).getShopCartItemList().get(j).getCover());
-                        map.put("keyTitle", mList.get(i).getShopCartItemList().get(j).getTitle());
-                        map.put("keyPrice", mList.get(i).getShopCartItemList().get(j).getTotal_price());
-                        map.put("keyColor", mList.get(i).getShopCartItemList().get(j).getSku_mode());
-                        map.put("keyCount", mList.get(i).getShopCartItemList().get(j).getN());
-                        map.put("keyType", mList.get(i).getShopCartItemList().get(j).getType());
-                        map.put("keyTargetId", mList.get(i).getShopCartItemList().get(j).getTarget_id());
-                        map.put("keyProductId", mList.get(i).getShopCartItemList().get(j).getProduct_id());
-                        map.put("isFirstJD",mList.get(i).getShopCartItemList().get(j).isFirstJD);
-                        map.put("storage_id",mList.get(i).getShopCartItemList().get(j).getStorage_id());
-                        map.put("referral_code",mList.get(i).getShopCartItemList().get(j).getReferral_code());
-                        // 一开始，把所有的checkbox状态设为未勾选
-                        map.put("status", false);
-                        totalList.add(map);
-                    }
-                }
-                if (mAllCheck.isChecked()) {
-                    mAllCheck.setChecked(false);
-                }
-                mPayMoneyAll = 0.0;//全局的
-                mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
-                adapter.notifyDataSetChanged();
-                if (!totalList.isEmpty()) {
-                    mEmptyLayout.setVisibility(View.GONE);
-                    mFullLayout.setVisibility(View.VISIBLE);
-//                                title.setContinueTvVisible(true);
-                } else {
-//                                title.setContinueTvVisible(false);
-                    mEmptyLayout.setVisibility(View.VISIBLE);
-                    mFullLayout.setVisibility(View.GONE);
-                }
-            }
-            if (mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
-        }
-    }
-
-    void method001(Message msg) {
-        if (msg.obj != null) {
-            if (msg.obj instanceof ShopCartNumber) {
-                ShopCartNumber numberCart;
-                numberCart = (ShopCartNumber) msg.obj;
-                if (numberCart.isSuccess() && numberCart.getCount() > 0) {
-                    customHead.setHeadCenterTxtShow(true, "购物车(" + numberCart.getCount() + ")");
-                } else {
-                    customHead.setHeadCenterTxtShow(true, "购物车(" + numberCart.getCount() + ")");
-//                                title.setContinueTvVisible(false);
-                }
-            }
-        }
-    }
-
 
     @Override
     protected void requestNet() {
-
+//        getLasteProduct();
     }
 
     @Override
@@ -197,48 +124,49 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            titleLayout.setPadding(0, App.getStatusBarHeight(), 0, 0);
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            customHead.setPadding(0, App.getStatusBarHeight(), 0, 0);
+        }
+        View recommented = recommented(); //添加头部View
 
-        initView2(rootView);
+        ListView listView = pullLvlsll.getRefreshableView();
+        listView.addHeaderView(recommented);
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        initView2();
-        Call cartHandler = DataPaser.shopCartParser(mHandler);
-        Call numHandler = DataPaser.shopCartNumberParser(mHandler);
+//        DataPaser.shopCartParser(mHandler);
+//        DataPaser.shopCartNumberParser(mHandler);
     }
 
-    protected void initView2(View rootView) {
-        mDialog = new WaittingDialog(getActivity());
-        if (!mDialog.isShowing()) {
-            mDialog.show();
-        }
+    protected void initView2(View headerView) {
         df = new DecimalFormat("######0.00");
-        mDeleteCalculate = (Button) rootView.findViewById(R.id.bt_delete_calculate_shopcart_item);
+
+
+        pullLv = (PullToRefreshListView) headerView.findViewById(R.id.pull_lv);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pullLv.getLayoutParams();
+        layoutParams.height = 300;
+        pullLv.setLayoutParams(layoutParams);
+
+        mDeleteCalculate = (Button) headerView.findViewById(R.id.bt_delete_calculate_shopcart_item);
         mDeleteCalculate.setOnClickListener(this);
-        mAllCheck = (CheckBox) rootView.findViewById(R.id.checkbox_choice_all_shopcart_item);
+        mAllCheck = (CheckBox) headerView.findViewById(R.id.checkbox_choice_all_shopcart_item);
         mAllCheck.setOnClickListener(this);
-        mAllPrice = (TextView)rootView. findViewById(R.id.tv_totalprice_shopcart_item);
-        mEmptyLayout = (RelativeLayout) rootView.findViewById(R.id.relative_stroll_shopcart);
-        Button mStroll = (Button)rootView. findViewById(R.id.bt_stroll_shopcart_empty);
+        mAllPrice = (TextView)headerView. findViewById(R.id.tv_totalprice_shopcart_item);
+        mEmptyLayout = (RelativeLayout) headerView.findViewById(R.id.relative_stroll_shopcart);
+        Button mStroll = (Button)headerView. findViewById(R.id.bt_stroll_shopcart_empty);
         mStroll.setOnClickListener(this);
-        mFullLayout = (RelativeLayout)rootView. findViewById(R.id.relative_full_shopcart);
+        mFullLayout = (RelativeLayout)headerView. findViewById(R.id.relative_full_shopcart);
+
         adapter = new ShopCartAdapter(totalList, getActivity(), change);
+
         pullLv.setAdapter(adapter);
         adapter.setOnTwoClickedListener(new ShopCartAdapter.OnTwoClickedListener() {
             @Override
@@ -246,50 +174,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                 integerStringHashMap = hashMap;
             }
         });
-        int mCarNum = 0;
-        if (mCarNum > 0) {
-            customHead.setHeadCenterTxtShow(true, "购物车（" + mCarNum + "）");
-        } else {
-            customHead.setHeadCenterTxtShow(true, "购物车");
-        }
+        customHead.setHeadCenterTxtShow(true, "购物车");
         customHead.getHeadRightTV().setOnClickListener(this);
         customHead.setHeadRightTxtShow(true,R.string.edit);
-        pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                final ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
-                // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
-                viewHolder.mCheckBox.toggle();
-                mAllCheck.setChecked(false);
-                if (position==0) return;
-                totalList.get(position-1).put("status", viewHolder.mCheckBox.isChecked());
-                int count = 0;
-                mPayMoneyAll = 0.00;//全局的
-                Double mPayMoneyAll = 0.00;//局部的
-                for (int i = 0; i < totalList.size(); i++) {
-                    if (totalList.get(i).get("status").equals(true)) {
-                        count = count + 1;
-                        mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
-                    }
-                }
-                mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
-                if (count == totalList.size()) {
-                    mAllCheck.setChecked(true);
-                }
-            }
-        });
-
-        pullLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                DataPaser.shopCartParser(mHandler);
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-
-            }
-        });
+        pullLv.setOnItemClickListener(new IonItemClickLister());
+        pullLv.setOnRefreshListener(new IpullToRefreshListener2());
     }
 
     @Override
@@ -482,6 +371,215 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         ButterKnife.unbind(this);
         if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
+        }
+    }
+
+    /********************************* 猜你喜欢 **********************************************/
+    private AddProductGridAdapter indexAdapter002;//主题列表适配器
+    private List<ProductBean.ProductListItem> productList;
+    private List<SearchBean.Data.SearchItem> searchList;
+    private int currentPage;
+
+    private View recommented(){
+//        View headerView = View.inflate(getActivity(), R.layout.header_view_shop_cart_top, null);
+//        initView2(headerView);
+//        initListView2(headerView);
+
+        TextView textView = new TextView(getActivity());
+        textView.setText("测试");
+        textView.setTextSize(30);
+        textView.setTextColor(Color.parseColor("#ff000f"));
+        return textView;
+    }
+
+    /**
+     * 新品
+     */
+    private void getLasteProduct(){
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, null, String.valueOf(4), null, null, null, "1", null);
+        HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
+            @Override
+            public void onSuccess(String json) {
+                ProductBean productBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    productBean = gson.fromJson(json, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+
+                if (productBean.isSuccess()) {
+                    searchList.clear();
+                    if (currentPage == 1) {
+                        productList.clear();
+                    }
+                    productList.addAll(productBean.getData().getRows());
+                    //刷新数据
+                    indexAdapter002.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) { }
+        });
+    }
+
+
+    void method003(Message msg) {
+        if (msg.obj != null) {
+            if (msg.obj instanceof List) {
+                doOrderList.clear();
+                doOrderList.addAll((List<CartDoOrder>) msg.obj);
+                //用户以前加入购物车的商品现在已经下架了，购物车中还显示，这时点确认订单，就给他提示，让他删掉已经下架的商品，否则不能往下走
+                if ("false".equals(doOrderList.get(0).getSuccess())) {
+                    if (mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
+                    new SVProgressHUD(getActivity()).showErrorWithStatus(doOrderList.get(0).getMessage());
+                } else {
+                    Intent intent = new Intent(getActivity(), ConfirmOrderActivity.class);
+                    intent.putExtra("cartBean", doOrderList.get(0));
+                    startActivity(intent);
+                }
+            }else if(msg.obj instanceof String){
+                if (mDialog.isShowing()) {
+                    mDialog.dismiss();
+                }
+                ToastUtils.showInfo(msg.obj.toString());
+            }
+        }
+    }
+
+    void method002(Message msg) {
+        if (pullLv!=null) pullLv.onRefreshComplete();
+        if (msg.obj != null) {
+            if (msg.obj instanceof List) {
+                totalList.clear();
+                mList.clear();
+                mList.addAll((List<ShopCart>) msg.obj);
+                for (int i = 0; i < mList.size(); i++) {
+                    for (int j = 0; j < mList.get(i).getShopCartItemList().size(); j++) {
+                        map = new HashMap<>();
+                        map.put("keyImage", mList.get(i).getShopCartItemList().get(j).getCover());
+                        map.put("keyTitle", mList.get(i).getShopCartItemList().get(j).getTitle());
+                        map.put("keyPrice", mList.get(i).getShopCartItemList().get(j).getTotal_price());
+                        map.put("keyColor", mList.get(i).getShopCartItemList().get(j).getSku_mode());
+                        map.put("keyCount", mList.get(i).getShopCartItemList().get(j).getN());
+                        map.put("keyType", mList.get(i).getShopCartItemList().get(j).getType());
+                        map.put("keyTargetId", mList.get(i).getShopCartItemList().get(j).getTarget_id());
+                        map.put("keyProductId", mList.get(i).getShopCartItemList().get(j).getProduct_id());
+                        map.put("isFirstJD",mList.get(i).getShopCartItemList().get(j).isFirstJD);
+                        map.put("storage_id",mList.get(i).getShopCartItemList().get(j).getStorage_id());
+                        map.put("referral_code",mList.get(i).getShopCartItemList().get(j).getReferral_code());
+                        // 一开始，把所有的checkbox状态设为未勾选
+                        map.put("status", false);
+                        totalList.add(map);
+                    }
+                }
+                if (mAllCheck.isChecked()) {
+                    mAllCheck.setChecked(false);
+                }
+                mPayMoneyAll = 0.0;//全局的
+                mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
+                adapter.notifyDataSetChanged();
+                if (!totalList.isEmpty()) {
+                    mEmptyLayout.setVisibility(View.GONE);
+                    mFullLayout.setVisibility(View.VISIBLE);
+//                                title.setContinueTvVisible(true);
+                } else {
+//                                title.setContinueTvVisible(false);
+                    mEmptyLayout.setVisibility(View.VISIBLE);
+                    mFullLayout.setVisibility(View.GONE);
+                }
+            }
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
+        }
+    }
+
+    void method001(Message msg) {
+        if (msg.obj != null) {
+            if (msg.obj instanceof ShopCartNumber) {
+                ShopCartNumber numberCart;
+                numberCart = (ShopCartNumber) msg.obj;
+                if (numberCart.isSuccess() && numberCart.getCount() > 0) {
+                    customHead.setHeadCenterTxtShow(true, "购物车(" + numberCart.getCount() + ")");
+                } else {
+                    customHead.setHeadCenterTxtShow(true, "购物车(" + numberCart.getCount() + ")");
+//                                title.setContinueTvVisible(false);
+                }
+            }
+        }
+    }
+
+    class IonItemClickLister implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+            final ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
+            // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
+            viewHolder.mCheckBox.toggle();
+            mAllCheck.setChecked(false);
+            if (position==0){
+                return;
+            }
+            totalList.get(position-1).put("status", viewHolder.mCheckBox.isChecked());
+            int count = 0;
+            mPayMoneyAll = 0.00;//全局的
+            Double mPayMoneyAll = 0.00;//局部的
+            for (int i = 0; i < totalList.size(); i++) {
+                if (totalList.get(i).get("status").equals(true)) {
+                    count = count + 1;
+                    mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
+                }
+            }
+            mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
+            if (count == totalList.size()) {
+                mAllCheck.setChecked(true);
+            }
+        }
+    }
+
+    class IpullToRefreshListener2 implements PullToRefreshBase.OnRefreshListener2<ListView>{
+
+        @Override
+        public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+            DataPaser.shopCartParser(mHandler);
+        }
+
+        @Override
+        public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+
+        }
+    }
+
+    /**
+     * 猜你喜欢
+     */
+    private void initListView2(View headerView){
+        GridViewForScrollView   recyclerView002 = (GridViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
+        productList = new ArrayList<>();
+        searchList = new ArrayList<>();
+        indexAdapter002 = new AddProductGridAdapter(getActivity(),productList, searchList);
+        recyclerView002.setAdapter(indexAdapter002);
+        recyclerView002.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
+                intent.putExtra("id", productList.get(position).get_id());
+                parent.getContext().startActivity(intent);
+            }
+        });
+    }
+
+    private void showDialog(){
+        mDialog = new WaittingDialog(getActivity());
+        if (!mDialog.isShowing()) {
+            mDialog.show();
         }
     }
 }

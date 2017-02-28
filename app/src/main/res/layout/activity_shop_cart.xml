@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ptr="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_f7f7f7"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -9,101 +9,12 @@
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include
+        layout="@layout/layout_shop_cart"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:layout_below="@+id/custom_head" />
 
-    <RelativeLayout
-        android:id="@+id/relative_full_shopcart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/custom_head"
-        android:visibility="gone">
-
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/pull_lv"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            ptr:ptrAnimationStyle="flip"
-            android:layout_above="@+id/linear_delete_count_shopcart"
-            />
-        <RelativeLayout
-            android:id="@+id/linear_delete_count_shopcart"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white">
-
-            <CheckBox
-                android:id="@+id/checkbox_choice_all_shopcart_item"
-                style="@style/CustomCheckboxTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="15dp"
-                android:paddingLeft="5dp"
-                android:text="@string/select_all"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_toLeftOf="@+id/tv_totalprice_shopcart_item"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:text="@string/all_money"/>
-
-            <TextView
-                android:id="@+id/tv_totalprice_shopcart_item"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_toLeftOf="@+id/bt_delete_calculate_shopcart_item"
-                android:gravity="center_vertical"
-                android:paddingRight="13dp"
-                android:textColor="@color/yellow_bd8913"/>
-
-            <Button
-                android:id="@+id/bt_delete_calculate_shopcart_item"
-                android:layout_width="100dp"
-                android:layout_height="44dp"
-                android:layout_alignParentRight="true"
-                android:background="@color/title_black"
-                android:text="@string/account"
-                android:textColor="@color/white"/>
-        </RelativeLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relative_stroll_shopcart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/title_shopcart"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_center"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_centerInParent="true"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tv_center"
-            android:layout_centerHorizontal="true"
-            android:drawablePadding="15dp"
-            android:drawableTop="@mipmap/shopcart_grey"
-            android:text="@string/cart_is_empty"
-            android:textSize="12sp"/>
-
-        <Button
-            android:id="@+id/bt_stroll_shopcart_empty"
-            android:layout_width="140dp"
-            android:layout_height="40dp"
-            android:layout_below="@+id/tv_center"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/corner_black"
-            android:text="@string/go_for_stroll"
-            android:textColor="@color/white"
-            android:textSize="14sp"/>
-    </RelativeLayout>
 </RelativeLayout>

@@ -630,7 +630,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     //好货专题列表
     private void subjectList3() {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "2");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 1 + "", null, String.valueOf(1), 5 + "", "2");
         HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack() {
 
             @Override

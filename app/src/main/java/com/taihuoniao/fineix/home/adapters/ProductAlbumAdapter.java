@@ -71,7 +71,7 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
         RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) holder.recyclerView.getLayoutParams();
         layoutParams2.width = MainApplication.getContext().getScreenWidth();
         holder.recyclerView.setLayoutParams(layoutParams2);
-        if (position == mRowsBeens.size() - 1) {
+        if (position != 0 && position == mRowsBeens.size() - 1) {
             holder.container.setPadding(0, 0, 0, DensityUtils.dp2px(mContext, 50));
         } else {
             holder.container.setPadding(0, 0, 0, 0);

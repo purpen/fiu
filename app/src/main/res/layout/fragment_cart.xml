@@ -1,5 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/activity_shop_cart" />
+
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:id="@+id/pull_lvlsll"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/custom_head"
+        android:layout_height="match_parent"/>
+
+    <!--<include-->
+        <!--layout="@layout/header_view_shop_cart_top"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/custom_head" />-->
+
 </RelativeLayout>
