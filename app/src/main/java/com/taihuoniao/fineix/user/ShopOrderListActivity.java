@@ -12,11 +12,10 @@ import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.User;
-import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.fragments.ShopOrderFragment;
@@ -40,8 +39,6 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     GlobalTitleLayout custom_head;
     private ViewPager mPager;
     private TabLayout tabBar;
-
-    //    private static final String[] TITLES = {"全部", "待付款", "待发货", "待收货", "待评价"/*, "退款/售后"*/};
     private boolean isRestart = false;
     private ArrayList<String> mTitles;
     private User user;
@@ -77,6 +74,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
 //        mFragments.add(shopOrderFragment);
         OrderViewpagerAdapter mAdapter = new OrderViewpagerAdapter(getSupportFragmentManager(), mFragments, mTitles);
         mPager.setAdapter(mAdapter);
+        tabBar.setTabMode(TabLayout.MODE_FIXED);
         tabBar.setupWithViewPager(mPager);
         if (!TextUtils.isEmpty(title)) {
             custom_head.setTitle(title);
@@ -179,7 +177,6 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack() {
-            //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
@@ -221,9 +218,4 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
 
     }
 
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-        startActivity(new Intent(ShopOrderListActivity.this, MainActivity.class));
-    }
 }

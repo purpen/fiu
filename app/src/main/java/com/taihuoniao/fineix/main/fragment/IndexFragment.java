@@ -67,6 +67,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
@@ -180,6 +181,17 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         getUserList();
     }
 
+
+    @OnClick({R.id.ll_select_city})
+    void performClick(View v){
+        switch (v.getId()){
+            case R.id.ll_select_city:
+
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void onClick(View v) {
