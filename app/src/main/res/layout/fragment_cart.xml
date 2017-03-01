@@ -7,16 +7,109 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
-        android:id="@+id/pull_lvlsll"
+    <FrameLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/custom_head"
-        android:layout_height="match_parent"/>
+        android:orientation="vertical">
 
-    <!--<include-->
-        <!--layout="@layout/header_view_shop_cart_top"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/custom_head" />-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:scrollbars="none"
+            android:layout_height="match_parent">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="▪ 7天无忧退货"
+                        android:gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="▪ 48小时快速退款"
+                        android:gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="▪ 满99免费邮"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/relative_full_shopcart"
+                    layout="@layout/layout_shopcart_container01"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    android:id="@+id/relative_stroll_shopcart"
+                    layout="@layout/layout_shopcart_container02"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/linear_delete_count_shopcart"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:background="@color/white">
+
+
+            <CheckBox
+                android:id="@+id/checkbox_choice_all_shopcart_item"
+                style="@style/CustomCheckboxTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:paddingLeft="5dp"
+                android:text="@string/select_all" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_toLeftOf="@+id/tv_totalprice_shopcart_item"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="@string/all_money" />
+
+            <TextView
+                android:id="@+id/tv_totalprice_shopcart_item"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_toLeftOf="@+id/bt_delete_calculate_shopcart_item"
+                android:gravity="center_vertical"
+                android:paddingRight="13dp"
+                android:textColor="@color/yellow_bd8913" />
+
+            <Button
+                android:id="@+id/bt_delete_calculate_shopcart_item"
+                android:layout_width="100dp"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/title_black"
+                android:text="@string/account"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </FrameLayout>
 </RelativeLayout>

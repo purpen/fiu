@@ -66,6 +66,9 @@
             android:name=".qingjingOrSceneDetails.QJDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".qingjingOrSceneDetails.QJDetailActivity2"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".qingjingOrSceneDetails.ShareActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen" />

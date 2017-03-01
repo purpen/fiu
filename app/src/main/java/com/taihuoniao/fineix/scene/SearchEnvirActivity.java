@@ -157,6 +157,9 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
+                if (netSearch == null) {
+                    return;
+                }
                 if (netSearch.isSuccess()) {
                     if (page == 1) {
                         list.clear();

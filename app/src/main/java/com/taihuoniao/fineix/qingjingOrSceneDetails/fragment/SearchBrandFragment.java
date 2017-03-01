@@ -155,6 +155,9 @@ public class SearchBrandFragment extends SearchFragment implements AdapterView.O
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
+                if (searchBean == null) {
+                    return;
+                }
                 SearchBean netSearch = searchBean;
                 if (netSearch.isSuccess()) {
                     pullRefreshView.setLoadingTime();

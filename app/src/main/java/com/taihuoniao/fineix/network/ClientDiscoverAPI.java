@@ -1308,4 +1308,22 @@ public class ClientDiscoverAPI {
         params.put("size",Constants.PAGE_SIZE);
         return params;
     }
+
+    public static HashMap getRelateProducts333(int curPage, String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("scene_id",id);
+        params.put("page", curPage+"");
+        params.put("size",Constants.PAGE_SIZE);
+        return params;
+    }
+
+    public static HashMap getRelateProducts4444(int curPage, String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("scene_id",id);
+        params.put("page", curPage+"");
+        params.put("size",Constants.PAGE_SIZE);
+        return params;
+    }
+
+
 }

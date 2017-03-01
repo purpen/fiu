@@ -141,6 +141,9 @@ public class SearchUserFragment extends SearchFragment {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
+                if (searchBean == null) {
+                    return;
+                }
                 SearchBean netSearch = searchBean;
                 if (netSearch.isSuccess()) {
                     pullRefreshView.setLoadingTime();

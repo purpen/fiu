@@ -1,7 +1,7 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,7 +21,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.adapters.ShopCartAdapter;
@@ -43,6 +43,7 @@ import com.taihuoniao.fineix.product.ConfirmOrderActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
+import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
@@ -65,14 +66,29 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     @Bind(R.id.custom_head)
     CustomHeadView customHead;
-    @Bind(R.id.pull_lvlsll)
-    com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView pullLvlsll;
 
-    com.handmark.pulltorefresh.library.PullToRefreshListView pullLv;
+    private View mRootView;
+    private LinearLayout mRelativeLayoutEmptyShopCart;
+    private RelativeLayout mRelativeLayoutProductLists;
 
 
-
+    private RelativeLayout mRelativeLayoutSettlement;
+    private ListViewForScrollView mListViewForScrollViewProductList;
     private WaittingDialog mDialog = null;
+    private CheckBox mAllCheck; //底部的全选框
+    private TextView mAllPrice; //底部的总价
+    private Button mDeleteCalculate; //底部删除和结算相切换的按钮
+
+
+
+
+
+
+
+
+
+
+    Map<String, Object> map;
     private List<ShopCart> mList = new ArrayList<>();
     private List<Map<String, Object>> totalList = new ArrayList<>();
     private List<Map<String, Object>> list_delete = new ArrayList<>();
@@ -80,18 +96,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     private ShopCartAdapter adapter;
 
     //该变量是为了切换购物车标题右边的“编缉”和“完成”二字所在的button
-    private int change = 0;
-    Map<String, Object> map;
-
-    private CheckBox mAllCheck;//底部的全选框
-    //底部的总价
-    private TextView mAllPrice;
-    private Double mPayMoneyAll = 0.0;
-    private Button mDeleteCalculate;//底部删除和结算相切换的按钮
     private List<CartDoOrder> doOrderList = new ArrayList<>();//购物车结算向确认订单界面传值
-
-    private RelativeLayout mEmptyLayout;
-    private RelativeLayout mFullLayout;
+    private int change = 0;
+    private Double mPayMoneyAll = 0.0;
     private DecimalFormat df = null;
 
     private Handler mHandler = new Handler() {
@@ -100,7 +107,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             super.handleMessage(msg);
             switch (msg.what) {
                 case DataConstants.PARSER_SHOP_CART_NUMBER:
-                    method001(msg);
+//                    method001(msg);
                     break;
                 case DataConstants.PARSER_SHOP_CART:
                     method002(msg);
@@ -115,59 +122,42 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     protected void requestNet() {
-//        getLasteProduct();
+        getLasteProduct();
     }
 
     @Override
     protected View initView() {
-        return View.inflate(getActivity(), R.layout.fragment_cart, null);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            customHead.setPadding(0, App.getStatusBarHeight(), 0, 0);
-        }
-        View recommented = recommented(); //添加头部View
-
-        ListView listView = pullLvlsll.getRefreshableView();
-        listView.addHeaderView(recommented);
-        return rootView;
+        mRootView = View.inflate(getActivity(), R.layout.fragment_cart, null);
+        return mRootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        DataPaser.shopCartParser(mHandler);
-//        DataPaser.shopCartNumberParser(mHandler);
+        DataPaser.shopCartParser(mHandler);
+        DataPaser.shopCartNumberParser(mHandler);
     }
 
-    protected void initView2(View headerView) {
+    protected void initView1(View headerView) {
         df = new DecimalFormat("######0.00");
 
 
-        pullLv = (PullToRefreshListView) headerView.findViewById(R.id.pull_lv);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pullLv.getLayoutParams();
-        layoutParams.height = 300;
-        pullLv.setLayoutParams(layoutParams);
+        mListViewForScrollViewProductList = (ListViewForScrollView) headerView.findViewById(R.id.pull_lv);
 
         mDeleteCalculate = (Button) headerView.findViewById(R.id.bt_delete_calculate_shopcart_item);
         mDeleteCalculate.setOnClickListener(this);
         mAllCheck = (CheckBox) headerView.findViewById(R.id.checkbox_choice_all_shopcart_item);
         mAllCheck.setOnClickListener(this);
         mAllPrice = (TextView)headerView. findViewById(R.id.tv_totalprice_shopcart_item);
-        mEmptyLayout = (RelativeLayout) headerView.findViewById(R.id.relative_stroll_shopcart);
+        mRelativeLayoutEmptyShopCart = (LinearLayout) headerView.findViewById(R.id.relative_stroll_shopcart);
         Button mStroll = (Button)headerView. findViewById(R.id.bt_stroll_shopcart_empty);
         mStroll.setOnClickListener(this);
-        mFullLayout = (RelativeLayout)headerView. findViewById(R.id.relative_full_shopcart);
+        mRelativeLayoutProductLists = (RelativeLayout)headerView. findViewById(R.id.relative_full_shopcart);
+        mRelativeLayoutSettlement = (RelativeLayout)headerView. findViewById(R.id.linear_delete_count_shopcart);
 
         adapter = new ShopCartAdapter(totalList, getActivity(), change);
 
-        pullLv.setAdapter(adapter);
+        mListViewForScrollViewProductList.setAdapter(adapter);
         adapter.setOnTwoClickedListener(new ShopCartAdapter.OnTwoClickedListener() {
             @Override
             public void onLetterCliced(HashMap<Integer, String> hashMap) {
@@ -177,8 +167,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         customHead.setHeadCenterTxtShow(true, "购物车");
         customHead.getHeadRightTV().setOnClickListener(this);
         customHead.setHeadRightTxtShow(true,R.string.edit);
-        pullLv.setOnItemClickListener(new IonItemClickLister());
-        pullLv.setOnRefreshListener(new IpullToRefreshListener2());
+        customHead.setHeadGoBackShow(false);
+        mListViewForScrollViewProductList.setOnItemClickListener(new IonItemClickLister());
+//        mListViewForScrollViewProductList.setOnRefreshListener(new IpullToRefreshListener2());
     }
 
     @Override
@@ -193,7 +184,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     mDeleteCalculate.setText("删除");
                     mAllPrice.setVisibility(View.INVISIBLE);
                     DataPaser.shopCartParser(mHandler);
-                    pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    mListViewForScrollViewProductList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             final ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
@@ -251,7 +242,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     mAllPrice.setVisibility(View.VISIBLE);
                     mAllPrice.setText("¥0.00");
                     mDeleteCalculate.setText("去结算");
-                    pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    mListViewForScrollViewProductList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
@@ -338,8 +329,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                             }
                             DataPaser.shopCartNumberParser(mHandler);
                             if (totalList.size() == list_delete.size()) {
-                                mEmptyLayout.setVisibility(View.VISIBLE);
-                                mFullLayout.setVisibility(View.GONE);
+                                mRelativeLayoutEmptyShopCart.setVisibility(View.VISIBLE);
+                                mRelativeLayoutProductLists.setVisibility(View.GONE);
+                                mRelativeLayoutSettlement.setVisibility(View.GONE);
                             }
                             adapter.removeItems(list_delete);
                             if (mDialog.isShowing()) {
@@ -381,15 +373,18 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     private int currentPage;
 
     private View recommented(){
-//        View headerView = View.inflate(getActivity(), R.layout.header_view_shop_cart_top, null);
+        View headerView = View.inflate(getActivity(), R.layout.header_index, null);
+//        View headerView = View.inflate(getActivity(), R.layout.layout_shopcart_container01, null);
+//        initView1(headerView);
 //        initView2(headerView);
-//        initListView2(headerView);
 
-        TextView textView = new TextView(getActivity());
-        textView.setText("测试");
-        textView.setTextSize(30);
-        textView.setTextColor(Color.parseColor("#ff000f"));
-        return textView;
+//        TextView textView = new TextView(getActivity());
+//        textView.setText("测试");
+//        textView.setTextSize(30);
+//        textView.setTextColor(Color.parseColor("#ff000f"));
+//        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
+//        textView.setLayoutParams(layoutParams);
+        return headerView;
     }
 
     /**
@@ -453,7 +448,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     }
 
     void method002(Message msg) {
-        if (pullLv!=null) pullLv.onRefreshComplete();
+//        if (mListViewForScrollViewProductList!=null) mListViewForScrollViewProductList.onRefreshComplete();
         if (msg.obj != null) {
             if (msg.obj instanceof List) {
                 totalList.clear();
@@ -484,14 +479,18 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                 mPayMoneyAll = 0.0;//全局的
                 mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
                 adapter.notifyDataSetChanged();
+                mListViewForScrollViewProductList.requestLayout();
                 if (!totalList.isEmpty()) {
-                    mEmptyLayout.setVisibility(View.GONE);
-                    mFullLayout.setVisibility(View.VISIBLE);
+                    mRelativeLayoutProductLists.setVisibility(View.VISIBLE);
+                    adapter.notifyDataSetChanged();
+                    mRelativeLayoutSettlement.setVisibility(View.VISIBLE);
+                    mRelativeLayoutEmptyShopCart.setVisibility(View.GONE);
 //                                title.setContinueTvVisible(true);
                 } else {
 //                                title.setContinueTvVisible(false);
-                    mEmptyLayout.setVisibility(View.VISIBLE);
-                    mFullLayout.setVisibility(View.GONE);
+                    mRelativeLayoutEmptyShopCart.setVisibility(View.VISIBLE);
+                    mRelativeLayoutProductLists.setVisibility(View.GONE);
+                    mRelativeLayoutSettlement.setVisibility(View.GONE);
                 }
             }
             if (mDialog.isShowing()) {
@@ -560,7 +559,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     /**
      * 猜你喜欢
      */
-    private void initListView2(View headerView){
+    private void initView2(View headerView){
         GridViewForScrollView   recyclerView002 = (GridViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
         productList = new ArrayList<>();
         searchList = new ArrayList<>();
@@ -581,5 +580,15 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         if (!mDialog.isShowing()) {
             mDialog.show();
         }
+    }
+
+    @Override
+    protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            customHead.setPadding(0, App.getStatusBarHeight(), 0, 0);
+        }
+        showDialog();
+        initView1(mRootView);
+        initView2(mRootView);
     }
 }

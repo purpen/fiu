@@ -52,6 +52,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity2;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJPictureActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
@@ -578,13 +579,19 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, QJPictureActivity.class);
-                intent.putExtra("img", sceneList.get(position).getCover_url());
-                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
-                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
-                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
+
+                // TODO: 2017/3/1 跳入情境详情
+                Intent intent = new Intent(activity, QJDetailActivity2.class);
                 intent.putExtra("id", sceneList.get(position).get_id());
                 activity.startActivity(intent);
+
+//                Intent intent = new Intent(activity, QJPictureActivity.class);
+//                intent.putExtra("img", sceneList.get(position).getCover_url());
+//                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
+//                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
+//                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
+//                intent.putExtra("id", sceneList.get(position).get_id());
+//                activity.startActivity(intent);
             }
         });
         holder.viewCount.setText(sceneList.get(position).getView_count());

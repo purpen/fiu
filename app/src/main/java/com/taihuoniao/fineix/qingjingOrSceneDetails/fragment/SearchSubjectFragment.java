@@ -174,6 +174,9 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
+                if (searchBean == null) {
+                    return;
+                }
                 SearchBean netSearch = searchBean;
                 if (netSearch.isSuccess()) {
                     pullRefreshView.setLoadingTime();

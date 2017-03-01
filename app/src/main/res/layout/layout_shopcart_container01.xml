@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <com.taihuoniao.fineix.view.ListViewForScrollView
+            android:id="@+id/pull_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#874ff0d8"
+            ptr:ptrAnimationStyle="flip" />
+    </LinearLayout>
+
+</RelativeLayout>
