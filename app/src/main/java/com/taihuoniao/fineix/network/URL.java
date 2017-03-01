@@ -9,9 +9,15 @@ public class URL {
     public static final String BASE_URL = "https://m.taihuoniao.com/app/api";//生产环境
 //    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
+    // 公共接口
+    public static final String BANNERS_URL = BASE_URL + "/gateway/slide";
+    public static final String URLSTRING_PRODUCTSLIST = BASE_URL + "/product/getlist";
+    public static final String SCENE_SUBJECT_GETLIST = BASE_URL + "/scene_subject/getlist";
+    public static final String CATEGORY_LIST = BASE_URL + "/category/getlist";
+    public static final String SEARCH = BASE_URL + "/search/getlist";
+
     public static final String WANT_BUY = BASE_URL + "/scene_product/sight_click_stat";
     public static final String DELETE_PRODUCT = BASE_URL + "/product/deleted";
-    public static final String URLSTRING_PRODUCTSLIST = BASE_URL + "/product/getlist";
     public static final String ADD_PRODUCT = BASE_URL + "/product/submit";
     public static final String GOOD_DETAILS = BASE_URL + "/product/view";
     public static final String URLSTRING_JD_PRODUCTSDATA = BASE_URL + "/scene_product/jd_view";
@@ -43,8 +49,6 @@ public class URL {
     public static final String REPORT = BASE_URL + "/report_tip/save";
     public static final String BRAND_LIST = BASE_URL + "/scene_brands/getlist";
     public static final String BRAND_DETAIL = BASE_URL + "/scene_brands/view";
-    public static final String CATEGORY_LIST = BASE_URL + "/category/getlist";
-    public static final String SEARCH = BASE_URL + "/SEARCH/getlist";
     public static final String PRODUCT_AND_SCENELIST = BASE_URL + "/sight_and_product/getlist";
     public static final String CART_NUMBER = BASE_URL + "/shopping/fetch_cart_count";
     public static final String SEND_COMMENT = BASE_URL + "/comment/ajax_comment";
@@ -56,7 +60,6 @@ public class URL {
     public static final String MINE_INFO = BASE_URL + "/user/user_info";
     public static final String GET_BONUS = BASE_URL + "/user/send_exp";
     public static final String USER_CENTER = BASE_URL + "/auth/user";
-    public static final String BANNERS_URL = BASE_URL + "/gateway/slide";
     public static final String PRODUCTS_URL = BASE_URL + "/scene_product/getlist";
     public static final String FOCUS_FAVORITE_URL = BASE_URL + "/follow";
     public static final String FOCUS_OPRATE_URL = BASE_URL + "/follow/ajax_follow";
@@ -106,7 +109,6 @@ public class URL {
     public static final String MY_ADD_INTEREST_SCENE_ID = BASE_URL + "/my/add_interest_scene_id";
     public static final String GATEWAY_VALIDE_INVITE_CODE = BASE_URL + "/gateway/valide_invite_code";
     public static final String AUTH_CHECK_VERIFY_CODE = BASE_URL + "/auth/check_verify_code";
-    public static final String SCENE_SUBJECT_GETLIST = BASE_URL + "/scene_subject/getlist";
     public static final String AUTH_THIRD_REGISTER_WITHOUT_PHONE = BASE_URL + "/auth/third_register_without_phone";
     public static final String FAVORITE_AJAX_FAVORITE = BASE_URL + "/favorite/ajax_favorite";
     public static final String SHOPPING_FETCH_CART_COUNT = BASE_URL + "/shopping/fetch_cart_count";
