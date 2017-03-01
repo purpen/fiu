@@ -355,6 +355,7 @@ public class ZoneDetailActivity extends BaseActivity {
                     isFirstLoc = false;
                     LatLng p1 = new LatLng(bdLocation.getLatitude(),
                             bdLocation.getLongitude());
+                    zoneDetailBean.location.myLocation = p1;
                     LatLng p2 = new LatLng(zoneDetailBean.location.coordinates.get(1), zoneDetailBean.location.coordinates.get(0));
                     double distance = MapUtil.getDistance(p1, p2);
                     LogUtil.e(distance + "");

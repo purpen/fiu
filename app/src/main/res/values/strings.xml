@@ -471,4 +471,7 @@
     <string name="company_partner">D3IN招募合伙人计划</string>
     <string name="open_city">已开通城市</string>
     <string name="title_switch_city">切换城市</string>
+    <string name="navigation">导航</string>
+    <string name="baidu_map">百度地图</string>
+    <string name="gaode_map">高德地图</string>
 </resources>

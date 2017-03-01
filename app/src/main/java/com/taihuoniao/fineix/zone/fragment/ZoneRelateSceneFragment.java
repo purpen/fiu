@@ -115,7 +115,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
                         requestNet();
                         break;
                     case R.id.zui_xin:
-                        sort = "0";
+                        sort = "3";
                         stick = "";
                         curPage = 1;
                         relateSceneList.clear();

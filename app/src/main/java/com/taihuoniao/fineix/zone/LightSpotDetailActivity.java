@@ -38,7 +38,7 @@ public class LightSpotDetailActivity extends BaseActivity {
     protected void getIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra(ZoneDetailActivity.class.getSimpleName())) {
-            zoneDetailBean = (ZoneDetailBean) intent.getSerializableExtra(ZoneDetailActivity.class.getSimpleName());
+            zoneDetailBean = intent.getParcelableExtra(ZoneDetailActivity.class.getSimpleName());
         }
 
     }

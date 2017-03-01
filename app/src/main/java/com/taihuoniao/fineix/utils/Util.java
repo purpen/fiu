@@ -341,6 +341,19 @@ public class Util {
     public static final List<String> getPackageNames(Context context){
         ArrayList<String> list = new ArrayList<>();
         List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_ACTIVITIES);
+        for (PackageInfo packageInfo:packageInfos){
+            list.add(packageInfo.packageName);
+        }
         return list;
     }
+
+
+//    public static final void bd_decrypt(double bd_lat, double bd_lon, double &gg_lat, double &gg_lon)
+//    {
+//        double x = bd_lon - 0.0065, y = bd_lat - 0.006;
+//        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
+//        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
+//        gg_lon = z * Math.cos(theta);
+//        gg_lat = z * Math.sin(theta);
+//    }
 }
