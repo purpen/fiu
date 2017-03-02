@@ -28,7 +28,6 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PushUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
-import com.taihuoniao.fineix.utils.Util;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -38,6 +37,8 @@ import com.umeng.message.entity.UMessage;
 
 import java.io.File;
 import java.util.List;
+
+import cn.sharesdk.framework.ShareSDK;
 
 
 /**
@@ -97,7 +98,6 @@ public class MainApplication extends Application {
 //        } catch (Exception e) {
 //        }
         initPush();
-        Util.getPackageNames(this);
 //        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
 //        OkHttpFinal.getInstance().init(builder.build());
     }

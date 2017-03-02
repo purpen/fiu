@@ -3,13 +3,14 @@ package com.taihuoniao.fineix.user;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.http.SslError;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
@@ -78,14 +79,22 @@ public class AboutUsActivity extends BaseActivity {
 //        });
 //        "http://m.taihuoniao.com/app/api/view/about"
         webView.loadUrl(url);
-        WindowUtils.chenjin(this);
     }
+
+
 
     static class MyWebViewClient extends WebViewClient{
         private WaittingDialog dialog;
         public MyWebViewClient(Activity activity){
             dialog=new WaittingDialog(activity);
         }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+            super.onReceivedSslError(view, handler, error);
+        }
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);

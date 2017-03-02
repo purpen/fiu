@@ -5,6 +5,7 @@ package com.taihuoniao.fineix.network;
  * 网络请求url封装
  */
 public class URL {
+    public static final String H5_URL="https://m.taihuoniao.com";
 //    public static final String BASE_URL = "https://api.taihuoniao.com/app/api"; //线上
     public static final String BASE_URL = "https://m.taihuoniao.com/app/api";//生产环境
 //    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
@@ -93,7 +94,8 @@ public class URL {
     public static final String CANCEL_FAVORITE_PRODUCT = BASE_URL + "/favorite/ajax_cancel_favorite";
     public static final String CHOOSEN_SUBJECT_URL = BASE_URL + "/scene_subject/getlist";
 
-    public static final String SETTINGS_ABOUTUS = BASE_URL + "/view/about";
+    public static final String SETTINGS_ABOUTUS = H5_URL + "/view/about";
+
     public static final String GATEWAY_RECORD_FIU_USER_ACTIVE = BASE_URL + "/gateway/record_fiu_user_active";
     public static final String SCENE_SIGHT_STICK_ACTIVE_TAGS = BASE_URL + "/scene_sight/stick_active_tags";
     public static final String SCENE_SIGHT_RECORD_VIEW = BASE_URL + "/scene_sight/record_view";
@@ -180,9 +182,9 @@ public class URL {
     //发现
     public static final String DISCOVER_URL = BASE_URL+"/gateway/find";
     //企业轻定制
-    public static final String COMPANY_DZ_URL = BASE_URL+"/storage/custom?from=2";
+    public static final String COMPANY_DZ_URL = H5_URL+"/storage/custom?from=2";
 
     //合伙人招募计划
-    public static final String COMPANY_PARTNER_URL = BASE_URL+"/storage/plan?from=2";
+    public static final String COMPANY_PARTNER_URL = H5_URL+"/storage/plan?from=2";
 
 }

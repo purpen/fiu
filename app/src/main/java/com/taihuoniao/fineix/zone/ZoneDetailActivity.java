@@ -289,8 +289,8 @@ public class ZoneDetailActivity extends BaseActivity {
                 break;
             case R.id.ibtn_share: //分享
                 Intent intent = new Intent(activity, ShareDialogActivity.class);
-//                intent.putExtra(ShareDialogActivity.class.getSimpleName(), item);
-                activity.startActivity(intent);
+                intent.putExtra(ShareDialogActivity.class.getSimpleName(),zoneDetailBean);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -397,7 +397,7 @@ public class ZoneDetailActivity extends BaseActivity {
             }
         });
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(activity, zoneDetailBean.banners);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(activity, zoneDetailBean.covers);
         scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
         scrollableView.setAutoScrollDurationFactor(8);
         scrollableView.setInterval(4000);

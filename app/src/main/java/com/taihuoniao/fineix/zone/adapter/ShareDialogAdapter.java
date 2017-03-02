@@ -47,20 +47,20 @@ public class ShareDialogAdapter extends RecyclerView.Adapter<ShareDialogAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         ShareItem item = list.get(position);
         if (mOnItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnItemClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
+                    mOnItemClickListener.onItemClick(holder.textView, position);
                 }
             });
 
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            holder.textView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    mOnItemClickListener.onItemLongClick(holder.itemView, holder.getAdapterPosition());
+                    mOnItemClickListener.onItemLongClick(holder.textView, holder.getAdapterPosition());
                     return false;
                 }
             });

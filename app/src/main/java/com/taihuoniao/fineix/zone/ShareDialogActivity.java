@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.zone;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,9 +10,12 @@ import android.view.WindowManager;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.zone.adapter.ShareDialogAdapter;
 import com.taihuoniao.fineix.zone.bean.ShareItem;
+import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,8 +38,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 public class ShareDialogActivity extends BaseActivity implements PlatformActionListener {
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
-//    private SubjectListBean.DataBean.RowsBean.ProductsBean.DataEntity item;
-
+    private ZoneDetailBean zoneDetailBean;
     public ShareDialogActivity() {
         super(R.layout.activity_share_dialog);
     }
@@ -45,9 +46,9 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
     @Override
     protected void getIntentData() {
         Intent intent = getIntent();
-//        if (intent.hasExtra(TAG)) {
-//            item = (ProductsBean.DataEntity) intent.getSerializableExtra(TAG);
-//        }
+        if (intent.hasExtra(TAG)) {
+            zoneDetailBean = intent.getParcelableExtra(TAG);
+        }
     }
 
     @Override
@@ -59,25 +60,26 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
         initData();
     }
 
-    @OnClick(R.id.ibtn_close)
+    @OnClick({R.id.ibtn_close,R.id.textView})
     void onClick(View v){
-        finish();
+        switch (v.getId()){
+            case R.id.ibtn_close:
+                finish();
+                break;
+            case R.id.textView:
+                Intent intent = new Intent(activity, AboutUsActivity.class);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.COMPANY_PARTNER_URL);
+                intent.putExtra(AboutUsActivity.class.getName(), getString(R.string.company_partner));
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 
-//    private boolean canRedExternalStorage() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        requestPermissions(new String[]{READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
-//        return false;
-//    }
-
     private void initData() {
-        int[] image = {R.mipmap.share_wechat, R.mipmap.share_moments, R.mipmap.share_weibo, R.mipmap.share_qq,R.mipmap.copy_link};
-        String[] name = {"微信", "朋友圈", "微博", "QQ","复制链接"};
+        int[] image = {R.mipmap.share_wechat, R.mipmap.share_moments, R.mipmap.share_weibo, R.mipmap.share_qq};
+        String[] name = {"微信", "朋友圈", "微博", "QQ"};
         List<ShareItem> shareList = new ArrayList<>();
         ShareItem shareItem;
         for (int i = 0; i < image.length; i++) {
@@ -87,7 +89,7 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
             shareList.add(shareItem);
         }
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(activity,5);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(activity,4);
         recyclerView.setLayoutManager(gridLayoutManager);
         ShareDialogAdapter adapter = new ShareDialogAdapter(activity, shareList);
         recyclerView.setAdapter(adapter);
@@ -98,51 +100,40 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
                 switch (position) {
                     case 0: //微信
                         params = new Platform.ShareParams();
-//                        params.setShareType(content.shareType);
-//                        params.setUrl(content.titleUrl);
-//                        params.setTitle(content.title);
-//                        params.setTitleUrl(content.titleUrl);
-//                        params.setText(content.shareTxt);
-//                        params.setSite(content.site);
-//                        params.setSiteUrl(content.siteUrl);
-//                        params.setImageUrl(content.imageUrl);
+                        params.setShareType(Platform.SHARE_WEBPAGE);
+                        params.setTitle(zoneDetailBean.title);
+                        params.setText(zoneDetailBean.des);
+                        params.setUrl(zoneDetailBean.view_url);
+                        params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                         wechat.setPlatformActionListener(ShareDialogActivity.this);
                         wechat.share(params);
                         break;
                     case 1: //微信朋友圈
                         params = new Platform.ShareParams();
-//                        params.setShareType(content.shareType);
-//                        params.setUrl(content.titleUrl);
-//                        params.setTitle(content.title);
-//                        params.setTitleUrl(content.titleUrl);
-//                        params.setText(content.shareTxt);
-//                        params.setSite(content.site);
-//                        params.setSiteUrl(content.siteUrl);
-//                        params.setImageUrl(content.imageUrl);
+                        params.setShareType(Platform.SHARE_WEBPAGE);
+                        params.setTitle(zoneDetailBean.title);
+                        params.setText(zoneDetailBean.des);
+                        params.setUrl(zoneDetailBean.view_url);
+                        params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                         wechatMoments.setPlatformActionListener(ShareDialogActivity.this);
                         wechatMoments.share(params);
                         break;
                     case 2: //新浪微博
                         params = new Platform.ShareParams();
-//                        params.setTitle(content.title);
-//                        params.setTitleUrl(content.titleUrl);
-//                        params.setText(content.shareTxt);
-//                        params.setSite(content.site);
-//                        params.setSiteUrl(content.siteUrl);
-//                        params.setImageUrl(content.imageUrl);
-//                        params.setUrl(content.url);
+                        params.setText(zoneDetailBean.des+zoneDetailBean.view_url);
+                        params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                         weibo.setPlatformActionListener(ShareDialogActivity.this); // 设置分享事件回调
                         weibo.share(params);
                         break;
                     case 3: //QQ
                         params = new Platform.ShareParams();
-//                    params.setTitle(getResources().getString(R.string.share_title_url));
-//                    params.setText(getResources().getString(R.string.share_title_url));
-//                    params.setTitleUrl("http://www.taihuoniao.com/");
-//                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+                        params.setTitle(zoneDetailBean.title);
+                        params.setTitleUrl(zoneDetailBean.view_url);
+                        params.setText(zoneDetailBean.des);
+                        params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
                         qq.setPlatformActionListener(ShareDialogActivity.this);
                         qq.share(params);
@@ -150,9 +141,7 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
                     default:
                         break;
                 }
-//                if(canRedExternalStorage()){
-//                    share();
-//                }
+
             }
 
             @Override
@@ -162,19 +151,20 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
         });
     }
 
+
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        ToastUtils.showInfo(platform + " 分享成功啦");
+        ToastUtils.showInfo(platform.getName()+ " 分享成功啦");
     }
 
     @Override
     public void onCancel(Platform platform, int i) {
-        ToastUtils.showInfo(platform + " 分享取消了");
+        ToastUtils.showInfo(platform.getName() + " 分享取消了");
     }
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        ToastUtils.showInfo(platform + " 分享失败啦");
+        ToastUtils.showInfo(platform.getName() + " 分享失败啦");
         if (throwable != null) {
             Log.e("throw", "throw:" + throwable.getMessage());
         }
@@ -186,9 +176,4 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-    }
 }
