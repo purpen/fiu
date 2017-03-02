@@ -157,7 +157,7 @@
     <string name="focus_tips1">你一定是想关注我，才点进来的对吧</string>
     <string name="fans_tips">给你一首歌的时间就回来哦，粉丝们还等着你的新动态呢</string>
     <string name="fans_tips1">众里寻他千百度，爱人之心不可无</string>
-    <string name="share_txt">我在Fiu浮游[表情]寻找同路人；希望和你一起用文字来记录内心情绪，用滤镜来表达情感色彩，用分享去变现原创价值；带你发现美学科技的力量和感性生活的温度！来吧，去Fiu一下 >>> http://m.taihuoniao.com/fiu</string>
+    <string name="share_txt">我在D³IN寻找同路人；希望和你一起用文字来记录内心情绪，用滤镜来表达情感色彩，用分享去变现原创价值；带你发现美学科技的力量和感性生活的温度！>>> https://m.taihuoniao.com/d3in</string>
     <string name="title_url">http://m.taihuoniao.com/guide/fiu/</string>
     <string name="l_album_name_all">最近图片</string>
     <string name="l_album_name_selected">选择图片</string>
@@ -426,7 +426,7 @@
     <string name="high_light">地盘特色</string>
     <string name="relate_scene">情境推荐</string>
     <string name="relate_products">产品推荐</string>
-    <string name="shop_info">地盘详情</string>
+    <string name="shop_info">地盘信息</string>
     <string name="business_hour">营业时间：</string>
     <string name="business_tel">电话：</string>
     <string name="shop_tags">地址：</string>
@@ -445,7 +445,7 @@
         <!--<item>地盘</item>-->
         <item>情境</item>
         <item>品牌</item>
-        <item>专辑</item>
+        <item>好货合集</item>
         <item>发现好友</item>
     </string-array>
 
@@ -474,4 +474,5 @@
     <string name="navigation">导航</string>
     <string name="baidu_map">百度地图</string>
     <string name="gaode_map">高德地图</string>
+    <string name="tj_qj">默认排序</string>
 </resources>

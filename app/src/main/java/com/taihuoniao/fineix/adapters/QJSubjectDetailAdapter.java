@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.zone.adapter;
+package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -34,6 +33,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.NetBean;
+import com.taihuoniao.fineix.beans.QJSubjectDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -52,6 +52,7 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -71,7 +72,7 @@ import butterknife.ButterKnife;
  * Created by lilin on 2017/2/21.
  */
 
-public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_UPLOAD = 0;
     private static final int TYPE_SCENE = 1;
     //popupwindow下的控件
@@ -81,6 +82,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private TextView shoucangTv;
     private TextView jubaoTv;
     private TextView cancelTv;
+
     public interface ISortListener {
         void onClick(View view);
     }
@@ -88,7 +90,8 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private ISortListener sortListener;
 
     private Activity activity;
-    private List<SceneList.DataBean.RowsBean> list;
+    private List<QJSubjectDetailBean.SightsBean> list;
+    private QJSubjectDetailBean data;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -96,9 +99,10 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onItemLongClick(View view, int position);
     }
 
-    public ZoneRelateSceneAdapter(Activity activity, List list) {
+    public QJSubjectDetailAdapter(Activity activity, QJSubjectDetailBean data) {
         this.activity = activity;
-        this.list = list;
+        this.data = data;
+        this.list = data.sights;
         initPopupWindow();
     }
 
@@ -115,8 +119,8 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_UPLOAD) {
-            View view = LayoutInflater.from(activity).inflate(R.layout.item_relate_scene_upload, parent, false);
-            return new UploadViewHolder(view);
+            View view = LayoutInflater.from(activity).inflate(R.layout.header_qj_subject_detail, parent, false);
+            return new HeadViewHolder(view);
         } else {
             View view = LayoutInflater.from(activity).inflate(R.layout.item_relate_zone, parent, false);
             return new ViewHolder(view);
@@ -133,37 +137,14 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof UploadViewHolder) {
-            ((UploadViewHolder)holder).tuiJian.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (sortListener!=null){
-                        sortListener.onClick(v);
-                        ((UploadViewHolder)holder).tuiJian.setTextColor(activity.getResources().getColor(R.color.yellow_bd8913));
-                        ((UploadViewHolder)holder).zuiXin.setTextColor(activity.getResources().getColor(R.color.color_666));
-                    }
-                }
-            });
-
-            ((UploadViewHolder)holder).zuiXin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    sortListener.onClick(v);
-                    ((UploadViewHolder)holder).tuiJian.setTextColor(activity.getResources().getColor(R.color.color_666));
-                    ((UploadViewHolder)holder).zuiXin.setTextColor(activity.getResources().getColor(R.color.yellow_bd8913));
-                }
-            });
-
-            ((UploadViewHolder)holder).btnUpload.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    sortListener.onClick(v);
-//
-                }
-            });
+        if (holder instanceof HeadViewHolder) {
+            GlideUtils.displayImage(data.banner_url, ((HeadViewHolder) holder).ivCover);
+            ((HeadViewHolder) holder).tvTitle.setText(data.title);
+            ((HeadViewHolder) holder).tvSubtitle.setText(data.short_title);
+            ((HeadViewHolder) holder).tvDesc.setText(data.summary);
         } else {
-            if (position<1) return;
-            final int itemPosition = position-1;
+            if (position < 1) return;
+            final int itemPosition = position - 1;
             if (mOnItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -180,62 +161,44 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                 });
             }
-            ViewGroup.LayoutParams params = ((ViewHolder)holder).container.getLayoutParams();
+            ViewGroup.LayoutParams params = ((ViewHolder) holder).container.getLayoutParams();
             params.width = Util.getScreenWidth();
             params.height = params.width;
-            ((ViewHolder)holder).container.setLayoutParams(params);
+            ((ViewHolder) holder).container.setLayoutParams(params);
 
-            GlideUtils.displayImageFadein(list.get(itemPosition).getCover_url(), ((ViewHolder)holder).qjImg);
-            GlideUtils.displayImage(list.get(itemPosition).getUser_info().getAvatar_url(), ((ViewHolder)holder).headImg);
-            ((ViewHolder)holder).labelContainer.setVisibility(View.VISIBLE);
+            GlideUtils.displayImageFadein(list.get(itemPosition).cover_url, ((ViewHolder) holder).qjImg);
+            GlideUtils.displayImage(list.get(itemPosition).user_info.avatar_url, ((ViewHolder) holder).headImg);
+            ((ViewHolder) holder).labelContainer.setVisibility(View.VISIBLE);
 
             //设置情景标题
-            SceneTitleSetUtils.setTitle(((ViewHolder)holder).qjTitleTv, ((ViewHolder)holder).qjTitleTv2, list.get(itemPosition).getTitle());
+            SceneTitleSetUtils.setTitle(((ViewHolder) holder).qjTitleTv, ((ViewHolder) holder).qjTitleTv2, list.get(itemPosition).title);
             //添加商品标签
-            List<SceneList.DataBean.RowsBean.ProductBean> productBeanList = list.get(itemPosition).getProduct();
-            if (productBeanList != null && compareble(productBeanList, (List<SceneList.DataBean.RowsBean.ProductBean>) ((ViewHolder)holder).labelContainer.getTag(R.id.label_container))) {
-                ((ViewHolder)holder).labelContainer.setTag(R.id.label_container, productBeanList);
+            List<QJSubjectDetailBean.SightsBean.ProductBean> productBeanList = list.get(itemPosition).product;
+            if (productBeanList != null && compareble(productBeanList, (List<QJSubjectDetailBean.SightsBean.ProductBean>) ((ViewHolder) holder).labelContainer.getTag(R.id.label_container))) {
+                ((ViewHolder) holder).labelContainer.setTag(R.id.label_container, productBeanList);
             } else {
-                stopAnimate(((ViewHolder)holder)); //停止商品动画 移除所有标签
-                method1(itemPosition, ((ViewHolder)holder));
-                addGoodsTag(itemPosition, ((ViewHolder)holder)); //添加商品标签
-                ((ViewHolder)holder).labelContainer.setTag(R.id.label_container, productBeanList);
+                stopAnimate(((ViewHolder) holder)); //停止商品动画 移除所有标签
+                method1(itemPosition, ((ViewHolder) holder));
+                addGoodsTag(itemPosition, ((ViewHolder) holder)); //添加商品标签
+                ((ViewHolder) holder).labelContainer.setTag(R.id.label_container, productBeanList);
             }
-            //跳转到分享页面
-            ((ViewHolder) holder).shareImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent4 = new Intent(activity, ShareActivity.class);
-                    intent4.putExtra("id", list.get(itemPosition).get_id());
-                    activity.startActivity(intent4);
-                }
-            });
-
-            //更多
-             ((ViewHolder) holder).moreImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showPopup(itemPosition);
-                }
-            });
 
             //跳转个人中心
-            ((ViewHolder)holder).headImg.setOnClickListener(new View.OnClickListener() {
+            ((ViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), UserCenterActivity.class);
-                    long l = Long.valueOf(list.get(itemPosition).getUser_info().getUser_id());
-                    intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, list.get(itemPosition).user_info._id);
                     v.getContext().startActivity(intent);
                 }
             });
             //跳转情景地图
-            ((ViewHolder)holder).mapLinear.setOnClickListener(new View.OnClickListener() {
+            ((ViewHolder) holder).mapLinear.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 //                跳转到地图界面，查看附近的情境
-                    String address = list.get(itemPosition).getAddress();
-                    LatLng ll = new LatLng(list.get(itemPosition).getLocation().getCoordinates().get(1), list.get(itemPosition).getLocation().getCoordinates().get(0));
+                    String address = list.get(itemPosition).address;
+                    LatLng ll = new LatLng(list.get(itemPosition).location.coordinates.get(1), list.get(itemPosition).location.coordinates.get(0));
                     Intent intent2 = new Intent(activity, MapNearByCJActivity.class);
                     intent2.putExtra("address", address);
                     intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
@@ -243,18 +206,38 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
 
+            //跳转到分享页面
+            ((ViewHolder) holder).shareImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent4 = new Intent(activity, ShareActivity.class);
+                    intent4.putExtra("id", list.get(itemPosition)._id);
+                    activity.startActivity(intent4);
+                }
+            });
+
+            //更多
+            ((ViewHolder) holder).moreImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopup(itemPosition);
+                }
+            });
+
+
             //点赞或取消点赞
-            ((ViewHolder)holder).loveImg.setOnClickListener(new View.OnClickListener() {
+            ((ViewHolder) holder).loveImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (LoginInfo.isUserLogin()) {
                         //已经登录
-                        if (list.get(itemPosition).getIs_love() == 1) {
-                            ((ViewHolder)holder).loveContainer.setEnabled(false);
-                            cancelLoveQJ(itemPosition, list.get(itemPosition).get_id(), ((ViewHolder)holder));
+                        LogUtil.e(list.get(itemPosition).is_love + "========");
+                        if (list.get(itemPosition).is_love == 1) {
+                            ((ViewHolder) holder).loveContainer.setEnabled(false);
+                            cancelLoveQJ(itemPosition, list.get(itemPosition)._id, ((ViewHolder) holder));
                         } else {
-                            ((ViewHolder)holder).loveContainer.setEnabled(false);
-                            loveQJ(itemPosition, list.get(itemPosition).get_id(), ((ViewHolder)holder));
+                            ((ViewHolder) holder).loveContainer.setEnabled(false);
+                            loveQJ(itemPosition, list.get(itemPosition)._id, ((ViewHolder) holder));
                         }
                         return;
                     }
@@ -267,7 +250,46 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        return list.size()+1;
+        return list.size() + 1;
+    }
+
+    //取消点赞
+    private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
+        HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack() {
+            @Override
+            public void onStart() {
+                holder.loveContainer.setEnabled(false);
+            }
+
+            @Override
+            public void onSuccess(String json) {
+                holder.loveContainer.setEnabled(true);
+                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    sceneLoveBean = gson.fromJson(json, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "解析异常");
+                }
+                if (sceneLoveBean.isSuccess()) {
+                    holder.loveImg.setImageResource(R.mipmap.index_love);
+                    holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
+                    list.get(position).is_love = 0;
+                    list.get(position).love_count = sceneLoveBean.getData().getLove_count();
+                } else {
+                    ToastUtils.showError(sceneLoveBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                holder.loveContainer.setEnabled(true);
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
     }
 
     private void initPopupWindow() {
@@ -304,7 +326,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void showPopup(final int position) {
-        if (LoginInfo.getUserId() == Long.parseLong(list.get(position).getUser_id())) {
+        if (LoginInfo.getUserId() == Long.parseLong(list.get(position).user_info._id)) {
             //自己不能举报自己。改为删除
             jubaoTv.setText("删除");
             bianjiTv.setVisibility(View.VISIBLE);
@@ -312,7 +334,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             bianjiTv.setVisibility(View.GONE);
             jubaoTv.setText("举报");
         }
-        if (list.get(position).getIs_favorite() == 1) {
+        if (list.get(position).is_favorite == 1) {
             shoucangTv.setText("取消收藏");
         } else {
             shoucangTv.setText("收藏");
@@ -335,7 +357,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (list.get(position).getIs_favorite() == 1) {
+                if (list.get(position).is_favorite == 1) {
                     cancelShoucang(position);
                 } else {
                     shoucang(position);
@@ -351,13 +373,13 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (LoginInfo.getUserId() == list.get(position).getIs_favorite()) {
-                    deleteScene(list.get(position).get_id());
+                if (LoginInfo.getUserId() == Long.parseLong(list.get(position).user_info._id)) {
+                    deleteScene(list.get(position)._id);
                     //过滤自己
                     return;
                 }
                 Intent intent1 = new Intent(activity, ReportActivity.class);
-                intent1.putExtra("target_id", list.get(position).get_id());
+                intent1.putExtra("target_id", list.get(position)._id);
                 intent1.putExtra("type", 4 + "");
                 activity.startActivity(intent1);
             }
@@ -373,36 +395,6 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         activity.getWindow().setAttributes(params);
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         popupWindow.showAtLocation(popup_view, Gravity.BOTTOM, 0, 0);
-    }
-
-    //取消收藏情景
-    private void cancelShoucang(final int position) {
-        HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(list.get(position).get_id(), "12");
-        HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
-            @Override
-            public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<取消收藏情景", "数据解析异常");
-                }
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    list.get(position).setIs_favorite(0);
-                } else {
-                    ToastUtils.showError(netBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
     }
 
     //删除情景
@@ -435,80 +427,8 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         });
     }
 
-
-    //收藏情景
-    private void shoucang(final int position) {
-        HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(list.get(position).get_id(), "12");
-        HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
-            @Override
-            public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<收藏情景", "数据解析异常");
-                }
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    list.get(position).setIs_favorite(1);
-                } else {
-                    ToastUtils.showError(netBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
-    }
-
-
-
-    //取消点赞
-    private void cancelLoveQJ(final int position, String id, final ZoneRelateSceneAdapter.ViewHolder holder) {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
-        HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack() {
-            @Override
-            public void onStart() {
-                holder.loveContainer.setEnabled(false);
-            }
-
-            @Override
-            public void onSuccess(String json) {
-                holder.loveContainer.setEnabled(true);
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
-                }
-                if (sceneLoveBean.isSuccess()) {
-                    holder.loveImg.setImageResource(R.mipmap.index_love);
-                    holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    list.get(position).setIs_love(0);
-                    list.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
-                } else {
-                    ToastUtils.showError(sceneLoveBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                holder.loveContainer.setEnabled(true);
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
-    }
-
     //点赞情景
-    private void loveQJ(final int position, String id, final ZoneRelateSceneAdapter.ViewHolder holder) {
+    private void loveQJ(final int position, String id, final ViewHolder holder) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack() {
             @Override
@@ -531,8 +451,8 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    list.get(position).setIs_love(1);
-                    list.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
+                    list.get(position).is_love = 1;
+                    list.get(position).love_count = sceneLoveBean.getData().getLove_count();
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }
@@ -546,6 +466,65 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         });
     }
 
+    //取消收藏情景
+    private void cancelShoucang(final int position) {
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(list.get(position)._id, "12");
+        HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(json, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<取消收藏情景", "数据解析异常");
+                }
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+                    list.get(position).is_favorite = 0;
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //收藏情景
+    private void shoucang(final int position) {
+        HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(list.get(position)._id, "12");
+        HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(json, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<收藏情景", "数据解析异常");
+                }
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+                    list.get(position).is_favorite = 1;
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
 
     /**
      * 添加商品标签
@@ -553,13 +532,13 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
      * @param position
      * @param holder
      */
-    private void addGoodsTag(int position, ZoneRelateSceneAdapter.ViewHolder holder) {
-        for (final SceneList.DataBean.RowsBean.ProductBean productBean : list.get(position).getProduct()) {
+    private void addGoodsTag(int position, ViewHolder holder) {
+        for (final QJSubjectDetailBean.SightsBean.ProductBean productBean : list.get(position).product) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(activity);
-            labelView.nameTv.setText(productBean.getTitle());
+            labelView.nameTv.setText(productBean.title);
             labelView.setLayoutParams(layoutParams);
-            if (productBean.getLoc() == 2) {
+            if (productBean.loc == 2) {
                 labelView.nameTv.setBackgroundResource(R.drawable.label_left);
                 RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
@@ -568,10 +547,10 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             labelView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (productBean.getLoc() == 2) {
+                    if (productBean.loc == 2) {
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
-                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
-                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                        lp.leftMargin = (int) (productBean.x * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
+                        lp.topMargin = (int) (productBean.y * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
                         labelView.setLayoutParams(lp);
                     } else {
                         labelView.nameTv.setBackgroundResource(R.drawable.label_right);
@@ -579,8 +558,8 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
                         labelView.pointContainer.setLayoutParams(layoutParams1);
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
-                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
-                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                        lp.leftMargin = (int) (productBean.x * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
+                        lp.topMargin = (int) (productBean.y * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
                         labelView.setLayoutParams(lp);
                     }
                 }
@@ -592,7 +571,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                    intent.putExtra("id", productBean.getId());
+                    intent.putExtra("id", productBean.id);
                     v.getContext().startActivity(intent);
                 }
             });
@@ -600,7 +579,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
 
-    private void stopAnimate(ZoneRelateSceneAdapter.ViewHolder holder) {
+    private void stopAnimate(ViewHolder holder) {
         //停止商品动画
         for (int i = 0; i < holder.labelContainer.getChildCount(); i++) {
             LabelView view = (LabelView) holder.labelContainer.getChildAt(i);
@@ -611,19 +590,19 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
 
-    private void method1(final int position, final ZoneRelateSceneAdapter.ViewHolder holder) {
-        if (list.get(position).getUser_info().getIs_expert() == 1) {
+    private void method1(final int position, final ViewHolder holder) {
+        if (list.get(position).user_info.is_expert == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
         } else {
             holder.vImg.setVisibility(View.GONE);
         }
-        holder.userNameTv.setText(list.get(position).getUser_info().getNickname());
-        holder.publishTime.setText(list.get(position).getCreated_at());
-        if (TextUtils.isEmpty(list.get(position).getAddress())) {
+        holder.userNameTv.setText(list.get(position).user_info.nickname);
+        holder.publishTime.setText(list.get(position).created_at);
+        if (TextUtils.isEmpty(list.get(position).address)) {
             holder.locationImg.setVisibility(View.GONE);
             holder.locationTv.setVisibility(View.GONE);
         } else {
-            holder.locationTv.setText(list.get(position).getCity() + " " + list.get(position).getAddress());
+            holder.locationTv.setText(list.get(position).city + " " + list.get(position).address);
             holder.locationImg.setVisibility(View.VISIBLE);
             holder.locationTv.setVisibility(View.VISIBLE);
         }
@@ -631,22 +610,22 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, QJPictureActivity.class);
-                intent.putExtra("img", list.get(position).getCover_url());
-                intent.putExtra("fine", list.get(position).getFine() == 1);
-                intent.putExtra("stick", list.get(position).getStick() == 1);
-                intent.putExtra("check", list.get(position).getIs_check() == 0);
-                intent.putExtra("id", list.get(position).get_id());
+                intent.putExtra("img", list.get(position).cover_url);
+                intent.putExtra("fine", data.fine == 1);
+                intent.putExtra("stick", data.stick == 1);
+//                intent.putExtra("check", data.check == 0);
+                intent.putExtra("id", list.get(position)._id);
                 activity.startActivity(intent);
             }
         });
-        holder.viewCount.setText(list.get(position).getView_count());
-        holder.loveCount.setText(list.get(position).getLove_count());
-        if (list.get(position).getIs_love() == 1) {
+        holder.viewCount.setText(list.get(position).view_count);
+        holder.loveCount.setText(list.get(position).love_count + "");
+        if (list.get(position).is_love == 1) {
             holder.loveImg.setImageResource(R.mipmap.index_has_love);
         } else {
             holder.loveImg.setImageResource(R.mipmap.index_love);
         }
-        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(list.get(position).getDes(), activity);
+        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(list.get(position).title, activity);
         holder.qjDesTv.setText(spannableStringBuilder);
         holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
         holder.qjDesTv.setMaxLines(3);
@@ -655,18 +634,18 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             public void run() {
                 if (holder.qjDesTv.getLineCount() > 3) {
                     Layout layout = holder.qjDesTv.getLayout();
-                    String str = list.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                    String str = list.get(position).title.substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
                     holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
                 }
             }
         });
-        holder.commentList.setAdapter(new ZoneRelateSceneAdapter.IndexCommentAdapter(list.get(position).getComments()));
-        if (list.get(position).getComment_count() > 0) {
-            holder.moreComment.setText("查看所有" + list.get(position).getComment_count() + "条评论");
-            holder.moreComment.setVisibility(View.GONE);
-        } else {
-            holder.moreComment.setVisibility(View.GONE);
-        }
+//        holder.commentList.setAdapter(new QJSubjectDetailAdapter.IndexCommentAdapter(data.sights));
+//        if (data.comment_count > 0) {
+//            holder.moreComment.setText("查看所有" + data.comment_count + "条评论");
+//            holder.moreComment.setVisibility(View.GONE);
+//        } else {
+//            holder.moreComment.setVisibility(View.GONE);
+//        }
     }
 
     static class IndexCommentAdapter extends BaseAdapter {
@@ -699,13 +678,13 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ZoneRelateSceneAdapter.IndexCommentAdapter.ViewHolder holder;
+            ViewHolder holder;
             if (convertView == null) {
                 convertView = View.inflate(parent.getContext(), R.layout.item_index_comment, null);
-                holder = new ZoneRelateSceneAdapter.IndexCommentAdapter.ViewHolder(convertView);
+                holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
             } else {
-                holder = (ZoneRelateSceneAdapter.IndexCommentAdapter.ViewHolder) convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
 //            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
 //            Glide.with(holder.headImg.getContext()).load(commentList.get(position).getUser_avatar_url()).into(holder.headImg);
@@ -731,17 +710,17 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    static class UploadViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.rl_upload)
-        RelativeLayout rlUpload;
-        @Bind(R.id.tui_jian)
-        TextView tuiJian;
-        @Bind(R.id.zui_xin)
-        TextView zuiXin;
-        @Bind(R.id.btn_upload)
-        Button btnUpload;
+    static class HeadViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_cover)
+        ImageView ivCover;
+        @Bind(R.id.tv_title)
+        TextView tvTitle;
+        @Bind(R.id.tv_subtitle)
+        TextView tvSubtitle;
+        @Bind(R.id.tv_desc)
+        TextView tvDesc;
 
-        public UploadViewHolder(View view) {
+        public HeadViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -805,7 +784,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    private boolean compareble(List<SceneList.DataBean.RowsBean.ProductBean> list1, List<SceneList.DataBean.RowsBean.ProductBean> list2) {
+    private boolean compareble(List<QJSubjectDetailBean.SightsBean.ProductBean> list1, List<QJSubjectDetailBean.SightsBean.ProductBean> list2) {
         return list1.equals(list2);
     }
 }

@@ -85,7 +85,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
         relateSceneAdapter = new ZoneRelateSceneAdapter(activity, relateSceneList);
         linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
-
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(relateSceneAdapter);
     }
 

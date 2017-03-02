@@ -210,7 +210,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     protected void requestNet() {
         if (TextUtils.isEmpty(id)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
-        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
+        HttpRequest.post(params,URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onStart() {

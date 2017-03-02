@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.NewProductDetailActivity;
+import com.taihuoniao.fineix.user.QJSubjectDetailActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.user.SubjectActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -61,7 +62,7 @@ public class GoToNextUtils {
                 intent.putExtra("id", url);
                 context.startActivity(intent);
                 break;
-            case 11:    //情境专题
+            case 11:    //专题
                 HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(url);
                 HttpRequest.post(params, URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
                     @Override
@@ -115,7 +116,12 @@ public class GoToNextUtils {
                 context.startActivity(intent);
                 break;
             case 5:
-                ToastUtils.showInfo("跳转情境详情");
+                ToastUtils.showInfo("跳转好货详情");
+                break;
+            case 6:
+                intent = new Intent(context, QJSubjectDetailActivity.class);
+                intent.putExtra(QJSubjectDetailActivity.class.getSimpleName(), url);
+                context.startActivity(intent);
                 break;
         }
     }

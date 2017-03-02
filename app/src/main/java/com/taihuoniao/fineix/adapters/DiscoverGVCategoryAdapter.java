@@ -29,7 +29,7 @@ public class DiscoverGVCategoryAdapter extends CommonBaseAdapter<DiscoverBean.Pr
         DiscoverBean.ProCategoryBean item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(R.layout.item_discover_gv_category, null);
+            convertView = Util.inflateView(R.layout.item_discover_qj_category, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

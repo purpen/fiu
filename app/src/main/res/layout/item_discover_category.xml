@@ -46,6 +46,7 @@
         android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/dp30"
+
         />
     <com.taihuoniao.fineix.view.CustomGridView
         android:id="@+id/gv_stick"

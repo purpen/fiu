@@ -222,6 +222,7 @@ public class ZoneDetailActivity extends BaseActivity {
                 Intent intent1 = new Intent(activity, LightSpotDetailActivity.class);
                 intent1.putExtra(TAG,zoneDetailBean);
                 activity.startActivity(intent1);
+                break;
             case R.id.head_goback:
                 finish();
                 break;

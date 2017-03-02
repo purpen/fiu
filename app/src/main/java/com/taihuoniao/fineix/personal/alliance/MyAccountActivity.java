@@ -9,10 +9,9 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.alliance.bean.MyAccountBean;
@@ -132,11 +131,5 @@ public class MyAccountActivity extends BaseActivity {
         textView2.setText(StringFormatUtils.formatMoney(myAccountBean.getTotal_balance_amount()));
         textView3.setText(StringFormatUtils.formatMoney(myAccountBean.getTotal_cash_amount()));
         this.myAccountBean = myAccountBean;
-    }
-
-    @Override
-    public void onBackPressed() {
-        activity.startActivity(new Intent(activity, MainActivity.class));
-        activity.finish();
     }
 }
