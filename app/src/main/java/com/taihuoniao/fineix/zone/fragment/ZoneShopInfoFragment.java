@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.zone.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
-import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.map.NaviToZoneActivity;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
 import butterknife.Bind;
@@ -81,7 +82,6 @@ public class ZoneShopInfoFragment extends BaseFragment {
 
     private void resetUI() {
         if (zoneDetailBean==null) return;
-
         addOverlayer();
         tvAddress.setText(zoneDetailBean.address);
         businessTime.setText(zoneDetailBean.extra.shop_hours);
@@ -89,15 +89,16 @@ public class ZoneShopInfoFragment extends BaseFragment {
     }
 
 
-
-
-
     private void addOverlayer() {
+        if (mapView==null) return;
         BaiduMap map = mapView.getMap();
+        final LatLng ll = new LatLng(zoneDetailBean.location.coordinates.get(1),zoneDetailBean.location.coordinates.get(0));
         map.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                LogUtil.e("msg");
+                Intent intent = new Intent(activity, NaviToZoneActivity.class);
+                intent.putExtra(NaviToZoneActivity.class.getSimpleName(),zoneDetailBean);
+                startActivity(intent);
             }
 
             @Override
@@ -108,7 +109,6 @@ public class ZoneShopInfoFragment extends BaseFragment {
         map.getUiSettings().setAllGesturesEnabled(false);
         map.setMapStatus(MapStatusUpdateFactory.zoomTo(18f));
         map.clear();
-        LatLng ll = new LatLng(zoneDetailBean.location.coordinates.get(1),zoneDetailBean.location.coordinates.get(0));
         BitmapDescriptor bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.target(ll).zoom(15.0f);

@@ -15,14 +15,13 @@
             android:textColor="@color/color_222"
             android:textSize="@dimen/sp16"
             />
-        <ImageButton
+        <ImageView
             android:id="@+id/ibtn_close"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/dp15"
+            android:padding="@dimen/dp15"
             android:src="@mipmap/share_close"
             android:layout_alignParentRight="true"
-            android:background="@null"
             />
     </RelativeLayout>
     <View

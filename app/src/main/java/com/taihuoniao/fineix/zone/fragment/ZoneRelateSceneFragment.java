@@ -85,7 +85,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
         relateSceneAdapter = new ZoneRelateSceneAdapter(activity, relateSceneList);
         linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
-
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(relateSceneAdapter);
     }
 
@@ -115,7 +115,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
                         requestNet();
                         break;
                     case R.id.zui_xin:
-                        sort = "0";
+                        sort = "3";
                         stick = "";
                         curPage = 1;
                         relateSceneList.clear();

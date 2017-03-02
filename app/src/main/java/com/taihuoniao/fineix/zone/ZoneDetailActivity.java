@@ -222,6 +222,7 @@ public class ZoneDetailActivity extends BaseActivity {
                 Intent intent1 = new Intent(activity, LightSpotDetailActivity.class);
                 intent1.putExtra(TAG,zoneDetailBean);
                 activity.startActivity(intent1);
+                break;
             case R.id.head_goback:
                 finish();
                 break;
@@ -288,8 +289,8 @@ public class ZoneDetailActivity extends BaseActivity {
                 break;
             case R.id.ibtn_share: //分享
                 Intent intent = new Intent(activity, ShareDialogActivity.class);
-//                intent.putExtra(ShareDialogActivity.class.getSimpleName(), item);
-                activity.startActivity(intent);
+                intent.putExtra(ShareDialogActivity.class.getSimpleName(),zoneDetailBean);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -355,6 +356,7 @@ public class ZoneDetailActivity extends BaseActivity {
                     isFirstLoc = false;
                     LatLng p1 = new LatLng(bdLocation.getLatitude(),
                             bdLocation.getLongitude());
+                    zoneDetailBean.location.myLocation = p1;
                     LatLng p2 = new LatLng(zoneDetailBean.location.coordinates.get(1), zoneDetailBean.location.coordinates.get(0));
                     double distance = MapUtil.getDistance(p1, p2);
                     LogUtil.e(distance + "");
@@ -395,7 +397,7 @@ public class ZoneDetailActivity extends BaseActivity {
             }
         });
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(activity, zoneDetailBean.banners);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(activity, zoneDetailBean.covers);
         scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
         scrollableView.setAutoScrollDurationFactor(8);
         scrollableView.setInterval(4000);

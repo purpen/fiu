@@ -75,7 +75,8 @@ public class DiscoverContentAdapter extends BaseAdapter implements PlatformActio
                 textView.setText(titles.get(position).indexName);
                 ImageView imageView = ButterKnife.findById(convertView, R.id.iv_cover);
                 GlideUtils.displayImageFadein(discoverBean.stick.cover_url, imageView);
-                ((TextView) ButterKnife.findById(convertView, R.id.tv_title)).setText(discoverBean.stick.sub_title);
+                ((TextView) ButterKnife.findById(convertView, R.id.tv_title)).setText(discoverBean.stick.title);
+                ((TextView) ButterKnife.findById(convertView, R.id.tv_subtitle)).setText(discoverBean.stick.sub_title);
                 ButterKnife.findById(convertView,R.id.rl_box).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -147,7 +148,7 @@ public class DiscoverContentAdapter extends BaseAdapter implements PlatformActio
                     }
                 });
                 break;
-            case 4://专辑
+            case 4://好货集合
                 convertView = View.inflate(activity, R.layout.item_discover_category, null);
                 textView = ButterKnife.findById(convertView, R.id.tv_title);
                 textView.getPaint().setFakeBoldText(true);
@@ -164,7 +165,7 @@ public class DiscoverContentAdapter extends BaseAdapter implements PlatformActio
                 break;
             case 5: //发现好友
                 convertView = View.inflate(activity, R.layout.item_discover_category, null);
-                ButterKnife.findById(convertView, R.id.iv_coupon).setVisibility(View.VISIBLE);
+//                ButterKnife.findById(convertView, R.id.iv_coupon).setVisibility(View.VISIBLE);
                 textView = ButterKnife.findById(convertView, R.id.tv_title);
                 textView.getPaint().setFakeBoldText(true);
                 textView.setText(titles.get(position).indexName);

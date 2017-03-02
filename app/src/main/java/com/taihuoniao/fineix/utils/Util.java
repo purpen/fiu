@@ -341,6 +341,9 @@ public class Util {
     public static final List<String> getPackageNames(Context context){
         ArrayList<String> list = new ArrayList<>();
         List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_ACTIVITIES);
+        for (PackageInfo packageInfo:packageInfos){
+            list.add(packageInfo.packageName);
+        }
         return list;
     }
 }

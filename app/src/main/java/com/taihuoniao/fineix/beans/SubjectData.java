@@ -52,6 +52,7 @@ public class SubjectData implements Parcelable {
         public String cover_url;
         public String created_at;
         public UserBean user;
+        public UserInfoBean user_info;
         public String prize;
         public ArrayList<ProductBean> product;
 
@@ -99,6 +100,15 @@ public class SubjectData implements Parcelable {
                 }
             };
         }
+
+        public static class UserInfoBean{
+            public long _id;
+            public String nickname;
+            public int is_expert;
+            public String avatar_url;
+            public int is_follow;
+        }
+
         public static class UserBean implements Parcelable {
             public long _id;
             public String nickname;

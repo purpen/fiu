@@ -2,9 +2,11 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -66,6 +68,13 @@ public class RuleContentAdapter extends BaseAdapter {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
         }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+            super.onReceivedSslError(view, handler, error);
+        }
+
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);

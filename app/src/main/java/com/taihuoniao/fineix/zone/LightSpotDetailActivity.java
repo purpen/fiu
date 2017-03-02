@@ -38,7 +38,7 @@ public class LightSpotDetailActivity extends BaseActivity {
     protected void getIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra(ZoneDetailActivity.class.getSimpleName())) {
-            zoneDetailBean = (ZoneDetailBean) intent.getSerializableExtra(ZoneDetailActivity.class.getSimpleName());
+            zoneDetailBean = intent.getParcelableExtra(ZoneDetailActivity.class.getSimpleName());
         }
 
     }
@@ -61,7 +61,7 @@ public class LightSpotDetailActivity extends BaseActivity {
                 TextView textView = new TextView(activity);
                 textView.setLayoutParams(params);
                 textView.setText(split[1]);
-                textView.setLineSpacing(getResources().getDimensionPixelSize(R.dimen.dp3), 1);
+                textView.setLineSpacing(1,1.2f);
                 textView.setTextColor(getResources().getColor(R.color.color_222));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 llContainer.addView(textView);
@@ -73,5 +73,10 @@ public class LightSpotDetailActivity extends BaseActivity {
                 llContainer.addView(imageView);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

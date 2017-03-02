@@ -2,8 +2,10 @@ package com.taihuoniao.fineix.pay.jdpay;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -95,6 +97,12 @@ public class JDPayActivity extends BaseActivity {
                 delayJump();
             }
             if (dialog != null) dialog.show();
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+            super.onReceivedSslError(view, handler, error);
         }
 
         @Override

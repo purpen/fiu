@@ -38,6 +38,8 @@ import com.umeng.message.entity.UMessage;
 import java.io.File;
 import java.util.List;
 
+import cn.sharesdk.framework.ShareSDK;
+
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -96,7 +98,6 @@ public class MainApplication extends Application {
 //        } catch (Exception e) {
 //        }
         initPush();
-
 //        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
 //        OkHttpFinal.getInstance().init(builder.build());
     }
