@@ -15,13 +15,11 @@
  */
 package com.taihuoniao.fineix.zxing.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -38,7 +36,6 @@ import android.widget.TextView;
 
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.BarCode;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
@@ -47,8 +44,6 @@ import com.taihuoniao.fineix.user.MyBarCodeActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
-import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListener;
@@ -129,21 +124,7 @@ public final class CaptureActivity extends BaseActivity implements
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.RESTART);
         scanLine.startAnimation(animation);
-        WindowUtils.chenjin(this);
     }
-
-//    @SuppressLint("NewApi")
-//    @Override
-//    protected boolean hasActionBar() {
-//
-//        if (android.os.Build.VERSION.SDK_INT >= 11) {
-//            getSupportActionBar().hide();
-//            return true;
-//        } else {
-//            return false;
-//        }
-//
-//    }
 
     @Override
     protected void onResume() {
@@ -192,6 +173,7 @@ public final class CaptureActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        cameraManager.stopPreview();
         super.onDestroy();
     }
 
@@ -228,22 +210,6 @@ public final class CaptureActivity extends BaseActivity implements
     public void handleDecode(final Result rawResult, Bundle bundle) {
         inactivityTimer.onActivity();
         beepManager.playBeepSoundAndVibrate();
-
-        // 通过这种方式可以获取到扫描的图片
-//	bundle.putInt("width", mCropRect.width());
-//	bundle.putInt("height", mCropRect.height());
-//	bundle.putString("result", rawResult.getText());
-//
-//	startActivity(new Intent(CaptureActivity.this, ResultActivity.class)
-//		.putExtras(bundle));
-        LogUtil.e("handleDecode", "handleDecode");
-//        handler.postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                handleText(rawResult.getText());
-//            }
-//        }, 800);
         handleText(rawResult.getText());
     }
 
@@ -251,7 +217,6 @@ public final class CaptureActivity extends BaseActivity implements
         String url = text;
         if (TextUtils.isEmpty(text)) return;
         Intent intent;
-        LogUtil.e("handleText", text);
         if (text.contains("taihuoniao.com")) {
             if (!text.contains("?")) {//是咱们的域名但没参数
                 return;
@@ -304,209 +269,6 @@ public final class CaptureActivity extends BaseActivity implements
             intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         }
-
-//        if (StringUtils.isUrl(text)) {
-//            showUrlOption(text);
-//        } else {
-//            handleOtherText(text);
-//        }
-    }
-
-
-    private void showUrlOption(final String url) {
-        LogUtil.e("showUrlOption", url);
-//        if (url.contains("scan_login")) {
-//            showConfirmLogin(url);
-//            return;
-//        }
-//        if (url.contains("oschina.net")) {
-//            UIHelper.showUrlRedirect(CaptureActivity.this, url);
-//            finish();
-//            return;
-//        }
-//        DialogHelp.getConfirmDialog(this, "可能存在风险，是否打开链接?</br>" + url, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                UIHelper.showUrlRedirect(CaptureActivity.this, url);
-//                finish();
-//            }
-//        }, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                finish();
-//            }
-//        }).show();
-    }
-
-    private void showConfirmLogin(final String url) {
-//        if (!AppContext.getInstance().isLogin()) {
-//            showLogin();
-//            return;
-//        }
-        new DefaultDialog(this, App.getString(R.string.hint_dialog_scan_success_title), App.getStringArray(R.array.text_dialog_button), new IDialogListener() {
-            @Override
-            public void click(View view, int index) {
-                if (index == 1) {
-                    handleScanLogin(url);
-                    finish();
-                } else if (index == 0) {
-                    finish();
-                }
-            }
-        });
-//        DialogHelp.getConfirmDialog(this, "扫描成功，是否进行网页登陆", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                handleScanLogin(url);
-//                finish();
-//            }
-//        }, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                finish();
-//            }
-//        }).show();
-    }
-
-    private void handleScanLogin(final String url) {
-//        OSChinaApi.scanQrCodeLogin(url, new AsyncHttpResponseHandler() {
-//
-//            @Override
-//            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-//                ResultBean result = XmlUtils.toBean(ResultBean.class, arg2);
-//                if (result != null && result.getResult() != null
-//                        && result.getResult().OK()) {
-//                    AppContext.showToast(result.getResult().getErrorMessage());
-//                    finish();
-//                } else {
-//                    handler.sendEmptyMessage(R.id.restart_preview);
-//                    AppContext.showToast(result != null
-//                            && result.getResult() != null ? result.getResult()
-//                            .getErrorMessage() : "登陆失败");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-//                                  Throwable arg3) {
-//                handler.sendEmptyMessage(R.id.restart_preview);
-//                if (arg2 != null) {
-//                    AppContext.showToast(new String(arg2));
-//                } else {
-//                    AppContext.showToast("网页登陆失败");
-//                }
-//            }
-//
-//            @Override
-//            public void onStart() {
-//                super.onStart();
-//                showWaitDialog("已扫描，正在登陆...");
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                super.onFinish();
-//                hideWaitDialog();
-//            }
-//        });
-    }
-
-    private void handleOtherText(final String text) {
-        // 判断是否符合基本的json格式
-        if (!text.matches("^\\{.*")) {
-            showCopyTextOption(text);
-        } else {
-            try {
-                BarCode barcode = BarCode.parse(text);
-                int type = barcode.getType();
-                switch (type) {
-                    case BarCode.SIGN_IN:// 签到
-                        handleSignIn(barcode);
-                        break;
-                    default:
-                        break;
-                }
-            } catch (Exception e) {
-                showCopyTextOption(text);
-            }
-        }
-    }
-
-    private void handleSignIn(BarCode barCode) {
-//        if (barCode.isRequireLogin() && !AppContext.getInstance().isLogin()) {
-//            showLogin();
-//            return;
-//        }
-//        showWaitDialog("正在签到...");
-//        AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-//                try {
-//                    SingInResult res = SingInResult.parse(new String(arg2));
-//                    if (res.isOk()) {
-//                        DialogHelp.getMessageDialog(CaptureActivity.this, res.getMessage()).show();
-//                    } else {
-//                        DialogHelp.getMessageDialog(CaptureActivity.this, res.getErrorMes()).show();
-//                    }
-//                } catch (AppException e) {
-//                    e.printStackTrace();
-//                    onFailure(arg0, arg1, arg2, e);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-//                                  Throwable arg3) {
-//                hideWaitDialog();
-//                DialogHelp.getMessageDialog(CaptureActivity.this, arg3.getMessage()).show();
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                super.onFinish();
-//                hideWaitDialog();
-//            }
-//        };
-//        OSChinaApi.singnIn(barCode.getUrl(), handler);
-    }
-
-//    private void showLogin() {
-//        DialogHelp.getConfirmDialog(this, "请先登录，再进行", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                UIHelper.showLoginActivity(CaptureActivity.this);
-//            }
-//        }).show();
-//    }
-
-    private void showCopyTextOption(final String text) {
-        new DefaultDialog(this, text, App.getStringArray(R.array.text_dialog_button), new IDialogListener() {
-            @Override
-            public void click(View view, int index) {
-                if (index == 1) {
-                    ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    cbm.setText(text);
-                    Util.makeToast("复制成功");
-                    finish();
-                } else if (index == 0) {
-                    finish();
-                }
-            }
-        });
-//        DialogHelp.getConfirmDialog(this, text, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-//                cbm.setText(text);
-//                Util.makeToast("复制成功");
-//                finish();
-//            }
-//        }, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                finish();
-//            }
-//        }).show();
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -544,32 +306,7 @@ public final class CaptureActivity extends BaseActivity implements
                 finish();
             }
         });
-//        // camera error
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(getString(R.string.app_name));
-//        builder.setMessage("相机打开出错，请稍后重试");
-//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                finish();
-//            }
-//
-//        });
-//        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//
-//            @Override
-//            public void onCancel(DialogInterface dialog) {
-//                finish();
-//            }
-//        });
-//        builder.show();
-    }
 
-    public void restartPreviewAfterDelay(long delayMS) {
-        if (handler != null) {
-            handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
-        }
     }
 
     public Rect getCropRect() {
