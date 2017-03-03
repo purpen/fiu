@@ -56,10 +56,10 @@
 
             <ImageView
                 android:id="@+id/subs_img"
-                android:layout_width="46dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:layout_centerVertical="true"
                 android:src="@mipmap/wellgoods_saomiao" />
         </RelativeLayout>
 

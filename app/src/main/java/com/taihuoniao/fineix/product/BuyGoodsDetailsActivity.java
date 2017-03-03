@@ -52,6 +52,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -90,7 +91,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private WebFragment webFragment;
     private CommentFragment commentFragment;
     private List<SearchFragment> fragmentList;
-    private List<String> titleList;
+    private static final String[] mtitles={"好货","好货详情","评价"};
     private SearchViewPagerAdapter searchViewPagerAdapter;
     //popupwindow下的控件
     private PopupWindow popupWindow;
@@ -142,7 +143,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     protected void initList() {
         fragmentList = new ArrayList<>();
-        titleList = new ArrayList<>();
         shoucangLinear.setOnClickListener(BuyGoodsDetailsActivity.this);
         shareLinear.setOnClickListener(this);
         addCartBtn.setOnClickListener(this);
@@ -396,15 +396,15 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 }
                 if (buyGoodDetailsBean.isSuccess()) {
                     if (fragmentList.size() == 0) {
-                        titleList.add("好货");
+//                        titleList.add("好货");
                         buyGoodsDetailsFragment = BuyGoodsDetailsFragment.newInstance(id);
                         fragmentList.add(buyGoodsDetailsFragment);
                         if (buyGoodDetailsBean.getData().getStage() == 9) {
-                            titleList.add("商品详情");
+//                            titleList.add("商品详情");
                             webFragment = WebFragment.newInstance();
 
                             fragmentList.add(webFragment);
-                            titleList.add("评价");
+//                            titleList.add("评价");
                             commentFragment = CommentFragment.newInstance(id);
                             fragmentList.add(commentFragment);
                         } else {
@@ -415,7 +415,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                             addCartBtn.setVisibility(View.GONE);
                         }
                         //设置适配器
-                        searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+                        searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, Arrays.asList(mtitles));
                         viewPager.setAdapter(searchViewPagerAdapter);
                         tabLayout.setupWithViewPager(viewPager);
                         viewPager.setOffscreenPageLimit(fragmentList.size());

@@ -184,7 +184,6 @@ public class MineFragment extends MyBaseFragment {
         }
         HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
         HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack() {
-            //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onStart() {
 //                if (!activity.isFinishing() && dialog != null) dialog.show();
@@ -284,7 +283,6 @@ public class MineFragment extends MyBaseFragment {
         }
 
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
-//            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
             GlideUtils.displayImage(user.medium_avatar_url, riv);
         }
         GlideUtils.displayImage(user.head_pic_url, iv_bg);

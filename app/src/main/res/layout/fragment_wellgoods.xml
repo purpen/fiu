@@ -23,23 +23,24 @@
 
             <ImageView
                 android:id="@+id/title_left"
-                android:layout_width="48.5dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
-                android:paddingRight="14dp"
+                android:layout_centerVertical="true"
                 android:src="@mipmap/wellgoods_saomiao" />
 
             <RelativeLayout
                 android:id="@+id/title_right"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true">
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                >
 
                 <ImageView
-                    android:layout_width="48dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:paddingLeft="9dp"
-                    android:paddingRight="16dp"
+                    android:paddingRight="@dimen/dp15"
                     android:src="@mipmap/wellgoods_cart" />
 
                 <TextView
@@ -65,6 +66,8 @@
                 android:layout_centerInParent="true"
                 android:layout_toLeftOf="@id/title_right"
                 android:layout_toRightOf="@id/title_left"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp15"
                 android:background="@drawable/background_corner_gray"
                 android:gravity="center"
                 android:orientation="horizontal">

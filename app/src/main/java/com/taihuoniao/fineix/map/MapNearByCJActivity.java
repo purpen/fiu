@@ -1,12 +1,12 @@
 package com.taihuoniao.fineix.map;
 
+import android.Manifest;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -16,27 +16,28 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.UserCJListData;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +45,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
 /**
  * @author lilin
@@ -54,17 +58,9 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     CustomHeadView custom_head;
     @Bind(R.id.mv)
     MapView mv;
-    //    @Bind(R.id.btn)
-//    Button btn;
-//    @Bind(R.id.ibtn)
-//    ImageButton ibtn;
     private BaiduMap mBDMap;
     private boolean isFirstLoc = true;
-    private static final String STICK_ALL = "0"; //所有情境
-    private static final String STICK_SELECT = "1"; //精选情境
-    private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
-    private BitmapDescriptor curDescripter;
     private WaittingDialog waittingDialog;
     private LatLng ll;
     private String address;
@@ -94,12 +90,15 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         waittingDialog = new WaittingDialog(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
-//        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
-//        mBDMap.getUiSettings().setAllGesturesEnabled(false);
-//        mBDMap.setMyLocationEnabled(true);
-//        startLocate();
-        loadCurrentData();
-        WindowUtils.chenjin(this);
+        if (AndPermission.hasPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            loadCurrentData();
+        }else {
+            // 申请权限。
+            AndPermission.with(activity)
+                    .requestCode(REQUEST_PHONE_STATE_CODE)
+                    .permission(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                    .send();
+        }
     }
 
     private void move2CurrentLocation() {
@@ -108,10 +107,35 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
     }
 
+
     private void loadCurrentData() {
         if (ll != null) {
             move2CurrentLocation();
             getNearByData(ll);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusYes(List<String> grantedPermissions) {
+        loadCurrentData();
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+        } else {
+            activity.finish();
         }
     }
 
@@ -144,49 +168,20 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
     @Override
     protected void onDestroy() {
-//        mBDMap.setMyLocationEnabled(false);
         MapUtil.destroyLocationClient();
         mv.onDestroy();
         if (bitmapDescripter != null) {
             bitmapDescripter.recycle();
         }
-
         super.onDestroy();
-    }
-
-    private void startLocate() {
-        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                if (bdLocation == null && mv == null) {
-                    return;
-                }
-                MyLocationData locData = new MyLocationData.Builder()
-                        .accuracy(bdLocation.getRadius())
-                        // 此处设置开发者获取到的方向信息，顺时针0-360
-                        .direction(100).latitude(bdLocation.getLatitude())
-                        .longitude(bdLocation.getLongitude()).build();
-                mBDMap.setMyLocationData(locData);
-                if (isFirstLoc) {
-                    isFirstLoc = false;
-                    LatLng ll = new LatLng(bdLocation.getLatitude(),
-                            bdLocation.getLongitude());
-                    MapStatus.Builder builder = new MapStatus.Builder();
-                    builder.target(ll).zoom(14);
-                    mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-                    getNearByData(ll);
-                }
-            }
-        });
     }
 
     private void getNearByData(LatLng ll) {//附近的所有情境
         int page = 1;
-        int pageSize = 1000;
+        int pageSize = 100;
         int radius = 5000;
         HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(String.valueOf(page), String.valueOf(pageSize), null, null, null, null, String.valueOf(ll.longitude), String.valueOf(ll.latitude));
-        HttpRequest.post(sceneListRequestParams, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSceneList(ll, String.valueOf(page), String.valueOf(pageSize), String.valueOf(radius), new RequestCallBack<String>() {
+        HttpRequest.post(sceneListRequestParams, URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
             public void onStart() {
                 if (waittingDialog != null && !activity.isFinishing()) waittingDialog.show();
@@ -195,10 +190,6 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             @Override
             public void onSuccess(String json) {
                 if (waittingDialog != null) waittingDialog.dismiss();
-                if (json == null) {
-                    return;
-                }
-                LogUtil.e("附近所有场景", json);
                 HttpResponse<UserCJListData> response;
                 try {
                     response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<UserCJListData>>() {
@@ -216,7 +207,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             @Override
             public void onFailure(String error) {
                 if (waittingDialog != null) waittingDialog.dismiss();
-                LogUtil.e(TAG, error);
+                LogUtil.e(TAG, ">>>"+error);
             }
         });
     }
@@ -227,7 +218,6 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         MarkerOptions option;
         final ArrayList<Marker> markers = new ArrayList<>();
         for (SceneListBean item : list) {
-            LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));
             option = new MarkerOptions().position(ll).icon(bitmapDescripter);
             option.animateType(MarkerOptions.MarkerAnimateType.grow);
@@ -249,23 +239,14 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                     }
                 }
 
-                if (which==-1){
+                if (which == -1) {
                     return true;
                 }
-
                 SceneListBean item = list.get(which);
                 if (item == null) {
                     return true;
                 }
                 showInfoWindow(marker.getPosition(), item);
-//                LatLng ll = marker.getPosition();
-//                View view = Util.inflateView(activity, R.layout.info_window_layout, null);
-//                LogUtil.e("huge", item.getCover_url());
-//                ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)));
-//                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());
-//                ((TextView) view.findViewById(R.id.tv_location)).setText(item.getAddress());
-//                InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, infoWindowClickListener);
-//                mBDMap.showInfoWindow(mInfoWindow);
                 return true;
             }
         });
@@ -273,11 +254,11 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
     private void showInfoWindow(LatLng ll, SceneListBean item) {
         View view = Util.inflateView(R.layout.info_window_layout, null);
-        LogUtil.e(TAG,item.getCover_url());
-        ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)), options);
+        view.findViewById(R.id.btn_navi).setVisibility(View.GONE);
+        GlideUtils.displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)));
         ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());
         ((TextView) view.findViewById(R.id.tv_location)).setText(item.getAddress());
-        InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -80, infoWindowClickListener);
+        InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -90, infoWindowClickListener);
         mBDMap.showInfoWindow(mInfoWindow);
     }
 
