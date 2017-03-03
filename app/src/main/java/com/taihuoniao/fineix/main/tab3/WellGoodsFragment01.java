@@ -66,9 +66,6 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
 
     private ListView mListView;
 
-    private List<CategoryListBean.CategoryListItem> categoryList;//产品分类数据
-    private WellGoodsProductCategoryAdapter wellGoodsProductCategoryAdapter;//产品分类大图适配器
-
     private List<FirstProductBean.DataBean.ItemsBean> firstProductList;//最新好货推荐数据
     private FirstProductAdapter firstProductAdapter;//最新好货推荐适配器
 

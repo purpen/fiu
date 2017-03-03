@@ -83,16 +83,12 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
  */
 public class IndexFragment extends BaseFragment<BannerBean> implements View.OnClickListener, PullToRefreshBase.OnRefreshListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick {
 
-    @Bind(R.id.pullToRefreshListView_home)
-    PullToRefreshListView pullRefreshView;
-    @Bind(R.id.progress_bar)
-    ProgressBar progressBar;
-    @Bind(R.id.title_layout)
-    RelativeLayout titleRelative;
-    @Bind(R.id.search_img)
-    ImageView searchImg;
-    @Bind(R.id.subs_img)
-    ImageView subsImg;
+    @Bind(R.id.pullToRefreshListView_home)PullToRefreshListView pullRefreshView;
+    @Bind(R.id.progress_bar)ProgressBar progressBar;
+    @Bind(R.id.title_layout)RelativeLayout titleRelative;
+    @Bind(R.id.search_img)ImageView searchImg;
+    @Bind(R.id.subs_img)ImageView subsImg;
+
     private boolean isScan;
     private ListView listView;
     private ScrollableView scrollableView; //顶部轮播图
@@ -105,7 +101,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表的用户列表数据
-    //    private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
+//    private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
     private int currentPage = 1;//网络请求页码
 
     private List<SubjectListBean.DataBean.RowsBean> subjectList001;//主题列表数据
@@ -118,7 +114,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private List<SearchBean.Data.SearchItem> searchList;
 
     private ProductAlbumAdapter indexAdapter003;//主题列表适配器
-    //    private IndexAdapter004 indexAdapter004;//主题列表适配器
+//    private IndexAdapter004 indexAdapter004;//主题列表适配器
     private IndexAdapter005 indexAdapter005;//D3IN
 
     @Override
@@ -560,8 +556,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         });
         recyclerView001.setAdapter(indexAdapter001);
 
-        GridViewForScrollView recyclerView002 = (GridViewForScrollView) headerView.findViewById(R.id.recyclerView_index_002);
-        subjectList002 = new ArrayList<>();
+        GridViewForScrollView   recyclerView002 = (GridViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
+//        subjectList002 = new ArrayList<>();
         productList = new ArrayList<>();
         searchList = new ArrayList<>();
         indexAdapter002 = new AddProductGridAdapter(getActivity(), productList, searchList);

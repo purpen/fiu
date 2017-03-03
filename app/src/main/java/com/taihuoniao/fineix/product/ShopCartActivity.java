@@ -373,7 +373,7 @@ public class ShopCartActivity extends BaseActivity implements View.OnClickListen
                                 .append(",\"n\":").append(totalList.get(i).get("keyCount"))
                                 .append(",\"type\":").append(totalList.get(i).get("keyType"))
                                 .append(",\"referral_code\":").append("\"" + totalList.get(i).get("referral_code") + "\"")
-                                .append(",\"storage_id\":").append("\"店铺ID\"")
+                                .append(",\"storage_id\":").append("\"" + totalList.get(i).get("storage_id") + "\"")
                                 .append("},");
                     }
                 }

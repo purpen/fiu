@@ -40,6 +40,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.qjdetails.QJDetailActivity2;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.MyBarCodeActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -48,6 +49,7 @@ import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListener;
+import com.taihuoniao.fineix.zone.ZoneDetailActivity;
 import com.taihuoniao.fineix.zxing.camera.CameraManager;
 import com.taihuoniao.fineix.zxing.utils.BeepManager;
 import com.taihuoniao.fineix.zxing.utils.CaptureActivityHandler;
@@ -75,8 +77,8 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
  */
 public final class CaptureActivity extends BaseActivity implements
         SurfaceHolder.Callback {
+    private static final String INFO_TYPE_QJ = "10";
     private static final int REQUEST_CODE = 100;
-    private static final String INFO_TYPE_QJ = "11";
     private static final String INFO_TYPE_CJ = "11";
     private static final String INFO_TYPE_CP = "1";
     private static final String INFO_TYPE_USER = "13";
@@ -292,13 +294,14 @@ public final class CaptureActivity extends BaseActivity implements
 
                 String infoType = map.get("infoType");
                 String infoId = map.get("infoId");
+                String storage_id = map.get("storage_id");
 
                 //获取推广码 字段referral_code
                 String referral_code = map.get("referral_code");
                 if (!TextUtils.isEmpty(referral_code)) {
                     SPUtil.write("referral_code", referral_code);
                 }
-                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
+//                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
                 if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
                     LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
                     return;
@@ -307,17 +310,20 @@ public final class CaptureActivity extends BaseActivity implements
                     intent=new Intent(CaptureActivity.this, UserCenterActivity.class);
                     intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.valueOf(infoId));
                     startActivity(intent);
-                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情景详情
-                    intent = new Intent(CaptureActivity.this, QJDetailActivity.class);
+                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转地盘详情
+                    // TODO: 2017/3/4  跳入地盘
+                    intent = new Intent(CaptureActivity.this, ZoneDetailActivity.class);
                     intent.putExtra("id",infoId);
+                    intent.putExtra("title","地盘详情");
                     startActivity(intent);
-                } else if (TextUtils.equals(INFO_TYPE_CJ, infoType)) {//跳转场景详情
-                    intent = new Intent(CaptureActivity.this, QJDetailActivity.class);
+                } else if (TextUtils.equals(INFO_TYPE_CJ, infoType)) {//跳转情境详情
+                    intent = new Intent(CaptureActivity.this, QJDetailActivity2.class);
                     intent.putExtra("id",infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
                     intent=new Intent(CaptureActivity.this, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id",infoId);
+                    intent.putExtra("storage_id",storage_id);
                     startActivity(intent);
                 }
             }

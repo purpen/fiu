@@ -101,9 +101,7 @@ public class ZoneDetailActivity extends BaseActivity {
     TextView shopDesc;
     private boolean isFirstLoc = true;
     private ZoneDetailBean zoneDetailBean;
-    private Dialog dialog;
     private String sZoneId = ""; //地盘ID
-    private String title = "";
     private TabViewPagerAdapter adapter;
 
     public ZoneDetailActivity() {
@@ -115,9 +113,6 @@ public class ZoneDetailActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("id")) {
             sZoneId = intent.getStringExtra("id");
-        }
-        if (intent.hasExtra("title")) {
-            title = intent.getStringExtra("title");
         }
     }
 
@@ -332,14 +327,9 @@ public class ZoneDetailActivity extends BaseActivity {
     protected void requestNet() {
         HashMap param = ClientDiscoverAPI.getZoneDetailParams(sZoneId);
         HttpRequest.post(param, URL.ZONE_DETAIL, new GlobalDataCallBack() {
-            @Override
-            public void onStart() {
-                if (dialog != null && !activity.isFinishing()) dialog.show();
-            }
 
             @Override
             public void onSuccess(String json) {
-                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
                 HttpResponse<ZoneDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ZoneDetailBean>>() {
                 });
                 if (response.isSuccess()) {
@@ -354,7 +344,6 @@ public class ZoneDetailActivity extends BaseActivity {
             @Override
             public void onFailure(String error) {
                 LogUtil.e(error);
-                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
             }
         });
     }
