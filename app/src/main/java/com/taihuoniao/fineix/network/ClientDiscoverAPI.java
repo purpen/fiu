@@ -47,7 +47,6 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-
     @NonNull
     public static HashMap<String, String> getaddProductRequestParams(String title, String brand_id) {
         HashMap<String, String> params = new HashMap<>();
@@ -734,24 +733,24 @@ public class ClientDiscoverAPI {
 
 
     @NonNull
-    public static HashMap<String, String> getaddToCartNetRequestParams(String target_id, String type, String n) {
+    public static HashMap<String, String> getaddToCartNetRequestParams(String target_id, String type, String n, String storageId) {
         HashMap<String, String> params = new HashMap<>();
         params.put("target_id", target_id);
         params.put("type", type);
         params.put("n", n);
-        params.put("storage_id", "店铺ID");
+        params.put("storage_id", storageId);
         params.put("referral_code", SPUtil.read("referral_code" ));
         return params;
     }
 
 
     @NonNull
-    public static HashMap<String, String> getbuyNowRequestParams(String target_id, String type, String n) {
+    public static HashMap<String, String> getbuyNowRequestParams(String target_id, String type, String n, String storageId) {
         HashMap<String, String> params = new HashMap<>();
         params.put("target_id", target_id);
         params.put("type", type);
         params.put("n", n);
-        params.put("storage_id", "店铺ID");
+        params.put("storage_id", storageId);
         params.put("referral_code", SPUtil.read("referral_code" ));
         return params;
     }

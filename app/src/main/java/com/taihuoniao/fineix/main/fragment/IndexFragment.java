@@ -83,16 +83,12 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
  */
 public class IndexFragment extends BaseFragment<BannerBean> implements View.OnClickListener, PullToRefreshBase.OnRefreshListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick {
 
-    @Bind(R.id.pullToRefreshListView_home)
-    PullToRefreshListView pullRefreshView;
-    @Bind(R.id.progress_bar)
-    ProgressBar progressBar;
-    @Bind(R.id.title_layout)
-    RelativeLayout titleRelative;
-    @Bind(R.id.search_img)
-    ImageView searchImg;
-    @Bind(R.id.subs_img)
-    ImageView subsImg;
+    @Bind(R.id.pullToRefreshListView_home)PullToRefreshListView pullRefreshView;
+    @Bind(R.id.progress_bar)ProgressBar progressBar;
+    @Bind(R.id.title_layout)RelativeLayout titleRelative;
+    @Bind(R.id.search_img)ImageView searchImg;
+    @Bind(R.id.subs_img)ImageView subsImg;
+
     private boolean isScan;
     private ListView listView;
     private ScrollableView scrollableView; //顶部轮播图
@@ -100,16 +96,12 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     private ViewPagerAdapter viewPagerAdapter;//banner图适配器
     private IndexQJListAdapter indexQJListAdapter;//情景列表适配器
-//    private IndexSubjectAdapter indexSubjectAdapter;//主题列表适配器
 
 
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表的用户列表数据
-    //    private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
     private int currentPage = 1;//网络请求页码
 
-    private List<SubjectListBean.DataBean.RowsBean> subjectList001;//主题列表数据
-    private List<SubjectListBean.DataBean.RowsBean> subjectList002;//主题列表数据
     private List<SubjectListBean.DataBean.RowsBean> subjectList003;//主题列表数据
 
     private IndexAdapter001 indexAdapter001;//新手
@@ -118,7 +110,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private List<SearchBean.Data.SearchItem> searchList;
 
     private ProductAlbumAdapter indexAdapter003;//主题列表适配器
-    //    private IndexAdapter004 indexAdapter004;//主题列表适配器
     private IndexAdapter005 indexAdapter005;//D3IN
 
     @Override
@@ -210,11 +201,9 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
         AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
-    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
     @PermissionYes(REQUEST_PHONE_STATE_CODE)
     private void getPhoneStatusYes(List<String> grantedPermissions) {
         if (grantedPermissions.contains(Manifest.permission.READ_PHONE_STATE)) {
@@ -226,7 +215,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     }
 
-    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
     @PermissionNo(REQUEST_PHONE_STATE_CODE)
     private void getPhoneStatusNo(List<String> deniedPermissions) {
         // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
@@ -253,9 +241,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.more_theme_img:
-//                startActivity(new Intent(getActivity(), ChooseSubjectActivity.class));
-//                break;
             case R.id.search_img:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra("t", 9);
@@ -267,20 +252,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 if (AndPermission.hasPermission(activity, android.Manifest.permission.CAMERA)) {
                     startActivity(new Intent(getActivity(), CaptureActivity.class));
                 } else {
-                    // 申请权限。
-                    AndPermission.with(this)
-                            .requestCode(REQUEST_PHONE_STATE_CODE)
-                            .permission(android.Manifest.permission.CAMERA)
-                            .send();
+                    AndPermission.with(this).requestCode(REQUEST_PHONE_STATE_CODE).permission(android.Manifest.permission.CAMERA).send();
                 }
-
-                // TODO: 2017/2/14 查看订阅
-/*                if (!LoginInfo.isUserLogin()) {
-                    MainApplication.which_activity = DataConstants.IndexFragment;
-                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
-                } else {
-                    startActivity(new Intent(getActivity(), SubsQJActivity.class));
-                }*/
                 break;
         }
     }
@@ -314,7 +287,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         } else {
             viewPagerAdapter.notifyDataSetChanged();
         }
-
     }
 
     private int sneceComplete;//判断情景是否加载完毕 0，情景用户都没加载 1,情景加载完毕等待用户加载 2，用户加载完毕等待情景加载
@@ -477,42 +449,12 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount > listView.getHeaderViewsCount()
-                && (firstVisibleItem + visibleItemCount >= totalItemCount)) {
-            if (firstVisibleItem != pullRefreshView.lastSavedFirstVisibleItem && pullRefreshView.lastTotalItem != totalItemCount) {
-                pullRefreshView.lastSavedFirstVisibleItem = firstVisibleItem;
-                pullRefreshView.lastTotalItem = totalItemCount;
-                progressBar.setVisibility(View.VISIBLE);
-                currentPage++;
 
-                sceneNet();
-            }
-        }
     }
 
     @Override
     public void click(int postion) {
-//        Intent intent = new Intent();
-//        switch (subjectList.get(postion).getType()) {
-//            case 1: //文章详情
-//                intent.setClass(getActivity(), ArticalDetailActivity.class);
-//                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
-//                break;
-//            case 2: //活动详情
-//                intent.setClass(getActivity(), ActivityDetailActivity.class);
-//                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
-//                break;
-//            case 3://促销详情
-//            case 5://好货
-//                intent.setClass(getActivity(), SalePromotionDetailActivity.class);
-//                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
-//                break;
-//            case 4: //新品详情
-//                intent.setClass(getActivity(), NewProductDetailActivity.class);
-//                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
-//                break;
-//        }
-//        startActivity(intent);
+
     }
 
     @Override
@@ -560,8 +502,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         });
         recyclerView001.setAdapter(indexAdapter001);
 
-        GridViewForScrollView recyclerView002 = (GridViewForScrollView) headerView.findViewById(R.id.recyclerView_index_002);
-        subjectList002 = new ArrayList<>();
+        GridViewForScrollView   recyclerView002 = (GridViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
+//        subjectList002 = new ArrayList<>();
         productList = new ArrayList<>();
         searchList = new ArrayList<>();
         indexAdapter002 = new AddProductGridAdapter(getActivity(), productList, searchList);

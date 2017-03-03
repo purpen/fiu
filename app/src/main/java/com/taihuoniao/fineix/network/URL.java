@@ -190,5 +190,6 @@ public class URL {
     public static final String COMPANY_PARTNER_URL = H5_URL+"/storage/plan?from=2";
 
     public static final String SHARE_H5_URL = BASE_URL+"/gateway/share_link";
+    public static final String PRODUCT_INDEX_HOT = BASE_URL+"/product/index_hot";
 
 }

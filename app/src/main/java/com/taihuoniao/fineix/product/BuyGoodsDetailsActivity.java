@@ -75,8 +75,6 @@ import okhttp3.Call;
  * 商品详情界面
  */
 public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClickListener {
-    //上个界面传递过来的商品id
-    private String id;
     private View activityView;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
@@ -122,6 +120,10 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private Call cancelShoucangHandler;
     private boolean isBuy;//判断点击的是购买还是添加购物车
 
+    //上个界面传递过来的商品id
+    private String id;
+    private String storage_id;
+
     public BuyGoodsDetailsActivity() {
         super(0);
     }
@@ -135,6 +137,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     protected void getIntentData() {
         id = getIntent().getStringExtra("id");
+        storage_id = getIntent().getStringExtra("storage_id");
         Log.e("<<<商品详情", "id=" + id);
         if (id == null) {
             ToastUtils.showError("好货不存在或已下架");
@@ -434,7 +437,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         popupWindow.showAtLocation(activityView, Gravity.BOTTOM, 0, 0);
     }
 
-
     //获取商品详情
     private void goodDetails() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(id);
@@ -620,9 +622,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //立即购买
     private void buyNow(String target_id, String type, String n) {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getbuyNowRequestParams(target_id, type, n);
-        buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack() {
-            //        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getbuyNowRequestParams(target_id, type, n, storage_id);
+        buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack(){
+//        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -658,9 +660,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //加入购物车
     private void addToCart(String target_id, String type, String n) {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getaddToCartNetRequestParams(target_id, type, n);
-        addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack() {
-            //        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getaddToCartNetRequestParams(target_id, type, n, storage_id);
+        addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack(){
+//        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();

@@ -98,9 +98,11 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         // 默认加载 推荐 情境
         mStringList.add("推荐");
         mStringList.add("情境");
+        mStringList.add("全部");
 
         mBaseFragments.add(new WellGoodsFragment01());
         mBaseFragments.add(new WellGoodsFragment02());
+        mBaseFragments.add(new WellGoodsFragment03());
     }
 
     @Override
