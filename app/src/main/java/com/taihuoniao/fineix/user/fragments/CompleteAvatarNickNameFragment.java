@@ -90,9 +90,9 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
         }
         super.onCreate(savedInstanceState);
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .showImageOnLoading(R.mipmap.default_load)
+                .showImageForEmptyUri(R.mipmap.default_load)
+                .showImageOnFail(R.mipmap.default_load)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheInMemory(false)
                 .cacheOnDisk(false)
@@ -169,15 +169,12 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 }
                 HashMap<String, String> params = ClientDiscoverAPI.getupdateNickNameSexRequestParams(nickName, gender);
                 HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
-
-//                ClientDiscoverAPI.updateNickNameSex(nickName, gender, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         if (TextUtils.isEmpty(json)) return;
                         HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
                         });
                         if (response.isSuccess()) {
-//                            User user = response.getData();
                             LoginInfo loginInfo = LoginInfo.getLoginInfo();
                             if (loginInfo != null) {
                                 loginInfo.setSex(gender);

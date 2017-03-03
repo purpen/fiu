@@ -16,7 +16,11 @@ import java.util.HashMap;
  * 参数设置
  */
 public class ClientDiscoverAPI {
-
+    @NonNull
+    public static HashMap<String, String> getDefaultParams() {
+        HashMap<String, String> params = new HashMap<>();
+        return params;
+    }
     @NonNull
     public static HashMap<String, String> getdeleteProductRequestParams(String id) {
         HashMap<String, String> params = new HashMap<>();

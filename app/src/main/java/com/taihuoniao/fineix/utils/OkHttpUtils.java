@@ -5,7 +5,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -21,8 +21,14 @@ import okhttp3.Response;
  */
 
 public class OkHttpUtils {
-
-    private static final OkHttpClient mOkHttpClient = new OkHttpClient();
+    public final static int CONNECT_TIMEOUT =30;
+    public final static int READ_TIMEOUT=30;
+    public final static int WRITE_TIMEOUT=30;
+    private static final OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
+                .readTimeout(READ_TIMEOUT,TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(WRITE_TIMEOUT,TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(CONNECT_TIMEOUT,TimeUnit.SECONDS)//设置连接超时时间
+                .build();
     private static final String CHARSET_NAME = "UTF-8";
     private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
     private static final MediaType JSON = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");

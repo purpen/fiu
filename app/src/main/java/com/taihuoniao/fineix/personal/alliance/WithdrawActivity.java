@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.AllianceRequstDeal;
@@ -130,13 +130,14 @@ public class WithdrawActivity extends BaseActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            LogUtil.e("s===="+s.length()+"===="+s.toString());
             if (TextUtils.isEmpty(s) || ".".equals(s) || "0".equals(s)) {
                 textView1.setVisibility(View.VISIBLE);
                 buttonCommit.setEnabled(false);
-            } else if (s.length() < 3) {
+            } else if (s.length() < 2) {
                 textView1.setVisibility(View.VISIBLE);
                 buttonCommit.setEnabled(false);
-            } else if (Double.valueOf(s.toString()) < 100.00D) {
+            } else if (Double.valueOf(s.toString()) < 10.00D) {
                 textView1.setVisibility(View.VISIBLE);
                 buttonCommit.setEnabled(false);
             } else if (Double.valueOf(s.toString()) > Double.valueOf(balance)) {

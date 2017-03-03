@@ -65,6 +65,8 @@ public class SalePromotionDetailActivity extends BaseActivity {
     private String id;
     private SubjectData data;
     private View view_line;
+    private String title;
+
     public SalePromotionDetailActivity() {
         super(R.layout.activity_sale_promotion_detail);
     }
@@ -75,11 +77,19 @@ public class SalePromotionDetailActivity extends BaseActivity {
         if (intent.hasExtra(TAG)) {
             id = intent.getStringExtra(TAG);
         }
+
+        if (intent.hasExtra("title")) {
+            title = intent.getStringExtra("title");
+        }
     }
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, "促销详情");
+        if (TextUtils.isEmpty(title)) {
+            custom_head.setHeadCenterTxtShow(true, "促销详情");
+        } else {
+            custom_head.setHeadCenterTxtShow(true, title);
+        }
         dialog = new WaittingDialog(this);
         View view = Util.inflateView(R.layout.head_sale_promotion_detail, null);
         iv_banner = ButterKnife.findById(view, R.id.iv_banner);
@@ -130,8 +140,8 @@ public class SalePromotionDetailActivity extends BaseActivity {
                     @Override
                     public void onSuccess() {
                         HashMap<String, String> params = ClientDiscoverAPI.getupdateShareCountRequestParams(id);
-                        HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack(){
-//                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
+                        HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack() {
+                            //                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 if (TextUtils.isEmpty(json)) return;
@@ -180,8 +190,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
-        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack() {
             @Override
             public void onStart() {
                 if (dialog != null) dialog.show();

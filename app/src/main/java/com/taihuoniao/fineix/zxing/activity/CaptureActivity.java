@@ -15,6 +15,7 @@
  */
 package com.taihuoniao.fineix.zxing.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -51,10 +52,16 @@ import com.taihuoniao.fineix.zxing.camera.CameraManager;
 import com.taihuoniao.fineix.zxing.utils.BeepManager;
 import com.taihuoniao.fineix.zxing.utils.CaptureActivityHandler;
 import com.taihuoniao.fineix.zxing.utils.InactivityTimer;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 
 
 /**
@@ -68,6 +75,7 @@ import java.util.HashMap;
  */
 public final class CaptureActivity extends BaseActivity implements
         SurfaceHolder.Callback {
+    private static final int REQUEST_CODE = 100;
     private static final String INFO_TYPE_QJ = "11";
     private static final String INFO_TYPE_CJ = "11";
     private static final String INFO_TYPE_CP = "1";
@@ -99,7 +107,6 @@ public final class CaptureActivity extends BaseActivity implements
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_qr_scan);
@@ -137,8 +144,34 @@ public final class CaptureActivity extends BaseActivity implements
         // first launch. That led to bugs where the scanning rectangle was the
         // wrong size and partially
         // off screen.
-        cameraManager = new CameraManager(getApplication());
+//        cameraManager = new CameraManager(getApplication());
+//
+//        handler = null;
+//
+//        if (isHasSurface) {
+//            // The activity was paused but not stopped, so the surface still
+//            // exists. Therefore
+//            // surfaceCreated() won't be called, so init the camera here.
+//            initCamera(scanPreview.getHolder());
+//        } else {
+//            // Install the callback and wait for surfaceCreated() to init the
+//            // camera.
+//            scanPreview.getHolder().addCallback(this);
+//        }
+//
+//        inactivityTimer.onResume();
+        if (AndPermission.hasPermission(this, Manifest.permission.CAMERA)){
+            initCamera();
+        } else {
+            AndPermission.with(this)
+                    .requestCode(REQUEST_CODE)
+                    .permission(Manifest.permission.CAMERA)
+                    .send();
+        }
+    }
 
+    public void initCamera(){
+        cameraManager = new CameraManager(getApplication());
         handler = null;
 
         if (isHasSurface) {
@@ -156,6 +189,31 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_CODE)
+    private void getRequestYes(List<String> grantedPermissions) {
+        initCamera();
+//        onResume();
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this,REQUEST_CODE_SETTING).show();
+        }else {
+            finish();
+        }
+    }
+
+    @Override
     protected void onPause() {
         if (handler != null) {
             handler.quitSynchronously();
@@ -163,7 +221,7 @@ public final class CaptureActivity extends BaseActivity implements
         }
         inactivityTimer.onPause();
         beepManager.close();
-        cameraManager.closeDriver();
+        if (cameraManager!=null) cameraManager.closeDriver();
         if (!isHasSurface) {
             scanPreview.getHolder().removeCallback(this);
         }

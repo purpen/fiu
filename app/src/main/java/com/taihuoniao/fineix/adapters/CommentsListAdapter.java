@@ -27,9 +27,9 @@ public class CommentsListAdapter extends BaseAdapter {
         this.context = context;
         this.list = list;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .showImageOnLoading(R.mipmap.default_load)
+                .showImageForEmptyUri(R.mipmap.default_load)
+                .showImageOnFail(R.mipmap.default_load)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360)).build();

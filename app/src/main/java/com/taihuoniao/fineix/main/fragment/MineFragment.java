@@ -57,12 +57,19 @@ import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
 public class MineFragment extends MyBaseFragment {
 
@@ -449,7 +456,17 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(new Intent(activity, SelectAddressActivity.class));
                         break;
                     case 7:
-                        startActivity(new Intent(activity, SelectPhotoOrCameraActivity.class));
+                        if (AndPermission.hasPermission(activity,android.Manifest.permission.CAMERA)){
+                            startActivity(new Intent(activity, SelectPhotoOrCameraActivity.class));
+                        }else {
+                            // 申请权限。
+                            AndPermission.with(activity)
+                                    .requestCode(REQUEST_PHONE_STATE_CODE)
+                                    .permission(android.Manifest.permission.CAMERA)
+                                    .send();
+
+                        }
+
                         break;
 //                    case 8: //退款/售后
 //                        startActivity(new Intent(activity, ChargeBackAndServiceActivity.class));
@@ -462,6 +479,30 @@ public class MineFragment extends MyBaseFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusYes(List<String> grantedPermissions) {
+        startActivity(new Intent(activity, SelectPhotoOrCameraActivity.class));
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this,REQUEST_CODE_SETTING).show();
+        }else {
+            activity.finish();
+        }
     }
 
     @Override

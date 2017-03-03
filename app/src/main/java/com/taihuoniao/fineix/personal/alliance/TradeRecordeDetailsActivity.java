@@ -83,20 +83,20 @@ public class TradeRecordeDetailsActivity extends BaseActivity {
 
     private void dealUI(HttpResponse<TradeRecordDetailsBean> tradeRecordeBeanHttpResponse) {
         TradeRecordDetailsBean data = tradeRecordeBeanHttpResponse.getData();
-        ((TextView)linearLayout1.getChildAt(0)).setText(data.getCreated_at());
-        ((TextView)linearLayout1.getChildAt(1)).setText(data.getStatus_label());
-        ((TextView)linearLayout2.getChildAt(0)).setText("产品");
-        ((TextView)linearLayout2.getChildAt(1)).setText(data.getProduct().getShort_title());
+        ((TextView)linearLayout1.getChildAt(0)).setText(data.created_at);
+        ((TextView)linearLayout1.getChildAt(1)).setText(data.status_label);
+        ((TextView)linearLayout2.getChildAt(0)).setText("名称");
+        ((TextView)linearLayout2.getChildAt(1)).setText(data.title);
         ((TextView)linearLayout3.getChildAt(0)).setText("单价");
-        ((TextView)linearLayout3.getChildAt(1)).setText(String.format("¥ %s", data.getSku_price()));
+        ((TextView)linearLayout3.getChildAt(1)).setText(String.format("¥ %s", data.sku_price));
         ((TextView)linearLayout4.getChildAt(0)).setText("收益比率");
-        ((TextView)linearLayout4.getChildAt(1)).setText(String.valueOf(Double.valueOf(data.getCommision_percent()) * 100D) + "%");
-        ((TextView)linearLayout5.getChildAt(0)).setText("佣金");
-        ((TextView)linearLayout5.getChildAt(1)).setText(String.format("¥ %s", data.getUnit_price()));
+        ((TextView)linearLayout4.getChildAt(1)).setText(String.valueOf(Double.valueOf(data.commision_percent) * 100D) + "%");
+        ((TextView)linearLayout5.getChildAt(0)).setText("收益");
+        ((TextView)linearLayout5.getChildAt(1)).setText(String.format("¥ %s", data.unit_price));
         ((TextView)linearLayout6.getChildAt(0)).setText("数量");
-        ((TextView)linearLayout6.getChildAt(1)).setText(data.getQuantity());
-        ((TextView)linearLayout7.getChildAt(0)).setText("分成收益");
-        ((TextView)linearLayout7.getChildAt(1)).setText(String.format("¥ %s", data.getTotal_price()));
+        ((TextView)linearLayout6.getChildAt(1)).setText(data.quantity+"");
+        ((TextView)linearLayout7.getChildAt(0)).setText("合计收益");
+        ((TextView)linearLayout7.getChildAt(1)).setText(String.format("¥ %s", data.total_price));
     }
 
     @Override

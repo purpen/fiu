@@ -115,10 +115,13 @@ public class GoToNextUtils {
                 intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), url);
                 context.startActivity(intent);
                 break;
-            case 5:
-                ToastUtils.showInfo("跳转好货详情");
+            case 5: // 同3
+                intent = new Intent(context, SalePromotionDetailActivity.class);
+                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), url);
+                intent.putExtra("title","好货合集");
+                context.startActivity(intent);
                 break;
-            case 6:
+            case 6: //情境专题详情
                 intent = new Intent(context, QJSubjectDetailActivity.class);
                 intent.putExtra(QJSubjectDetailActivity.class.getSimpleName(), url);
                 context.startActivity(intent);

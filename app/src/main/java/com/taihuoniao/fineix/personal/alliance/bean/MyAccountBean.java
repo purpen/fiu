@@ -1,11 +1,14 @@
 package com.taihuoniao.fineix.personal.alliance.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Stephen on 2017/1/17 10:25
  * Email: 895745843@qq.com
  */
 
-public class MyAccountBean {
+public class MyAccountBean implements Parcelable {
 
     /**
      * _id : 587dd1343ffca27e2a8baaec
@@ -191,7 +194,7 @@ public class MyAccountBean {
         return current_user_id;
     }
 
-    public static class ContactEntity {
+    public static class ContactEntity implements Parcelable {
         /**
          * name : 田帅 
          * phone : 15001120509
@@ -245,5 +248,105 @@ public class MyAccountBean {
         public String getCompany_name() {
             return company_name;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.name);
+            dest.writeString(this.phone);
+            dest.writeString(this.email);
+            dest.writeString(this.position);
+            dest.writeString(this.company_name);
+        }
+
+        public ContactEntity() {
+        }
+
+        protected ContactEntity(Parcel in) {
+            this.name = in.readString();
+            this.phone = in.readString();
+            this.email = in.readString();
+            this.position = in.readString();
+            this.company_name = in.readString();
+        }
+
+        public static final Creator<ContactEntity> CREATOR = new Creator<ContactEntity>() {
+            @Override
+            public ContactEntity createFromParcel(Parcel source) {
+                return new ContactEntity(source);
+            }
+
+            @Override
+            public ContactEntity[] newArray(int size) {
+                return new ContactEntity[size];
+            }
+        };
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this._id);
+        dest.writeString(this.name);
+        dest.writeString(this.code);
+        dest.writeString(this.kind);
+        dest.writeString(this.type);
+        dest.writeString(this.status);
+        dest.writeParcelable(this.contact, flags);
+        dest.writeString(this.summary);
+        dest.writeString(this.total_balance_amount);
+        dest.writeString(this.total_cash_amount);
+        dest.writeString(this.wait_cash_amount);
+        dest.writeString(this.whether_apply_cash);
+        dest.writeString(this.whether_balance_stat);
+        dest.writeString(this.total_count);
+        dest.writeString(this.success_count);
+        dest.writeString(this.created_on);
+        dest.writeString(this.updated_on);
+        dest.writeString(this.current_user_id);
+    }
+
+    public MyAccountBean() {
+    }
+
+    protected MyAccountBean(Parcel in) {
+        this._id = in.readString();
+        this.name = in.readString();
+        this.code = in.readString();
+        this.kind = in.readString();
+        this.type = in.readString();
+        this.status = in.readString();
+        this.contact = in.readParcelable(ContactEntity.class.getClassLoader());
+        this.summary = in.readString();
+        this.total_balance_amount = in.readString();
+        this.total_cash_amount = in.readString();
+        this.wait_cash_amount = in.readString();
+        this.whether_apply_cash = in.readString();
+        this.whether_balance_stat = in.readString();
+        this.total_count = in.readString();
+        this.success_count = in.readString();
+        this.created_on = in.readString();
+        this.updated_on = in.readString();
+        this.current_user_id = in.readString();
+    }
+
+    public static final Parcelable.Creator<MyAccountBean> CREATOR = new Parcelable.Creator<MyAccountBean>() {
+        @Override
+        public MyAccountBean createFromParcel(Parcel source) {
+            return new MyAccountBean(source);
+        }
+
+        @Override
+        public MyAccountBean[] newArray(int size) {
+            return new MyAccountBean[size];
+        }
+    };
 }

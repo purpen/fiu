@@ -29,9 +29,9 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
     public PersonalCenterGVAdapter(ArrayList<ImgTxtItem> list, Activity activity){
         super(list,activity);
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .showImageOnLoading(R.mipmap.default_load)
+                .showImageForEmptyUri(R.mipmap.default_load)
+                .showImageOnFail(R.mipmap.default_load)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .cacheInMemory(true)
                 .cacheOnDisk(false)

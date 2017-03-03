@@ -1,299 +1,146 @@
 package com.taihuoniao.fineix.personal.alliance.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Stephen on 2017/1/20 10:24
  * Email: 895745843@qq.com
  */
 
-public class TradeRecordDetailsBean {
+public class TradeRecordDetailsBean implements Parcelable {
+
 
     /**
-     * _id : 587f438b3ffca2ba3d8b4596
-     * alliance_id : 587dd1343ffca27e2a8baaec
-     * order_rid : 117011807046
+     * _id : 58aaaf9afc8b1292678b4b49
+     * alliance_id : 586f6e1f20de8d8e608bc612
+     * target_id : 117022050911
+     * order_rid : 117022050911
      * sub_order_id : null
-     * product_id : 1120677456
-     * sku_id : 1120677465
-     * sku_price : 998
+     * product_id : 0
+     * sku_id : 0
+     * sku_price : 69
      * user_id : 20448
-     * quantity : 2
-     * commision_percent : 0.1
-     * unit_price : 99.8
-     * total_price : 199.6
-     * code : x518fe
+     * quantity : 1
+     * commision_percent : 0.05
+     * unit_price : 3.45
+     * total_price : 3.45
+     * code : ZzEJfc
      * summary : null
      * type : 2
      * kind : 1
      * stage : 5
      * status : 1
      * status_label : 已结算
-     * balance_on : 1484735701
+     * balance_on : 1487952301
      * from_site : 1
-     * created_on : 1484735371
-     * updated_on : 1484735701
-     * product : {"title":"爱牵挂智能腕表老人专用危情报警心率检测触摸按键智能提醒","short_title":"爱牵挂智能腕表老人专用危情报警心率检测触摸按键智能提醒"}
-     * created_at : 2017-01-18 18:29
+     * created_on : 1487581082
+     * updated_on : 1487952301
+     * title : 订单[117022050911]
+     * created_at : 2017-02-20 16:58
      * current_user_id : 20448
      */
 
-    private String _id;
-    private String alliance_id;
-    private String order_rid;
-    private Object sub_order_id;
-    private String product_id;
-    private String sku_id;
-    private String sku_price;
-    private String user_id;
-    private String quantity;
-    private String commision_percent;
-    private String unit_price;
-    private String total_price;
-    private String code;
-    private Object summary;
-    private String type;
-    private String kind;
-    private String stage;
-    private String status;
-    private String status_label;
-    private String balance_on;
-    private String from_site;
-    private String created_on;
-    private String updated_on;
-    private ProductEntity product;
-    private String created_at;
-    private String current_user_id;
+    public String _id;
+    public String alliance_id;
+    public String target_id;
+    public String order_rid;
+    public int product_id;
+    public int sku_id;
+    public int sku_price;
+    public int user_id;
+    public int quantity;
+    public double commision_percent;
+    public double unit_price;
+    public double total_price;
+    public String code;
+    public int type;
+    public int kind;
+    public int stage;
+    public int status;
+    public String status_label;
+    public int balance_on;
+    public int from_site;
+    public int created_on;
+    public int updated_on;
+    public String title;
+    public String created_at;
+    public int current_user_id;
 
-    public void set_id(String _id) {
-        this._id = _id;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setAlliance_id(String alliance_id) {
-        this.alliance_id = alliance_id;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this._id);
+        dest.writeString(this.alliance_id);
+        dest.writeString(this.target_id);
+        dest.writeString(this.order_rid);
+        dest.writeInt(this.product_id);
+        dest.writeInt(this.sku_id);
+        dest.writeInt(this.sku_price);
+        dest.writeInt(this.user_id);
+        dest.writeInt(this.quantity);
+        dest.writeDouble(this.commision_percent);
+        dest.writeDouble(this.unit_price);
+        dest.writeDouble(this.total_price);
+        dest.writeString(this.code);
+        dest.writeInt(this.type);
+        dest.writeInt(this.kind);
+        dest.writeInt(this.stage);
+        dest.writeInt(this.status);
+        dest.writeString(this.status_label);
+        dest.writeInt(this.balance_on);
+        dest.writeInt(this.from_site);
+        dest.writeInt(this.created_on);
+        dest.writeInt(this.updated_on);
+        dest.writeString(this.title);
+        dest.writeString(this.created_at);
+        dest.writeInt(this.current_user_id);
     }
 
-    public void setOrder_rid(String order_rid) {
-        this.order_rid = order_rid;
+    public TradeRecordDetailsBean() {
     }
 
-    public void setSub_order_id(Object sub_order_id) {
-        this.sub_order_id = sub_order_id;
+    protected TradeRecordDetailsBean(Parcel in) {
+        this._id = in.readString();
+        this.alliance_id = in.readString();
+        this.target_id = in.readString();
+        this.order_rid = in.readString();
+        this.product_id = in.readInt();
+        this.sku_id = in.readInt();
+        this.sku_price = in.readInt();
+        this.user_id = in.readInt();
+        this.quantity = in.readInt();
+        this.commision_percent = in.readDouble();
+        this.unit_price = in.readDouble();
+        this.total_price = in.readDouble();
+        this.code = in.readString();
+        this.type = in.readInt();
+        this.kind = in.readInt();
+        this.stage = in.readInt();
+        this.status = in.readInt();
+        this.status_label = in.readString();
+        this.balance_on = in.readInt();
+        this.from_site = in.readInt();
+        this.created_on = in.readInt();
+        this.updated_on = in.readInt();
+        this.title = in.readString();
+        this.created_at = in.readString();
+        this.current_user_id = in.readInt();
     }
 
-    public void setProduct_id(String product_id) {
-        this.product_id = product_id;
-    }
-
-    public void setSku_id(String sku_id) {
-        this.sku_id = sku_id;
-    }
-
-    public void setSku_price(String sku_price) {
-        this.sku_price = sku_price;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setCommision_percent(String commision_percent) {
-        this.commision_percent = commision_percent;
-    }
-
-    public void setUnit_price(String unit_price) {
-        this.unit_price = unit_price;
-    }
-
-    public void setTotal_price(String total_price) {
-        this.total_price = total_price;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setSummary(Object summary) {
-        this.summary = summary;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public void setStage(String stage) {
-        this.stage = stage;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setStatus_label(String status_label) {
-        this.status_label = status_label;
-    }
-
-    public void setBalance_on(String balance_on) {
-        this.balance_on = balance_on;
-    }
-
-    public void setFrom_site(String from_site) {
-        this.from_site = from_site;
-    }
-
-    public void setCreated_on(String created_on) {
-        this.created_on = created_on;
-    }
-
-    public void setUpdated_on(String updated_on) {
-        this.updated_on = updated_on;
-    }
-
-    public void setProduct(ProductEntity product) {
-        this.product = product;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-
-    public void setCurrent_user_id(String current_user_id) {
-        this.current_user_id = current_user_id;
-    }
-
-    public String get_id() {
-        return _id;
-    }
-
-    public String getAlliance_id() {
-        return alliance_id;
-    }
-
-    public String getOrder_rid() {
-        return order_rid;
-    }
-
-    public Object getSub_order_id() {
-        return sub_order_id;
-    }
-
-    public String getProduct_id() {
-        return product_id;
-    }
-
-    public String getSku_id() {
-        return sku_id;
-    }
-
-    public String getSku_price() {
-        return sku_price;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public String getCommision_percent() {
-        return commision_percent;
-    }
-
-    public String getUnit_price() {
-        return unit_price;
-    }
-
-    public String getTotal_price() {
-        return total_price;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public Object getSummary() {
-        return summary;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public String getStage() {
-        return stage;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getStatus_label() {
-        return status_label;
-    }
-
-    public String getBalance_on() {
-        return balance_on;
-    }
-
-    public String getFrom_site() {
-        return from_site;
-    }
-
-    public String getCreated_on() {
-        return created_on;
-    }
-
-    public String getUpdated_on() {
-        return updated_on;
-    }
-
-    public ProductEntity getProduct() {
-        return product;
-    }
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public String getCurrent_user_id() {
-        return current_user_id;
-    }
-
-    public static class ProductEntity {
-        /**
-         * title : 爱牵挂智能腕表老人专用危情报警心率检测触摸按键智能提醒
-         * short_title : 爱牵挂智能腕表老人专用危情报警心率检测触摸按键智能提醒
-         */
-
-        private String title;
-        private String short_title;
-
-        public void setTitle(String title) {
-            this.title = title;
+    public static final Parcelable.Creator<TradeRecordDetailsBean> CREATOR = new Parcelable.Creator<TradeRecordDetailsBean>() {
+        @Override
+        public TradeRecordDetailsBean createFromParcel(Parcel source) {
+            return new TradeRecordDetailsBean(source);
         }
 
-        public void setShort_title(String short_title) {
-            this.short_title = short_title;
+        @Override
+        public TradeRecordDetailsBean[] newArray(int size) {
+            return new TradeRecordDetailsBean[size];
         }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getShort_title() {
-            return short_title;
-        }
-    }
+    };
 }

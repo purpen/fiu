@@ -1,10 +1,12 @@
 package com.taihuoniao.fineix.zone;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -47,6 +49,9 @@ import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 import com.taihuoniao.fineix.zone.fragment.ZoneRelateProductsFragment;
 import com.taihuoniao.fineix.zone.fragment.ZoneRelateSceneFragment;
 import com.taihuoniao.fineix.zone.fragment.ZoneShopInfoFragment;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -59,10 +64,13 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+
 /**
  * 地盘详情
  */
 public class ZoneDetailActivity extends BaseActivity {
+    private static final int REQUEST_CODE =100;
     @Bind(R.id.head_goback)
     ImageButton headGoback;
     @Bind(R.id.tv_title)
@@ -111,6 +119,12 @@ public class ZoneDetailActivity extends BaseActivity {
         if (intent.hasExtra("title")) {
             title = intent.getStringExtra("title");
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -373,7 +387,15 @@ public class ZoneDetailActivity extends BaseActivity {
     @Override
     protected void refreshUI() {
         if (zoneDetailBean == null) return;
-        getDistance();
+        if (AndPermission.hasPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)){
+            getDistance();
+        } else {
+            AndPermission.with(this)
+                    .requestCode(REQUEST_CODE)
+                    .permission(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                    .send();
+        }
+
         if (zoneDetailBean.is_favorite == 1) {
             ibtnShoucang.setImageResource(R.mipmap.shoucang_yes);
         } else {
@@ -411,6 +433,30 @@ public class ZoneDetailActivity extends BaseActivity {
 //        ratingbar.setRating(zoneDetailBean.score_average);
 //        averageSpend.setText(zoneDetailBean.);
         shopDesc.setText(zoneDetailBean.des);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_CODE)
+    private void getRequestYes(List<String> grantedPermissions) {
+        getDistance();
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this,REQUEST_CODE_SETTING).show();
+        }else {
+//            finish();
+        }
     }
 
     private void setBrightSpots(List<String> brightSpot) {

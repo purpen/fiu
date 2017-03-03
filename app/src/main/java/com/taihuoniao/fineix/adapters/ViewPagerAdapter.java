@@ -56,9 +56,9 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         this.size = list.size();
         isInfiniteLoop = false;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .showImageOnLoading(R.mipmap.default_load)
+                .showImageForEmptyUri(R.mipmap.default_load)
+                .showImageOnFail(R.mipmap.default_load)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
@@ -125,9 +125,9 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if (TextUtils.isEmpty(UserGuideActivity.fromPage)) {
-//                            activity.startActivity(new Intent(activity, MainActivity.class));
-//                            activity.finish();
-                            isNeedCode();
+                            activity.startActivity(new Intent(activity, MainActivity.class));
+                            activity.finish();
+//                            isNeedCode();
                         } else {
                             UserGuideActivity.fromPage = null;
                             activity.finish();

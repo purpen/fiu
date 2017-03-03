@@ -155,11 +155,11 @@ public class DiscoverContentAdapter extends BaseAdapter implements PlatformActio
                 textView.setText(titles.get(position).indexName);
                 CustomGridView zj_gv_stick = ButterKnife.findById(convertView, R.id.gv_stick);
                 zj_gv_stick.setVisibility(View.VISIBLE);
-                zj_gv_stick.setAdapter(new DiscoverQJRecommendAdapter(discoverBean.sight.stick, activity));
+                zj_gv_stick.setAdapter(new DiscoverZJRecommendAdapter(discoverBean.product_subject, activity));
                 zj_gv_stick.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        GoToNextUtils.goToIntent(activity, Integer.valueOf(discoverBean.sight.stick.get(i).type), discoverBean.sight.stick.get(i).web_url);
+                        GoToNextUtils.goToIntent(activity, Integer.valueOf(discoverBean.product_subject.get(i).type), discoverBean.product_subject.get(i).web_url);
                     }
                 });
                 break;
