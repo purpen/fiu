@@ -40,7 +40,7 @@ public class ZoneDetailBean implements Parcelable {
      * current_user_id : 20448
      */
 
-    public int _id;
+    public String _id;
     public String title;
     public String sub_title;
     public String avatar_url;
@@ -217,7 +217,7 @@ public class ZoneDetailBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this._id);
+        dest.writeString(this._id);
         dest.writeString(this.title);
         dest.writeString(this.sub_title);
         dest.writeString(this.avatar_url);
@@ -245,7 +245,7 @@ public class ZoneDetailBean implements Parcelable {
     }
 
     protected ZoneDetailBean(Parcel in) {
-        this._id = in.readInt();
+        this._id = in.readString();
         this.title = in.readString();
         this.sub_title = in.readString();
         this.avatar_url = in.readString();

@@ -187,4 +187,6 @@ public class URL {
     //合伙人招募计划
     public static final String COMPANY_PARTNER_URL = H5_URL+"/storage/plan?from=2";
 
+    public static final String SHARE_H5_URL = BASE_URL+"/gateway/share_link";
+
 }

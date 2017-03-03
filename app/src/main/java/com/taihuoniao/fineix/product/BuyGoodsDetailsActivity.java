@@ -30,6 +30,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
@@ -47,11 +48,13 @@ import com.taihuoniao.fineix.product.fragment.WebFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.taihuoniao.fineix.zone.bean.ShareH5Url;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -317,6 +320,25 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         }
     }
 
+    private ShareH5Url shareH5Url;
+
+    private void requestShareH5Url() {
+        //1是产品
+        HttpRequest.post(ClientDiscoverAPI.getH5ShareParams(buyGoodDetailsBean.getData().get_id(), "1", ""), URL.SHARE_H5_URL, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                HttpResponse<ShareH5Url> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ShareH5Url>>() {
+                });
+                if (response.isSuccess()) shareH5Url = response.getData();
+            }
+
+            @Override
+            public void onFailure(String error) {
+
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -412,11 +434,12 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         popupWindow.showAtLocation(activityView, Gravity.BOTTOM, 0, 0);
     }
 
+
     //获取商品详情
     private void goodDetails() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(id);
-        detailHandler = HttpRequest.post(requestParams, URL.GOOD_DETAILS, new GlobalDataCallBack(){
-//        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
+        detailHandler = HttpRequest.post(requestParams, URL.GOOD_DETAILS, new GlobalDataCallBack() {
+            //        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -426,6 +449,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     Type type = new TypeToken<BuyGoodDetailsBean>() {
                     }.getType();
                     buyGoodDetailsBean = gson.fromJson(json, type);
+                    requestShareH5Url();
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<商品详情", "解析异常=" + e.toString());
                 }
@@ -496,8 +520,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             return;
         }
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcartNumRequestParams();
-        cartHandler =  HttpRequest.post(requestParams, URL.CART_NUMBER, new GlobalDataCallBack(){
-//        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+        cartHandler = HttpRequest.post(requestParams, URL.CART_NUMBER, new GlobalDataCallBack() {
+            //        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 CartBean cartBean = new CartBean();
@@ -527,8 +551,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     //取消收藏
     private void cancelFavorate() {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(id, "1");
-        cancelShoucangHandler=   HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
-//        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
+        cancelShoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
+            //        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -562,8 +586,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     //收藏
     private void favorate() {
         HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(id, "1");
-        shoucangHandler=  HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
-//        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
+        shoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
+            //        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -597,8 +621,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     //立即购买
     private void buyNow(String target_id, String type, String n) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getbuyNowRequestParams(target_id, type, n);
-        buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack(){
-//        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
+        buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack() {
+            //        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -635,8 +659,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     //加入购物车
     private void addToCart(String target_id, String type, String n) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getaddToCartNetRequestParams(target_id, type, n);
-        addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack(){
-//        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
+        addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack() {
+            //        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -671,7 +695,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.e("<<<", "imgPath=" + MainApplication.getContext().getCacheDirPath());
             Platform.ShareParams params;
-
+            if (shareH5Url==null||buyGoodDetailsBean==null) ToastUtils.showInfo("分享出错");
             if (!dialog.isShowing()) {
                 dialog.show();
             }
@@ -683,7 +707,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     params.setShareType(Platform.SHARE_WEBPAGE);
                     params.setTitle(buyGoodDetailsBean.getData().getTitle());
                     params.setText(buyGoodDetailsBean.getData().getAdvantage());
-                    params.setTitleUrl(buyGoodDetailsBean.getData().getShare_view_url());
+                    params.setTitleUrl(shareH5Url.url);
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }
@@ -694,7 +718,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     //sina
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setText(buyGoodDetailsBean.getData().getAdvantage() + buyGoodDetailsBean.getData().getShare_view_url());
+                    params.setText(buyGoodDetailsBean.getData().getAdvantage() + shareH5Url.url);
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }
@@ -710,7 +734,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }
-                    params.setUrl(buyGoodDetailsBean.getData().getShare_view_url());
+                    params.setUrl(shareH5Url.url);
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.share(params);
                     break;
@@ -723,7 +747,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }
-                    params.setUrl(buyGoodDetailsBean.getData().getShare_view_url());
+                    params.setUrl(shareH5Url.url);
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.share(params);
                     break;

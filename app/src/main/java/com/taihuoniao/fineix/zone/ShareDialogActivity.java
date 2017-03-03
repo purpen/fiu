@@ -1,5 +1,8 @@
 package com.taihuoniao.fineix.zone;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,12 +11,19 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.AboutUsActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.zone.adapter.ShareDialogAdapter;
+import com.taihuoniao.fineix.zone.bean.ShareH5Url;
 import com.taihuoniao.fineix.zone.bean.ShareItem;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
@@ -38,6 +48,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 public class ShareDialogActivity extends BaseActivity implements PlatformActionListener {
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
+    private ShareH5Url shareH5Url;
     private ZoneDetailBean zoneDetailBean;
     public ShareDialogActivity() {
         super(R.layout.activity_share_dialog);
@@ -60,6 +71,24 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
         initData();
     }
 
+    @Override
+    protected void requestNet() {
+        //3代表地盘
+        HttpRequest.post(ClientDiscoverAPI.getH5ShareParams(zoneDetailBean._id,"3",""), URL.SHARE_H5_URL, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                HttpResponse<ShareH5Url> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ShareH5Url>>() {
+                });
+                if (response.isSuccess()) shareH5Url = response.getData();
+            }
+
+            @Override
+            public void onFailure(String error) {
+
+            }
+        });
+    }
+
     @OnClick({R.id.ibtn_close,R.id.textView})
     void onClick(View v){
         switch (v.getId()){
@@ -77,9 +106,11 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
         }
     }
 
+
+
     private void initData() {
-        int[] image = {R.mipmap.share_wechat, R.mipmap.share_moments, R.mipmap.share_weibo, R.mipmap.share_qq};
-        String[] name = {"微信", "朋友圈", "微博", "QQ"};
+        int[] image = {R.mipmap.share_wechat, R.mipmap.share_moments, R.mipmap.share_weibo, R.mipmap.share_qq,R.mipmap.copy_link};
+        String[] name = {"微信", "朋友圈", "微博", "QQ","复制链接"};
         List<ShareItem> shareList = new ArrayList<>();
         ShareItem shareItem;
         for (int i = 0; i < image.length; i++) {
@@ -89,13 +120,14 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
             shareList.add(shareItem);
         }
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(activity,4);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(activity,5);
         recyclerView.setLayoutManager(gridLayoutManager);
         ShareDialogAdapter adapter = new ShareDialogAdapter(activity, shareList);
         recyclerView.setAdapter(adapter);
         adapter.setmOnItemClickListener(new ShareDialogAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                if (shareH5Url==null || zoneDetailBean==null) ToastUtils.showInfo("分享内容失败");
                 Platform.ShareParams params;
                 switch (position) {
                     case 0: //微信
@@ -103,7 +135,7 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
                         params.setShareType(Platform.SHARE_WEBPAGE);
                         params.setTitle(zoneDetailBean.title);
                         params.setText(zoneDetailBean.des);
-                        params.setUrl(zoneDetailBean.view_url);
+                        params.setUrl(shareH5Url.url);
                         params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                         wechat.setPlatformActionListener(ShareDialogActivity.this);
@@ -114,7 +146,7 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
                         params.setShareType(Platform.SHARE_WEBPAGE);
                         params.setTitle(zoneDetailBean.title);
                         params.setText(zoneDetailBean.des);
-                        params.setUrl(zoneDetailBean.view_url);
+                        params.setUrl(shareH5Url.url);
                         params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                         wechatMoments.setPlatformActionListener(ShareDialogActivity.this);
@@ -122,7 +154,7 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
                         break;
                     case 2: //新浪微博
                         params = new Platform.ShareParams();
-                        params.setText(zoneDetailBean.des+zoneDetailBean.view_url);
+                        params.setText(zoneDetailBean.des+shareH5Url.url);
                         params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                         weibo.setPlatformActionListener(ShareDialogActivity.this); // 设置分享事件回调
@@ -131,12 +163,17 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
                     case 3: //QQ
                         params = new Platform.ShareParams();
                         params.setTitle(zoneDetailBean.title);
-                        params.setTitleUrl(zoneDetailBean.view_url);
+                        params.setTitleUrl(shareH5Url.url);
                         params.setText(zoneDetailBean.des);
                         params.setImageUrl(zoneDetailBean.avatar_url);
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
                         qq.setPlatformActionListener(ShareDialogActivity.this);
                         qq.share(params);
+                        break;
+                    case 4:
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        cm.setPrimaryClip(ClipData.newPlainText("link",shareH5Url.url));
+                        ToastUtils.showInfo("已复制地盘链接到剪切板");
                         break;
                     default:
                         break;

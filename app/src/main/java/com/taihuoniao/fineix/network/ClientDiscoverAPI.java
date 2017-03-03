@@ -10,6 +10,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by android on 2015/12/27.
@@ -1310,6 +1311,16 @@ public class ClientDiscoverAPI {
         params.put("scene_id",id);
         params.put("page", curPage+"");
         params.put("size",Constants.PAGE_SIZE);
+        return params;
+    }
+
+
+    //分享h5链接
+    public static Map<String,String> getH5ShareParams(String id,String type,String storage_id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
+        params.put("type", type);
+        params.put("storage_id",storage_id);
         return params;
     }
 }
