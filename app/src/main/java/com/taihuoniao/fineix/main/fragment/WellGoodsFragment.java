@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -31,6 +32,7 @@ import com.taihuoniao.fineix.adapters.WellGoodsProductCategoryAdapter;
 import com.taihuoniao.fineix.adapters.WellGoodsRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartBean;
@@ -43,6 +45,8 @@ import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.ShopMarginDecoration;
+import com.taihuoniao.fineix.main.tab3.adapter.WellGoodsCategoryAdapter;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
@@ -78,12 +82,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     ImageView titleLeft;
     @Bind(R.id.title_right)
     RelativeLayout titleRight;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
     @Bind(R.id.cart_number)
     TextView cartNumber;
     @Bind(R.id.search_linear)
@@ -118,12 +116,12 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
         ButterKnife.bind(this, view);
+
         listView = pullRefreshView.getRefreshableView();
         pullRefreshView.animLayout();
-        View header1 = View.inflate(getActivity(), R.layout.header1_wellgoods_fragment, null);
-        gridView = (CustomGridViewForScrollView) header1.findViewById(R.id.grid_view);
-        listView.addHeaderView(header1);
-        productRecycler = (RecyclerView) header1.findViewById(R.id.product_recycler);
+
+        listView.addHeaderView(getHeaderView());
+
         dialog = new WaittingDialog(getActivity());
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadWellGoods);
         getActivity().registerReceiver(wellGoodsReceiver, intentFilter);
@@ -145,7 +143,9 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         goneRelative.setTranslationY(goneTranslation);
         titleLeft.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
-        titleRight.setOnClickListener(this);
+//        titleRight.setOnClickListener(this);
+        titleRight.setVisibility(View.INVISIBLE);
+
         toTopImg.setOnClickListener(this);
         setupBlurView();
         categoryList = new ArrayList<>();
@@ -344,9 +344,10 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
                 if (categoryListBean.isSuccess()) {
-                    gridView.setVisibility(View.VISIBLE);
+                    gridView.setVisibility(View.GONE);
                     categoryList.clear();
                     categoryList.addAll(categoryListBean.getData().getRows());
+                    mWellGoodsCategoryAdapter.putList(categoryListBean.getData().getRows());
                     wellGoodsProductCategoryAdapter.notifyDataSetChanged();
                     wellGoodsRecyclerAdapter.notifyDataSetChanged();
                 } else {
@@ -549,5 +550,34 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             lastY = event.getRawY();
         }
         return false;
+    }
+
+    /**
+     * 顶部导航栏
+     */
+    private WellGoodsCategoryAdapter mWellGoodsCategoryAdapter;
+    private View getHeaderView(){
+        View headerView = View.inflate(getActivity(), R.layout.header1_wellgoods_fragment, null);
+        gridView = (CustomGridViewForScrollView) headerView.findViewById(R.id.grid_view);
+        gridView.setVisibility(View.GONE);
+        productRecycler = (RecyclerView) headerView.findViewById(R.id.product_recycler);
+
+        RecyclerView recyclerView001 = (RecyclerView) headerView.findViewById(R.id.recyclerView_wellGoods_headerView_category);
+        recyclerView001.setHasFixedSize(true);
+        recyclerView001.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView001.addItemDecoration(new ShopMarginDecoration(activity,R.dimen.dp5));
+        mWellGoodsCategoryAdapter = new WellGoodsCategoryAdapter(getActivity(), new GlobalCallBack() {
+            @Override
+            public void callBack(Object object) {
+                if (object instanceof CategoryListBean.CategoryListItem) {
+                    CategoryListBean.CategoryListItem rowsEntity = (CategoryListBean.CategoryListItem) object;
+                    Toast.makeText(activity, rowsEntity.getTitle(), Toast.LENGTH_SHORT).show();
+//                    GoToNextUtils.goToIntent(getActivity(), Integer.valueOf(rowsEntity.type), rowsEntity.web_url);
+                }
+            }
+        });
+        recyclerView001.setAdapter(mWellGoodsCategoryAdapter);
+
+        return headerView;
     }
 }

@@ -21,9 +21,10 @@
             android:text="情境详情" />
     </LinearLayout>
 
-    <!--<com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView-->
-    <!--android:id="@+id/pullToRefreshListView_qjDetails"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_below="@id/title_layout" />-->
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:id="@+id/pullToRefreshListView_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_layout" />
+
 </RelativeLayout>

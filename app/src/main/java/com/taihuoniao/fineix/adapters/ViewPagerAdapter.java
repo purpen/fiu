@@ -53,7 +53,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     public ViewPagerAdapter(final Activity activity, List<T> list) {
         this.activity = activity;
         this.list = list;
-        this.size = list.size();
+        this.size = (list == null ? 0 : list.size());
         isInfiniteLoop = false;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)

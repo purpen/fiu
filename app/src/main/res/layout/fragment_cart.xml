@@ -1,22 +1,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <com.taihuoniao.fineix.view.CustomHeadView
-        android:id="@+id/custom_head"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/linearLayout_title"
+        android:layout_height="wrap_content">
+
+        <com.taihuoniao.fineix.view.CustomHeadView
+            android:id="@+id/custom_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/custom_head"
+        android:layout_below="@+id/linearLayout_title"
         android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:scrollbars="none"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,26 +34,27 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:text="▪ 7天无忧退货"
-                        android:gravity="center"
-                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="▪ 48小时快速退款"
                         android:gravity="center"
-                        android:layout_height="wrap_content" />
+                        android:text="▪ 7天无忧退货" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="▪ 满99免费邮"
-                        android:layout_height="wrap_content" />
+                        android:text="▪ 48小时快速退款" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="▪ 满99免费邮" />
                 </LinearLayout>
 
                 <include

@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.adapters;
+package com.taihuoniao.fineix.qingjingOrSceneDetails.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -52,7 +52,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.qjdetails.QJDetailActivity2;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJPictureActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
@@ -83,9 +83,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
+ *
+ * 情境详情
  * Created by taihuoniao on 2016/8/10.
  */
-public class IndexQJListAdapter extends BaseAdapter {
+public class QJDetailsTopAdapter extends BaseAdapter {
     private boolean isNoUser;
     private Activity activity;
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
@@ -102,7 +104,7 @@ public class IndexQJListAdapter extends BaseAdapter {
     private TextView jubaoTv;
     private TextView cancelTv;
 
-    public IndexQJListAdapter(Activity activity, List<SceneList.DataBean.RowsBean> sceneList, List<IndexUserListBean.DataBean.UsersBean> userList) {
+    public QJDetailsTopAdapter(Activity activity, List<SceneList.DataBean.RowsBean> sceneList, List<IndexUserListBean.DataBean.UsersBean> userList) {
         this.activity = activity;
         this.sceneList = sceneList;
         this.userList = userList;
@@ -255,7 +257,7 @@ public class IndexQJListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(parent.getContext(), R.layout.item_index_qj, null);
+            convertView = View.inflate(parent.getContext(), R.layout.item_index_qj2, null);
             holder = new ViewHolder(convertView);
             holder.userRecycler.setHasFixedSize(true);
             holder.userRecycler.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
@@ -365,6 +367,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                 pos = position;
             }
         });
+
         holder.commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> pare, View vie, int positi, long d) {
@@ -560,7 +563,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             //自己的话隐藏关注按钮
             holder.attentionBtn.setVisibility(View.GONE);
         } else {
-            holder.attentionBtn.setVisibility(View.GONE);
+            holder.attentionBtn.setVisibility(View.VISIBLE);
             if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
 //                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
@@ -578,19 +581,13 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // TODO: 2017/3/1 跳入情境详情
-                Intent intent = new Intent(activity, QJDetailActivity2.class);
+                Intent intent = new Intent(activity, QJPictureActivity.class);
+                intent.putExtra("img", sceneList.get(position).getCover_url());
+                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
+                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
+                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
                 intent.putExtra("id", sceneList.get(position).get_id());
                 activity.startActivity(intent);
-
-//                Intent intent = new Intent(activity, QJPictureActivity.class);
-//                intent.putExtra("img", sceneList.get(position).getCover_url());
-//                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
-//                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
-//                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
-//                intent.putExtra("id", sceneList.get(position).get_id());
-//                activity.startActivity(intent);
             }
         });
         holder.viewCount.setText(sceneList.get(position).getView_count());
@@ -689,7 +686,6 @@ public class IndexQJListAdapter extends BaseAdapter {
             ButterKnife.bind(this, view);
         }
     }
-
 
     //取消关注弹窗
     private void showFocusFansConfirmView(final SceneList.DataBean.RowsBean item, String tips, final ViewHolder holder) {
@@ -982,11 +978,11 @@ public class IndexQJListAdapter extends BaseAdapter {
     //用户列表适配器
     class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
         private Activity activity;
-        private IndexQJListAdapter indexQJListAdapter;
+        private QJDetailsTopAdapter indexQJListAdapter;
         private List<IndexUserListBean.DataBean.UsersBean> userList;
         private WaittingDialog dialog;
 
-        public UserAdapter(Activity activity, IndexQJListAdapter indexQJListAdapter, List<IndexUserListBean.DataBean.UsersBean> userList) {
+        public UserAdapter(Activity activity, QJDetailsTopAdapter indexQJListAdapter, List<IndexUserListBean.DataBean.UsersBean> userList) {
             this.activity = activity;
             this.indexQJListAdapter = indexQJListAdapter;
             this.userList = userList;
@@ -1308,8 +1304,8 @@ public class IndexQJListAdapter extends BaseAdapter {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-//            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
-//            Glide.with(holder.headImg.getContext()).load(commentList.get(position).getUser_avatar_url()).into(holder.headImg);
+//            ImageLoader.getInstance().displayImage(listProducts.get(position).getUser_avatar_url(), holder.headImg);
+//            Glide.with(holder.headImg.getContext()).load(listProducts.get(position).getUser_avatar_url()).into(holder.headImg);
             GlideUtils.displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
             SpannableStringBuilder spannableString = new SpannableStringBuilder(commentList.get(position).getUser_nickname() + ": " + commentList.get(position).getContent());
             ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(parent.getResources().getColor(R.color.black));

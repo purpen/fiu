@@ -41,6 +41,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ConfirmOrderActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -585,8 +586,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     @Override
     protected void initList() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            customHead.setPadding(0, App.getStatusBarHeight(), 0, 0);
+            LinearLayout linearLayout = (LinearLayout) mRootView.findViewById(R.id.linearLayout_title);
+            linearLayout.setPadding(0, App.getStatusBarHeight(), 0, 0);
         }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            customHead.setPadding(0, App.getStatusBarHeight(), 0, 0);
+//        }
+//        WindowUtils.chenjin(getActivity());
         showDialog();
         initView1(mRootView);
         initView2(mRootView);
