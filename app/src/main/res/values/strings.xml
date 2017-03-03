@@ -474,5 +474,6 @@
     <string name="navigation">导航</string>
     <string name="baidu_map">百度地图</string>
     <string name="gaode_map">高德地图</string>
-    <string name="tj_qj">默认排序</string>
+    <string name="tj_qj">情境推荐</string>
+    <string name="rationale_read_phone_status">你需要开启手机状态权限才能使用本应用</string>
 </resources>

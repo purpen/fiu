@@ -37,6 +37,9 @@ import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ImageCrop.ClipImageLayout;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,10 +49,14 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
+
 /**
  * Created by taihuoniao on 2016/8/28.
  */
 public class PictureFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, View.OnTouchListener {
+    private static final int REQUEST_CODE = 100;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.container)
@@ -98,6 +105,18 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         titleLayout.setTitleLinearListener(this);
         titleLayout.setContinueListener(this);
         albumPaths = new ArrayList<>();
+        if (AndPermission.hasPermission(activity,android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+            initAlbumList();
+        }else {
+            // 申请权限。
+            AndPermission.with(this)
+                    .requestCode(REQUEST_PHONE_STATE_CODE)
+                    .permission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .send();
+        }
+    }
+
+    private void initAlbumList(){
         albumList = findGalleries(getActivity());
         arrowContainer.setOnTouchListener(this);
         if (albumList.containsKey(MainApplication.systemPhotoPath)) {
@@ -114,11 +133,37 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         listView.setOnItemClickListener(this);
         gridView.setAdapter(albumGridAdapter);
         gridView.setOnItemClickListener(this);
+        selectImg(0);
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_CODE)
+    private void getRequestYes(List<String> grantedPermissions) {
+        initAlbumList();
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this,REQUEST_CODE_SETTING).show();
+        }else {
+            activity.finish();
+        }
+    }
+
+
+    @Override
     protected void requestNet() {
-        selectImg(0);
+
     }
 
 

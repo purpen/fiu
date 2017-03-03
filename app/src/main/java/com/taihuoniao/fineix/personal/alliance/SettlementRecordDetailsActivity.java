@@ -119,8 +119,8 @@ public class SettlementRecordDetailsActivity extends BaseActivity {
 
     private void dealUI(HttpResponse<SettlementRecordeDetailsBean> tradeRecordeBeanHttpResponse) {
         SettlementRecordeDetailsBean data = tradeRecordeBeanHttpResponse.getData();
-        if (data != null && data.getRows() != null) {
-            List<SettlementRecordeDetailsBean.RowsEntity> rows = data.getRows();
+        if (data != null && data.rows != null) {
+            List<SettlementRecordeDetailsBean.RowsBean> rows = data.rows;
             adapter.setList(rows);
             returnTextViewEmpty.setVisibility(View.GONE);
         } else {

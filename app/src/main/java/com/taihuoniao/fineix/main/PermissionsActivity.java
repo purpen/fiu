@@ -110,6 +110,16 @@ public class PermissionsActivity extends AppCompatActivity {
         return true;
     }
 
+    //判断RedPhoneState权限是否开通
+    private boolean hasReadPhoneStatusGranted(@NonNull int[] grantResults){
+        for (int grantResult : grantResults) {
+            if (grantResult == PackageManager.PERMISSION_DENIED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // 显示缺失权限提示
     private void showMissingPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PermissionsActivity.this);

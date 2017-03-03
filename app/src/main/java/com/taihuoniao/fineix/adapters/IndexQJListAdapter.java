@@ -478,8 +478,13 @@ public class IndexQJListAdapter extends BaseAdapter {
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(activity);
+            if (TextUtils.equals("0",productBean.price)){
+                labelView.price.setVisibility(View.GONE);
+            }else {
+                labelView.price.setText("¥"+productBean.price);
+            }
             labelView.nameTv.setText(productBean.getTitle());
-            labelView.price.setText("¥"+productBean.price);
+
             labelView.setLayoutParams(layoutParams);
             if (productBean.getLoc() == 2) {
 //                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
@@ -491,12 +496,12 @@ public class IndexQJListAdapter extends BaseAdapter {
             labelView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (productBean.getLoc() == 2) { //左边
+                    if (productBean.getLoc() == 2) { //右边
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
                         labelView.setLayoutParams(lp);
-                    } else { //右边
+                    } else { //
 //                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
                         labelView.llTag.setBackgroundResource(R.drawable.label_right);
                         RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();

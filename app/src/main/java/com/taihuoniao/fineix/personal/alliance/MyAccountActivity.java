@@ -60,7 +60,7 @@ public class MyAccountActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        customHead.setHeadCenterTxtShow(true, "我的分成");
+        customHead.setHeadCenterTxtShow(true, "我的钱包");
         WindowUtils.chenjin(this);
     }
 

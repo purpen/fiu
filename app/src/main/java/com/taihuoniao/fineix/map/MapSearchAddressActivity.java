@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.map;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -39,17 +40,23 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+
 /**
  * @author lilin
  *         created at 2016/4/12 18:15
  */
 public class MapSearchAddressActivity extends BaseActivity implements View.OnClickListener {
+    private static final int REQUEST_CODE= 100;
     private static final int REQUEST_ADDRESS = 101;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
@@ -81,39 +88,19 @@ public class MapSearchAddressActivity extends BaseActivity implements View.OnCli
     @Override
     protected void getIntentData() {
         super.getIntentData();
-//        latLng = getIntent().getParcelableExtra("latLng");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (latLng == null) {
-        displayCurrentLocation();
-//        } else {
-//            MapUtil.getCurrentLocation(activity, new MapUtil.OnReceiveLocationListener() {
-//                @Override
-//                public void onReceiveLocation(BDLocation location) {
-//                    if (location == null) {
-//                        return;
-//                    }
-//                    MyLocationData locData = new MyLocationData.Builder()
-//                            .accuracy(location.getRadius())
-//                            // 此处设置开发者获取到的方向信息，顺时针0-360
-//                            .direction(100).latitude(location.getLatitude())
-//                            .longitude(location.getLongitude()).build();
-//                    mBDMap.setMyLocationData(locData);
-//
-//                    if (isFirstLoc) {
-//                        isFirstLoc = false;
-//                        LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
-//                        MapStatus.Builder builder = new MapStatus.Builder();
-//                        builder.target(ll).zoom(15.0f);
-//                        mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-//                    }
-//                }
-//            });
-//            loadAndshowGeoCoderResult(latLng);
-//        }
+        if (AndPermission.hasPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)){
+            displayCurrentLocation();
+        } else {
+            AndPermission.with(this)
+                    .requestCode(REQUEST_CODE)
+                    .permission(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                    .send();
+        }
     }
 
     private void displayCurrentLocation() {
@@ -137,6 +124,30 @@ public class MapSearchAddressActivity extends BaseActivity implements View.OnCli
                 }
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_CODE)
+    private void getRequestYes(List<String> grantedPermissions) {
+        displayCurrentLocation();
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this,REQUEST_CODE_SETTING).show();
+        }else {
+//            finish();
+        }
     }
 
     private void loadAndshowGeoCoderResult(LatLng latLng) {

@@ -1,9 +1,7 @@
 package com.taihuoniao.fineix.main;
 
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,12 +25,9 @@ import com.taihuoniao.fineix.beans.TabItem;
 import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
 import com.taihuoniao.fineix.main.fragment.CartFragment;
 import com.taihuoniao.fineix.main.fragment.DiscoverFragment;
-import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.NetWorkUtils;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -46,32 +41,54 @@ import java.util.TimerTask;
 import butterknife.Bind;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
-    @Bind(R.id.activity_main_container)RelativeLayout container;
-    @Bind(R.id.ll_nav0)LinearLayout ll_nav0;
-    @Bind(R.id.ll_nav1)LinearLayout ll_nav1;
-    @Bind(R.id.ll_nav2)LinearLayout ll_nav2;
-    @Bind(R.id.ll_nav3)LinearLayout ll_nav3;
-    @Bind(R.id.ll_nav4)LinearLayout ll_nav4;
-    @Bind(R.id.activity_main_fragment_group)FrameLayout fragmetnContainer;
-    @Bind(R.id.activity_main_bottomlinear)LinearLayout bottomLinear;
+    @Bind(R.id.activity_main_container)
+    RelativeLayout container;
+    @Bind(R.id.ll_nav0)
+    LinearLayout ll_nav0;
+    @Bind(R.id.ll_nav1)
+    LinearLayout ll_nav1;
+    @Bind(R.id.ll_nav2)
+    LinearLayout ll_nav2;
+    @Bind(R.id.ll_nav3)
+    LinearLayout ll_nav3;
+    @Bind(R.id.ll_nav4)
+    LinearLayout ll_nav4;
+    @Bind(R.id.activity_main_fragment_group)
+    FrameLayout fragmetnContainer;
+    @Bind(R.id.activity_main_bottomlinear)
+    LinearLayout bottomLinear;
 
-    @Bind(R.id.activity_main_homebtn)ImageView homeImg;
-    @Bind(R.id.activity_main_findbtn)ImageView findImg;
-    @Bind(R.id.activity_main_shopbtn)ImageView shopImg;
-    @Bind(R.id.activity_main_minebtn)ImageView mineImg;
-    @Bind(R.id.activity_main_cartbtn)ImageView cartImg;
+    @Bind(R.id.activity_main_homebtn)
+    ImageView homeImg;
+    @Bind(R.id.activity_main_findbtn)
+    ImageView findImg;
+    @Bind(R.id.activity_main_shopbtn)
+    ImageView shopImg;
+    @Bind(R.id.activity_main_minebtn)
+    ImageView mineImg;
+    @Bind(R.id.activity_main_cartbtn)
+    ImageView cartImg;
 
-    @Bind(R.id.tv_nav0)TextView tv_nav0;
-    @Bind(R.id.tv_nav1)TextView tv_nav1;
-    @Bind(R.id.tv_nav3)TextView tv_nav3;
-    @Bind(R.id.tv_nav4)TextView tv_nav4;
-    @Bind(R.id.tv_nav2)TextView tv_nav2;
+    @Bind(R.id.tv_nav0)
+    TextView tv_nav0;
+    @Bind(R.id.tv_nav1)
+    TextView tv_nav1;
+    @Bind(R.id.tv_nav3)
+    TextView tv_nav3;
+    @Bind(R.id.tv_nav4)
+    TextView tv_nav4;
+    @Bind(R.id.tv_nav2)
+    TextView tv_nav2;
 
     //用户第一次进入app会用到
-    @Bind(R.id.activity_main_first_relative)RelativeLayout firstRelative;
-    @Bind(R.id.activity_main_first_left_img)ImageView firstLeftImg;
-    @Bind(R.id.activity_main_first_right_img)ImageView firstRightImg;
-    @Bind(R.id.tv_msg_indicator)TextView tv_msg_indicator;
+    @Bind(R.id.activity_main_first_relative)
+    RelativeLayout firstRelative;
+    @Bind(R.id.activity_main_first_left_img)
+    ImageView firstLeftImg;
+    @Bind(R.id.activity_main_first_right_img)
+    ImageView firstRightImg;
+    @Bind(R.id.tv_msg_indicator)
+    TextView tv_msg_indicator;
 
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
@@ -109,10 +126,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(WellGoodsFragment.class);
         } else if (TextUtils.equals(DiscoverFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(DiscoverFragment.class);
-        } else if(TextUtils.equals(CartFragment.class.getSimpleName(),which)) {
+        } else if (TextUtils.equals(CartFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(CartFragment.class);
         }
     }
+
 
     @Override
     protected void getIntentData() {
@@ -139,15 +157,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//            WindowUtils.show(this);
             WindowUtils.showStatusBar(this);
             firstRelative.setPadding(0, App.getStatusBarHeight(), 0, 0);
         }
-
-        NetWorkUtils netWorkUtils = new NetWorkUtils(this);
-        netWorkUtils.checkVersionInfo();
     }
-
     public void hint() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WindowUtils.hide(this);
@@ -361,100 +374,100 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            final SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-            if (showFragment instanceof IndexFragment) {
-
-                //判断是不是第一次进入情界面
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
-                if (isFirstIn) {
-                    firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-                    firstLeftImg.setImageResource(R.mipmap.first_in_index);
-                    firstLeftImg.setVisibility(View.VISIBLE);
-                    firstRelative.setTag(1);
-                    firstRelative.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ((int) (v.getTag()) == 1) {
-                                firstLeftImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-                                firstRightImg.setImageResource(R.mipmap.first_in_index2);
-                                firstRightImg.setVisibility(View.VISIBLE);
-                                firstRelative.setTag(6);
-                            } else if ((int) (v.getTag()) == 6) {
-                                firstRelative.setVisibility(View.GONE);
-                                firstRightImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.nothing);
-                            }
-                        }
-                    });
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_QING, false);
-                    editor.apply();
-                }
-            } else if (showFragment instanceof DiscoverFragment) {
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
-                if (isFirstIn) {
-                    firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-                    firstLeftImg.setImageResource(R.mipmap.first_in_find);
-                    firstLeftImg.setVisibility(View.VISIBLE);
-                    firstRelative.setTag(1);
-                    firstRelative.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ((int) (v.getTag()) == 1) {
-                                firstLeftImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-                                firstRightImg.setImageResource(R.mipmap.first_in_find2);
-                                firstRightImg.setVisibility(View.VISIBLE);
-                                firstRelative.setTag(6);
-                            } else if ((int) (v.getTag()) == 6) {
-                                firstRelative.setVisibility(View.GONE);
-                                firstRightImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.nothing);
-                            }
-                        }
-                    });
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
-                    editor.apply();
-                }
-            } else if (showFragment instanceof WellGoodsFragment) {
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
-                if (isFirstIn) {
-                    firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-                    firstLeftImg.setImageResource(R.mipmap.first_in_wellgood);
-                    firstLeftImg.setVisibility(View.VISIBLE);
-                    firstRelative.setTag(1);
-                    firstRelative.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ((int) (v.getTag()) == 1) {
-                                firstLeftImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-                                firstRightImg.setImageResource(R.mipmap.first_in_wellgood2);
-                                firstRightImg.setVisibility(View.VISIBLE);
-                                firstRelative.setTag(6);
-                            } else if ((int) (v.getTag()) == 6) {
-                                firstRelative.setVisibility(View.GONE);
-                                firstRightImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.nothing);
-                            }
-                        }
-                    });
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
-                    editor.apply();
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            final SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+//            if (showFragment instanceof IndexFragment) {
+//
+//                //判断是不是第一次进入情界面
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
+//                if (isFirstIn) {
+//                    firstRelative.setVisibility(View.VISIBLE);
+//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                    firstLeftImg.setImageResource(R.mipmap.first_in_index);
+//                    firstLeftImg.setVisibility(View.VISIBLE);
+//                    firstRelative.setTag(1);
+//                    firstRelative.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if ((int) (v.getTag()) == 1) {
+//                                firstLeftImg.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                                firstRightImg.setImageResource(R.mipmap.first_in_index2);
+//                                firstRightImg.setVisibility(View.VISIBLE);
+//                                firstRelative.setTag(6);
+//                            } else if ((int) (v.getTag()) == 6) {
+//                                firstRelative.setVisibility(View.GONE);
+//                                firstRightImg.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.nothing);
+//                            }
+//                        }
+//                    });
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_QING, false);
+//                    editor.apply();
+//                }
+//            } else if (showFragment instanceof DiscoverFragment) {
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
+//                if (isFirstIn) {
+//                    firstRelative.setVisibility(View.VISIBLE);
+//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                    firstLeftImg.setImageResource(R.mipmap.first_in_find);
+//                    firstLeftImg.setVisibility(View.VISIBLE);
+//                    firstRelative.setTag(1);
+//                    firstRelative.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if ((int) (v.getTag()) == 1) {
+//                                firstLeftImg.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                                firstRightImg.setImageResource(R.mipmap.first_in_find2);
+//                                firstRightImg.setVisibility(View.VISIBLE);
+//                                firstRelative.setTag(6);
+//                            } else if ((int) (v.getTag()) == 6) {
+//                                firstRelative.setVisibility(View.GONE);
+//                                firstRightImg.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.nothing);
+//                            }
+//                        }
+//                    });
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
+//                    editor.apply();
+//                }
+//            } else if (showFragment instanceof WellGoodsFragment) {
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
+//                if (isFirstIn) {
+//                    firstRelative.setVisibility(View.VISIBLE);
+//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                    firstLeftImg.setImageResource(R.mipmap.first_in_wellgood);
+//                    firstLeftImg.setVisibility(View.VISIBLE);
+//                    firstRelative.setTag(1);
+//                    firstRelative.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if ((int) (v.getTag()) == 1) {
+//                                firstLeftImg.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                                firstRightImg.setImageResource(R.mipmap.first_in_wellgood2);
+//                                firstRightImg.setVisibility(View.VISIBLE);
+//                                firstRelative.setTag(6);
+//                            } else if ((int) (v.getTag()) == 6) {
+//                                firstRelative.setVisibility(View.GONE);
+//                                firstRightImg.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.nothing);
+//                            }
+//                        }
+//                    });
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
+//                    editor.apply();
+//                }
+//            }
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -462,6 +475,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         for (Fragment fragment : fragments) {
             fragment.onActivityResult(requestCode, resultCode, data);
         }
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     /**
@@ -501,7 +516,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (fragment != null) {
             fm.beginTransaction().remove(fragment).commitAllowingStateLoss();
         }
-        for(int i = 0; i < fragments.size(); i++) {
+        for (int i = 0; i < fragments.size(); i++) {
             if (fragments.get(i) instanceof MineFragment) {
                 fragments.remove(i);
                 break;

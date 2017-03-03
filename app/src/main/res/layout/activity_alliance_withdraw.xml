@@ -43,7 +43,7 @@
                 android:layout_height="44dp"
                 android:inputType="numberDecimal"
                 android:background="@color/color_transparent"
-                android:hint="100.00元"
+                android:hint="10.00元"
                 android:textColorHint="#BFBFBF"
                 android:maxLength="9"
                 android:textColor="#222222"
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
-            android:text="*每次提现金额不得少于100元"
+            android:text="*每次提现金额不得少于10元"
             android:textColor="#F76260" />
 
         <View

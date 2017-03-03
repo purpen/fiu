@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -47,6 +48,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.ShopMarginDecoration;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.NetWorkUtils;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
@@ -60,6 +62,9 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -70,17 +75,25 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import okhttp3.Call;
 
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
+
 /**
  * Created by taihuoniao on 2016/8/9.
  */
 public class IndexFragment extends BaseFragment<BannerBean> implements View.OnClickListener, PullToRefreshBase.OnRefreshListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick {
 
-    @Bind(R.id.pullToRefreshListView_home)PullToRefreshListView pullRefreshView;
-    @Bind(R.id.progress_bar)ProgressBar progressBar;
-    @Bind(R.id.title_layout)RelativeLayout titleRelative;
-    @Bind(R.id.search_img)ImageView searchImg;
-    @Bind(R.id.subs_img)ImageView subsImg;
-
+    @Bind(R.id.pullToRefreshListView_home)
+    PullToRefreshListView pullRefreshView;
+    @Bind(R.id.progress_bar)
+    ProgressBar progressBar;
+    @Bind(R.id.title_layout)
+    RelativeLayout titleRelative;
+    @Bind(R.id.search_img)
+    ImageView searchImg;
+    @Bind(R.id.subs_img)
+    ImageView subsImg;
+    private boolean isScan;
     private ListView listView;
     private ScrollableView scrollableView; //顶部轮播图
     private WaittingDialog dialog;//网络请求对话框
@@ -92,7 +105,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表的用户列表数据
-//    private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
+    //    private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
     private int currentPage = 1;//网络请求页码
 
     private List<SubjectListBean.DataBean.RowsBean> subjectList001;//主题列表数据
@@ -105,7 +118,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private List<SearchBean.Data.SearchItem> searchList;
 
     private ProductAlbumAdapter indexAdapter003;//主题列表适配器
-//    private IndexAdapter004 indexAdapter004;//主题列表适配器
+    //    private IndexAdapter004 indexAdapter004;//主题列表适配器
     private IndexAdapter005 indexAdapter005;//D3IN
 
     @Override
@@ -159,12 +172,26 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     @Override
     protected void requestNet() {
+        if (AndPermission.hasPermission(activity, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.CAMERA)) {
+            requestData();
+        } else {
+            // 申请权限。
+            AndPermission.with(this)
+                    .requestCode(REQUEST_PHONE_STATE_CODE)
+                    .permission(android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.CAMERA)
+                    .send();
+
+        }
+    }
+
+    private void requestData() {
         if (!dialog.isShowing()) {
             dialog.show();
         }
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-
+        NetWorkUtils netWorkUtils = new NetWorkUtils(activity);
+        netWorkUtils.checkVersionInfo();
         sceneNet();
 //        subjectList();
         getBanners();
@@ -181,10 +208,40 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         getUserList();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusYes(List<String> grantedPermissions) {
+        if (grantedPermissions.contains(Manifest.permission.READ_PHONE_STATE)) {
+            requestData();
+        }
+        if (grantedPermissions.contains(Manifest.permission.CAMERA)&&isScan) {
+            startActivity(new Intent(getActivity(), CaptureActivity.class));
+        }
+
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+        } else {
+            activity.finish();
+        }
+    }
+
 
     @OnClick({R.id.ll_select_city})
-    void performClick(View v){
-        switch (v.getId()){
+    void performClick(View v) {
+        switch (v.getId()) {
             case R.id.ll_select_city:
 
                 break;
@@ -206,7 +263,16 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 break;
             case R.id.subs_img:
                 // 扫码
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                isScan =true;
+                if (AndPermission.hasPermission(activity, android.Manifest.permission.CAMERA)) {
+                    startActivity(new Intent(getActivity(), CaptureActivity.class));
+                } else {
+                    // 申请权限。
+                    AndPermission.with(this)
+                            .requestCode(REQUEST_PHONE_STATE_CODE)
+                            .permission(android.Manifest.permission.CAMERA)
+                            .send();
+                }
 
                 // TODO: 2017/2/14 查看订阅
 /*                if (!LoginInfo.isUserLogin()) {
@@ -256,8 +322,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     //获取中间插入的用户列表
     private void getUserList() {
         HashMap<String, String> re = ClientDiscoverAPI.getUserListRequestParams(5);
-        Call httpHandler = HttpRequest.post(re, URL.USER_FIND_USER, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
+        Call httpHandler = HttpRequest.post(re, URL.USER_FIND_USER, new GlobalDataCallBack() {
+            //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 Log.e("<<<首页用户列表", json);
@@ -309,7 +375,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     //获取精选主题
     private void subjectList() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getIndexChosenSubjectRequestParams();
-        Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_SUBJECT_INDEX_SUJECT_STICK, new GlobalDataCallBack(){
+        Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_INDEX_SUJECT_STICK, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 SubjectListBean subjectListBean = new SubjectListBean();
@@ -330,7 +396,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
             @Override
             public void onFailure(String error) {
-                LogUtil.e("getIndexChosenSubject",getResources().getString(R.string.network_err));
+                LogUtil.e("getIndexChosenSubject", getResources().getString(R.string.network_err));
             }
         });
         addNet(httpHandler);
@@ -341,7 +407,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         dialog.show();
         HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 20 + "", null, null, 2 + "", null, null, null);
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 Log.e("<<<情景列表", json);
@@ -370,12 +435,12 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                         sneceComplete = 1;
                         return;
                     }
-                   new android.os.Handler().postDelayed(new Runnable() {
-                       @Override
-                       public void run() {
-                           indexQJListAdapter.notifyDataSetChanged();
-                       }
-                   }, 200);
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            indexQJListAdapter.notifyDataSetChanged();
+                        }
+                    }, 200);
                 }
             }
 
@@ -474,15 +539,16 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     /**
      * headView 轮播图 + 精选主题
+     *
      * @return headView
      */
-    private View getHeadView(){
+    private View getHeadView() {
         View headerView = View.inflate(getActivity(), R.layout.header_index, null);
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
         RecyclerView recyclerView001 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_001);
         recyclerView001.setHasFixedSize(true);
         recyclerView001.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerView001.addItemDecoration(new ShopMarginDecoration(activity,R.dimen.dp5));
+        recyclerView001.addItemDecoration(new ShopMarginDecoration(activity, R.dimen.dp5));
         indexAdapter001 = new IndexAdapter001(getActivity(), new GlobalCallBack() {
             @Override
             public void callBack(Object object) {
@@ -494,11 +560,11 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         });
         recyclerView001.setAdapter(indexAdapter001);
 
-        GridViewForScrollView   recyclerView002 = (GridViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
+        GridViewForScrollView recyclerView002 = (GridViewForScrollView) headerView.findViewById(R.id.recyclerView_index_002);
         subjectList002 = new ArrayList<>();
         productList = new ArrayList<>();
         searchList = new ArrayList<>();
-        indexAdapter002 = new AddProductGridAdapter(getActivity(),productList, searchList);
+        indexAdapter002 = new AddProductGridAdapter(getActivity(), productList, searchList);
         recyclerView002.setAdapter(indexAdapter002);
         recyclerView002.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -532,14 +598,14 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         RecyclerView recyclerView005 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_005);
         recyclerView005.setHasFixedSize(true);
         recyclerView005.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerView005.addItemDecoration(new ShopMarginDecoration(activity,R.dimen.dp5));
-        indexAdapter005=new IndexAdapter005(activity,null);
+        recyclerView005.addItemDecoration(new ShopMarginDecoration(activity, R.dimen.dp5));
+        indexAdapter005 = new IndexAdapter005(activity, null);
         indexAdapter005.setOnItemClickListener(new IRecycleViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 BannerBean.RowsBean item = indexAdapter005.getItem(position);
-                if (item==null) return;
-                GoToNextUtils.goToIntent(activity,Integer.valueOf(item.type),item.web_url);
+                if (item == null) return;
+                GoToNextUtils.goToIntent(activity, Integer.valueOf(item.type), item.web_url);
             }
 
             @Override
@@ -556,11 +622,12 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
      */
     private void getBanners() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetBannersRequestParams("app_fiu_sight_index_slide");
-        Call httpHandler = HttpRequest.post(requestParams,URL.BANNERS_URL, new GlobalDataCallBack(){
+        Call httpHandler = HttpRequest.post(requestParams, URL.BANNERS_URL, new GlobalDataCallBack() {
 
             @Override
             public void onSuccess(String json) {
-                BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() { });
+                BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() {
+                });
                 if (bannerData != null) {
                     List<BannerBean.RowsBean> rows = bannerData.rows;
                     refreshUI(rows);
@@ -568,7 +635,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             }
 
             @Override
-            public void onFailure(String error) {}
+            public void onFailure(String error) {
+            }
         });
         addNet(httpHandler);
     }
@@ -578,10 +646,11 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
      */
     private void getBanners2() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetBannersRequestParams("app_fiu_index_new_zone");
-        Call httpHandler = HttpRequest.post(requestParams,URL.BANNERS_URL, new GlobalDataCallBack(){
+        Call httpHandler = HttpRequest.post(requestParams, URL.BANNERS_URL, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() { });
+                BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() {
+                });
                 if (bannerData != null) {
                     List<BannerBean.RowsBean> rows = bannerData.rows;
                     indexAdapter001.setRowsEntities(rows);
@@ -589,7 +658,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             }
 
             @Override
-            public void onFailure(String error) {}
+            public void onFailure(String error) {
+            }
         });
         addNet(httpHandler);
     }
@@ -599,7 +669,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
      */
     private void getLasteProduct(){
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, null, String.valueOf(4), null, null, null, "1", null);
-        HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
+        HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 ProductBean productBean = new ProductBean();
@@ -624,7 +694,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             }
 
             @Override
-            public void onFailure(String error) { }
+            public void onFailure(String error) {
+            }
         });
     }
 
@@ -662,11 +733,12 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private void getBanners4() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcategoryListRequestParams("1", "12", null);
         requestParams.put("show_sub", "1");
-        HttpRequest.post(requestParams, URL.CATEGORY_LIST, new GlobalDataCallBack(){
+        HttpRequest.post(requestParams, URL.CATEGORY_LIST, new GlobalDataCallBack() {
 
             @Override
             public void onSuccess(String json) {
-                com.taihuoniao.fineix.home.beans.CategoryListBean  categoryListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<com.taihuoniao.fineix.home.beans.CategoryListBean >>() { });
+                com.taihuoniao.fineix.home.beans.CategoryListBean categoryListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<com.taihuoniao.fineix.home.beans.CategoryListBean>>() {
+                });
                 if (categoryListBean != null) {
 //                    indexAdapter004.setRowsEntities(categoryListBean.getRows());
                 }
@@ -684,10 +756,11 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
      */
     private void getBanners5() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetBannersRequestParams("app_fiu_index_scene_stick");
-        Call httpHandler = HttpRequest.post(requestParams,URL.BANNERS_URL, new GlobalDataCallBack(){
+        Call httpHandler = HttpRequest.post(requestParams, URL.BANNERS_URL, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() { });
+                BannerBean bannerData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BannerBean>>() {
+                });
                 if (bannerData != null) {
                     List<BannerBean.RowsBean> rows = bannerData.rows;
                     indexAdapter005.setRowsEntities(rows);
@@ -695,8 +768,11 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             }
 
             @Override
-            public void onFailure(String error) {}
+            public void onFailure(String error) {
+            }
         });
         addNet(httpHandler);
     }
+
+
 }

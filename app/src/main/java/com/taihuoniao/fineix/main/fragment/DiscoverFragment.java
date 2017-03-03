@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.beans.DiscoverBean;
 import com.taihuoniao.fineix.beans.DiscoverIndexBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -163,7 +164,7 @@ public class DiscoverFragment extends BaseFragment {
 
     @Override
     protected void requestNet() {
-        HttpRequest.post(null, URL.DISCOVER_URL, new GlobalDataCallBack() {
+        HttpRequest.post(ClientDiscoverAPI.getDefaultParams(), URL.DISCOVER_URL, new GlobalDataCallBack() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) dialog.show();

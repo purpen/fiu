@@ -32,4 +32,8 @@ public class Constants {
     public static final String QJ_THEME_TYPE = "11"; //情境专题
     public static final String QJ_DETAIL_TYPE = "12"; //情境详情
 
+    public static final String PACKAGE_URL_SCHEME = "package:";
+
+    public static final int REQUEST_PHONE_STATE_CODE = 100; // 权限请求码
+    public static final int REQUEST_CODE_SETTING = 300;
 }

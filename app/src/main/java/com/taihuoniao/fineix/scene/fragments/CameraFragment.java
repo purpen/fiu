@@ -30,6 +30,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.yanzhenjie.permission.AndPermission;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -43,6 +44,7 @@ import java.util.List;
  * Created by taihuoniao on 2016/3/14.
  */
 public class CameraFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener {
+    private static final int REQUEST_CODE = 100;
     private static final int FOCUS = 0;
     private static final int ZOOM = 1;
     private GlobalTitleLayout titleLayout;
@@ -102,6 +104,20 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         bottomRelative.setLayoutParams(lp);
         takePicture = (ImageView) view.findViewById(R.id.fragment_camera_takepic);
         focus = view.findViewById(R.id.fragment_camera_focus);
+//        if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)){
+//            requestCameraPermission();
+//        } else {
+//             AndPermission.with(this)
+//                    .requestCode(REQUEST_CODE)
+//                    .permission(Manifest.permission.CAMERA)
+//                    .send();
+//        }
+        requestCameraPermission();
+        dialog = new WaittingDialog(getActivity());
+        return view;
+    }
+
+    private void requestCameraPermission(){
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         surfaceHolder.setKeepScreenOn(true);
@@ -109,18 +125,42 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         surfaceView.setBackgroundColor(android.content.ComponentCallbacks2.TRIM_MEMORY_BACKGROUND);
         SurfaceCallback surfaceCallback = new SurfaceCallback();
         surfaceView.getHolder().addCallback(surfaceCallback);
-        dialog = new WaittingDialog(getActivity());
-        return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+//    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+//    @PermissionYes(REQUEST_CODE)
+//    private void getRequestYes(List<String> grantedPermissions) {
+//        requestCameraPermission();
+//        LogUtil.e("getRequestYes");
+//    }
+
+//    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+//    @PermissionNo(REQUEST_CODE)
+//    private void getPhoneStatusNo(List<String> deniedPermissions) {
+//        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+//        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+//            // 第一种：用默认的提示语。
+//            AndPermission.defaultSettingDialog(this,REQUEST_CODE_SETTING).show();
+//        }else {
+//            activity.finish();
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.self_take:
-                cameraInst.stopPreview();//停掉原来摄像头的预览
-                cameraInst.release();//释放资源
-                cameraInst = null;//取消原来摄像头
+                if (cameraInst!=null){
+                    cameraInst.stopPreview();//停掉原来摄像头的预览
+                    cameraInst.release();//释放资源
+                    cameraInst = null;//取消原来摄像头
+                }
                 if (camera_facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
                     camera_facing = Camera.CameraInfo.CAMERA_FACING_FRONT;
                 } else {
@@ -664,7 +704,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         public void surfaceCreated(SurfaceHolder holder) {
             surfaceHolder = holder;
             if (null == cameraInst) {
-//                Log.e("<<<", "surfaceCreate");
+                Log.e("<<<", "surfaceCreate");
                 try {
                     int numberOfCameras = Camera.getNumberOfCameras();
                     Camera.CameraInfo cameraInfo = new Camera.CameraInfo();

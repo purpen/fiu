@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -15,20 +14,12 @@ import android.widget.VideoView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainActivity;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.URL;
-import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.view.ScrollableView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,7 +29,7 @@ import butterknife.OnClick;
  * @author lilin
  *         created at 2016/4/18 16:10
  */
-public class UserGuideActivity extends BaseActivity {
+public class UserGuideActivity extends BaseActivity {//implements EasyPermissions.PermissionCallbacks {
     @Bind(R.id.scrollableView)
     ScrollableView scrollableView;
     @Bind(R.id.iv_welcome)
@@ -59,6 +50,7 @@ public class UserGuideActivity extends BaseActivity {
     private boolean empty;
     private boolean taskRoot;
     private boolean readBool;
+
     public UserGuideActivity() {
         super(R.layout.activity_user_guide_layout);
     }
@@ -73,6 +65,7 @@ public class UserGuideActivity extends BaseActivity {
                 finish();
             }
         }
+//        readPhoneStatus();
     }
 
     @Override
@@ -97,7 +90,8 @@ public class UserGuideActivity extends BaseActivity {
                 public void run() {
                     iv_welcome.setVisibility(View.GONE);
                     if (empty) {
-                        initVideoRes();
+                        initGuide();
+//                        initVideoRes();
                     } else {
                         if (taskRoot) {
                             if (readBool) {
@@ -115,43 +109,43 @@ public class UserGuideActivity extends BaseActivity {
     }
 
 
-    private void initVideoRes() {
-        scrollableView.setVisibility(View.GONE);
-        rlVideo.setVisibility(View.VISIBLE);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        activityVideoView.setLayoutParams(layoutParams);
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.first_in_app;
-        activityVideoView.setVideoURI(Uri.parse(uri));
-        activityVideoView.start();
-        SPUtil.write(DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
-        activityVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-
-                initGuide();
-            }
-        });
-        activityVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                initGuide();
-                return true;
-            }
-        });
-        activityVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mediaPlayer = mp;
-                setVolume(0);
-            }
-        });
-    }
+//    private void initVideoRes() {
+//        scrollableView.setVisibility(View.GONE);
+//        rlVideo.setVisibility(View.VISIBLE);
+//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+//                RelativeLayout.LayoutParams.MATCH_PARENT,
+//                RelativeLayout.LayoutParams.MATCH_PARENT);
+//        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+//        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        activityVideoView.setLayoutParams(layoutParams);
+//        String uri = "android.resource://" + getPackageName() + "/" + R.raw.first_in_app;
+//        activityVideoView.setVideoURI(Uri.parse(uri));
+//        activityVideoView.start();
+//        SPUtil.write(DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
+//        activityVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//
+//                initGuide();
+//            }
+//        });
+//        activityVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+//            @Override
+//            public boolean onError(MediaPlayer mp, int what, int extra) {
+//                initGuide();
+//                return true;
+//            }
+//        });
+//        activityVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                mediaPlayer = mp;
+//                setVolume(0);
+//            }
+//        });
+//    }
 
     private void showInvite() {
         scrollableView.setVisibility(View.VISIBLE);
@@ -162,22 +156,7 @@ public class UserGuideActivity extends BaseActivity {
     }
 
     private void initGuide() {
-        HashMap<String, String> params = ClientDiscoverAPI.getactiveStatusRequestParams();
-        HttpRequest.post(params, URL.GATEWAY_RECORD_FIU_USER_ACTIVE, new GlobalDataCallBack(){
-            @Override
-            public void onSuccess(String json) {
-                LogUtil.e(TAG,json);
-                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                if (!response.isSuccess()) {
-                    LogUtil.e(TAG, "提交渠道失败信息:" + response.getMessage());
-                }
-            }
 
-            @Override
-            public void onFailure(String error) {
-                LogUtil.e(TAG, "网络异常,请确保网络畅通");
-            }
-        });
         rlVideo.setVisibility(View.GONE);
         activityVideoView = null;
         scrollableView.setVisibility(View.VISIBLE);
@@ -190,7 +169,27 @@ public class UserGuideActivity extends BaseActivity {
         list.add(R.mipmap.guide2);
         list.add(R.mipmap.guide3);
         scrollableView.setAdapter(new ViewPagerAdapter<>(activity, list));
+        SPUtil.write(DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
     }
+
+//    private void submitActiveStatus() {
+//        HashMap<String, String> params = ClientDiscoverAPI.getactiveStatusRequestParams();
+//        HttpRequest.post(params, URL.GATEWAY_RECORD_FIU_USER_ACTIVE, new GlobalDataCallBack() {
+//            @Override
+//            public void onSuccess(String json) {
+//                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+//                ToastUtils.showInfo("提交渠道信息成功");
+//                if (!response.isSuccess()) {
+//                    LogUtil.e(TAG, "提交渠道失败信息:" + response.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                LogUtil.e(TAG, "网络异常,请确保网络畅通");
+//            }
+//        });
+//    }
 
 
     private void goMainPage() {
@@ -216,15 +215,6 @@ public class UserGuideActivity extends BaseActivity {
             activityVideoView.pause();
         }
     }
-
-    //    @Override
-//    public void onBackPressed() {
-//        if (isGuide) {
-//            goMainPage();
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
 
 
     @Override
@@ -267,4 +257,63 @@ public class UserGuideActivity extends BaseActivity {
         final float volume = (float) (1 - (numerator / Math.log(max)));
         this.mediaPlayer.setVolume(volume, volume);
     }
+
+//    @AfterPermissionGranted(RC_READ_PHONE_STATUS_PERM)
+//    public void readPhoneStatus() {
+//        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_PHONE_STATE)) {
+            // Have permission, do the thing!
+//            submitActiveStatus();
+//            Toast.makeText(this, "TODO: READ_PHONE_STATE things", Toast.LENGTH_LONG).show();
+//        } else {
+//             Ask for one permission
+//            EasyPermissions.requestPermissions(this, getString(R.string.rationale_read_phone_status),
+//                    RC_READ_PHONE_STATUS_PERM, Manifest.permission.READ_PHONE_STATE);
+//        }
+//    }
+
+//    @Override
+//    public void onPermissionsGranted(int requestCode, List<String> perms) {
+//        Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
+////        submitActiveStatus();
+//    }
+
+//    @Override
+//    public void onPermissionsDenied(int requestCode, List<String> perms) {
+//        Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size() + perms.get(0));
+//        for (String str : perms) {
+//            if (TextUtils.equals(str,Manifest.permission.READ_PHONE_STATE)){
+//                finish();
+//                break;
+//            }
+//        }
+//
+//        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+//            AppSettingsDialog.Builder builder = new AppSettingsDialog.Builder(this);
+//            builder.setRationale(R.string.rationale_read_phone_status);
+//            builder.build().show();
+//        }
+//    }
+
+//    // 启动应用的设置
+//    private void startAppSettings() {
+//        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//        intent.setData(Uri.parse(Constants.PACKAGE_URL_SCHEME + getPackageName()));
+//        startActivity(intent);
+//    }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+//    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == RC_READ_PHONE_STATUS_PERM) {
+//            // Do something after user returned from app settings screen, like showing a Toast.
+//            readPhoneStatus(); //再次请求权限
+//        }
+//    }
 }

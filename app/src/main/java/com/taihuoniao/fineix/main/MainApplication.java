@@ -38,8 +38,6 @@ import com.umeng.message.entity.UMessage;
 import java.io.File;
 import java.util.List;
 
-import cn.sharesdk.framework.ShareSDK;
-
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -88,7 +86,7 @@ public class MainApplication extends Application {
 
         //初始化universal_image_load
 //        initImageLoader();
-        UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_background_750_1334);
+        UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_load);
 
         JsonUtil.init();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";

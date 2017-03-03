@@ -558,9 +558,14 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(activity);
             labelView.nameTv.setText(productBean.getTitle());
+            if (TextUtils.equals("0",productBean.price)){
+                labelView.price.setVisibility(View.GONE);
+            }else {
+                labelView.price.setText("¥"+productBean.price);
+            }
             labelView.setLayoutParams(layoutParams);
             if (productBean.getLoc() == 2) {
-                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
+                labelView.llTag.setBackgroundResource(R.drawable.label_left);
                 RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
                 labelView.pointContainer.setLayoutParams(layoutParams1);
@@ -574,9 +579,9 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
                         labelView.setLayoutParams(lp);
                     } else {
-                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
+                        labelView.llTag.setBackgroundResource(R.drawable.label_right);
                         RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
-                        layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
+                        layoutParams1.leftMargin = (int) (labelView.llTag.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
                         labelView.pointContainer.setLayoutParams(layoutParams1);
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);

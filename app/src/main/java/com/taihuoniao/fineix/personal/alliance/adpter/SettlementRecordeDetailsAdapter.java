@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.personal.alliance.bean.SettlementRecordeDetailsBean;
-import com.taihuoniao.fineix.personal.alliance.bean.SettlementRecordeListBean;
 import com.taihuoniao.fineix.utils.StringFormatUtils;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
 
 public class SettlementRecordeDetailsAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
-    private List<SettlementRecordeDetailsBean.RowsEntity> mRows;
+    private List<SettlementRecordeDetailsBean.RowsBean> mRows;
 
     public SettlementRecordeDetailsAdapter(Context context) {
         this.mLayoutInflater = LayoutInflater.from(context);
@@ -60,27 +59,27 @@ public class SettlementRecordeDetailsAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        SettlementRecordeDetailsBean.RowsEntity rowsEntity = mRows.get(position);
+        SettlementRecordeDetailsBean.RowsBean rowsEntity = mRows.get(position);
         if (rowsEntity != null) {
-            ((TextView)viewHolder.linearLayout1.getChildAt(0)).setText(rowsEntity.getCreated_at());
+            ((TextView)viewHolder.linearLayout1.getChildAt(0)).setText(rowsEntity.created_at);
             ((TextView)viewHolder.linearLayout1.getChildAt(1)).setText("");
-            ((TextView)viewHolder.linearLayout2.getChildAt(0)).setText("产品");
-            ((TextView)viewHolder.linearLayout2.getChildAt(1)).setText(rowsEntity.getBalance().getProduct().getShort_title());
+            ((TextView)viewHolder.linearLayout2.getChildAt(0)).setText("名称");
+            ((TextView)viewHolder.linearLayout2.getChildAt(1)).setText(rowsEntity.balance.title);
             ((TextView)viewHolder.linearLayout3.getChildAt(0)).setText("单价");
-            ((TextView)viewHolder.linearLayout3.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.getBalance().getSku_price()));
+            ((TextView)viewHolder.linearLayout3.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.balance.sku_price));
             ((TextView)viewHolder.linearLayout4.getChildAt(0)).setText("收益比率");
-            ((TextView)viewHolder.linearLayout4.getChildAt(1)).setText(String.valueOf(Double.valueOf(rowsEntity.getBalance().getCommision_percent()) * 100D) + "%");
-            ((TextView)viewHolder.linearLayout5.getChildAt(0)).setText("佣金");
-            ((TextView)viewHolder.linearLayout5.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.getBalance().getUnit_price()));
+            ((TextView)viewHolder.linearLayout4.getChildAt(1)).setText(String.valueOf(Double.valueOf(rowsEntity.balance.commision_percent) * 100D) + "%");
+            ((TextView)viewHolder.linearLayout5.getChildAt(0)).setText("收益");
+            ((TextView)viewHolder.linearLayout5.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.balance.unit_price));
             ((TextView)viewHolder.linearLayout6.getChildAt(0)).setText("数量");
-            ((TextView)viewHolder.linearLayout6.getChildAt(1)).setText(rowsEntity.getBalance().getQuantity());
-            ((TextView)viewHolder.linearLayout7.getChildAt(0)).setText("已结算收益");
-            ((TextView)viewHolder.linearLayout7.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.getBalance().getTotal_price()));
+            ((TextView)viewHolder.linearLayout6.getChildAt(1)).setText(rowsEntity.balance.quantity+"");
+            ((TextView)viewHolder.linearLayout7.getChildAt(0)).setText("合计收益");
+            ((TextView)viewHolder.linearLayout7.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.balance.total_price));
         }
         return convertView;
     }
 
-    public void setList(List<SettlementRecordeDetailsBean.RowsEntity> rows) {
+    public void setList(List<SettlementRecordeDetailsBean.RowsBean> rows) {
         if (mRows == null) {
             mRows = rows;
         } else {

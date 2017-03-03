@@ -350,7 +350,9 @@
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_about_us"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_feedback"
@@ -383,10 +385,10 @@
             android:visibility="gone" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="38dp"
             android:layout_height="@dimen/dp45"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/logo_no_word" />
+            android:src="@mipmap/logo_white" />
 
         <ImageButton
             android:id="@+id/ibtn_setting"

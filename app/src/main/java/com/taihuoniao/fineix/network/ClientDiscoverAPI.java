@@ -10,13 +10,18 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by android on 2015/12/27.
  * 参数设置
  */
 public class ClientDiscoverAPI {
-
+    @NonNull
+    public static HashMap<String, String> getDefaultParams() {
+        HashMap<String, String> params = new HashMap<>();
+        return params;
+    }
     @NonNull
     public static HashMap<String, String> getdeleteProductRequestParams(String id) {
         HashMap<String, String> params = new HashMap<>();
@@ -1309,21 +1314,12 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    public static HashMap getRelateProducts333(int curPage, String id) {
+    //分享h5链接
+    public static Map<String,String> getH5ShareParams(String id,String type,String storage_id) {
         HashMap<String, String> params = new HashMap<>();
-        params.put("scene_id",id);
-        params.put("page", curPage+"");
-        params.put("size",Constants.PAGE_SIZE);
+        params.put("id",id);
+        params.put("type", type);
+        params.put("storage_id",storage_id);
         return params;
     }
-
-    public static HashMap getRelateProducts4444(int curPage, String id) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("scene_id",id);
-        params.put("page", curPage+"");
-        params.put("size",Constants.PAGE_SIZE);
-        return params;
-    }
-
-
 }
