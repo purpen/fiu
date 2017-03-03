@@ -27,6 +27,7 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.FirstProductBean;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -37,6 +38,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -69,6 +71,9 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
     private List<FirstProductBean.DataBean.ItemsBean> firstProductList;//最新好货推荐数据
     private FirstProductAdapter firstProductAdapter;//最新好货推荐适配器
 
+    private List<FirstProductBean.DataBean.ItemsBean> secondProductList;//最新好货推荐数据
+    private FirstProductAdapter secondProductAdapter;//最新好货推荐适配器
+
     private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
     private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
 
@@ -77,6 +82,7 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
     @Override
     protected void requestNet() {
         firstProducts();
+        secondProduct();
         subjectList();
     }
 
@@ -85,8 +91,7 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods_01, null);
         ButterKnife.bind(this, view);
 
-        initListView();
-        mListView.addHeaderView(getHeaderView());
+        initListView();        mListView.addHeaderView(getHeaderView());
 
         return view;
     }
@@ -127,7 +132,7 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
     }
 
     private View getHeaderView() {
-        View headerView = View.inflate(getActivity(), R.layout.header1_wellgoods_fragment, null);
+        View headerView = View.inflate(getActivity(), R.layout.headerview_wellgoods_tab1, null);
         RecyclerView productRecycler = (RecyclerView) headerView.findViewById(R.id.product_recycler);
         productRecycler.setHasFixedSize(true);
         productRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -141,6 +146,20 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
             }
         });
         productRecycler.setAdapter(firstProductAdapter);
+
+        RecyclerView productRecycler2 = (RecyclerView) headerView.findViewById(R.id.product_recycler2);
+        productRecycler2.setHasFixedSize(true);
+        productRecycler2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        secondProductList = new ArrayList<>();
+        secondProductAdapter = new FirstProductAdapter(firstProductList, new EditRecyclerAdapter.ItemClick() {
+            @Override
+            public void click(int postion) {
+                Intent intent = new Intent(getActivity(), BuyGoodsDetailsActivity.class);
+                intent.putExtra("id", secondProductList.get(postion).get_id());
+                getActivity().startActivity(intent);
+            }
+        });
+        productRecycler2.setAdapter(secondProductAdapter);
         return headerView;
     }
 
@@ -202,11 +221,9 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
     private void firstProducts() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getfirstProductsRequestParams();
         Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
-            //        HttpHandler<String> httpHandler = ClientDiscoverAPI.firstProducts(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 Log.e("<<<最新好货推荐", json);
-//                WriteJsonToSD.writeToSD("json",json);
                 FirstProductBean firstProductBean = new FirstProductBean();
                 try {
                     Gson gson = new Gson();
@@ -229,5 +246,39 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
             }
         });
         addNet(httpHandler);
+    }
+
+    /**
+     * 好货最热推荐接口
+     */
+    private void secondProduct(){
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getfirstProductsRequestParams();
+        HttpRequest.post(requestParams, URL.PRODUCT_INDEX_HOT, new GlobalDataCallBack(){
+
+            @Override
+            public void onSuccess(String json) {
+                Product3Bean product3Bean = JsonUtil.fromJson(json,new TypeToken<HttpResponse<Product3Bean>>(){});
+                if (product3Bean != null && product3Bean.getItems() != null) {
+                    int size = product3Bean.getItems().size();
+
+                    secondProductList.clear();
+                    for(int i = 0; i < size; i++) {
+                        Product3Bean.ItemsEntity itemsEntity = product3Bean.getItems().get(i);
+                        FirstProductBean.DataBean.ItemsBean bean = new FirstProductBean.DataBean.ItemsBean();
+                        bean.set_id(itemsEntity.get_id());
+                        bean.setTitle(itemsEntity.getTitle());
+                        bean.setBrand_cover_url(itemsEntity.getBrand_cover_url());
+                        bean.setBrand_id(itemsEntity.getBrand_id());
+                        bean.setCover_url(itemsEntity.getCover_url());
+                        bean.setSale_price(Double.valueOf(itemsEntity.getSale_price()));
+                        secondProductList.add(bean);
+                    }
+                    secondProductAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) { }
+        });
     }
 }

@@ -28,7 +28,6 @@ import com.taihuoniao.fineix.main.fragment.DiscoverFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 //import com.taihuoniao.fineix.main.fragment.WellGoodsNewFragment;
-import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetWorkUtils;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -90,8 +89,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (exit) {
                 tv_msg_indicator.setVisibility(View.GONE);
             }
-        } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
-            which = WellGoodsFragment.class.getSimpleName();
+        } else if (intent.hasExtra(WellGoodsNewFragment.class.getSimpleName())) {
+            which = WellGoodsNewFragment.class.getSimpleName();
         } else if (intent.hasExtra(DiscoverFragment.class.getSimpleName())) {
             which = DiscoverFragment.class.getSimpleName();
         }
@@ -104,8 +103,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(IndexFragment.class);
         } else if (TextUtils.equals(MineFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(MineFragment.class);
-        } else if (TextUtils.equals(WellGoodsFragment.class.getSimpleName(), which)) {
-            switchFragmentandImg(WellGoodsFragment.class);
+        } else if (TextUtils.equals(WellGoodsNewFragment.class.getSimpleName(), which)) {
+            switchFragmentandImg(WellGoodsNewFragment.class);
         } else if (TextUtils.equals(DiscoverFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(DiscoverFragment.class);
         } else if (TextUtils.equals(CartFragment.class.getSimpleName(), which)) {
@@ -119,8 +118,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Intent intent = getIntent();
         if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
             which = IndexFragment.class.getSimpleName();
-        } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
-            which = WellGoodsFragment.class.getSimpleName();
+        } else if (intent.hasExtra(WellGoodsNewFragment.class.getSimpleName())) {
+            which = WellGoodsNewFragment.class.getSimpleName();
         }
     }
 
@@ -166,8 +165,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         addFragment2List(indexFragment);
         Fragment findFragment = fm.getFragment(savedInstanceState, DiscoverFragment.class.getSimpleName());
         addFragment2List(findFragment);
-        Fragment wellGoodsFragment = fm.getFragment(savedInstanceState, WellGoodsFragment.class.getSimpleName());
-        addFragment2List(wellGoodsFragment);
+        Fragment WellGoodsNewFragment = fm.getFragment(savedInstanceState, WellGoodsNewFragment.class.getSimpleName());
+        addFragment2List(WellGoodsNewFragment);
         Fragment mineFragment = fm.getFragment(savedInstanceState, MineFragment.class.getSimpleName());
         addFragment2List(mineFragment);
         Fragment cartFragment = fm.getFragment(savedInstanceState, CartFragment.class.getSimpleName());
@@ -215,7 +214,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         initTabItem(homeImg, tv_nav0, IndexFragment.class, R.mipmap.icon_home_pressed, R.mipmap.icon_home_normal);
         initTabItem(findImg, tv_nav1, DiscoverFragment.class, R.mipmap.icon_discover_pressed, R.mipmap.icon_discover_normal);
-        initTabItem(shopImg, tv_nav3, WellGoodsFragment.class, R.mipmap.icon_shop_pressed, R.mipmap.icon_shop_normal);
+        initTabItem(shopImg, tv_nav3, WellGoodsNewFragment.class, R.mipmap.icon_shop_pressed, R.mipmap.icon_shop_normal);
         initTabItem(cartImg, tv_nav2, CartFragment.class, R.mipmap.icon_cart_pressed, R.mipmap.icon_cart_normal);
         initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.icon_mine_pressed, R.mipmap.icon_mine_normal);
     }
@@ -254,7 +253,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.ll_nav3:  //品
 //                Log.e("<<<", "点击切换");
-                switchFragmentandImg(WellGoodsFragment.class);
+                switchFragmentandImg(WellGoodsNewFragment.class);
                 onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav4: //个人中心
@@ -419,7 +418,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
 //                    editor.apply();
 //                }
-//            } else if (showFragment instanceof WellGoodsFragment) {
+//            } else if (showFragment instanceof WellGoodsNewFragment) {
 //                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
 //                if (isFirstIn) {
 //                    firstRelative.setVisibility(View.VISIBLE);

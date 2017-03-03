@@ -4,10 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView
         android:id="@+id/pull_refresh_view_001"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/relative"
+        android:fastScrollEnabled="false"
+        android:horizontalSpacing="15dp"
+        android:numColumns="2"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:verticalSpacing="15dp"
         android:background="#f8f8f8" />
 </RelativeLayout>

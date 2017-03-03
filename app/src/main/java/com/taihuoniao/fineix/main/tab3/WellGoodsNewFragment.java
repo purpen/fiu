@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +12,30 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.tab3.adapter.WellGoodsAdapter;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+
+import static com.taihuoniao.fineix.R.id.gridView;
 
 /**
  * Created by Stephen on 2017/3/3 20:36
@@ -37,10 +51,12 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     private List<String> mStringList;
     private List<BaseFragment> mBaseFragments;
+    private List<CategoryListBean.CategoryListItem> categoryListItems;
+    private WellGoodsAdapter wellGoodsAdapter;
 
     @Override
     protected void requestNet() {
-
+        productCategoryList();
     }
 
     @Override
@@ -65,7 +81,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
     }
 
     private void initTabLayoutAndViewPager() {
-        WellGoodsAdapter wellGoodsAdapter = new WellGoodsAdapter(getFragmentManager(), mStringList, mBaseFragments);
+        wellGoodsAdapter = new WellGoodsAdapter(getFragmentManager(), mStringList, mBaseFragments);
         viewPagerWellGoodsList.setAdapter(wellGoodsAdapter);
         viewPagerWellGoodsList.addOnPageChangeListener(this);
         tabLayoutWellGoodsCategory.setupWithViewPager(viewPagerWellGoodsList);
@@ -99,10 +115,12 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         mStringList.add("推荐");
         mStringList.add("情境");
         mStringList.add("全部");
+        mStringList.add("智能家居");
 
         mBaseFragments.add(new WellGoodsFragment01());
         mBaseFragments.add(new WellGoodsFragment02());
         mBaseFragments.add(new WellGoodsFragment03());
+        mBaseFragments.add(new WellGoodsFragment04());
     }
 
     @Override
@@ -151,5 +169,47 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
     protected void initList() {
         initTabLayout();
         initTabLayoutAndViewPager();
+    }
+
+    //获取产品分类列表
+    private void productCategoryList() {
+        HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams("1", "1", null);
+        HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
+            @Override
+            public void onSuccess(String json) {
+                CategoryListBean categoryListBean = new CategoryListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryListBean>() {
+                    }.getType();
+                    categoryListBean = gson.fromJson(json, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
+                }
+                if (categoryListBean.isSuccess()) {
+                    categoryListItems = categoryListBean.getData().getRows();
+                    addExtraCategory(categoryListItems);
+                    wellGoodsAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+            }
+        });
+    }
+
+    private void addExtraCategory(List<CategoryListBean.CategoryListItem> categoryListItems){
+        if (categoryListItems != null) {
+            for(int i = 0; i < categoryListItems.size(); i++) {
+                CategoryListBean.CategoryListItem categoryListItem = categoryListItems.get(i);
+                mStringList.add(categoryListItem.getTitle());
+                WellGoodsFragment04 fragment04 = new WellGoodsFragment04();
+                Bundle bundle = new Bundle();
+                bundle.putString("key", categoryListItem.get_id());
+                fragment04.setArguments(bundle);
+                mBaseFragments.add(fragment04);
+            }
+        }
     }
 }
