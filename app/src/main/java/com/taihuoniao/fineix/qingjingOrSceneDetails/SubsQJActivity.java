@@ -38,6 +38,8 @@ import butterknife.Bind;
 import okhttp3.Call;
 
 /**
+ *
+ * 查看订阅
  * Created by taihuoniao on 2016/8/2.
  */
 public class SubsQJActivity extends BaseActivity implements View.OnClickListener {
