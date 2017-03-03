@@ -478,6 +478,7 @@
         <activity android:name=".zone.SelectMapDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
         <activity android:name=".map.NaviToZoneActivity" android:screenOrientation="portrait"/>
         <activity android:name=".zone.ShareDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
+        <activity android:name=".product.ShareGoodsDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

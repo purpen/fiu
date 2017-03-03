@@ -109,7 +109,7 @@ public class ZoneRelateProductsFragment extends BaseFragment {
                 if (productList==null || productList.size()==0) return;
                 Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                 intent.putExtra("id",productList.get(position).product._id);
-                intent.putExtra("storage_id",productList.get(position)._id);
+                intent.putExtra("storage_id",sZoneId);
                 startActivity(intent);
             }
 

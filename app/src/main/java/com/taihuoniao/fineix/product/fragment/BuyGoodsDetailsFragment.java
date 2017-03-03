@@ -59,7 +59,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
     private int lastTotalItem = -1;
     private ViewHolder holder;//headerview控件
     private ViewPagerAdapter<String> viewPagerAdapter;
-    private BuyGoodDetailsBean buyGoodDetailsBean;
+    private BuyGoodDetailsBean mbuyGoodDetailsBean;
     private int page = 1;//相关情景列表页码
     private List<ProductAndSceneListBean.ProductAndSceneItem> sceneList;
     private GoodDetailsSceneListAdapter goodDetailsSceneListAdapter;
@@ -126,7 +126,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
     //用来刷新页面
     @Override
     public void refreshData(BuyGoodDetailsBean buyGoodDetailsBean) {
-        this.buyGoodDetailsBean = buyGoodDetailsBean;
+        this.mbuyGoodDetailsBean = buyGoodDetailsBean;
         if (buyGoodDetailsBean.getData().getStage() != 9) {
             holder.detailContainer.setVisibility(View.GONE);
             holder.price.setVisibility(View.GONE);
@@ -135,7 +135,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
             holder.marketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter<>(activity, buyGoodDetailsBean.getData().getAsset());
+            viewPagerAdapter = new ViewPagerAdapter<>(activity,mbuyGoodDetailsBean.getData().getAsset());
             holder.scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
             holder.scrollableView.setAutoScrollDurationFactor(8);
             holder.scrollableView.setInterval(4000);
@@ -254,12 +254,12 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                 activity.viewPager.setCurrentItem(1);
                 break;
             case R.id.brand_container:
-                if (buyGoodDetailsBean == null) {
+                if (mbuyGoodDetailsBean == null) {
                     getActivity().sendBroadcast(new Intent(DataConstants.BroadBuyGoodDetails));
                     return;
                 }
                 Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
-                intent.putExtra("id", buyGoodDetailsBean.getData().getBrand().get_id());
+                intent.putExtra("id", mbuyGoodDetailsBean.getData().getBrand().get_id());
                 getActivity().startActivity(intent);
                 break;
         }
@@ -290,6 +290,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         TextView marketPrice2;
 
         ViewHolder(View view) {
+            super();
             ButterKnife.bind(this, view);
         }
     }
