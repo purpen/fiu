@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails.bean;
 
-import java.io.Serializable;
+import android.transition.Scene;
+
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * Email: 895745843@qq.com
  */
 
-public class SceneListBean2 implements Serializable{
+public class SceneListBean2 {
 
     /**
      * total_rows : 20
@@ -94,7 +95,7 @@ public class SceneListBean2 implements Serializable{
         return rows;
     }
 
-    public static class RowsEntity implements Serializable{
+    public static class RowsEntity {
         /**
          * _id : 441
          * title : Go to itzzzzz
@@ -170,7 +171,7 @@ public class SceneListBean2 implements Serializable{
         private List<String> tags;
         private List<ProductEntity> product;
         private List<String> subject_ids;
-        private List<String> scene;
+        private SceneEntity scene;
         private List<CommentsEntity> comments;
 
         public void set_id(String _id) {
@@ -313,7 +314,7 @@ public class SceneListBean2 implements Serializable{
             this.subject_ids = subject_ids;
         }
 
-        public void setScene(List<String> scene) {
+        public void setScene(SceneEntity scene) {
             this.scene = scene;
         }
 
@@ -461,7 +462,7 @@ public class SceneListBean2 implements Serializable{
             return subject_ids;
         }
 
-        public List<String> getScene() {
+        public SceneEntity getScene() {
             return scene;
         }
 
@@ -469,7 +470,28 @@ public class SceneListBean2 implements Serializable{
             return comments;
         }
 
-        public static class LocationEntity implements Serializable{
+        public static class SceneEntity {
+            private String _id;
+            private String title;
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String get_id() {
+                return _id;
+            }
+
+            public void set_id(String _id) {
+                this._id = _id;
+            }
+        }
+
+        public static class LocationEntity {
             /**
              * type : Point
              * coordinates : [0,0]
@@ -495,7 +517,7 @@ public class SceneListBean2 implements Serializable{
             }
         }
 
-        public static class UserInfoEntity implements Serializable{
+        public static class UserInfoEntity {
             /**
              * user_id : 924912
              * nickname : Test_android
@@ -630,7 +652,7 @@ public class SceneListBean2 implements Serializable{
                 return is_follow;
             }
 
-            public static class CounterEntity implements Serializable{
+            public static class CounterEntity {
                 /**
                  * message_count : 0
                  * notice_count : 0
@@ -787,7 +809,7 @@ public class SceneListBean2 implements Serializable{
             }
         }
 
-        public static class ProductEntity implements Serializable{
+        public static class ProductEntity {
             /**
              * id : 1102511135
              * title : HC-7020B 高端工程级HDMI线
@@ -863,7 +885,7 @@ public class SceneListBean2 implements Serializable{
             }
         }
 
-        public static class CommentsEntity implements Serializable{
+        public static class CommentsEntity {
             /**
              * _id : 58ae8c743ffca2995e8b4571
              * content :  风风光光 vv
