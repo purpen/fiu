@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Email: 895745843@qq.com
  */
 
-public class SceneListBean2 {
+public class SceneListBean2 implements Serializable{
 
     /**
      * total_rows : 20
@@ -93,7 +94,7 @@ public class SceneListBean2 {
         return rows;
     }
 
-    public static class RowsEntity {
+    public static class RowsEntity implements Serializable{
         /**
          * _id : 441
          * title : Go to itzzzzz
@@ -468,7 +469,7 @@ public class SceneListBean2 {
             return comments;
         }
 
-        public static class LocationEntity {
+        public static class LocationEntity implements Serializable{
             /**
              * type : Point
              * coordinates : [0,0]
@@ -494,7 +495,7 @@ public class SceneListBean2 {
             }
         }
 
-        public static class UserInfoEntity {
+        public static class UserInfoEntity implements Serializable{
             /**
              * user_id : 924912
              * nickname : Test_android
@@ -629,7 +630,7 @@ public class SceneListBean2 {
                 return is_follow;
             }
 
-            public static class CounterEntity {
+            public static class CounterEntity implements Serializable{
                 /**
                  * message_count : 0
                  * notice_count : 0
@@ -786,7 +787,7 @@ public class SceneListBean2 {
             }
         }
 
-        public static class ProductEntity {
+        public static class ProductEntity implements Serializable{
             /**
              * id : 1102511135
              * title : HC-7020B 高端工程级HDMI线
@@ -862,7 +863,7 @@ public class SceneListBean2 {
             }
         }
 
-        public static class CommentsEntity {
+        public static class CommentsEntity implements Serializable{
             /**
              * _id : 58ae8c743ffca2995e8b4571
              * content :  风风光光 vv
