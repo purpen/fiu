@@ -231,7 +231,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
                 mStringList.add(categoryListItem.getTitle());
                 WellGoodsFragment04 fragment04 = new WellGoodsFragment04();
                 Bundle bundle = new Bundle();
-                bundle.putString("key", categoryListItem.get_id());
+                bundle.putString("categoryId", categoryListItem.get_id());
                 fragment04.setArguments(bundle);
                 mBaseFragments.add(fragment04);
             }
