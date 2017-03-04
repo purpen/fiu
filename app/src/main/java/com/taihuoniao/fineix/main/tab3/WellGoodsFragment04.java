@@ -92,26 +92,10 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
                 requestNet();
             }
         });
-
-        productList = new ArrayList<>();
-        searchList = new ArrayList<>();
-        indexAdapter002 = new AddProductGridAdapter(getActivity(),productList, searchList);
-        mListView.setAdapter(indexAdapter002);
-
         mListView.setSelector(R.color.nothing);
         mListView.setDividerHeight(0);
         mListView.setOnScrollListener(this);
         mListView.setOnTouchListener(this);
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
-                intent.putExtra("id", productList.get(position).get_id());
-                parent.getContext().startActivity(intent);
-            }
-        });
-
         pullRefreshView001.animLayout();
         mListView = pullRefreshView001.getRefreshableView();
     }
@@ -137,6 +121,21 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         subjectList = new ArrayList<>();
         wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
         recyclerView002.setAdapter(wellgoodsSubjectAdapter);
+
+        // TODO: 2017/3/4 产品列表
+        GridViewForScrollView recyclerView003 = (GridViewForScrollView ) headerView.findViewById(R.id.pull_refresh_view_003);
+        productList = new ArrayList<>();
+        searchList = new ArrayList<>();
+        indexAdapter002 = new AddProductGridAdapter(getActivity(),productList, searchList);
+        recyclerView003.setAdapter(indexAdapter002);
+        recyclerView003.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
+                intent.putExtra("id", productList.get(position).get_id());
+                parent.getContext().startActivity(intent);
+            }
+        });
         return headerView;
     }
 

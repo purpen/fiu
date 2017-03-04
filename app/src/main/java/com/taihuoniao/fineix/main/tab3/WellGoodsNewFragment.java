@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main.tab3;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -19,11 +23,19 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.main.tab3.adapter.WellGoodsAdapter;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.product.ShopCartActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -33,21 +45,28 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-
-import static com.taihuoniao.fineix.R.id.gridView;
 
 /**
  * Created by Stephen on 2017/3/3 20:36
  * Email: 895745843@qq.com
  */
 
-public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
+public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
     @Bind(R.id.tabLayout_wellGoods_category)
     TabLayout tabLayoutWellGoodsCategory;
     @Bind(R.id.viewPager_wellGoods_list)
     ViewPager viewPagerWellGoodsList;
+    @Bind(R.id.title_left)
+    ImageView titleLeft;
+    @Bind(R.id.cart_number)
+    TextView cartNumber;
+    @Bind(R.id.title_right)
+    RelativeLayout titleRight;
+    @Bind(R.id.search_linear)
+    LinearLayout searchLinear;
+    @Bind(R.id.relative)
+    RelativeLayout relative;
 
     private List<String> mStringList;
     private List<BaseFragment> mBaseFragments;
@@ -167,6 +186,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     @Override
     protected void initList() {
+        initTitleBar();
         initTabLayout();
         initTabLayoutAndViewPager();
     }
@@ -174,7 +194,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
     //获取产品分类列表
     private void productCategoryList() {
         HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams("1", "1", null);
-        HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
+        HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 CategoryListBean categoryListBean = new CategoryListBean();
@@ -199,9 +219,9 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         });
     }
 
-    private void addExtraCategory(List<CategoryListBean.CategoryListItem> categoryListItems){
+    private void addExtraCategory(List<CategoryListBean.CategoryListItem> categoryListItems) {
         if (categoryListItems != null) {
-            for(int i = 0; i < categoryListItems.size(); i++) {
+            for (int i = 0; i < categoryListItems.size(); i++) {
                 CategoryListBean.CategoryListItem categoryListItem = categoryListItems.get(i);
                 mStringList.add(categoryListItem.getTitle());
                 WellGoodsFragment04 fragment04 = new WellGoodsFragment04();
@@ -210,6 +230,39 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
                 fragment04.setArguments(bundle);
                 mBaseFragments.add(fragment04);
             }
+        }
+    }
+
+    private void initTitleBar(){
+        titleLeft.setOnClickListener(this);
+        searchLinear.setOnClickListener(this);
+//        titleRight.setOnClickListener(this);
+        titleRight.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.to_top_img:
+//                listView.setSelection(0);
+                break;
+            case R.id.title_left:
+                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                break;
+            case R.id.title_right:
+                if (!LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = DataConstants.WellGoodsFragment;
+                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
+                    return;
+                }
+                startActivity(new Intent(getActivity(), ShopCartActivity.class));
+                break;
+            case R.id.search_linear:
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra(WellGoodsFragment.class.getSimpleName(), false);
+                intent.putExtra("t", 7);
+                startActivity(intent);
+                break;
         }
     }
 }
