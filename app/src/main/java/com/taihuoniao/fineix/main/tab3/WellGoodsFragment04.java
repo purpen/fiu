@@ -77,6 +77,10 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         initListView();
         mListView.addHeaderView(getHeaderView());
 
+        subjectList = new ArrayList<>();
+        wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
+        mListView.setAdapter(wellgoodsSubjectAdapter);
+
         return view;
     }
 
@@ -96,8 +100,8 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         mListView.setDividerHeight(0);
         mListView.setOnScrollListener(this);
         mListView.setOnTouchListener(this);
-        pullRefreshView001.animLayout();
-        mListView = pullRefreshView001.getRefreshableView();
+//        pullRefreshView001.animLayout();
+//        mListView = pullRefreshView001.getRefreshableView();
     }
 
     @Override
@@ -157,6 +161,7 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
     //好货专题列表
     private void subjectList() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "1");
+        requestParams.put("category_id", categoryId);
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 
             @Override
@@ -197,6 +202,7 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
      */
     private void getLasteProduct(){
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, null, String.valueOf(5), null, null, null, "1", null);
+        requestParams.put("category_id", categoryId);
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {

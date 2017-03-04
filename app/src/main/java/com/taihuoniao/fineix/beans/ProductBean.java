@@ -19,7 +19,7 @@ public class ProductBean extends NetBean implements Serializable {
         this.data = data;
     }
 
-    public static class Data {
+    public static class Data implements Serializable{
         private List<ProductListItem> rows;
 
         public List<ProductListItem> getRows() {
@@ -31,7 +31,7 @@ public class ProductBean extends NetBean implements Serializable {
         }
     }
 
-    public static class ProductListItem {
+    public static class ProductListItem implements Serializable{
         private int pos;
         private String _id;
         private String title;
@@ -159,7 +159,7 @@ public class ProductBean extends NetBean implements Serializable {
         }
     }
 
-    public static class Sight {
+    public static class Sight implements Serializable{
         private String id;
         private String title;
         private String cover_url;
