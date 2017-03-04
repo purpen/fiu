@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails.bean;
 
+import android.transition.Scene;
+
 import java.util.List;
 
 /**
@@ -169,7 +171,7 @@ public class SceneListBean2 {
         private List<String> tags;
         private List<ProductEntity> product;
         private List<String> subject_ids;
-        private List<String> scene;
+        private SceneEntity scene;
         private List<CommentsEntity> comments;
 
         public void set_id(String _id) {
@@ -312,7 +314,7 @@ public class SceneListBean2 {
             this.subject_ids = subject_ids;
         }
 
-        public void setScene(List<String> scene) {
+        public void setScene(SceneEntity scene) {
             this.scene = scene;
         }
 
@@ -460,12 +462,33 @@ public class SceneListBean2 {
             return subject_ids;
         }
 
-        public List<String> getScene() {
+        public SceneEntity getScene() {
             return scene;
         }
 
         public List<CommentsEntity> getComments() {
             return comments;
+        }
+
+        public static class SceneEntity {
+            private String _id;
+            private String title;
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String get_id() {
+                return _id;
+            }
+
+            public void set_id(String _id) {
+                this._id = _id;
+            }
         }
 
         public static class LocationEntity {

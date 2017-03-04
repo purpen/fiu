@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -69,6 +70,7 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
+        WindowUtils.chenjin(getActivity());
         return rootView;
     }
 

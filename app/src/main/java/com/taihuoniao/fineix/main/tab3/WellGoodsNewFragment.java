@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.main.tab3.adapter.WellGoodsAdapter;
@@ -80,7 +81,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     @Override
     protected View initView() {
-        View view = View.inflate(getActivity(), R.layout.fragment_well_goods, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_well_goods_new, null);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -151,7 +152,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
     public void onPageSelected(int position) {
         // TODO: 2017/3/3 跳过一页
 
-        Toast.makeText(activity, mStringList.get(position), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(activity, mStringList.get(position), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -186,6 +187,9 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            relative.setPadding(0, App.getStatusBarHeight(), 0, 0);
+        }
         initTitleBar();
         initTabLayout();
         initTabLayoutAndViewPager();
