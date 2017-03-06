@@ -105,6 +105,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         viewPagerWellGoodsList.setAdapter(wellGoodsAdapter);
         viewPagerWellGoodsList.addOnPageChangeListener(this);
         tabLayoutWellGoodsCategory.setupWithViewPager(viewPagerWellGoodsList);
+
         tabLayoutWellGoodsCategory.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -135,12 +136,12 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         mStringList.add("推荐");
         mStringList.add("情境");
         mStringList.add("全部");
-        mStringList.add("智能家居");
+//        mStringList.add("先锋智能");
 
         mBaseFragments.add(new WellGoodsFragment01());
         mBaseFragments.add(new WellGoodsFragment02());
         mBaseFragments.add(new WellGoodsFragment03());
-        mBaseFragments.add(new WellGoodsFragment04());
+//        mBaseFragments.add(new WellGoodsFragment04());
     }
 
     @Override
@@ -230,7 +231,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
                 mStringList.add(categoryListItem.getTitle());
                 WellGoodsFragment04 fragment04 = new WellGoodsFragment04();
                 Bundle bundle = new Bundle();
-                bundle.putString("key", categoryListItem.get_id());
+                bundle.putString("categoryId", categoryListItem.get_id());
                 fragment04.setArguments(bundle);
                 mBaseFragments.add(fragment04);
             }

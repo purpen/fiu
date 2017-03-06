@@ -68,7 +68,7 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
     @Override
     protected void requestNet() {
         subjectList();
-        getLasteProduct();
+//        getLasteProduct();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
         ButterKnife.bind(this, view);
 
         initListView();
-        mListView.addHeaderView(getHeaderView());
+//        mListView.addHeaderView(getHeaderView());
 
         return view;
     }
