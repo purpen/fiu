@@ -13,12 +13,9 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectListBean;
+import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.user.ActivityDetailActivity;
-import com.taihuoniao.fineix.user.ArticalDetailActivity;
-import com.taihuoniao.fineix.user.NewProductDetailActivity;
-import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
 
@@ -83,31 +80,33 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
         holder.subjectImg.setOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
-                                                     Intent intent = new Intent();
-                                                     switch (list.get(position).getType()) {
-                                                         case 1: //文章详情
-                                                             intent = new Intent(activity, ArticalDetailActivity.class);
-                                                             intent.putExtra(ArticalDetailActivity.class.getSimpleName(), list.get(position).get_id());
-//                                                             activity.startActivity(intent);
-                                                             break;
-                                                         case 2: //活动详情
-                                                             intent = new Intent(activity, ActivityDetailActivity.class);
-                                                             intent.putExtra(ActivityDetailActivity.class.getSimpleName(), list.get(position).get_id());
-//                                                             activity.startActivity(intent);
-                                                             break;
-                                                         case 4: //新品
-                                                             intent = new Intent(activity, NewProductDetailActivity.class);
-                                                             intent.putExtra(NewProductDetailActivity.class.getSimpleName(), list.get(position).get_id());
-//                                                             activity.startActivity(intent);
-                                                             break;
-                                                         case 3: //促销
-                                                         case 5://好货
-                                                             intent = new Intent(activity, SalePromotionDetailActivity.class);
-                                                             intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), list.get(position).get_id());
-//                                                             activity.startActivity(intent);
-                                                             break;
-                                                     }
-                                                     activity.startActivity(intent);
+//                                                     LogUtil.e("title==="+list.get(position).getTitle()+";id==="+list.get(position).get_id());
+                                                     GoToNextUtils.goNext(activity, list.get(position).getType(), list.get(position).get_id());
+//                                                     Intent intent = new Intent();
+//                                                     switch (list.get(position).getType()) {
+//                                                         case 1: //文章详情
+//                                                             intent = new Intent(activity, ArticalDetailActivity.class);
+//                                                             intent.putExtra(ArticalDetailActivity.class.getSimpleName(), list.get(position).get_id());
+////                                                             activity.startActivity(intent);
+//                                                             break;
+//                                                         case 2: //活动详情
+//                                                             intent = new Intent(activity, ActivityDetailActivity.class);
+//                                                             intent.putExtra(ActivityDetailActivity.class.getSimpleName(), list.get(position).get_id());
+////                                                             activity.startActivity(intent);
+//                                                             break;
+//                                                         case 4: //新品
+//                                                             intent = new Intent(activity, NewProductDetailActivity.class);
+//                                                             intent.putExtra(NewProductDetailActivity.class.getSimpleName(), list.get(position).get_id());
+////                                                             activity.startActivity(intent);
+//                                                             break;
+//                                                         case 3: //促销
+//                                                         case 5://好货
+//                                                             intent = new Intent(activity, SalePromotionDetailActivity.class);
+//                                                             intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), list.get(position).get_id());
+////                                                             activity.startActivity(intent);
+//                                                             break;
+//                                                     }
+//                                                     activity.startActivity(intent);
                                                  }
 
                                              }

@@ -478,7 +478,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(activity);
-            if (TextUtils.equals("0",productBean.price)){
+            if (TextUtils.isEmpty(productBean.price)||TextUtils.equals("0",productBean.price)){
                 labelView.price.setVisibility(View.GONE);
             }else {
                 labelView.price.setText("¥"+productBean.price);

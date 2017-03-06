@@ -114,6 +114,7 @@ public class Tools {
                 oldProductBean.setTitle(newProduct.get(k).getTitle());
                 oldProductBean.setX(newProduct.get(k).getX());
                 oldProductBean.setY(newProduct.get(k).getY());
+                oldProductBean.price= newProduct.get(k).getPrice();
                 oldProductBeans.add(oldProductBean);
             }
             oldRowBean.setProduct(oldProductBeans);

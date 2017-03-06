@@ -33,6 +33,10 @@ import java.util.HashMap;
 
 public class GoToNextUtils {
 
+
+    /**
+     * 专题详情
+     */
     public static void goToIntent(final Context context, int type, final String url){
         Intent intent;
         switch (type) {
@@ -92,6 +96,12 @@ public class GoToNextUtils {
         }
     }
 
+    /**
+     * 直接跳详情
+     * @param context
+     * @param type
+     * @param url
+     */
     public static void goNext(Context context, int type, String url){
         Intent intent;
         switch (type) {
