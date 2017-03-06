@@ -177,7 +177,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌下产品列表
     private void getProductList() {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9");
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
 //        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override

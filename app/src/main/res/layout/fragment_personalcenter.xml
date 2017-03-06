@@ -329,7 +329,7 @@
                 android:id="@+id/iv_plan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/fiu_plan"
+                android:src="@mipmap/mine_banner"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp16"
                 android:scaleType="centerCrop"

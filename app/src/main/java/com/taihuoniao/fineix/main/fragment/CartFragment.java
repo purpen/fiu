@@ -1,14 +1,10 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -41,7 +37,6 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ConfirmOrderActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -67,6 +62,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     @Bind(R.id.custom_head)
     CustomHeadView customHead;
+    @Bind(R.id.linearLayout_title)
+    LinearLayout linearLayout_title;
 
     private View mRootView;
     private LinearLayout mRelativeLayoutEmptyShopCart;
@@ -131,6 +128,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         mRootView = View.inflate(getActivity(), R.layout.fragment_cart, null);
         return mRootView;
     }
+
+
 
     @Override
     public void onResume() {
@@ -586,13 +585,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     @Override
     protected void initList() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            LinearLayout linearLayout = (LinearLayout) mRootView.findViewById(R.id.linearLayout_title);
-            linearLayout.setPadding(0, App.getStatusBarHeight(), 0, 0);
+            linearLayout_title.setPadding(0, App.getStatusBarHeight(), 0, 0);
         }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            customHead.setPadding(0, App.getStatusBarHeight(), 0, 0);
-//        }
-//        WindowUtils.chenjin(getActivity());
         showDialog();
         initView1(mRootView);
         initView2(mRootView);

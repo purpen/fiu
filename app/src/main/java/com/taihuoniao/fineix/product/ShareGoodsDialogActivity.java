@@ -173,7 +173,7 @@ public class ShareGoodsDialogActivity extends BaseActivity implements PlatformAc
                     case 4:
                         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                         cm.setPrimaryClip(ClipData.newPlainText("link",shareH5Url.url));
-                        ToastUtils.showInfo("已复制地盘链接到剪切板");
+                        ToastUtils.showInfo("已复制商品链接到剪切板");
                         break;
                     default:
                         break;
