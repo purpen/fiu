@@ -658,6 +658,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
+                    subjectList003.clear();
                     subjectList003.addAll(subjectListBean.getData().getRows());
                     indexAdapter003.notifyDataSetChanged();
                 }

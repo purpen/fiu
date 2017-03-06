@@ -151,7 +151,7 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
         productRecycler2.setHasFixedSize(true);
         productRecycler2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         secondProductList = new ArrayList<>();
-        secondProductAdapter = new FirstProductAdapter(firstProductList, new EditRecyclerAdapter.ItemClick() {
+        secondProductAdapter = new FirstProductAdapter(secondProductList, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
                 Intent intent = new Intent(getActivity(), BuyGoodsDetailsActivity.class);

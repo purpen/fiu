@@ -53,8 +53,11 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
 
     private ListView mListView;
 
-    private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
-    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
+//    private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
+//    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
+
+  private List<SubjectListBean.DataBean.RowsBean> subjectList2;//好货页面专题及产品列表
+    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter2;//好货页面爪蹄及产品适配器
 
     private AddProductGridAdapter indexAdapter002;//主题列表适配器
     private List<ProductBean.ProductListItem> productList;
@@ -77,9 +80,9 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         initListView();
         mListView.addHeaderView(getHeaderView());
 
-        subjectList = new ArrayList<>();
-        wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
-        mListView.setAdapter(wellgoodsSubjectAdapter);
+        subjectList2 = new ArrayList<>();
+        wellgoodsSubjectAdapter2 = new WellgoodsSubjectAdapter(getActivity(), subjectList2);
+        mListView.setAdapter(wellgoodsSubjectAdapter2);
 
         return view;
     }
@@ -121,10 +124,10 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
     private View getHeaderView() {
         View headerView = View.inflate(getActivity(), R.layout.headerview_wellgoods_tab4, null);
 
-        ListViewForScrollView recyclerView002 = (ListViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
-        subjectList = new ArrayList<>();
-        wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
-        recyclerView002.setAdapter(wellgoodsSubjectAdapter);
+//        ListViewForScrollView recyclerView002 = (ListViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
+//        subjectList = new ArrayList<>();
+//        wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
+//        recyclerView002.setAdapter(wellgoodsSubjectAdapter);
 
         // TODO: 2017/3/4 产品列表
         GridViewForScrollView recyclerView003 = (GridViewForScrollView ) headerView.findViewById(R.id.pull_refresh_view_003);
@@ -181,10 +184,15 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
                     if (currentPage == 1) {
                         pullRefreshView001.lastTotalItem = -1;
                         pullRefreshView001.lastSavedFirstVisibleItem = -1;
-                        subjectList.clear();
+//                        subjectList.clear();
                     }
-                    subjectList.addAll(subjectListBean.getData().getRows());
-                    wellgoodsSubjectAdapter.notifyDataSetChanged();
+//                    subjectList.clear();
+                    subjectList2.clear();
+                    subjectList2.addAll(subjectListBean.getData().getRows());
+//                    subjectList.addAll(subjectListBean.getData().getRows());
+
+                    wellgoodsSubjectAdapter2.notifyDataSetChanged();
+//                    wellgoodsSubjectAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -218,9 +226,10 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
 
                 if (productBean.isSuccess()) {
                     searchList.clear();
-                    if (currentPage == 1) {
-                        productList.clear();
-                    }
+//                    if (currentPage == 1) {
+//                        productList.clear();
+//                    }
+                    productList.clear();
                     productList.addAll(productBean.getData().getRows());
                     //刷新数据
                     indexAdapter002.notifyDataSetChanged();
