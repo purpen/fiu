@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.antfortune.freeline'
 
 android {
     compileSdkVersion 25
@@ -15,8 +16,9 @@ android {
         renderscriptSupportModeEnabled true
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
     }
-    signingConfigs {//C:/AndroidStudioProjects/fiu/app/fiu.jks
+    signingConfigs {
         release {
+//            storeFile file('C:/AndroidStudioProjects/fiu/app/fiu.jks')
             storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
@@ -54,7 +56,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     compile project(':PushSDK')
     compile project(':Gpu-Image')
     compile project(':pullrefreshlib')
@@ -78,4 +79,5 @@ dependencies {
     compile files('libs/baidumapapi_radar_v4_2_0.jar')
     compile files('libs/baidumapapi_search_v4_2_0.jar')
     compile files('libs/baidumapapi_util_v4_2_0.jar')
+    compile 'com.android.support:multidex:1.0.1'
 }
