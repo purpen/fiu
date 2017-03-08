@@ -81,9 +81,9 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
 
     @Override
     protected void requestNet() {
+        subjectList();
         firstProducts();
         secondProduct();
-        subjectList();
     }
 
     @Override
@@ -180,6 +180,7 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
 
     //好货专题列表
     private void subjectList() {
+//        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", "1", null, 5 + "", "1");
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "2");
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 

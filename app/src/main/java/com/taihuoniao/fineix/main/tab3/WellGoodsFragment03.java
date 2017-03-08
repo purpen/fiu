@@ -154,7 +154,7 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
 
     //好货专题列表
     private void subjectList() {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "1");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "0");
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 
             @Override

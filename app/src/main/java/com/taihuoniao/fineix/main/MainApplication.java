@@ -75,7 +75,6 @@ public class MainApplication extends Application {
 
     @Override
     public void onCreate() {
-        MultiDex.install(this);
         LogUtil.e("taihuoniao", "---------->onCreate()" + getClass().getSimpleName());
         super.onCreate();
 
@@ -240,5 +239,11 @@ public class MainApplication extends Application {
 
     public boolean setPush_status(boolean push_status) {
         return tempSharedPreference.edit().putBoolean(DataConstants.STATUS, push_status).commit();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 }

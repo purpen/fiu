@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.main.tab3;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -9,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -23,14 +26,19 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.tab3.adapter.ProductListGridAdapter;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
+import com.taihuoniao.fineix.view.pulltorefresh.HeaderGridView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
-import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView2;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -49,27 +57,28 @@ import okhttp3.Call;
 public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnScrollListener, View.OnTouchListener {
 
     @Bind(R.id.pull_refresh_view_001)
-    PullToRefreshListView pullRefreshView001;
+    PullToRefreshGridView2 pullToRefreshGridView;
 
-    private ListView mListView;
+    private HeaderGridView mGridView;
 
 //    private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
 //    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
 
-  private List<SubjectListBean.DataBean.RowsBean> subjectList2;//好货页面专题及产品列表
+    private List<SubjectListBean.DataBean.RowsBean> subjectList2;//好货页面专题及产品列表
     private WellgoodsSubjectAdapter wellgoodsSubjectAdapter2;//好货页面爪蹄及产品适配器
 
-    private AddProductGridAdapter indexAdapter002;//主题列表适配器
+    private ProductListGridAdapter indexAdapter002;//主题列表适配器
     private List<ProductBean.ProductListItem> productList;
     private List<SearchBean.Data.SearchItem> searchList;
 
-    private int currentPage = 0;
+    private int currentPage = 1;
     private String categoryId;
+    private boolean isLoadMore;
 
     @Override
     protected void requestNet() {
-        subjectList();
         getLasteProduct();
+        subjectList();
     }
 
     @Override
@@ -77,34 +86,62 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods_04, null);
         ButterKnife.bind(this, view);
 
-        initListView();
-        mListView.addHeaderView(getHeaderView());
+        if (getArguments() != null) {
+            categoryId = getArguments().getString("categoryId");
+        }
 
-        subjectList2 = new ArrayList<>();
-        wellgoodsSubjectAdapter2 = new WellgoodsSubjectAdapter(getActivity(), subjectList2);
-        mListView.setAdapter(wellgoodsSubjectAdapter2);
+        initGridView();
 
         return view;
     }
 
-    private void initListView() {
-        if (getArguments() != null) {
-            categoryId = getArguments().getString("categoryId");
-        }
-        pullRefreshView001.animLayout();
-        mListView = pullRefreshView001.getRefreshableView();
-        pullRefreshView001.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+    private void initGridView() {
+        mGridView = pullToRefreshGridView.getRefreshableView();
+        mGridView.addHeaderView(getHeaderView());
+        pullToRefreshGridView.setMode(com.handmark.pulltorefresh.library.PullToRefreshBase.Mode.PULL_FROM_START);
+
+//        mGridView.setNumColumns(2);
+//        mGridView.setSelector(R.color.nothing);
+//        mGridView.setHorizontalSpacing(DensityUtils.dp2px(getActivity(), 15));
+//        mGridView.setVerticalSpacing(DensityUtils.dp2px(getActivity(), 15));
+
+        productList = new ArrayList<>();
+        searchList = new ArrayList<>();
+        indexAdapter002 = new ProductListGridAdapter(getActivity(),productList, searchList);
+        mGridView.setAdapter(indexAdapter002);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onRefresh() {
-                requestNet();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
+                intent.putExtra("id", productList.get(position).get_id());
+                parent.getContext().startActivity(intent);
             }
         });
-        mListView.setSelector(R.color.nothing);
-        mListView.setDividerHeight(0);
-        mListView.setOnScrollListener(this);
-        mListView.setOnTouchListener(this);
-//        pullRefreshView001.animLayout();
-//        mListView = pullRefreshView001.getRefreshableView();
+
+        pullToRefreshGridView.setOnRefreshListener(new com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2<HeaderGridView>() {
+            @Override
+            public void onPullDownToRefresh(com.handmark.pulltorefresh.library.PullToRefreshBase<HeaderGridView> refreshView) {
+                isLoadMore = true;
+                currentPage = 1;
+                getLasteProduct();
+            }
+
+            @Override
+            public void onPullUpToRefresh(com.handmark.pulltorefresh.library.PullToRefreshBase<HeaderGridView> refreshView) {
+
+            }
+        });
+        pullToRefreshGridView.setOnLastItemVisibleListener(new com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                if (isLoadMore) {
+                    currentPage++;
+                    getLasteProduct();
+                } else {
+                    isLoadMore = true;
+                }
+            }
+        });
     }
 
     @Override
@@ -121,28 +158,16 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         ButterKnife.unbind(this);
     }
 
+    private View headerView;
     private View getHeaderView() {
-        View headerView = View.inflate(getActivity(), R.layout.headerview_wellgoods_tab4, null);
-
-//        ListViewForScrollView recyclerView002 = (ListViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
-//        subjectList = new ArrayList<>();
-//        wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
-//        recyclerView002.setAdapter(wellgoodsSubjectAdapter);
-
-        // TODO: 2017/3/4 产品列表
-        GridViewForScrollView recyclerView003 = (GridViewForScrollView ) headerView.findViewById(R.id.pull_refresh_view_003);
-        productList = new ArrayList<>();
-        searchList = new ArrayList<>();
-        indexAdapter002 = new AddProductGridAdapter(getActivity(),productList, searchList);
-        recyclerView003.setAdapter(indexAdapter002);
-        recyclerView003.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
-                intent.putExtra("id", productList.get(position).get_id());
-                parent.getContext().startActivity(intent);
-            }
-        });
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        /*View */headerView = View.inflate(getActivity(), R.layout.headerview_wellgoods_tab4, null);
+        headerView.setLayoutParams(layoutParams);
+        ListViewForScrollView recyclerView002 = (ListViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
+        subjectList2 = new ArrayList<>();
+        wellgoodsSubjectAdapter2 = new WellgoodsSubjectAdapter(getActivity(), subjectList2);
+        recyclerView002.setAdapter(wellgoodsSubjectAdapter2);
+//        headerView.setVisibility(View.GONE);
         return headerView;
     }
 
@@ -163,14 +188,14 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
 
     //好货专题列表
     private void subjectList() {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "1");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(null, 2 + "", null, null, 5 + "", "1");
         requestParams.put("category_id", categoryId);
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 
             @Override
             public void onSuccess(String json) {
                 Log.e("<<<好货专题列表", json);
-                pullRefreshView001.onRefreshComplete();
+                pullToRefreshGridView.onRefreshComplete();
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
                     Gson gson = new Gson();
@@ -180,25 +205,30 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
-                if (subjectListBean.isSuccess()) {
+                String total_rows = subjectListBean.getData().getTotal_rows();
+                if (subjectListBean.isSuccess() &&  !TextUtils.isEmpty(total_rows) && Integer.valueOf(total_rows) > 0) {
                     if (currentPage == 1) {
-                        pullRefreshView001.lastTotalItem = -1;
-                        pullRefreshView001.lastSavedFirstVisibleItem = -1;
-//                        subjectList.clear();
+//                        pullToRefreshGridView.lastTotalItem = -1;
+//                        pullToRefreshGridView.lastSavedFirstVisibleItem = -1;
+                        subjectList2.clear();
                     }
-//                    subjectList.clear();
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getActivity(), (156 + 211)));
+                    headerView.setLayoutParams(layoutParams);
                     subjectList2.clear();
                     subjectList2.addAll(subjectListBean.getData().getRows());
 //                    subjectList.addAll(subjectListBean.getData().getRows());
 
                     wellgoodsSubjectAdapter2.notifyDataSetChanged();
+                    headerView.setVisibility(View.VISIBLE);
 //                    wellgoodsSubjectAdapter.notifyDataSetChanged();
-                }
+                }/* else {
+                    headerView.setVisibility(View.GONE);
+                }*/
             }
 
             @Override
             public void onFailure(String error) {
-                pullRefreshView001.onRefreshComplete();
+//                headerView.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
             }
         });
@@ -209,11 +239,12 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
      * 新品
      */
     private void getLasteProduct(){
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, null, String.valueOf(5), null, null, null, "1", null);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, String.valueOf(currentPage), String.valueOf(8), null, null, null, "0", null);
         requestParams.put("category_id", categoryId);
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
+                pullToRefreshGridView.onRefreshComplete();
                 ProductBean productBean = new ProductBean();
                 try {
                     Gson gson = new Gson();
@@ -225,13 +256,14 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
                 }
 
                 if (productBean.isSuccess()) {
-                    searchList.clear();
-//                    if (currentPage == 1) {
-//                        productList.clear();
-//                    }
-                    productList.clear();
+
+                    if (currentPage == 1) {
+//                        pullToRefreshGridView.lastTotalItem = -1;
+//                        pullToRefreshGridView.lastSavedFirstVisibleItem = -1;
+                        searchList.clear();
+                        productList.clear();
+                    }
                     productList.addAll(productBean.getData().getRows());
-                    //刷新数据
                     indexAdapter002.notifyDataSetChanged();
                 }
             }

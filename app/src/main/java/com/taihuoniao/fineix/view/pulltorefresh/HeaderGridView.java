@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.view;
+package com.taihuoniao.fineix.view.pulltorefresh;
 
 /**
  * Created by taihuoniao on 2016/4/29.
