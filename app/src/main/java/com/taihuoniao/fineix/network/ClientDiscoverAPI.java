@@ -1321,4 +1321,15 @@ public class ClientDiscoverAPI {
         params.put("storage_id",storage_id);
         return params;
     }
+
+    //编辑参数
+    public static HashMap<String,String> getEditZoneInfo(String id,String title,String sub_title,String des,String category_id) {
+        HashMap<String,String> params= new HashMap<>();
+        params.put("id",id);
+        params.put("title",title);
+        params.put("sub_title",sub_title);
+        params.put("des",des);
+        params.put("category_id",category_id);
+        return params;
+    }
 }

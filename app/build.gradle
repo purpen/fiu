@@ -59,6 +59,12 @@ dependencies {
     compile project(':Gpu-Image')
     compile project(':pullrefreshlib')
     compile project(':flowlayout')
+    compile files('libs/baidumapapi_base_v4_2_0.jar')
+    compile files('libs/baidumapapi_cloud_v4_2_0.jar')
+    compile files('libs/baidumapapi_map_v4_2_0.jar')
+    compile files('libs/baidumapapi_radar_v4_2_0.jar')
+    compile files('libs/baidumapapi_search_v4_2_0.jar')
+    compile files('libs/baidumapapi_util_v4_2_0.jar')
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'
@@ -72,10 +78,5 @@ dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okio:okio:1.7.0'
-    compile files('libs/baidumapapi_base_v4_2_0.jar')
-    compile files('libs/baidumapapi_cloud_v4_2_0.jar')
-    compile files('libs/baidumapapi_map_v4_2_0.jar')
-    compile files('libs/baidumapapi_radar_v4_2_0.jar')
-    compile files('libs/baidumapapi_search_v4_2_0.jar')
-    compile files('libs/baidumapapi_util_v4_2_0.jar')
+    compile 'com.android.support.constraint:constraint-layout:1.0.1'
 }

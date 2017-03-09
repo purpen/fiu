@@ -45,6 +45,7 @@ public class ZoneDetailBean implements Parcelable {
     public String sub_title;
     public String avatar_url;
     public String created_at;
+    public CategoryBean category;
     public UserBean user;
     public int love_count;
     public int view_count;
@@ -62,6 +63,42 @@ public class ZoneDetailBean implements Parcelable {
     public List<String> covers;
     public List<String> tags;
     public List<String> bright_spot;
+
+    public static class CategoryBean implements Parcelable {
+        public String _id;
+        public String title;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeString(this.title);
+        }
+
+        public CategoryBean() {
+        }
+
+        protected CategoryBean(Parcel in) {
+            this._id = in.readString();
+            this.title = in.readString();
+        }
+
+        public static final Creator<CategoryBean> CREATOR = new Creator<CategoryBean>() {
+            @Override
+            public CategoryBean createFromParcel(Parcel source) {
+                return new CategoryBean(source);
+            }
+
+            @Override
+            public CategoryBean[] newArray(int size) {
+                return new CategoryBean[size];
+            }
+        };
+    }
 
     public static class UserBean implements Parcelable {
         /**
@@ -210,6 +247,9 @@ public class ZoneDetailBean implements Parcelable {
         };
     }
 
+    public ZoneDetailBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -222,6 +262,7 @@ public class ZoneDetailBean implements Parcelable {
         dest.writeString(this.sub_title);
         dest.writeString(this.avatar_url);
         dest.writeString(this.created_at);
+        dest.writeParcelable(this.category, flags);
         dest.writeParcelable(this.user, flags);
         dest.writeInt(this.love_count);
         dest.writeInt(this.view_count);
@@ -241,15 +282,13 @@ public class ZoneDetailBean implements Parcelable {
         dest.writeStringList(this.bright_spot);
     }
 
-    public ZoneDetailBean() {
-    }
-
     protected ZoneDetailBean(Parcel in) {
         this._id = in.readString();
         this.title = in.readString();
         this.sub_title = in.readString();
         this.avatar_url = in.readString();
         this.created_at = in.readString();
+        this.category = in.readParcelable(CategoryBean.class.getClassLoader());
         this.user = in.readParcelable(UserBean.class.getClassLoader());
         this.love_count = in.readInt();
         this.view_count = in.readInt();

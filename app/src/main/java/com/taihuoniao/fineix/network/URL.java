@@ -6,9 +6,9 @@ package com.taihuoniao.fineix.network;
  */
 public class URL {
     public static final String H5_URL="https://m.taihuoniao.com";
-    public static final String BASE_URL = "https://api.taihuoniao.com/app/api"; //线上
+//    public static final String BASE_URL = "https://api.taihuoniao.com/app/api"; //线上
 //    public static final String BASE_URL = "https://m.taihuoniao.com/app/api";//生产环境
-//    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
+    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     // 公共接口
     public static final String BANNERS_URL = BASE_URL + "/gateway/slide";
@@ -192,4 +192,6 @@ public class URL {
     public static final String SHARE_H5_URL = BASE_URL+"/gateway/share_link";
     public static final String PRODUCT_INDEX_HOT = BASE_URL+"/product/index_hot";
 
+    //新增地盘接口
+    public static final String SCENE_SCENE_SAVE_URL= BASE_URL+"/scene_scene/save";
 }

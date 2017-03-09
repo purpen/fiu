@@ -57,6 +57,7 @@ import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.zone.ZoneManagementActivity;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
@@ -399,9 +400,12 @@ public class MineFragment extends MyBaseFragment {
                 intent.putExtra(AboutUsActivity.class.getName(), getString(R.string.company_dz));
                 startActivity(intent);
                 break;
-//            case R.id.btn:
-//                startActivity(new Intent(activity, ZoneDetailActivity.class));
-//                break;
+            case R.id.btn:
+                if (TextUtils.isEmpty(user.identify.storage_id)) return;
+                intent = new Intent(activity, ZoneManagementActivity.class);
+                intent.putExtra(ZoneManagementActivity.class.getSimpleName(),user.identify.storage_id);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
