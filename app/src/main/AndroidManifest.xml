@@ -470,6 +470,11 @@
         <activity android:name=".personal.alliance.WithdrawRecordActivity" />
         <activity android:name=".personal.alliance.WithdrawRecordDetailsActivity" />
         <activity android:name=".personal.alliance.PrivacyPolicyActivity" />
+        <activity android:name=".personal.alliance.AddWithdrawAccountInfoActivity" />
+        <activity android:name=".personal.alliance.AddWithdrawAccountInfo2Activity" />
+        <activity android:name=".personal.alliance.BindWithdrawAccountActivity" />
+        <activity android:name=".personal.alliance.WithdrawAllianceBankListActivity" />
+
         <activity android:name=".zone.ZoneDetailActivity" android:screenOrientation="portrait"/>
         <activity android:name=".user.QJSubjectDetailActivity" android:screenOrientation="portrait"/>
         <activity android:name=".map.SelectCitiesActivity" android:screenOrientation="portrait"/>

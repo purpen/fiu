@@ -1321,4 +1321,40 @@ public class ClientDiscoverAPI {
         params.put("storage_id",storage_id);
         return params;
     }
+
+    public static Map<String,String> getAllianceWithDraw01(String id,String alliance_id,String kind,String pay_type,String account,String bank_address ,String is_default,String username,String phone,String verify_code) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
+        params.put("alliance_id", alliance_id);
+        params.put("kind",kind);
+        params.put("pay_type",pay_type);
+        params.put("account",account);
+        params.put("bank_address",bank_address);
+        params.put("is_default",is_default);
+        params.put("username",username);
+        params.put("phone",phone);
+        params.put("verify_code",verify_code);
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw02(String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw03(String page, String size, String sort) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("page",page);
+        params.put("size",size);
+        params.put("sort",sort);
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw04() {
+        HashMap<String, String> params = new HashMap<>();
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw05(String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
+        return params;
+    }
 }

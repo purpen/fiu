@@ -8,8 +8,11 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -18,6 +21,7 @@ import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.AllianceRequstDeal;
+import com.taihuoniao.fineix.personal.alliance.bean.WithDrawDefaultAccountBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -26,6 +30,7 @@ import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,9 +55,16 @@ public class WithdrawActivity extends BaseActivity {
     TextView textViewLink1;
     @Bind(R.id.button_commit)
     Button buttonCommit;
+    @Bind(R.id.imageView_alliance_withdraw_account_icon)
+    ImageView imageViewAllianceWithdrawAccountIcon;
+    @Bind(R.id.textView_alliance_withdraw_account_description)
+    TextView textViewAllianceWithdrawAccountDescription;
+    @Bind(R.id.linearLayout_alliance_withdraw_account)
+    LinearLayout linearLayoutAllianceWithdrawAccount;
 
     private String balance;
     private String amount;
+    private static int REQUESTCODE_SELECTED_ACCOUNT = 10002;
 
     public WithdrawActivity() {
         super(R.layout.activity_alliance_withdraw);
@@ -80,7 +92,7 @@ public class WithdrawActivity extends BaseActivity {
         textView2.setText(String.format("¥ %s", balance));
     }
 
-    @OnClick({R.id.textView_link1, R.id.button_commit})
+    @OnClick({R.id.textView_link1, R.id.button_commit, R.id.linearLayout_alliance_withdraw_account})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.textView_link1:
@@ -95,6 +107,10 @@ public class WithdrawActivity extends BaseActivity {
                         requestData(amount);
                     }
                 });
+                break;
+            case R.id.linearLayout_alliance_withdraw_account:
+                Intent intent = new Intent(WithdrawActivity.this, BindWithdrawAccountActivity.class);
+                startActivityForResult(intent, REQUESTCODE_SELECTED_ACCOUNT);
                 break;
         }
     }
@@ -121,7 +137,7 @@ public class WithdrawActivity extends BaseActivity {
         });
     }
 
-    class MyTextWatcher implements TextWatcher{
+    class MyTextWatcher implements TextWatcher {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -156,5 +172,58 @@ public class WithdrawActivity extends BaseActivity {
         public void afterTextChanged(Editable s) {
 
         }
+    }
+
+    /**
+     * 获取默认绑定接口
+     */
+    private void requestData2() {
+        Map<String, String> allianceWithDraw04 = ClientDiscoverAPI.getAllianceWithDraw04();
+        HttpRequest.post(allianceWithDraw04, URL.ALLIANCE_PAYMENT_CARD_DEFAULTED, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                WithDrawDefaultAccountBean withDrawDefaultAccountBean = JsonUtil.fromJson(json,  new TypeToken<HttpResponse<WithDrawDefaultAccountBean>>() { });
+                if (withDrawDefaultAccountBean != null) {
+                    dealResult(withDrawDefaultAccountBean);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showSuccess("提现失败");
+            }
+        });
+    }
+
+    private void dealResult(WithDrawDefaultAccountBean withDrawDefaultAccountBean) {
+        if (withDrawDefaultAccountBean == null) {
+            return;
+        }
+        String has_default = withDrawDefaultAccountBean.getHas_default();
+        if (Integer.valueOf(has_default) == 1) {
+            String kind = withDrawDefaultAccountBean.getKind();
+            if (Integer.valueOf(kind) == 1) { //银行卡
+                String pay_type_label = withDrawDefaultAccountBean.getPay_type_label();
+                imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_bank);
+                textViewAllianceWithdrawAccountDescription.setText(pay_type_label);
+            } else if(Integer.valueOf(kind) == 2){ //支付宝
+                imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_alipay);
+                textViewAllianceWithdrawAccountDescription.setText("支付宝");
+            }
+            imageViewAllianceWithdrawAccountIcon.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void requestNet() {
+        requestData2();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == this.REQUESTCODE_SELECTED_ACCOUNT) {
+            requestData2();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
