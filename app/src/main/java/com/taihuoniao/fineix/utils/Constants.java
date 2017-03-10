@@ -35,5 +35,6 @@ public class Constants {
     public static final String PACKAGE_URL_SCHEME = "package:";
 
     public static final int REQUEST_PHONE_STATE_CODE = 100; // 权限请求码
+    public static final int REQUEST_PERMISSION_CODE = 101; // 权限请求码
     public static final int REQUEST_CODE_SETTING = 300;
 }

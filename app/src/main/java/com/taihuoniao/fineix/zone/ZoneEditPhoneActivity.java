@@ -26,9 +26,9 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * 修改地盘标题
+ * 修改地盘电话
  */
-public class ZoneEditTitleActivity extends BaseActivity {
+public class ZoneEditPhoneActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView customHead;
     @Bind(R.id.et_name)
@@ -36,8 +36,8 @@ public class ZoneEditTitleActivity extends BaseActivity {
     @Bind(R.id.ibtn)
     ImageButton ibtn;
     private ZoneDetailBean zoneDetailBean;
-    public ZoneEditTitleActivity() {
-        super(R.layout.activity_edit_zone_title);
+    public ZoneEditPhoneActivity() {
+        super(R.layout.activity_edit_zone_phone);
     }
 
     @Override
@@ -50,9 +50,10 @@ public class ZoneEditTitleActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        customHead.setHeadCenterTxtShow(true,R.string.modify_zone_name);
+        customHead.setHeadCenterTxtShow(true,R.string.title_zone_phone);
         customHead.setHeadRightTxtShow(true, R.string.save);
-        if (zoneDetailBean!=null) etName.setText(zoneDetailBean.title);
+        if (zoneDetailBean!=null && zoneDetailBean.extra!=null) etName.setText(zoneDetailBean.extra.tel);
+
     }
 
     @OnClick({R.id.tv_head_right, R.id.ibtn})
@@ -96,27 +97,27 @@ public class ZoneEditTitleActivity extends BaseActivity {
     protected void submitData() {
         final String zoneName = etName.getText().toString();
         if (TextUtils.isEmpty(zoneName)) {
-            ToastUtils.showInfo("请先填写地盘名称");
+            ToastUtils.showInfo("请先填写地盘电话");
             return;
         }
 
-        if (zoneName.length()<3){
-            ToastUtils.showInfo("标题长度应为3~15个字符");
-            return;
-        }
+//        if (zoneName.length()<3){
+//            ToastUtils.showInfo("标题长度应为3~15个字符");
+//            return;
+//        }
 
         HashMap<String,String> params = new HashMap<>();
         params.put("id",zoneDetailBean._id);
-        params.put("title",zoneName);
+        params.put("extra_tel",zoneName);
         HttpRequest.post(params, URL.SCENE_SCENE_SAVE_URL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     Util.makeToast(response.getMessage());
-                    zoneDetailBean.title = zoneName;
+                    zoneDetailBean.extra.tel = zoneName;
                     Intent intent = new Intent();
-                    intent.putExtra(TAG,zoneName);
+                    intent.putExtra(TAG,zoneDetailBean);
                     setResult(RESULT_OK, intent);
                     finish();
                     return;

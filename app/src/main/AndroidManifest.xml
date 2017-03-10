@@ -511,6 +511,19 @@
         <activity android:name=".zone.ZoneClassifyActivity" />
         <activity android:name=".zone.ZoneEditSubtitleActivity" />
         <activity android:name=".zone.ZoneEditBriefActivity" />
+        <activity android:name=".zone.ZoneEditPhoneActivity" />
+        <activity android:name=".zone.ZoneEditTimeActivity" />
+        <activity android:name=".zone.ZoneEditAddressActivity" />
+        <activity android:name=".zone.ZoneMapSelectAddressActivity" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.taihuoniao.fineix.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

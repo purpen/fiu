@@ -89,7 +89,7 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
 
-        imageLoader.displayImage(left_qj.getCover_url(), holder.iv_cover_left, options);
+        GlideUtils.displayImage(left_qj.getCover_url(), holder.iv_cover_left);
         if (!TextUtils.isEmpty(left_qj.getTitle())) {
             holder.tv_title_left.setVisibility(View.VISIBLE);
             holder.tv_title_left1.setVisibility(View.VISIBLE);

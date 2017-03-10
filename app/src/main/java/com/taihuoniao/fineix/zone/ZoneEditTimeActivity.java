@@ -26,9 +26,9 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * 修改地盘标题
+ * 修改地盘营业时间
  */
-public class ZoneEditTitleActivity extends BaseActivity {
+public class ZoneEditTimeActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView customHead;
     @Bind(R.id.et_name)
@@ -36,8 +36,8 @@ public class ZoneEditTitleActivity extends BaseActivity {
     @Bind(R.id.ibtn)
     ImageButton ibtn;
     private ZoneDetailBean zoneDetailBean;
-    public ZoneEditTitleActivity() {
-        super(R.layout.activity_edit_zone_title);
+    public ZoneEditTimeActivity() {
+        super(R.layout.activity_edit_zone_time);
     }
 
     @Override
@@ -50,9 +50,10 @@ public class ZoneEditTitleActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        customHead.setHeadCenterTxtShow(true,R.string.modify_zone_name);
+        customHead.setHeadCenterTxtShow(true,R.string.title_business_times);
         customHead.setHeadRightTxtShow(true, R.string.save);
-        if (zoneDetailBean!=null) etName.setText(zoneDetailBean.title);
+        if (zoneDetailBean!=null && zoneDetailBean.extra!=null) etName.setText(zoneDetailBean.extra.shop_hours);
+
     }
 
     @OnClick({R.id.tv_head_right, R.id.ibtn})
@@ -96,27 +97,27 @@ public class ZoneEditTitleActivity extends BaseActivity {
     protected void submitData() {
         final String zoneName = etName.getText().toString();
         if (TextUtils.isEmpty(zoneName)) {
-            ToastUtils.showInfo("请先填写地盘名称");
+            ToastUtils.showInfo("请先填写地盘营业时间");
             return;
         }
 
-        if (zoneName.length()<3){
-            ToastUtils.showInfo("标题长度应为3~15个字符");
-            return;
-        }
+//        if (zoneName.length()<3){
+//            ToastUtils.showInfo("标题长度应为3~15个字符");
+//            return;
+//        }
 
         HashMap<String,String> params = new HashMap<>();
         params.put("id",zoneDetailBean._id);
-        params.put("title",zoneName);
+        params.put("extra_shop_hours",zoneName);
         HttpRequest.post(params, URL.SCENE_SCENE_SAVE_URL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     Util.makeToast(response.getMessage());
-                    zoneDetailBean.title = zoneName;
+                    zoneDetailBean.extra.shop_hours = zoneName;
                     Intent intent = new Intent();
-                    intent.putExtra(TAG,zoneName);
+                    intent.putExtra(TAG,zoneDetailBean);
                     setResult(RESULT_OK, intent);
                     finish();
                     return;
