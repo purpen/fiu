@@ -304,7 +304,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        HashMap<String, String> params = ClientDiscoverAPI.getisInvitedRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         HttpRequest.post(params,URL.GATEWAY_IS_INVITED, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
             @Override

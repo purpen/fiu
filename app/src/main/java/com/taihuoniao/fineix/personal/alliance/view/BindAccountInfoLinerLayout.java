@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -24,7 +25,7 @@ public class BindAccountInfoLinerLayout extends LinearLayout {
     private ImageView imageViewAllianceWithdrawAccountIcon;
     private TextView textViewAllianceWithdrawAccountDescription;
     private TextView textViewDefaultText;
-    private CheckBox textViewSetDefaultBank;
+    private TextView textViewSetDefaultBank;
 
     private boolean selected;
 
@@ -49,20 +50,19 @@ public class BindAccountInfoLinerLayout extends LinearLayout {
         imageViewAllianceWithdrawAccountIcon = (ImageView) findViewById(R.id.imageView_alliance_withdraw_account_icon);
         textViewAllianceWithdrawAccountDescription = (TextView) findViewById(R.id.textView_alliance_withdraw_account_description);
         textViewDefaultText = (TextView) findViewById(R.id.textView_default_text);
-        textViewSetDefaultBank = (CheckBox) findViewById(R.id.textView_setDefault_bank);
+        textViewSetDefaultBank = (TextView) findViewById(R.id.textView_setDefault_bank);
     }
 
     public void setSelectStatus(boolean selected) {
         this.selected = selected;
         if (selected) {
-            textViewSetDefaultBank.setChecked(true);
+            textViewSetDefaultBank.setBackgroundResource(R.mipmap.icon_selector_selected);
         } else {
-            textViewSetDefaultBank.setChecked(false);
+            textViewSetDefaultBank.setBackgroundResource(R.mipmap.icon_selector_normal);
         }
     }
 
     public void setInitInfo(int kind, String label, boolean iSdefault, boolean selected) {
-        this.selected = selected;
         if (kind == 1) {
             imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_bank);
         } else if (kind == 2) {
@@ -73,11 +73,7 @@ public class BindAccountInfoLinerLayout extends LinearLayout {
         } else {
             textViewDefaultText.setText("");
         }
-        if (selected) {
-            textViewSetDefaultBank.setChecked(true);
-        } else {
-            textViewSetDefaultBank.setChecked(false);
-        }
+        setSelectStatus(selected);
         textViewAllianceWithdrawAccountDescription.setText(label);
     }
 
@@ -87,9 +83,9 @@ public class BindAccountInfoLinerLayout extends LinearLayout {
     }
 
     public void setOnChangedListener(final GlobalCallBack onCheckedChangeListener, final int index){
-        textViewSetDefaultBank.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        textViewSetDefaultBank.setOnClickListener(new OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onClick(View view) {
                 onCheckedChangeListener.callBack(index);
             }
         });

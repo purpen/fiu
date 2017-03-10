@@ -182,8 +182,7 @@ public class MineFragment extends MyBaseFragment {
             LogUtil.e(TAG, "isUserLogin()==false");
             return;
         }
-        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack() {
+        HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack() {
             @Override
             public void onStart() {
 //                if (!activity.isFinishing() && dialog != null) dialog.show();

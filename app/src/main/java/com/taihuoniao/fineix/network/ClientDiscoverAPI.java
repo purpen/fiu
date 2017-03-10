@@ -191,16 +191,6 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    public static HashMap<String, String> getProvinceListRequestParams() {
-        return new HashMap<>();
-    }
-
-    @NonNull
-    public static HashMap<String, String> getgetDefaultAddressNetRequestParams() {
-        return new HashMap<>();
-    }
-
-    @NonNull
     public static HashMap<String, String> getgetAddressListRequestParams(String page) {
         HashMap<String, String> params = new HashMap<>();
         params.put("page", page);
@@ -303,12 +293,6 @@ public class ClientDiscoverAPI {
         params.put("product_id", product_id);
         params.put("brand_id", brand_id);
         return params;
-    }
-
-
-    @NonNull
-    public static HashMap<String, String> getcartNumRequestParams() {
-        return new HashMap<>();
     }
 
 
@@ -474,12 +458,6 @@ public class ClientDiscoverAPI {
         params.put("user_id", userId);
         LogUtil.e("getMineInfo", userId);
         return params;
-    }
-
-
-    @NonNull
-    public static HashMap<String, String> getgetUserCenterDataRequestParams() {
-        return new HashMap<>();
     }
 
 
@@ -686,18 +664,6 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    public static HashMap<String, String> getshopCartNetRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
-    public static HashMap<String, String> getshopCartNumberNetRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
     public static HashMap<String, String> getcalculateShopCartNetRequestParams(String array) {
         HashMap<String, String> params = new HashMap<>();
         params.put("array", array);
@@ -809,12 +775,6 @@ public class ClientDiscoverAPI {
 
 
     @NonNull
-    public static HashMap<String, String> getshopcartInventoryNetRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
     public static HashMap<String, String> getshopcartAddSubtractNetRequestParams(String array) {
         HashMap<String, String> params = new HashMap<>();
         params.put("array", array);
@@ -906,12 +866,6 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    public static HashMap<String, String> getgetAuthStatusRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
     public static HashMap<String, String> getgetBonusRequestParams(String type, String evt, String target_id) {
         HashMap<String, String> params = new HashMap<>();
         params.put("type", type);
@@ -942,11 +896,6 @@ public class ClientDiscoverAPI {
         params.put("id", id);
         params.put("type", type);
         return params;
-    }
-
-    @NonNull
-    public static HashMap<String, String> getisInvitedRequestParams() {
-        return new HashMap<>();
     }
 
 

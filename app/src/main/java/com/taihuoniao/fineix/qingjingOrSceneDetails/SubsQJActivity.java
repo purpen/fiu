@@ -175,8 +175,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
 
     //获取订阅情境主题个数
     private void hasSubsCount() {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        Call httpHandler = HttpRequest.post(requestParams, URL.USER_CENTER, new GlobalDataCallBack(){
+        Call httpHandler = HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {

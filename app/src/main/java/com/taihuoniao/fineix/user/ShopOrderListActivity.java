@@ -175,8 +175,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
 
     @Override
     protected void requestNet() {
-        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack() {
+        HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

@@ -105,8 +105,7 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
+        HttpRequest.post( URL.USER_CENTER, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onStart() {

@@ -64,7 +64,7 @@ public class CertificateStatusActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
-        HashMap<String, String> params = ClientDiscoverAPI.getgetAuthStatusRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         HttpRequest.post(params,URL.MY_FETCH_TALENT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
             @Override

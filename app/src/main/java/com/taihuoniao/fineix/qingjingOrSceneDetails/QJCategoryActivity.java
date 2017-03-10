@@ -112,8 +112,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
 
     //获取订阅情境主题个数
     private void hasSubsCount() {
-        HashMap<String, String> params = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        HttpRequest.post(params, URL.USER_CENTER, new GlobalDataCallBack(){
+        HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack(){
 //        userCenterHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {

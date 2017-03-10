@@ -223,8 +223,7 @@ public class DataPaser {
      * @return
      */
     public static Call shopCartParser(final Handler handler) {
-        HashMap<String, String> params = ClientDiscoverAPI.getshopCartNetRequestParams();
-        return HttpRequest.post(params, URL.SHOPPING_FETCH_CART, new GlobalDataCallBack(){
+        return HttpRequest.post(URL.SHOPPING_FETCH_CART, new GlobalDataCallBack(){
 //        return ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
@@ -287,7 +286,7 @@ public class DataPaser {
      * @return
      */
     public static Call shopCartNumberParser(final Handler handler) {
-        HashMap<String, String> params = ClientDiscoverAPI.getshopCartNumberNetRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         return HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_COUNT, new GlobalDataCallBack(){
 //        return ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
             @Override

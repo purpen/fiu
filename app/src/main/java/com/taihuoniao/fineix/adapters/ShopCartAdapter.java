@@ -199,7 +199,7 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
     List<ShopCartInventoryItemBean> mInventoryList = new ArrayList<>();
 
     private void inventory() {
-        HashMap<String, String> params = ClientDiscoverAPI.getshopcartInventoryNetRequestParams();
+        HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_PRODUCT_COUUNT, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
             @Override

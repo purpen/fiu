@@ -217,8 +217,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             cartNumber.setVisibility(View.GONE);
             return;
         }
-        HashMap<String, String> params =ClientDiscoverAPI. getcartNumRequestParams();
-       Call httpHandler=  HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
+       Call httpHandler=  HttpRequest.post(URL.CART_NUMBER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {

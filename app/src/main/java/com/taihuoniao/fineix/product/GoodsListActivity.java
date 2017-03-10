@@ -175,8 +175,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
             titleLayout.setCartNum(0);
             return;
         }
-        HashMap<String, String> params =ClientDiscoverAPI. getcartNumRequestParams();
-        cartHandler = HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
+        cartHandler = HttpRequest.post( URL.CART_NUMBER, new GlobalDataCallBack(){
 //        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {

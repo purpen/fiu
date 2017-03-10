@@ -14,6 +14,7 @@ import org.apache.http.NameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,13 @@ public class HttpRequest {
             requestUrlreal = URL.BASE_URL + requestUrl;
         }
         return OkHttpUtils.post(requestUrlreal, nameValuePairs);
+    }
+
+    public static Call post(String requestUrl, GlobalDataCallBack callBack) {
+        if (callBack != null) {
+            callBack.onStart();
+        }
+        return post(getSignedList(null), requestUrl, callBack, true);
     }
 
     public static Call post(Map<String, String> params, String requestUrl, GlobalDataCallBack callBack) {
@@ -72,17 +80,17 @@ public class HttpRequest {
     }
 
     private static List<NameValuePair> getSignedList(Map<String, String> params){
-        if (params != null) {
-            List<NameValuePair> signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
-            for(int i = signedNameValuePairs.size() - 1; i >= 0; i--) {
-                NameValuePair nameValuePair = signedNameValuePairs.get(i);
-                if (TextUtils.isEmpty(nameValuePair.getValue())) {
-                    signedNameValuePairs.remove(nameValuePair);
-                }
-            }
-            return signedNameValuePairs;
+        if (params == null) {
+            params = new HashMap<>();
         }
-        return new ArrayList<>();
+        List<NameValuePair> signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
+        for(int i = signedNameValuePairs.size() - 1; i >= 0; i--) {
+            NameValuePair nameValuePair = signedNameValuePairs.get(i);
+            if (TextUtils.isEmpty(nameValuePair.getValue())) {
+                signedNameValuePairs.remove(nameValuePair);
+            }
+        }
+        return signedNameValuePairs;
     }
 
     /********************************************** 旧的网络请求******************************************************/

@@ -198,8 +198,7 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        HashMap<String, String> params = ClientDiscoverAPI.getProvinceListRequestParams();
-        Call httpHandler = HttpRequest.post(params, URL.URLSTRING_PROVINCE_CITIES, new GlobalDataCallBack(){
+        Call httpHandler = HttpRequest.post(URL.URLSTRING_PROVINCE_CITIES, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
