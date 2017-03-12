@@ -1,5 +1,9 @@
 package com.taihuoniao.fineix.personal.alliance.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +11,7 @@ import java.util.List;
  * Email: 895745843@qq.com
  */
 
-public class WithDrawAccountListBean {
+public class WithDrawAccountListBean implements Parcelable {
 
     /**
      * total_rows : 3
@@ -93,7 +97,7 @@ public class WithDrawAccountListBean {
         this.rows = rows;
     }
 
-    public static class RowsEntity {
+    public static class RowsEntity implements Parcelable {
         /**
          * _id : 58bd48dd5c42ec090500424d
          * user_id : 36
@@ -267,5 +271,110 @@ public class WithDrawAccountListBean {
         public void setCreated_at(String created_at) {
             this.created_at = created_at;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeString(this.user_id);
+            dest.writeString(this.alliance);
+            dest.writeString(this.phone);
+            dest.writeString(this.type);
+            dest.writeString(this.kind);
+            dest.writeString(this.kind_label);
+            dest.writeString(this.pay_type);
+            dest.writeString(this.pay_type_label);
+            dest.writeString(this.account);
+            dest.writeString(this.username);
+            dest.writeString(this.is_default);
+            dest.writeString(this.bank_address);
+            dest.writeString(this.status);
+            dest.writeString(this.created_on);
+            dest.writeString(this.updated_on);
+            dest.writeString(this.created_at);
+        }
+
+        public RowsEntity() {
+        }
+
+        protected RowsEntity(Parcel in) {
+            this._id = in.readString();
+            this.user_id = in.readString();
+            this.alliance = in.readString();
+            this.phone = in.readString();
+            this.type = in.readString();
+            this.kind = in.readString();
+            this.kind_label = in.readString();
+            this.pay_type = in.readString();
+            this.pay_type_label = in.readString();
+            this.account = in.readString();
+            this.username = in.readString();
+            this.is_default = in.readString();
+            this.bank_address = in.readString();
+            this.status = in.readString();
+            this.created_on = in.readString();
+            this.updated_on = in.readString();
+            this.created_at = in.readString();
+        }
+
+        public static final Creator<RowsEntity> CREATOR = new Creator<RowsEntity>() {
+            @Override
+            public RowsEntity createFromParcel(Parcel source) {
+                return new RowsEntity(source);
+            }
+
+            @Override
+            public RowsEntity[] newArray(int size) {
+                return new RowsEntity[size];
+            }
+        };
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.total_rows);
+        dest.writeString(this.total_page);
+        dest.writeString(this.current_page);
+        dest.writeString(this.pager);
+        dest.writeString(this.next_page);
+        dest.writeString(this.prev_page);
+        dest.writeString(this.current_user_id);
+        dest.writeList(this.rows);
+    }
+
+    public WithDrawAccountListBean() {
+    }
+
+    protected WithDrawAccountListBean(Parcel in) {
+        this.total_rows = in.readString();
+        this.total_page = in.readString();
+        this.current_page = in.readString();
+        this.pager = in.readString();
+        this.next_page = in.readString();
+        this.prev_page = in.readString();
+        this.current_user_id = in.readString();
+        this.rows = new ArrayList<RowsEntity>();
+        in.readList(this.rows, RowsEntity.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<WithDrawAccountListBean> CREATOR = new Parcelable.Creator<WithDrawAccountListBean>() {
+        @Override
+        public WithDrawAccountListBean createFromParcel(Parcel source) {
+            return new WithDrawAccountListBean(source);
+        }
+
+        @Override
+        public WithDrawAccountListBean[] newArray(int size) {
+            return new WithDrawAccountListBean[size];
+        }
+    };
 }

@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.personal.alliance;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -62,9 +63,10 @@ public class WithdrawActivity extends BaseActivity {
     @Bind(R.id.linearLayout_alliance_withdraw_account)
     LinearLayout linearLayoutAllianceWithdrawAccount;
 
+    private static int REQUESTCODE_SELECTED_ACCOUNT = 10002;
     private String balance;
     private String amount;
-    private static int REQUESTCODE_SELECTED_ACCOUNT = 10002;
+    private String accountId;
 
     public WithdrawActivity() {
         super(R.layout.activity_alliance_withdraw);
@@ -79,10 +81,7 @@ public class WithdrawActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-
-//        editText1.setSelection(editText1.length());
         editText1.addTextChangedListener(new MyTextWatcher());
         initUI();
     }
@@ -104,27 +103,26 @@ public class WithdrawActivity extends BaseActivity {
                 new DefaultDialog(this, String.format("¥ %s", amount), "请确认要提现的金额", "提现", new IDialogListenerConfirmBack() {
                     @Override
                     public void clickRight() {
-                        requestData(amount);
+                        requestData(amount, accountId);
                     }
                 });
                 break;
             case R.id.linearLayout_alliance_withdraw_account:
                 Intent intent = new Intent(WithdrawActivity.this, BindWithdrawAccountActivity.class);
+                intent.putExtra("accountId", accountId);
                 startActivityForResult(intent, REQUESTCODE_SELECTED_ACCOUNT);
                 break;
         }
     }
 
-    private void requestData(String amount) {
+    private void requestData(String amount, String accountId) {
         String allianceValue = AllianceRequstDeal.getAllianceValue();
-        HashMap<String, String> hashMap = ClientDiscoverAPI.getWithdraw_cash(allianceValue, amount);
+        HashMap<String, String> hashMap = ClientDiscoverAPI.getWithdraw_cash(allianceValue, amount, accountId);
         HttpRequest.post(hashMap, URL.ALLIANCE_BALANCE_WITHDRAW_CASH_APPLY_CASH, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse httpResponse = JsonUtil.fromJson(json, HttpResponse.class);
                 if (httpResponse.isSuccess()) {
-
-                    // TODO: 2017/1/19 提现成功
                     startActivity(new Intent(WithdrawActivity.this, MyAccountActivity.class));
                     WithdrawActivity.this.finish();
                 }
@@ -140,14 +138,14 @@ public class WithdrawActivity extends BaseActivity {
     class MyTextWatcher implements TextWatcher {
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            LogUtil.e("s===="+s.length()+"===="+s.toString());
-            if (TextUtils.isEmpty(s) || ".".equals(s) || "0".equals(s)) {
+            if (TextUtils.isEmpty(accountId)) {
+                ToastUtils.showError("请先绑定要提现的账户");
+                return;
+            }else if (TextUtils.isEmpty(s) || ".".equals(s) || "0".equals(s)) {
                 textView1.setVisibility(View.VISIBLE);
                 buttonCommit.setEnabled(false);
             } else if (s.length() < 2) {
@@ -190,7 +188,7 @@ public class WithdrawActivity extends BaseActivity {
 
             @Override
             public void onFailure(String error) {
-                ToastUtils.showSuccess("提现失败");
+                ToastUtils.showSuccess("请求失败");
             }
         });
     }
@@ -201,17 +199,31 @@ public class WithdrawActivity extends BaseActivity {
         }
         String has_default = withDrawDefaultAccountBean.getHas_default();
         if (Integer.valueOf(has_default) == 1) {
-            String kind = withDrawDefaultAccountBean.getKind();
-            if (Integer.valueOf(kind) == 1) { //银行卡
-                String pay_type_label = withDrawDefaultAccountBean.getPay_type_label();
-                imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_bank);
-                textViewAllianceWithdrawAccountDescription.setText(pay_type_label);
-            } else if(Integer.valueOf(kind) == 2){ //支付宝
-                imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_alipay);
-                textViewAllianceWithdrawAccountDescription.setText("支付宝");
-            }
-            imageViewAllianceWithdrawAccountIcon.setVisibility(View.VISIBLE);
+            loadSeletedAccountInfo(withDrawDefaultAccountBean);
+        } else {
+            imageViewAllianceWithdrawAccountIcon.setVisibility(View.GONE);
+            textViewAllianceWithdrawAccountDescription.setText("绑定提现账户");
+            textViewAllianceWithdrawAccountDescription.setTextColor(Color.parseColor("#222222"));
         }
+    }
+
+    private void loadSeletedAccountInfo(WithDrawDefaultAccountBean withDrawDefaultAccountBean) {
+        String kind = withDrawDefaultAccountBean.getKind();
+        if (TextUtils.isEmpty(kind)) {
+            return;
+        }
+        if (Integer.valueOf(kind) == 1) { //银行卡
+            String pay_type_label = withDrawDefaultAccountBean.getPay_type_label();
+            imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_bank);
+            textViewAllianceWithdrawAccountDescription.setText(pay_type_label);
+            textViewAllianceWithdrawAccountDescription.setTextColor(Color.parseColor("#222222"));
+        } else if(Integer.valueOf(kind) == 2){ //支付宝
+            imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_alipay);
+            textViewAllianceWithdrawAccountDescription.setText("支付宝");
+            textViewAllianceWithdrawAccountDescription.setTextColor(Color.parseColor("#10AEFF"));
+        }
+        imageViewAllianceWithdrawAccountIcon.setVisibility(View.VISIBLE);
+        accountId = withDrawDefaultAccountBean.get_id();
     }
 
     @Override
@@ -221,9 +233,35 @@ public class WithdrawActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == this.REQUESTCODE_SELECTED_ACCOUNT) {
-            requestData2();
+        if (requestCode == REQUESTCODE_SELECTED_ACCOUNT && data != null) {
+            if (data.getStringExtra("id") != null) {
+                requestData3(data.getStringExtra("id"));
+            } else {
+                requestData2();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * 获取提现账户详情接口
+     */
+    private void requestData3(String id) {
+        Map<String, String> allianceWithDraw04 = ClientDiscoverAPI.getDefaultParams();
+        allianceWithDraw04.put("id",id );
+        HttpRequest.post(allianceWithDraw04, URL.ALLIANCE_BALANCE_CARD_VIEW, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                WithDrawDefaultAccountBean withDrawDefaultAccountBean = JsonUtil.fromJson(json,  new TypeToken<HttpResponse<WithDrawDefaultAccountBean>>() { });
+                if (withDrawDefaultAccountBean != null) {
+                    loadSeletedAccountInfo(withDrawDefaultAccountBean);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showSuccess("请求失败");
+            }
+        });
     }
 }

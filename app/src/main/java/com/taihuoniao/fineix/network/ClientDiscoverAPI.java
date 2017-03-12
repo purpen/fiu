@@ -1197,10 +1197,11 @@ public class ClientDiscoverAPI {
         return new HashMap<>();
     }
 
-    public static HashMap<String, String> getWithdraw_cash(String id, String amount) {
+    public static HashMap<String, String> getWithdraw_cash(String id, String amount, String accountId) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id", id);
         params.put("amount", amount);
+        params.put("payment_card_id", accountId);
         return params;
     }
 

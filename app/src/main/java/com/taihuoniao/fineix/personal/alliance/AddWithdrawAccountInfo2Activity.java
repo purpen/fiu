@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.personal.alliance;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -30,15 +32,17 @@ import com.taihuoniao.fineix.view.dialog.BaseDialogList;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
+ * 绑定/修改银行卡信息
  * Created by Stephen on 2017/3/9 10:00
  * Email: 895745843@qq.com
  */
@@ -53,29 +57,35 @@ public class AddWithdrawAccountInfo2Activity extends BaseActivity {
     EditText editText2;
     @Bind(R.id.editText3)
     EditText editText3;
-    @Bind(R.id.editText7)
-    EditText editText7;
     @Bind(R.id.editText4)
     EditText editText4;
-    @Bind(R.id.button1)
-    Button button1;
     @Bind(R.id.checkBox1)
     CheckBox checkBox1;
+    @Bind(R.id.button1)
+    TextView button1;
+    @Bind(R.id.editText7)
+    EditText editText7;
     @Bind(R.id.textView_alliance_select_bank)
     TextView textViewAllianceSelectBank;
 
-    private List<BankListBean.BanksEntity> banksEntities;
+    private static final int REQUEST_CODE_ORIGINAL_BANK = 10007;
     private WithDrawAccountListBean.RowsEntity rowsEntity;
-    private String bankId;
     private boolean isDefault;
+    private String payType;
+    private String phone;
 
     public AddWithdrawAccountInfo2Activity() {
         super(R.layout.activity_alliance_add_withdraw_account_info2);
     }
 
     @Override
+    protected void getIntentData() {
+        rowsEntity = getIntent().getParcelableExtra("ParcelableExtraRowsEntity");
+    }
+
+    @Override
     protected void initView() {
-        customHead.setHeadCenterTxtShow(true, "绑定银行卡");
+        customHead.setHeadCenterTxtShow(true, rowsEntity == null ? "绑定提现账户" : "修改提现账户");
         customHead.setHeadRightTxtShow(true, "保存");
         customHead.getHeadRightTV().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,31 +96,17 @@ public class AddWithdrawAccountInfo2Activity extends BaseActivity {
         WindowUtils.chenjin(this);
     }
 
-    private void commitCardInfomation() {
-        String str = editText1.getText().toString();
-        String str1 = editText2.getText().toString();
-        String str2 = editText3.getText().toString();
-        String str3 = editText7.getText().toString();
-        String str4 = editText4.getText().toString();
-
-        if (TextUtils.isEmpty(bankId)) {
-            ToastUtils.showError("请选择银行");
-        } else if (TextUtils.isEmpty(str)) {
-            ToastUtils.showError("开户行不能为空");
-        } else if (TextUtils.isEmpty(str1)) {
-            ToastUtils.showError("持卡人姓名不能为空");
-        } else if (TextUtils.isEmpty(str2)) {
-            ToastUtils.showError("请输入银行卡号");
-        } else if (TextUtils.isEmpty(str3)) {
-            ToastUtils.showError("请输入手机号");
-        } else if (TextUtils.isEmpty(str4)) {
-            ToastUtils.showError("请输入短信验证码");
-        } else {
-            if (rowsEntity != null) {
-                createBankInfomation(rowsEntity.get_id(),AllianceRequstDeal.getAllianceValue(),"1",bankId, str2, str,isDefault ? "1" : "0", str1,str3, str4);
-            } else {
-                createBankInfomation(null,AllianceRequstDeal.getAllianceValue(),"1",bankId, str2, str,isDefault ? "1" : "0", str1,str3, str4);
-            }
+    @Override
+    protected void initList() {
+        if (rowsEntity != null) {
+            phone = rowsEntity.getPhone();
+            payType = rowsEntity.getPay_type();
+            textViewAllianceSelectBank.setText(rowsEntity.getPay_type_label());
+            editText1.setText(rowsEntity.getBank_address());
+            editText2.setText(rowsEntity.getUsername());
+            editText3.setText(rowsEntity.getAccount());
+            editText7.setText(rowsEntity.getPhone());
+            checkBox1.setChecked("1".equals(rowsEntity.getIs_default()));
         }
     }
 
@@ -118,7 +114,6 @@ public class AddWithdrawAccountInfo2Activity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        rowsEntity = getIntent().getParcelableExtra("rowsEntity");
         checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -130,78 +125,148 @@ public class AddWithdrawAccountInfo2Activity extends BaseActivity {
     /**
      * 修改创建银行卡信息
      */
-    private void createBankInfomation(String id,String alliance_id,String kind,String pay_type,String account,String bank_address ,String is_default,String username,String phone,String verify_code) {
+    private void createBankInfomation(String id, String alliance_id, String kind, String pay_type, String account, String bank_address, String is_default, String username, String phone, String verify_code) {
         Map<String, String> allianceWithDraw01 = ClientDiscoverAPI.getAllianceWithDraw01(id, alliance_id, kind, pay_type, account, bank_address, is_default, username, phone, verify_code);
         HttpRequest.post(allianceWithDraw01, URL.ALLIANCE_PAYMENT_CARD_SAVE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                WithDrawCreateAccountBean bean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<WithDrawCreateAccountBean>>() {
+                HttpResponse<WithDrawCreateAccountBean> bean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawCreateAccountBean>>() {
                 });
                 if (bean != null) {
-                    Toast.makeText(activity, "添加信息成功", Toast.LENGTH_SHORT).show();
-                    AddWithdrawAccountInfo2Activity.this.finish();
+                    if (bean.isSuccess()) {
+                        AddWithdrawAccountInfo2Activity.this.finish();
+                    } else {
+                        ToastUtils.showError(bean.getMessage());
+                    }
                 }
             }
 
             @Override
             public void onFailure(String error) {
-                ToastUtils.showSuccess("提现失败");
+                ToastUtils.showSuccess("请求失败");
             }
         });
     }
 
-    @OnClick(R.id.textView_alliance_select_bank)
-    public void onClick() {
-        showSelectedBankListDialog();
-    }
-
-    private String[] strings2 = new String[] {"中国银行","农业银行", "交通银行", "北京银行"};
-
-    /**
-     * 修改创建银行卡信息
-     */
-    private void requestDat2a() {
-        HttpRequest.post(URL.ALLIANCE_PAYMENT_GATEWAY_BUNK_OPTIONS, new GlobalDataCallBack() {
-            @Override
-            public void onSuccess(String json) {
-                BankListBean bankListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<BankListBean>>() { });
-                if (bankListBean != null) {
-                    dealResult(bankListBean);
-                }
+    private void commitCardInfomation() {
+        String str = editText1.getText().toString();
+        String str1 = editText2.getText().toString();
+        String str2 = editText3.getText().toString();
+        String str3 = editText7.getText().toString();
+        String str4 = editText4.getText().toString();
+        if (TextUtils.isEmpty(payType)) {
+            ToastUtils.showError("请选择银行");
+        } else if (TextUtils.isEmpty(str)) {
+            ToastUtils.showError("请输入开户行名称");
+        } else if (TextUtils.isEmpty(str1)) {
+            ToastUtils.showError("请输入持卡人姓名");
+        } else if (TextUtils.isEmpty(str2)) {
+            ToastUtils.showError("请输入银行卡号");
+        } else if (TextUtils.isEmpty(str3)) {
+            ToastUtils.showError("请输入手机号");
+        } else if (TextUtils.isEmpty(str4)) {
+            ToastUtils.showError("请输入短信验证码");
+        } else if (phone != null && !TextUtils.equals(str3, phone)) {
+            ToastUtils.showError("接收验证码手机号与当前手机号不一致");
+        }else {
+            if (rowsEntity != null) {
+                createBankInfomation(rowsEntity.get_id(), AllianceRequstDeal.getAllianceValue(), "1", payType, str2, str, isDefault ? "1" : "0", str1, str3, str4);
+            } else {
+                createBankInfomation(null, AllianceRequstDeal.getAllianceValue(), "1", payType, str2, str, isDefault ? "1" : "0", str1, str3, str4);
             }
-
-            @Override
-            public void onFailure(String error) {
-                ToastUtils.showSuccess("提现失败");
-            }
-        });
-    }
-    private void dealResult(BankListBean bankListBean) {
-        banksEntities = bankListBean.getBanks();
-        int size = banksEntities.size();
-        strings2 = new String[size];
-        for(int i = 0; i < size; i++) {
-            strings2[i] = banksEntities.get(i).getName();
         }
     }
 
-    private void showSelectedBankListDialog(){
-        final ArrayList<String> customerList = new ArrayList<>();
-        Collections.addAll(customerList, strings2);
-        BaseDialogList dialogList = new BaseDialogList(this, new BaseDialogList.SubmitListener() {
+    /**
+     * 发送短信验证码
+     */
+    private void sendVerificationCode(String phone) {
+        Map<String, String> allianceWithDraw01 = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
+        allianceWithDraw01.put("type", "5");
+        HttpRequest.post(allianceWithDraw01, URL.AUTH_VERIFY_CODE, new GlobalDataCallBack() {
             @Override
-            public void submit(int position) {
-                BankListBean.BanksEntity banksEntity = banksEntities.get(position);
-                textViewAllianceSelectBank.setText(customerList.get(position));
-                bankId = banksEntity.getId();
+            public void onSuccess(String json) {
+                HttpResponse httpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<Object>>(){});
+                if (httpResponse.isSuccess()) {
+                    ToastUtils.showInfo("发送验证码成功");
+                    startToTiming();
+                }
             }
-        }, "");
-        dialogList.setContent(customerList);
-        dialogList.show();
+
+            @Override
+            public void onFailure(String error) {
+            }
+        });
+    }
+
+    private Timer timer;
+    private int second = 60;
+
+    /**
+     * 开始倒计时
+     */
+    private void startToTiming() {
+        button1.setEnabled(false);
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        second--;
+                        if (second == 0) {
+                            resetVerificationStatus();
+                            return;
+                        }
+                        button1.setText(String.format("%s", second + "秒"));
+                    }
+                });
+
+            }
+        }, 0, 1000);
+    }
+
+    /**
+     * 重置验证码状态
+     */
+    private void resetVerificationStatus() {
+        button1.setText("获取验证码");
+        button1.setEnabled(true);
+        second = 60;
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    @OnClick({R.id.textView_alliance_select_bank, R.id.button1})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.textView_alliance_select_bank:
+                startActivityForResult(new Intent(AddWithdrawAccountInfo2Activity.this, WithdrawAllianceBankListActivity.class), REQUEST_CODE_ORIGINAL_BANK);
+//                showSelectedBankListDialog();
+                break;
+            case R.id.button1:
+                String tempPhone = editText7.getText().toString();
+                if (TextUtils.isEmpty(tempPhone)) {
+                    ToastUtils.showInfo("请输入手机号");
+                } else if (tempPhone.length() < 11) {
+                    ToastUtils.showInfo("请输入11位手机号");
+                } else {
+                    phone = tempPhone;
+                    sendVerificationCode(this.phone);
+                }
+                break;
+        }
     }
 
     @Override
-    protected void requestNet() {
-        requestDat2a();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_ORIGINAL_BANK && data != null) {
+            BankListBean.BanksEntity banksEntity = data.getParcelableExtra("banksEntity");
+            textViewAllianceSelectBank.setText(banksEntity.getName());
+            payType = banksEntity.getId();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

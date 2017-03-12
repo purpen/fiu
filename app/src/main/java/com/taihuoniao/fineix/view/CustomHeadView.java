@@ -104,7 +104,11 @@ public class CustomHeadView extends RelativeLayout {
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.head_goback:
-                    ((Activity)context).finish();
+                    if (mIgobackLister != null) {
+                        mIgobackLister.goback();
+                    } else {
+                        ((Activity)context).finish();
+                    }
                     break;
                 case R.id.iv_left:
                     //TODO
@@ -226,5 +230,15 @@ public class CustomHeadView extends RelativeLayout {
 
     public TextView getHeadRightTV(){
         return tv_head_right;
+    }
+
+    private IgobackLister mIgobackLister;
+
+    public interface IgobackLister {
+        void goback();
+    }
+
+    public void setGoBackListenr(IgobackLister igobackLister){
+        mIgobackLister = igobackLister;
     }
 }

@@ -1,8 +1,9 @@
 package com.taihuoniao.fineix.personal.alliance;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 绑定体现账户
+ * 绑定提现账户
  * Created by Stephen on 2017/3/9 10:00
  * Email: 895745843@qq.com
  */
@@ -48,15 +49,11 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
     @Bind(R.id.linearLayout_account_add_withdraw_account)
     LinearLayout linearLayoutAccountAddWithdrawAccount;
 
-    private static final int WITHDRAW_APLIPAY = 10004;
-    private static final int WITHDRAW_BANK = 10005;
-    private static final int REQUESTCODE_ADD_ACCOUNT = 10006;
-
-
-    private List<LinearLayout> mLinearLayouts;
-
-    private int defaultType;
+    private static final int REQUESTCODE_ADD_ACCOUNT            =               10006;
+    private List<WithDrawAccountListBean.RowsEntity> rowsEntities;
+    private WithDrawAccountListBean.RowsEntity selectedEntity;
     private String selectedID;
+    private int selectedIndex = -1;
 
     public BindWithdrawAccountActivity() {
         super(R.layout.activity_alliance_bind_withdraw_account);
@@ -64,55 +61,41 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
 
     @Override
     protected void initView() {
-        mLinearLayouts = new ArrayList<>();
-        customHead.setHeadCenterTxtShow(true, "绑定体现账户");
+        customHead.setHeadCenterTxtShow(true, "绑定提现账户");
         customHead.setHeadRightTxtShow(true, "管理");
         customHead.getHeadRightTV().setOnClickListener(this);
+        customHead.setGoBackListenr(new CustomHeadView.IgobackLister() {
+            @Override
+            public void goback() {
+                onBackPressed();
+            }
+        });
         WindowUtils.chenjin(this);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-        initUI();
     }
 
-    private void initUI() {
-//        textViewSetDefaultAlipay.setOnClickListener(this);
-//        textViewSetDefaultBank.setOnClickListener(this);
-//        liearLayoutBindAccountAlipay.setOnClickListener(this);
-//        liearLayoutBindAccountBank.setOnClickListener(this);
-//        linearLayoutAccountAddWithdrawAccount.setOnClickListener(this);
+    @Override
+    protected void getIntentData() {
+        selectedID = getIntent().getStringExtra("accountId");
     }
-
-
 
     @OnClick({R.id.linearLayout_account_add_withdraw_account})
     public void onClick(View view) {
         switch (view.getId()) {
-//            case R.id.textView_setDefault_alipay:
-//                break;
-//            case R.id.liearLayout_bind_account_alipay:
-//                textViewSetDefaultAlipay.setText("");
-//                Drawable drawable = getResources().getDrawable(R.mipmap.icon_account_alipay);
-//                textViewSetDefaultAlipay.setCompoundDrawables(null, null, drawable, null);
-//                defaultType = WITHDRAW_APLIPAY;
-//                break;
-//            case R.id.textView_setDefault_bank:
-//                break;
-//            case R.id.liearLayout_bind_account_bank:
-//                Drawable drawable2 = getResources().getDrawable(R.mipmap.icon_account_bank);
-//                textViewSetDefaultBank.setCompoundDrawables(null, null, drawable2, null);
-//                defaultType = WITHDRAW_BANK;
-//                break;
             case R.id.linearLayout_account_add_withdraw_account:
-//                showDialog();
                 showBindAccountType();
                 break;
             case R.id.tv_head_right:
-                showManageCurrentAccount();
+                if (TextUtils.isEmpty(selectedID)) {
+                    ToastUtils.showError("请先选择一个账户");
+                } else {
+                    showManageCurrentAccount();
+                }
                 break;
         }
     }
@@ -120,8 +103,7 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUESTCODE_ADD_ACCOUNT) {
-            // TODO: 2017/3/9 加载绑定账户列表
-            requestData();
+            getAccountList();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -129,13 +111,12 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
     /**
      * 加载绑定账户列表
      */
-    private void requestData() {
+    private void getAccountList() {
         HashMap<String, String> hashMap = new HashMap<>();
         HttpRequest.post(hashMap, URL.ALLIANCE_PAYMENT_CARD_GETLIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                WithDrawAccountListBean withDrawAccountListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<WithDrawAccountListBean>>() {
-                });
+                WithDrawAccountListBean withDrawAccountListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<WithDrawAccountListBean>>() {});
                 if (withDrawAccountListBean != null) {
                     dealResult(withDrawAccountListBean);
                 }
@@ -143,7 +124,7 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
 
             @Override
             public void onFailure(String error) {
-                ToastUtils.showSuccess("提现失败");
+                ToastUtils.showSuccess("加载失败");
             }
         });
     }
@@ -152,17 +133,24 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
         if (withDrawAccountListBean == null || Integer.valueOf(withDrawAccountListBean.getTotal_rows()) < 1) {
             return;
         }
-        List<WithDrawAccountListBean.RowsEntity> rowsEntities = withDrawAccountListBean.getRows();
+        rowsEntities = withDrawAccountListBean.getRows();
         linearLayoutAllianceWithdrawAccountList.removeAllViews();
         for (int i = 0; i < rowsEntities.size(); i++) {
             WithDrawAccountListBean.RowsEntity rowsEntity = rowsEntities.get(i);
             BindAccountInfoLinerLayout linerLayout = new BindAccountInfoLinerLayout(this);
             int valueOf = Integer.valueOf(rowsEntity.getIs_default());
-            if (valueOf != 1) {
-                linerLayout.setInitInfo(Integer.valueOf(rowsEntity.getKind()), rowsEntity.getKind_label(), true, true);
+            linerLayout.setInitInfo(Integer.valueOf(rowsEntity.getKind()), rowsEntity.getKind_label(), rowsEntity.getPay_type_label(), rowsEntity.getAccount(), valueOf == 1);
+            if (TextUtils.equals(rowsEntity.get_id(), selectedID) || ( selectedID == null && valueOf == 1 && selectedIndex == -1 || selectedIndex == i)) {
+                linerLayout.setSelectStatus(true);
+                if (valueOf == 1 && selectedIndex == -1) {
+                    selectedIndex = 0;
+                    selectedEntity = rowsEntity;
+                    selectedID = rowsEntity.get_id();
+                }
             } else {
-                linerLayout.setInitInfo(Integer.valueOf(rowsEntity.getKind()), rowsEntity.getKind_label(), false, false);
+                linerLayout.setSelectStatus(false);
             }
+
             linerLayout.setOnChangedListener(new GlobalCallBack() {
                 @Override
                 public void callBack(Object object) {
@@ -179,19 +167,22 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
             BindAccountInfoLinerLayout childAt = (BindAccountInfoLinerLayout) linearLayoutAllianceWithdrawAccountList.getChildAt(i);
             if (i == index) {
                 childAt.setSelectStatus(true);
-                continue;
+                selectedEntity = rowsEntities.get(i);
+                selectedID = selectedEntity.get_id();
+                selectedIndex = i;
+            } else {
+                childAt.setSelectStatus(false);
             }
-            childAt.setSelectStatus(false);
         }
     }
 
     @Override
     protected void requestNet() {
-        requestData();
+        getAccountList();
     }
 
     /**
-     * 点击添加提现账户
+     * 绑定账户类型
      */
     private void showBindAccountType(){
         final ArrayList<String> customerList = new ArrayList<>();
@@ -201,12 +192,10 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
             public void submit(int position) {
                 switch (position) {
                     case 0:
-                        Intent intent2 = new Intent(BindWithdrawAccountActivity.this, AddWithdrawAccountInfo2Activity.class);
-                        startActivityForResult(intent2, REQUESTCODE_ADD_ACCOUNT);
+                        createOrmodifyAccountInformation("1", null);
                         break;
                     case 1:
-                        Intent intent = new Intent(BindWithdrawAccountActivity.this, AddWithdrawAccountInfoActivity.class);
-                        startActivityForResult(intent, REQUESTCODE_ADD_ACCOUNT);
+                        createOrmodifyAccountInformation("2", null);
                         break;
                 }
             }
@@ -223,13 +212,14 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
         BaseDialogList dialogList = new BaseDialogList(this, new BaseDialogList.SubmitListener() {
             @Override
             public void submit(int position) {
-                Toast.makeText(activity, customerList.get(position), Toast.LENGTH_SHORT).show();
                 switch (position) {
                     case 0:
                         bindAccount(selectedID);
                         break;
                     case 1:
-                        // TODO: 2017/3/10  修改
+                        if (selectedEntity != null) {
+                            createOrmodifyAccountInformation(selectedEntity.getKind(), selectedEntity);
+                        }
                         break;
                     case 2:
                         unBindAccount(selectedID);
@@ -243,28 +233,6 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
     private String[] strings2 = new String[]{"设为默认提现账户","修改账户","删除"};
 
     /**
-     * 获取绑定账户列表
-     */
-    private void getAccountList(){
-        HashMap<String, String> hashMap = new HashMap<>();
-        HttpRequest.post(hashMap, URL.ALLIANCE_PAYMENT_CARD_GETLIST, new GlobalDataCallBack() {
-            @Override
-            public void onSuccess(String json) {
-                WithDrawAccountListBean withDrawAccountListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<WithDrawAccountListBean>>() {
-                });
-                if (withDrawAccountListBean != null) {
-                    dealResult(withDrawAccountListBean);
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                ToastUtils.showSuccess("提现失败");
-            }
-        });
-    }
-
-    /**
      * 设为默认账户
      */
     private void bindAccount(String id){
@@ -275,13 +243,13 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
             public void onSuccess(String json) {
                 HttpResponse<WithDrawSetDefaultAccoutBean> beanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawSetDefaultAccoutBean>>(){});
                 if (beanHttpResponse != null && beanHttpResponse.isSuccess()) {
-                    requestData();
+                    getAccountList();
                 }
             }
 
             @Override
             public void onFailure(String error) {
-                ToastUtils.showSuccess("提现失败");
+                ToastUtils.showSuccess("请求失败");
             }
         });
     }
@@ -297,14 +265,45 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
             public void onSuccess(String json) {
                 HttpResponse<WithDrawSetDefaultAccoutBean> beanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawSetDefaultAccoutBean>>(){});
                 if (beanHttpResponse != null && beanHttpResponse.isSuccess()) {
-                    requestData();
+                    selectedID = null;
+                    selectedIndex = -1;
+                    selectedEntity = null;
+                    getAccountList();
                 }
             }
 
             @Override
             public void onFailure(String error) {
-                ToastUtils.showSuccess("提现失败");
+                ToastUtils.showSuccess("解绑失败");
             }
         });
+    }
+
+    /**
+     * 创建/修改账户信息
+     * @param kind // 账号类型：1.银行卡；2.支付宝；3.--
+     * @param bean
+     */
+    private void createOrmodifyAccountInformation(String kind, WithDrawAccountListBean.RowsEntity bean) {
+        switch (kind) {
+            case "1":
+                Intent intent2 = new Intent(BindWithdrawAccountActivity.this, AddWithdrawAccountInfo2Activity.class);
+                intent2.putExtra("ParcelableExtraRowsEntity", bean);
+                startActivityForResult(intent2, REQUESTCODE_ADD_ACCOUNT);
+                break;
+            case "2":
+                Intent intent = new Intent(BindWithdrawAccountActivity.this, AddWithdrawAccountInfoActivity.class);
+                intent.putExtra("ParcelableExtraRowsEntity", bean);
+                startActivityForResult(intent, REQUESTCODE_ADD_ACCOUNT);
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("id", selectedID);
+        setResult(Activity.RESULT_OK, intent);
+        BindWithdrawAccountActivity.this.finish();
     }
 }

@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.utils;
 
+import android.text.TextUtils;
+
 import java.text.DecimalFormat;
 
 /**
@@ -23,4 +25,15 @@ public class StringFormatUtils {
         }
         return "¥ 0.00";
     }
+
+    public static String formatAccountNumber(String account){
+        String blur = "******";
+        if (TextUtils.isEmpty(account) || account.length() <= 7) {
+            return blur;
+        }
+        String prefixStr = account.substring(0, 3);
+        String suffixStr = account.substring(account.length() - 4);
+        return prefixStr + "******" + suffixStr;
+    }
+
 }

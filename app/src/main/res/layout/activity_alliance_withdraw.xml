@@ -16,7 +16,10 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:minHeight="44dp"
-        android:orientation="horizontal">
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
         <ImageView
             android:id="@+id/imageView_alliance_withdraw_account_icon"
@@ -34,7 +37,7 @@
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:drawableRight="@mipmap/arrow_right"
-            android:text="绑定体现账户"
+            android:text="绑定提现账户"
             android:textColor="#222222"
             android:textSize="14sp" />
     </LinearLayout>
@@ -44,6 +47,7 @@
         android:layout_height="135dp"
         android:layout_marginTop="15dp"
         android:orientation="vertical"
+        android:background="#FFFFFF"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 
@@ -51,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="提现金额"
+            android:layout_marginTop="10dp"
             android:textColor="#666666"
             android:textSize="14sp" />
 

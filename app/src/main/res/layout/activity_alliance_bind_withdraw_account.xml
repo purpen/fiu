@@ -16,75 +16,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" />
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/liearLayout_bind_account_alipay"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="44dp"-->
-            <!--android:layout_height="44dp"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:src="@mipmap/icon_account_alipay" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="支付宝"-->
-            <!--android:textColor="#10AEFF"-->
-            <!--android:textSize="14sp" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/textView_setDefault_alipay"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginRight="15dp"-->
-            <!--android:drawablePadding="10dp"-->
-            <!--android:drawableRight="@mipmap/icon_selector_selected"-->
-            <!--android:gravity="center"-->
-            <!--android:text="默认提现账户"-->
-            <!--android:textColor="#999999"-->
-            <!--android:textSize="12sp" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:id="@+id/liearLayout_bind_account_bank"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="44dp"-->
-            <!--android:layout_height="44dp"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:src="@mipmap/icon_account_bank" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="银行卡"-->
-            <!--android:textColor="#222222"-->
-            <!--android:textSize="14sp" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/textView_setDefault_bank"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginRight="15dp"-->
-            <!--android:drawablePadding="10dp"-->
-            <!--android:drawableRight="@mipmap/icon_selector_normal"-->
-            <!--android:gravity="center"-->
-            <!--android:textColor="#999999"-->
-            <!--android:textSize="12sp" />-->
-    <!--</LinearLayout>-->
-
     <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,6 +25,7 @@
         android:id="@+id/linearLayout_account_add_withdraw_account"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:background="#FFFFFF"
         android:gravity="center">
 
         <ImageView
