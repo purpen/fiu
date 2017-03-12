@@ -422,48 +422,50 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
             }
         });
-        SceneList.DataBean.RowsBean rowsBean = sceneList.get(position);
-        List<String> tags = rowsBean.getTags();
-        if (tags != null && tags.size() > 0) {
-            holder.idTagFlowLayout.setVisibility(View.VISIBLE);
-            holder.idTagFlowLayout.setAdapter(new TagAdapter<String>(tags) {
-                @Override
-                public View getView(FlowLayout parent, int position, String s) {
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    TextView textView = new TextView(activity);
-                    params.setMargins(0, 0, activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0);
-                    if (position == 0) {
-                        textView.setText("# " + s);
-                    } else {
-                        textView.setText(s);
-                    }
-                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                    textView.setTextColor(activity.getResources().getColor(R.color.color_666));
-                    textView.setLayoutParams(params);
-                    return textView;
-                }
-            });
 
-            holder.idTagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-                @Override
-                public boolean onTagClick(View view, int position, FlowLayout parent) {
-                    Intent intent = new Intent(activity, SearchActivity.class);
-                    String s = ((TextView) view).getText().toString();
-                    if (!TextUtils.isEmpty(s)) {
-                        if (position == 0) {
-                            intent.putExtra("q", s.substring(2));
-                        } else {
-                            intent.putExtra("q", s);
-                        }
-                        intent.putExtra("t", 9);
-                        activity.startActivity(intent);
-                    }
-                    return true;
-                }
-            });
-        }else {
-            holder.idTagFlowLayout.setVisibility(View.GONE);
-        }
+        holder.idTagFlowLayout.setVisibility(View.GONE);
+//        SceneList.DataBean.RowsBean rowsBean = sceneList.get(position);
+//        List<String> tags = rowsBean.getTags();
+//        if (tags != null && tags.size() > 0) {
+//            holder.idTagFlowLayout.setVisibility(View.VISIBLE);
+//            holder.idTagFlowLayout.setAdapter(new TagAdapter<String>(tags) {
+//                @Override
+//                public View getView(FlowLayout parent, int position, String s) {
+//                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                    TextView textView = new TextView(activity);
+//                    params.setMargins(0, 0, activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0);
+//                    if (position == 0) {
+//                        textView.setText("# " + s);
+//                    } else {
+//                        textView.setText(s);
+//                    }
+//                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+//                    textView.setTextColor(activity.getResources().getColor(R.color.color_666));
+//                    textView.setLayoutParams(params);
+//                    return textView;
+//                }
+//            });
+//
+//            holder.idTagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+//                @Override
+//                public boolean onTagClick(View view, int position, FlowLayout parent) {
+//                    Intent intent = new Intent(activity, SearchActivity.class);
+//                    String s = ((TextView) view).getText().toString();
+//                    if (!TextUtils.isEmpty(s)) {
+//                        if (position == 0) {
+//                            intent.putExtra("q", s.substring(2));
+//                        } else {
+//                            intent.putExtra("q", s);
+//                        }
+//                        intent.putExtra("t", 9);
+//                        activity.startActivity(intent);
+//                    }
+//                    return true;
+//                }
+//            });
+//        }else {
+//            holder.idTagFlowLayout.setVisibility(View.GONE);
+//        }
         return convertView;
     }
 
@@ -552,6 +554,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
         holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
         holder.publishTime.setText(sceneList.get(position).getCreated_at());
+        holder.publishTime.setVisibility(View.GONE);
         if (TextUtils.isEmpty(sceneList.get(position).getAddress())) {
             holder.locationImg.setVisibility(View.GONE);
             holder.locationTv.setVisibility(View.GONE);
@@ -588,14 +591,6 @@ public class IndexQJListAdapter extends BaseAdapter {
                 Intent intent = new Intent(activity, QJDetailActivity2.class);
                 intent.putExtra("id", sceneList.get(position).get_id());
                 activity.startActivity(intent);
-
-//                Intent intent = new Intent(activity, QJPictureActivity.class);
-//                intent.putExtra("img", sceneList.get(position).getCover_url());
-//                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
-//                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
-//                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
-//                intent.putExtra("id", sceneList.get(position).get_id());
-//                activity.startActivity(intent);
             }
         });
         holder.viewCount.setText(sceneList.get(position).getView_count());

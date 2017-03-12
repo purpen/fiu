@@ -76,12 +76,12 @@
 
         <EditText
             android:id="@+id/editText1"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:background="@color/color_transparent"
             android:hint="请输入开户行"
-            android:maxLength="8"
+            android:maxLength="16"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -106,13 +106,14 @@
 
         <EditText
             android:id="@+id/editText2"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="15dp"
             android:background="@color/color_transparent"
             android:ellipsize="end"
             android:hint="请输入持卡人姓名"
+            android:maxLength="10"
             android:maxLines="1"
             android:textSize="14sp" />
     </LinearLayout>
@@ -138,13 +139,13 @@
 
         <EditText
             android:id="@+id/editText3"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:background="@color/color_transparent"
             android:hint="请输入银行卡号"
-            android:inputType="phone"
-            android:maxLength="11"
+            android:inputType="number"
+            android:maxLength="22"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -166,7 +167,7 @@
 
         <EditText
             android:id="@+id/editText7"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:background="@color/color_transparent"

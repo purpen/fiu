@@ -135,6 +135,7 @@
                     android:id="@+id/img"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
+                    android:visibility="gone"
                     android:src="@mipmap/index_time" />
 
                 <TextView
@@ -150,7 +151,6 @@
                     android:id="@+id/location_img"
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"
-                    android:layout_marginLeft="10dp"
                     android:src="@mipmap/index_location" />
 
                 <TextView

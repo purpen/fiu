@@ -9,16 +9,28 @@
         android:id="@+id/scrollableView"
         android:layout_width="match_parent"
         android:layout_height="211dp" />
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp10"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="@dimen/dp15"
+        android:layout_height="45dp"
         android:gravity="center_vertical"
-        android:text="新手福利见面礼"
-        android:textColor="@color/color_222"
-        android:textSize="14sp" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/diamond_index" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:gravity="center_vertical"
+            android:text="新手福利见面礼"
+            android:textColor="@color/color_222"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_index_001"
@@ -36,15 +48,27 @@
         android:paddingRight="10dp"
         android:visibility="gone" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp10"
-        android:layout_marginLeft="@dimen/dp15"
-        android:layout_marginTop="@dimen/dp15"
-        android:text="D3IN在这里"
-        android:textColor="@color/color_222"
-        android:textSize="@dimen/sp14" />
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/diamond_index" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:gravity="center_vertical"
+            android:text="D3IN在这里"
+            android:textColor="@color/color_222"
+            android:textSize="14sp" />
+    </LinearLayout>
     <!--地盘推荐-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_index_005"
@@ -53,16 +77,27 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp10"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="@dimen/dp15"
-        android:text="新鲜好货早知道"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/diamond_index" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:gravity="center_vertical"
+            android:text="新鲜好货早知道"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <com.taihuoniao.fineix.view.GridViewForScrollView
         android:id="@+id/recyclerView_index_002"
@@ -75,16 +110,27 @@
         android:paddingRight="15dp"
         android:verticalSpacing="15dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="@dimen/dp15"
-        android:layout_marginBottom="@dimen/dp10"
-        android:text="好货合集"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/diamond_index" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:gravity="center_vertical"
+            android:text="好货合集"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_index_003"
@@ -113,7 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp5"
+            android:layout_marginLeft="@dimen/dp10"
             android:text="@string/choiceness_qingjing"
             android:textColor="@color/black"
             android:textSize="14sp" />
