@@ -49,7 +49,19 @@ public class BaseDialogList {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         this.mSubmitListener = submitListener;
-        initLayout(title);
+        initLayout(title, -1);
+        initListener();
+
+    }
+
+    /**
+     * 构造函数2
+     */
+    public BaseDialogList(Context context, SubmitListener submitListener, String title, int textColor) {
+        mContext = context;
+        mLayoutInflater = LayoutInflater.from(mContext);
+        this.mSubmitListener = submitListener;
+        initLayout(title, textColor);
         initListener();
 
     }
@@ -65,7 +77,7 @@ public class BaseDialogList {
      *
      * @param title
      */
-    private void initLayout(String title) {
+    private void initLayout(String title, int color) {
         rootView = mLayoutInflater.inflate(R.layout.dialog_baselist, null);
         rootView.setBackgroundColor(Color.parseColor("#efeff4"));
         mListView = (ListView) rootView.findViewById(R.id.lv);
@@ -76,6 +88,9 @@ public class BaseDialogList {
         if (!TextUtils.isEmpty(title)) {
             ll_title.setVisibility(View.VISIBLE);
             tv_title.setText(title);
+            if (color != -1) {
+                tv_title.setTextColor(color);
+            }
         } else {
             ll_title.setVisibility(View.GONE);
             mListView.setBackgroundColor(Color.parseColor("#FFFFFFFF"));

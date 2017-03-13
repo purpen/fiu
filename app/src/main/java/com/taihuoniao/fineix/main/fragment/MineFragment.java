@@ -51,6 +51,7 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.StringFormatUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomGridView;
@@ -219,7 +220,7 @@ public class MineFragment extends MyBaseFragment {
                 HttpResponse<MyAccountBean> httpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<MyAccountBean>>() {
                 });
                 if (httpResponse.isSuccess()) {
-                    tvBonus.setText(httpResponse.getData().getWait_cash_amount()+"元");
+                    tvBonus.setText(StringFormatUtils.formatMoney(httpResponse.getData().getWait_cash_amount()) + "元");
                 }
             }
 

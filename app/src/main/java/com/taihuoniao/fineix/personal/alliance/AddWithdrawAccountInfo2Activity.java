@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.personal.alliance;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -134,6 +135,7 @@ public class AddWithdrawAccountInfo2Activity extends BaseActivity {
                 });
                 if (bean != null) {
                     if (bean.isSuccess()) {
+                        setResult(Activity.RESULT_OK);
                         AddWithdrawAccountInfo2Activity.this.finish();
                     } else {
                         ToastUtils.showError(bean.getMessage());

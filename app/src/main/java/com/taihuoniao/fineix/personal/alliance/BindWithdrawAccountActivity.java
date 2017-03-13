@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.personal.alliance;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -102,7 +103,8 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUESTCODE_ADD_ACCOUNT) {
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUESTCODE_ADD_ACCOUNT) {
+            resetSelectedValues();
             getAccountList();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -131,6 +133,7 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
 
     private void dealResult(WithDrawAccountListBean withDrawAccountListBean) {
         if (withDrawAccountListBean == null || Integer.valueOf(withDrawAccountListBean.getTotal_rows()) < 1) {
+            linearLayoutAllianceWithdrawAccountList.removeAllViews();
             return;
         }
         rowsEntities = withDrawAccountListBean.getRows();
@@ -142,11 +145,11 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
             linerLayout.setInitInfo(Integer.valueOf(rowsEntity.getKind()), rowsEntity.getKind_label(), rowsEntity.getPay_type_label(), rowsEntity.getAccount(), valueOf == 1);
             if (TextUtils.equals(rowsEntity.get_id(), selectedID) || ( selectedID == null && valueOf == 1 && selectedIndex == -1 || selectedIndex == i)) {
                 linerLayout.setSelectStatus(true);
-                if (valueOf == 1 && selectedIndex == -1) {
-                    selectedIndex = 0;
-                    selectedEntity = rowsEntity;
-                    selectedID = rowsEntity.get_id();
-                }
+//                if (valueOf == 1 && selectedIndex == -1) {
+//                    selectedIndex = 0;
+//                }
+                selectedEntity = rowsEntity;
+                selectedID = rowsEntity.get_id();
             } else {
                 linerLayout.setSelectStatus(false);
             }
@@ -199,7 +202,7 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
                         break;
                 }
             }
-        }, "请选择绑定账户");
+        }, "请选择绑定账户", Color.parseColor("#222222"));
         dialogList.setContent(customerList);
         dialogList.show();
     }
@@ -243,6 +246,7 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
             public void onSuccess(String json) {
                 HttpResponse<WithDrawSetDefaultAccoutBean> beanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawSetDefaultAccoutBean>>(){});
                 if (beanHttpResponse != null && beanHttpResponse.isSuccess()) {
+                    resetSelectedValues();
                     getAccountList();
                 }
             }
@@ -265,9 +269,7 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
             public void onSuccess(String json) {
                 HttpResponse<WithDrawSetDefaultAccoutBean> beanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawSetDefaultAccoutBean>>(){});
                 if (beanHttpResponse != null && beanHttpResponse.isSuccess()) {
-                    selectedID = null;
-                    selectedIndex = -1;
-                    selectedEntity = null;
+                    resetSelectedValues();
                     getAccountList();
                 }
             }
@@ -305,5 +307,11 @@ public class BindWithdrawAccountActivity extends BaseActivity implements View.On
         intent.putExtra("id", selectedID);
         setResult(Activity.RESULT_OK, intent);
         BindWithdrawAccountActivity.this.finish();
+    }
+
+    private void resetSelectedValues() {
+        selectedID = null;
+        selectedIndex = -1;
+        selectedEntity = null;
     }
 }

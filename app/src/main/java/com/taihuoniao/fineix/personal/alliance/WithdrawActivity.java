@@ -24,6 +24,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.personal.alliance.bean.WithDrawDefaultAccountBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.StringFormatUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -62,6 +63,12 @@ public class WithdrawActivity extends BaseActivity {
     TextView textViewAllianceWithdrawAccountDescription;
     @Bind(R.id.linearLayout_alliance_withdraw_account)
     LinearLayout linearLayoutAllianceWithdrawAccount;
+    @Bind(R.id.linearLayout_alliance_noBindAccount)
+    LinearLayout linearLayoutAllianceNoBindAccount;
+    @Bind(R.id.textView_alliance_withdraw_account_type)
+    TextView textViewAllianceWithdrawAccountType;
+    @Bind(R.id.linearLayout_alliance_BindAccount)
+    LinearLayout linearLayoutAllianceBindAccount;
 
     private static int REQUESTCODE_SELECTED_ACCOUNT = 10002;
     private String balance;
@@ -88,6 +95,9 @@ public class WithdrawActivity extends BaseActivity {
 
     private void initUI() {
         balance = getIntent().getStringExtra("balance");
+        if (!TextUtils.isEmpty(balance)) {
+            balance = StringFormatUtils.formatMoney(Double.valueOf(balance));
+        }
         textView2.setText(String.format("¥ %s", balance));
     }
 
@@ -100,6 +110,10 @@ public class WithdrawActivity extends BaseActivity {
                 editText1.setSelection(editText1.length());
                 break;
             case R.id.button_commit:
+                if (TextUtils.isEmpty(accountId)) {
+                    ToastUtils.showError("请先绑定要提现的账户");
+                    return;
+                }
                 new DefaultDialog(this, String.format("¥ %s", amount), "请确认要提现的金额", "提现", new IDialogListenerConfirmBack() {
                     @Override
                     public void clickRight() {
@@ -138,14 +152,15 @@ public class WithdrawActivity extends BaseActivity {
     class MyTextWatcher implements TextWatcher {
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (TextUtils.isEmpty(accountId)) {
                 ToastUtils.showError("请先绑定要提现的账户");
                 return;
-            }else if (TextUtils.isEmpty(s) || ".".equals(s) || "0".equals(s)) {
+            } else if (TextUtils.isEmpty(s) || ".".equals(s) || "0".equals(s)) {
                 textView1.setVisibility(View.VISIBLE);
                 buttonCommit.setEnabled(false);
             } else if (s.length() < 2) {
@@ -180,7 +195,8 @@ public class WithdrawActivity extends BaseActivity {
         HttpRequest.post(allianceWithDraw04, URL.ALLIANCE_PAYMENT_CARD_DEFAULTED, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                WithDrawDefaultAccountBean withDrawDefaultAccountBean = JsonUtil.fromJson(json,  new TypeToken<HttpResponse<WithDrawDefaultAccountBean>>() { });
+                WithDrawDefaultAccountBean withDrawDefaultAccountBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<WithDrawDefaultAccountBean>>() {
+                });
                 if (withDrawDefaultAccountBean != null) {
                     dealResult(withDrawDefaultAccountBean);
                 }
@@ -201,9 +217,8 @@ public class WithdrawActivity extends BaseActivity {
         if (Integer.valueOf(has_default) == 1) {
             loadSeletedAccountInfo(withDrawDefaultAccountBean);
         } else {
-            imageViewAllianceWithdrawAccountIcon.setVisibility(View.GONE);
-            textViewAllianceWithdrawAccountDescription.setText("绑定提现账户");
-            textViewAllianceWithdrawAccountDescription.setTextColor(Color.parseColor("#222222"));
+            linearLayoutAllianceNoBindAccount.setVisibility(View.VISIBLE);
+            linearLayoutAllianceBindAccount.setVisibility(View.GONE);
         }
     }
 
@@ -212,17 +227,21 @@ public class WithdrawActivity extends BaseActivity {
         if (TextUtils.isEmpty(kind)) {
             return;
         }
+        String account = withDrawDefaultAccountBean.getAccount();
         if (Integer.valueOf(kind) == 1) { //银行卡
-            String pay_type_label = withDrawDefaultAccountBean.getPay_type_label();
             imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_bank);
-            textViewAllianceWithdrawAccountDescription.setText(pay_type_label);
-            textViewAllianceWithdrawAccountDescription.setTextColor(Color.parseColor("#222222"));
-        } else if(Integer.valueOf(kind) == 2){ //支付宝
+            String pay_type_label = withDrawDefaultAccountBean.getPay_type_label();
+            textViewAllianceWithdrawAccountType.setText(pay_type_label);
+            textViewAllianceWithdrawAccountType.setTextColor(Color.parseColor("#222222"));
+            textViewAllianceWithdrawAccountDescription.setText("储蓄卡(尾号 " + account.substring(account.length() - 4) + ")");
+        } else if (Integer.valueOf(kind) == 2) { //支付宝
             imageViewAllianceWithdrawAccountIcon.setImageResource(R.mipmap.icon_account_alipay);
-            textViewAllianceWithdrawAccountDescription.setText("支付宝");
-            textViewAllianceWithdrawAccountDescription.setTextColor(Color.parseColor("#10AEFF"));
+            textViewAllianceWithdrawAccountType.setText("支付宝");
+            textViewAllianceWithdrawAccountType.setTextColor(Color.parseColor("#10AEFF"));
+            textViewAllianceWithdrawAccountDescription.setText("支付宝(" + StringFormatUtils.formatAccountNumber(account) + ")");
         }
-        imageViewAllianceWithdrawAccountIcon.setVisibility(View.VISIBLE);
+        linearLayoutAllianceBindAccount.setVisibility(View.VISIBLE);
+        linearLayoutAllianceNoBindAccount.setVisibility(View.GONE);
         accountId = withDrawDefaultAccountBean.get_id();
     }
 
@@ -237,6 +256,7 @@ public class WithdrawActivity extends BaseActivity {
             if (data.getStringExtra("id") != null) {
                 requestData3(data.getStringExtra("id"));
             } else {
+                accountId = null;
                 requestData2();
             }
         }
@@ -248,11 +268,12 @@ public class WithdrawActivity extends BaseActivity {
      */
     private void requestData3(String id) {
         Map<String, String> allianceWithDraw04 = ClientDiscoverAPI.getDefaultParams();
-        allianceWithDraw04.put("id",id );
+        allianceWithDraw04.put("id", id);
         HttpRequest.post(allianceWithDraw04, URL.ALLIANCE_BALANCE_CARD_VIEW, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                WithDrawDefaultAccountBean withDrawDefaultAccountBean = JsonUtil.fromJson(json,  new TypeToken<HttpResponse<WithDrawDefaultAccountBean>>() { });
+                WithDrawDefaultAccountBean withDrawDefaultAccountBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<WithDrawDefaultAccountBean>>() {
+                });
                 if (withDrawDefaultAccountBean != null) {
                     loadSeletedAccountInfo(withDrawDefaultAccountBean);
                 }

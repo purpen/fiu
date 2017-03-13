@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.personal.alliance;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -115,6 +116,7 @@ public class AddWithdrawAccountInfoActivity extends BaseActivity {
                 });
                 if (bean != null) {
                     if (bean.isSuccess()) {
+                        setResult(Activity.RESULT_OK);
                         AddWithdrawAccountInfoActivity.this.finish();
                     } else {
                         ToastUtils.showError(bean.getMessage());
