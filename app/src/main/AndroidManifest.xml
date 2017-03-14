@@ -475,16 +475,6 @@
         <activity android:name=".personal.alliance.BindWithdrawAccountActivity" />
         <activity android:name=".personal.alliance.WithdrawAllianceBankListActivity" />
 
-        <activity android:name=".zone.ZoneDetailActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".user.QJSubjectDetailActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".map.SelectCitiesActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".main.PermissionsActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".zone.LightSpotDetailActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".zone.SelectMapDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
-        <activity android:name=".map.NaviToZoneActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".zone.ShareDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
-        <activity android:name=".product.ShareGoodsDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
-
         <activity
             android:name=".zone.ZoneDetailActivity"
             android:screenOrientation="portrait" />
