@@ -25,8 +25,7 @@ public class AllianceRequstDeal {
     private static final String ALLIANCE_IDENTIFY = "alliance_id";
 
     public static void requestAllianceIdentify(final GlobalCallBack globalCallBack){
-        HashMap<String, String> map = ClientDiscoverAPI.getgetUserCenterDataRequestParams();
-        HttpRequest.post(map, URL.USER_CENTER, new GlobalDataCallBack() {
+        HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 saveAllianceValue(json);

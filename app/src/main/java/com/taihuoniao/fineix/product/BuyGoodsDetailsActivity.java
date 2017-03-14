@@ -460,8 +460,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             titleLayout.setCartNum(0);
             return;
         }
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getcartNumRequestParams();
-        cartHandler = HttpRequest.post(requestParams, URL.CART_NUMBER, new GlobalDataCallBack() {
+        cartHandler = HttpRequest.post(URL.CART_NUMBER, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 CartBean cartBean = new CartBean();

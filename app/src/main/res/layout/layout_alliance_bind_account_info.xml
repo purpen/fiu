@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/liearLayout_bind_account_bank"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView_alliance_withdraw_account_icon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/icon_account_bank" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_alliance_withdraw_account_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#222222"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_alliance_withdraw_account_description2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="#222222"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/textView_default_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="#C9C9C9" />
+
+        <TextView
+            android:id="@+id/textView_setDefault_bank"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:button="@null"
+            android:gravity="center"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E5E5E5" />
+</LinearLayout>

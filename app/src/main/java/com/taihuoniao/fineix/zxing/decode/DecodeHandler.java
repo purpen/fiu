@@ -32,18 +32,18 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 public class DecodeHandler extends Handler {
 
-	private final CaptureActivity activity;
+	private final CaptureActivityZxing activity;
 	private final MultiFormatReader multiFormatReader;
 	private boolean running = true;
 
-	public DecodeHandler(CaptureActivity activity, Map<DecodeHintType, Object> hints) {
+	public DecodeHandler(CaptureActivityZxing activity, Map<DecodeHintType, Object> hints) {
 		multiFormatReader = new MultiFormatReader();
 		multiFormatReader.setHints(hints);
 		this.activity = activity;

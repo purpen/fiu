@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7F7"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:id="@+id/pullToRefreshListView_wellGoods_more"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f8f8f8"
+        android:scrollbars="none" />
+</LinearLayout>

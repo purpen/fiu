@@ -191,16 +191,6 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    public static HashMap<String, String> getProvinceListRequestParams() {
-        return new HashMap<>();
-    }
-
-    @NonNull
-    public static HashMap<String, String> getgetDefaultAddressNetRequestParams() {
-        return new HashMap<>();
-    }
-
-    @NonNull
     public static HashMap<String, String> getgetAddressListRequestParams(String page) {
         HashMap<String, String> params = new HashMap<>();
         params.put("page", page);
@@ -303,12 +293,6 @@ public class ClientDiscoverAPI {
         params.put("product_id", product_id);
         params.put("brand_id", brand_id);
         return params;
-    }
-
-
-    @NonNull
-    public static HashMap<String, String> getcartNumRequestParams() {
-        return new HashMap<>();
     }
 
 
@@ -474,12 +458,6 @@ public class ClientDiscoverAPI {
         params.put("user_id", userId);
         LogUtil.e("getMineInfo", userId);
         return params;
-    }
-
-
-    @NonNull
-    public static HashMap<String, String> getgetUserCenterDataRequestParams() {
-        return new HashMap<>();
     }
 
 
@@ -686,18 +664,6 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    public static HashMap<String, String> getshopCartNetRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
-    public static HashMap<String, String> getshopCartNumberNetRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
     public static HashMap<String, String> getcalculateShopCartNetRequestParams(String array) {
         HashMap<String, String> params = new HashMap<>();
         params.put("array", array);
@@ -809,12 +775,6 @@ public class ClientDiscoverAPI {
 
 
     @NonNull
-    public static HashMap<String, String> getshopcartInventoryNetRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
     public static HashMap<String, String> getshopcartAddSubtractNetRequestParams(String array) {
         HashMap<String, String> params = new HashMap<>();
         params.put("array", array);
@@ -906,12 +866,6 @@ public class ClientDiscoverAPI {
     }
 
     @NonNull
-    public static HashMap<String, String> getgetAuthStatusRequestParams() {
-        return new HashMap<>();
-    }
-
-
-    @NonNull
     public static HashMap<String, String> getgetBonusRequestParams(String type, String evt, String target_id) {
         HashMap<String, String> params = new HashMap<>();
         params.put("type", type);
@@ -942,11 +896,6 @@ public class ClientDiscoverAPI {
         params.put("id", id);
         params.put("type", type);
         return params;
-    }
-
-    @NonNull
-    public static HashMap<String, String> getisInvitedRequestParams() {
-        return new HashMap<>();
     }
 
 
@@ -1248,10 +1197,11 @@ public class ClientDiscoverAPI {
         return new HashMap<>();
     }
 
-    public static HashMap<String, String> getWithdraw_cash(String id, String amount) {
+    public static HashMap<String, String> getWithdraw_cash(String id, String amount, String accountId) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id", id);
         params.put("amount", amount);
+        params.put("payment_card_id", accountId);
         return params;
     }
 
@@ -1340,6 +1290,43 @@ public class ClientDiscoverAPI {
         params.put("id",id);
         params.put("tmp",base64Str);
         params.put("type",type);
+        return params;
+    }
+
+
+    public static Map<String,String> getAllianceWithDraw01(String id,String alliance_id,String kind,String pay_type,String account,String bank_address ,String is_default,String username,String phone,String verify_code) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
+        params.put("alliance_id", alliance_id);
+        params.put("kind",kind);
+        params.put("pay_type",pay_type);
+        params.put("account",account);
+        params.put("bank_address",bank_address);
+        params.put("is_default",is_default);
+        params.put("username",username);
+        params.put("phone",phone);
+        params.put("verify_code",verify_code);
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw02(String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw03(String page, String size, String sort) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("page",page);
+        params.put("size",size);
+        params.put("sort",sort);
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw04() {
+        HashMap<String, String> params = new HashMap<>();
+        return params;
+    }
+    public static Map<String,String> getAllianceWithDraw05(String id) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
         return params;
     }
 }

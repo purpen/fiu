@@ -176,6 +176,14 @@ public class URL {
     public static final String ALLIANCE_BALANCE_WITHDRAW_CASH_APPLY_CASH = BASE_URL + "/withdraw_cash/apply_cash";
     public static final String ALLIANCE_BALANCE_PRIVACY_POLICY = BASE_URL + "/alliance/info";
 
+    public static final String ALLIANCE_PAYMENT_GATEWAY_BUNK_OPTIONS = BASE_URL + "/gateway/bank_options";
+    public static final String ALLIANCE_PAYMENT_CARD_SAVE = BASE_URL + "/payment_card/save";
+    public static final String ALLIANCE_BALANCE_CARD_VIEW = BASE_URL + "/payment_card/view";
+    public static final String ALLIANCE_PAYMENT_CARD_GETLIST = BASE_URL + "/payment_card/getlist";
+    public static final String ALLIANCE_PAYMENT_CARD_DEFAULTED = BASE_URL + "/payment_card/defaulted";
+    public static final String ALLIANCE_PAYMENT_SET_DEFAULT = BASE_URL + "/payment_card/set_default";
+    public static final String ALLIANCE_PAYMENT_DELETE = BASE_URL + "/payment_card/deleted";
+
     //地盘详情
     public static final String ZONE_DETAIL = BASE_URL + "/scene_scene/view";
     public static final String ZONE_RELATE_SCENE = BASE_URL + "/scene_sight/getlist";

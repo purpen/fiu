@@ -27,7 +27,7 @@ import com.taihuoniao.fineix.view.CustomSubItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -228,7 +228,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     void performClick(View v) {
         switch (v.getId()) {
             case R.id.head_view_shop:
-                startActivity(new Intent(activity, CaptureActivity.class));
+                startActivity(new Intent(activity, CaptureActivityZxing.class));
                 break;
             case R.id.rl_search_user:
                 showDialog();

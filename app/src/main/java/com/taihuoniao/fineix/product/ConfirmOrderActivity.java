@@ -119,8 +119,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     }
 
     private void getDefaultAddress() {
-        HashMap<String, String> params = ClientDiscoverAPI.getgetDefaultAddressNetRequestParams();
-        addressHandler = HttpRequest.post(params, URL.URLSTRING_DEFAULT_ADDRESS, new GlobalDataCallBack() {
+        addressHandler = HttpRequest.post(URL.URLSTRING_DEFAULT_ADDRESS, new GlobalDataCallBack() {
 //        addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {

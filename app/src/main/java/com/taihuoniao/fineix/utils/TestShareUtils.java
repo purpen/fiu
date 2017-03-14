@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -9,10 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.zxing.WriterException;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -27,7 +32,7 @@ public class TestShareUtils {
     private int layout;
 
     //根据position动态改变控件的位置
-    public View selectStyle(final Context context, int position, QJDetailBean sceneDetails, final double b, double height, double width) {
+    public View selectStyle(final Context context, int position, QJDetailBean sceneDetails, final double b, double height, double width, Bitmap qrcodeBitmap) {
         this.height = height;
         this.width = width;
         selectStyle(position);
@@ -45,6 +50,8 @@ public class TestShareUtils {
             holder.locationImg.setVisibility(View.VISIBLE);
         }
         holder.des.setText(sceneDetails.getData().getDes());
+
+        holder.imageViewShareStyleQRCode.setImageBitmap(qrcodeBitmap);
         setStyle(position, holder);
         //添加商品标签
         holder.labelContainer.removeAllViews();
@@ -206,6 +213,8 @@ public class TestShareUtils {
         public TextView des;
         @Bind(R.id.linear1)
         LinearLayout linear1;
+        @Bind(R.id.imageView_share_style_QRCode)
+        ImageView imageViewShareStyleQRCode;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

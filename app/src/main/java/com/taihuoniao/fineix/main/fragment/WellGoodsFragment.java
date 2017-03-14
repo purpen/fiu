@@ -61,7 +61,7 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -217,8 +217,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             cartNumber.setVisibility(View.GONE);
             return;
         }
-        HashMap<String, String> params =ClientDiscoverAPI. getcartNumRequestParams();
-       Call httpHandler=  HttpRequest.post(params, URL.CART_NUMBER, new GlobalDataCallBack(){
+       Call httpHandler=  HttpRequest.post(URL.CART_NUMBER, new GlobalDataCallBack(){
 //        HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
@@ -370,7 +369,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 listView.setSelection(0);
                 break;
             case R.id.title_left:
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                startActivity(new Intent(getActivity(), CaptureActivityZxing.class));
                 break;
             case R.id.title_right:
                 if (!LoginInfo.isUserLogin()) {

@@ -11,33 +11,26 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
-import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.tab3.adapter.ProductListGridAdapter;
+import com.taihuoniao.fineix.main.tab3.adapter.WellgoodsSubjectAdapter2;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.pulltorefresh.HeaderGridView;
-import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
-import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView2;
 
 import java.lang.reflect.Type;
@@ -59,15 +52,10 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
     @Bind(R.id.pull_refresh_view_001)
     PullToRefreshGridView2 pullToRefreshGridView;
 
-    private HeaderGridView mGridView;
+    private List<SubjectListBean.DataBean.RowsBean> subjectList2;
+    private WellgoodsSubjectAdapter2 wellgoodsSubjectAdapter2;
 
-//    private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
-//    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
-
-    private List<SubjectListBean.DataBean.RowsBean> subjectList2;//好货页面专题及产品列表
-    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter2;//好货页面爪蹄及产品适配器
-
-    private ProductListGridAdapter indexAdapter002;//主题列表适配器
+    private ProductListGridAdapter indexAdapter002;
     private List<ProductBean.ProductListItem> productList;
     private List<SearchBean.Data.SearchItem> searchList;
 
@@ -89,22 +77,14 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         if (getArguments() != null) {
             categoryId = getArguments().getString("categoryId");
         }
-
         initGridView();
-
         return view;
     }
 
     private void initGridView() {
-        mGridView = pullToRefreshGridView.getRefreshableView();
+        HeaderGridView mGridView = pullToRefreshGridView.getRefreshableView();
         mGridView.addHeaderView(getHeaderView());
         pullToRefreshGridView.setMode(com.handmark.pulltorefresh.library.PullToRefreshBase.Mode.PULL_FROM_START);
-
-//        mGridView.setNumColumns(2);
-//        mGridView.setSelector(R.color.nothing);
-//        mGridView.setHorizontalSpacing(DensityUtils.dp2px(getActivity(), 15));
-//        mGridView.setVerticalSpacing(DensityUtils.dp2px(getActivity(), 15));
-
         productList = new ArrayList<>();
         searchList = new ArrayList<>();
         indexAdapter002 = new ProductListGridAdapter(getActivity(),productList, searchList);
@@ -146,7 +126,6 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -161,32 +140,29 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
     private View headerView;
     private View getHeaderView() {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        /*View */headerView = View.inflate(getActivity(), R.layout.headerview_wellgoods_tab4, null);
+        headerView = View.inflate(getActivity(), R.layout.headerview_wellgoods_tab4, null);
         headerView.setLayoutParams(layoutParams);
         ListViewForScrollView recyclerView002 = (ListViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
         subjectList2 = new ArrayList<>();
-        wellgoodsSubjectAdapter2 = new WellgoodsSubjectAdapter(getActivity(), subjectList2);
+        wellgoodsSubjectAdapter2 = new WellgoodsSubjectAdapter2(getActivity(), subjectList2);
         recyclerView002.setAdapter(wellgoodsSubjectAdapter2);
-//        headerView.setVisibility(View.GONE);
         return headerView;
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView absListView, int i) {
-
-    }
+    public void onScrollStateChanged(AbsListView absListView, int i) {}
 
     @Override
-    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
-    }
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {}
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
     }
 
-    //好货专题列表
+    /**
+     *  好货专题列表
+     */
     private void subjectList() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(null, 2 + "", null, null, 5 + "", "1");
         requestParams.put("category_id", categoryId);
@@ -194,7 +170,6 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<好货专题列表", json);
                 pullToRefreshGridView.onRefreshComplete();
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
@@ -203,32 +178,24 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
+                    e.printStackTrace();
                 }
                 String total_rows = subjectListBean.getData().getTotal_rows();
                 if (subjectListBean.isSuccess() &&  !TextUtils.isEmpty(total_rows) && Integer.valueOf(total_rows) > 0) {
                     if (currentPage == 1) {
-//                        pullToRefreshGridView.lastTotalItem = -1;
-//                        pullToRefreshGridView.lastSavedFirstVisibleItem = -1;
                         subjectList2.clear();
                     }
                     FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getActivity(), (156 + 211)));
                     headerView.setLayoutParams(layoutParams);
                     subjectList2.clear();
                     subjectList2.addAll(subjectListBean.getData().getRows());
-//                    subjectList.addAll(subjectListBean.getData().getRows());
-
                     wellgoodsSubjectAdapter2.notifyDataSetChanged();
                     headerView.setVisibility(View.VISIBLE);
-//                    wellgoodsSubjectAdapter.notifyDataSetChanged();
-                }/* else {
-                    headerView.setVisibility(View.GONE);
-                }*/
+                }
             }
 
             @Override
             public void onFailure(String error) {
-//                headerView.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
             }
         });
@@ -254,12 +221,8 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
-
                 if (productBean.isSuccess()) {
-
                     if (currentPage == 1) {
-//                        pullToRefreshGridView.lastTotalItem = -1;
-//                        pullToRefreshGridView.lastSavedFirstVisibleItem = -1;
                         searchList.clear();
                         productList.clear();
                     }

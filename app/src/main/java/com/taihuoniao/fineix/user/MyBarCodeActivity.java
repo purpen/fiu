@@ -29,7 +29,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,7 +226,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                 PopupWindowUtil.dismiss();
                 break;
             case R.id.tv_album:
-                startActivity(new Intent(activity, CaptureActivity.class));
+                startActivity(new Intent(activity, CaptureActivityZxing.class));
                 PopupWindowUtil.dismiss();
                 break;
             case R.id.tv_cancel:

@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -36,7 +35,7 @@ import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -252,7 +251,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 //                listView.setSelection(0);
                 break;
             case R.id.title_left:
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                startActivity(new Intent(getActivity(), CaptureActivityZxing.class));
                 break;
             case R.id.title_right:
                 if (!LoginInfo.isUserLogin()) {

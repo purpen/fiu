@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F8F7"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/listView_backlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

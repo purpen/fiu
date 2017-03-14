@@ -380,6 +380,7 @@ public class SubjectListBean extends NetBean {
                 private String banner_url;
                 private String summary;
                 private String sale_price;
+                private String cover_url;
 
                 public String get_id() {
                     return _id;
@@ -419,6 +420,14 @@ public class SubjectListBean extends NetBean {
 
                 public void setSale_price(String sale_price) {
                     this.sale_price = sale_price;
+                }
+
+                public String getCover_url() {
+                    return cover_url;
+                }
+
+                public void setCover_url(String cover_url) {
+                    this.cover_url = cover_url;
                 }
             }
         }

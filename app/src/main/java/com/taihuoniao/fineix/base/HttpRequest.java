@@ -4,16 +4,21 @@ import android.app.Activity;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.main.App;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 import com.taihuoniao.fineix.utils.OkHttpUtils;
+import com.taihuoniao.fineix.utils.Util;
 
 import org.apache.http.NameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +34,19 @@ import okhttp3.Response;
 public class HttpRequest {
     public static Call post(Map<String, String> params, String requestUrl){
         List<NameValuePair> nameValuePairs = getSignedList(params);
-        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + nameValuePairs.toString());
+        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + removedUnnecessaryNameValuePairs(nameValuePairs).toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
             requestUrlreal = URL.BASE_URL + requestUrl;
         }
         return OkHttpUtils.post(requestUrlreal, nameValuePairs);
+    }
+
+    public static Call post(String requestUrl, GlobalDataCallBack callBack) {
+        if (callBack != null) {
+            callBack.onStart();
+        }
+        return post(getSignedList(null), requestUrl, callBack, true);
     }
 
     public static Call post(Map<String, String> params, String requestUrl, GlobalDataCallBack callBack) {
@@ -65,24 +77,41 @@ public class HttpRequest {
                 Message msg = Message.obtain();
                 msg.what = BaseHandler.CALLBACK_SUCCESS;
                 msg.obj = response.body().string();
-                LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString() + "\n" + "返回数据为" + msg.obj);
+                LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + removedUnnecessaryNameValuePairs(list).toString() + "\n" + "返回数据为" + msg.obj);
                 handler.sendMessage(msg);
             }
         });
     }
 
     private static List<NameValuePair> getSignedList(Map<String, String> params){
-        if (params != null) {
-            List<NameValuePair> signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
-            for(int i = signedNameValuePairs.size() - 1; i >= 0; i--) {
-                NameValuePair nameValuePair = signedNameValuePairs.get(i);
-                if (TextUtils.isEmpty(nameValuePair.getValue())) {
-                    signedNameValuePairs.remove(nameValuePair);
-                }
-            }
-            return signedNameValuePairs;
+        if (params == null) {
+            params = new HashMap<>();
         }
-        return new ArrayList<>();
+        List<NameValuePair> signedNameValuePairs = MD5Utils.getSignedNameValuePairs(params);
+        for(int i = signedNameValuePairs.size() - 1; i >= 0; i--) {
+            NameValuePair nameValuePair = signedNameValuePairs.get(i);
+            if (TextUtils.isEmpty(nameValuePair.getValue())) {
+                signedNameValuePairs.remove(nameValuePair);
+            }
+        }
+        return signedNameValuePairs;
+    }
+
+    /**
+     * 移除不必打印的key-value
+     */
+    private static List<NameValuePair> removedUnnecessaryNameValuePairs(List<NameValuePair> nameValuePairs){
+        if (nameValuePairs == null) {
+            return new ArrayList<NameValuePair>();
+        }
+        for(int i = nameValuePairs.size() - 1; i >= 0; i--) {
+            NameValuePair nameValuePair = nameValuePairs.get(i);
+            String name = nameValuePair.getName();
+            if ("app_type".equals(name) || "client_id".equals(name) || "uuid".equals(name) || "channel".equals(name) || "time".equals(name) || "sign".equals(name)) {
+                nameValuePairs.remove(nameValuePair);
+            }
+        }
+        return nameValuePairs;
     }
 
     /********************************************** 旧的网络请求******************************************************/

@@ -144,7 +144,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen" />
         <activity
-            android:name=".zxing.activity.CaptureActivity"
+            android:name=".zxing.activity.CaptureActivityZxing"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
@@ -375,9 +375,9 @@
             android:process=":remote" />
 
         <!-- 此处为测试value，线上版本务必更换 -->
-        <!-- <meta-data -->
-        <!-- android:name="com.baidu.lbsapi.API_KEY" -->
-        <!-- android:value="muQDLN6lCST6qMDvTAydAilM"/> -->
+         <!--<meta-data-->
+         <!--android:name="com.baidu.lbsapi.API_KEY"-->
+         <!--android:value="muQDLN6lCST6qMDvTAydAilM"/> -->
 
 
         <!-- 百度地图线上API_KEY -->
@@ -470,6 +470,21 @@
         <activity android:name=".personal.alliance.WithdrawRecordActivity" />
         <activity android:name=".personal.alliance.WithdrawRecordDetailsActivity" />
         <activity android:name=".personal.alliance.PrivacyPolicyActivity" />
+        <activity android:name=".personal.alliance.AddWithdrawAccountInfoActivity" />
+        <activity android:name=".personal.alliance.AddWithdrawAccountInfo2Activity" />
+        <activity android:name=".personal.alliance.BindWithdrawAccountActivity" />
+        <activity android:name=".personal.alliance.WithdrawAllianceBankListActivity" />
+
+        <activity android:name=".zone.ZoneDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".user.QJSubjectDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".map.SelectCitiesActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".main.PermissionsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.LightSpotDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.SelectMapDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
+        <activity android:name=".map.NaviToZoneActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ShareDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
+        <activity android:name=".product.ShareGoodsDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
+
         <activity
             android:name=".zone.ZoneDetailActivity"
             android:screenOrientation="portrait" />
@@ -529,6 +544,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <activity android:name="com.taihuoniao.fineix.home.MoreWellGoodsActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

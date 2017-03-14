@@ -11,9 +11,92 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:id="@+id/linearLayout_alliance_withdraw_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:minHeight="44dp"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_alliance_noBindAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableRight="@mipmap/arrow_right"
+                android:text="绑定提现账户"
+                android:textColor="#222222"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_alliance_BindAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageView_alliance_withdraw_account_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:src="@mipmap/icon_account_alipay" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_alliance_withdraw_account_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="#222222"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView_alliance_withdraw_account_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#222222"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:drawableRight="@mipmap/arrow_right"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:layout_marginTop="15dp"
+        android:background="#FFFFFF"
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
@@ -21,6 +104,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="提现金额"
             android:textColor="#666666"
             android:textSize="14sp" />
@@ -41,24 +125,24 @@
                 android:id="@+id/editText1"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:inputType="numberDecimal"
                 android:background="@color/color_transparent"
                 android:hint="10.00元"
-                android:textColorHint="#BFBFBF"
+                android:inputType="numberDecimal"
                 android:maxLength="9"
                 android:textColor="#222222"
+                android:textColorHint="#BFBFBF"
                 android:textSize="30sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView1"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
             android:text="*每次提现金额不得少于10元"
-            android:textColor="#F76260" />
+            android:textColor="#F76260"
+            android:textSize="13sp"
+            android:visibility="invisible" />
 
         <View
             android:layout_width="match_parent"
@@ -105,6 +189,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/background_aaa"
         android:enabled="false"
         android:text="申请提现"
