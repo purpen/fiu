@@ -619,7 +619,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
      * 新品
      */
     private void getLasteProduct(){
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, null, String.valueOf(4), null, null, null, "1", null);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, "2", null, null, null, null, String.valueOf(4), null, null, null, "1", null);
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
