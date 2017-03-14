@@ -264,14 +264,11 @@ public class MineFragment extends MyBaseFragment {
             for (int i = 0; i < gvList.size(); i++) {
                 switch (i) {
                     case 0:
-                        gvList.get(i).count = user.counter.order_total_count;
-                        break;
-                    case 1:
                         gvList.get(i).count = user.counter.message_total_count;
                         if (listener != null)
                             listener.onMessageCountChange(user.counter.message_total_count);
                         break;
-                    case 6:
+                    case 5:
                         gvList.get(i).count = user.counter.fiu_bonus_count;
                         break;
                     default:
