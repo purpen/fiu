@@ -39,6 +39,7 @@ import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.common.bean.BannerBean;
 import com.taihuoniao.fineix.home.GoToNextUtils;
+import com.taihuoniao.fineix.home.MoreWellGoodsActivity;
 import com.taihuoniao.fineix.home.adapters.IndexAdapter001;
 import com.taihuoniao.fineix.home.adapters.IndexAdapter005;
 import com.taihuoniao.fineix.home.adapters.ProductAlbumAdapter;
@@ -61,7 +62,7 @@ import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
@@ -210,7 +211,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             requestData();
         }
         if (grantedPermissions.contains(Manifest.permission.CAMERA)&&isScan) {
-            startActivity(new Intent(getActivity(), CaptureActivity.class));
+            startActivity(new Intent(getActivity(), CaptureActivityZxing.class));
         }
 
     }
@@ -250,7 +251,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 // 扫码
                 isScan =true;
                 if (AndPermission.hasPermission(activity, android.Manifest.permission.CAMERA)) {
-                    startActivity(new Intent(getActivity(), CaptureActivity.class));
+                    startActivity(new Intent(getActivity(), CaptureActivityZxing.class));
                 } else {
                     AndPermission.with(this).requestCode(REQUEST_PHONE_STATE_CODE).permission(android.Manifest.permission.CAMERA).send();
                 }
@@ -556,6 +557,14 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             }
         });
         recyclerView005.setAdapter(indexAdapter005);
+
+        // 好货合集 查看更多
+        headerView.findViewById(R.id.textView_indexFragment_headerIndex_more).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), MoreWellGoodsActivity.class));
+            }
+        });
         return headerView;
     }
 

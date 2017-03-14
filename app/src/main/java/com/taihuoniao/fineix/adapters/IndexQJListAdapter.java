@@ -274,7 +274,13 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.labelContainer.setVisibility(View.VISIBLE);
 
         //设置情景标题
-        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
+        if (TextUtils.isEmpty(sceneList.get(position).getTitle())) {
+            holder.qjTitleTv.setVisibility(View.GONE);
+        } else {
+            holder.qjTitleTv.setText(sceneList.get(position).getTitle());
+            holder.qjTitleTv.setVisibility(View.VISIBLE);
+        }
+//        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
         List<SceneList.DataBean.RowsBean.ProductBean> productBeanList = sceneList.get(position).getProduct();
         if (productBeanList != null && compareble(productBeanList, (List<SceneList.DataBean.RowsBean.ProductBean>) holder.labelContainer.getTag(R.id.label_container))) {
@@ -658,8 +664,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         ImageView qjImg;
         @Bind(R.id.qj_title_tv)
         TextView qjTitleTv;
-        @Bind(R.id.qj_title_tv2)
-        TextView qjTitleTv2;
+//        @Bind(R.id.qj_title_tv2)
+//        TextView qjTitleTv2;
         @Bind(R.id.label_container)
         RelativeLayout labelContainer;
         @Bind(R.id.view_count)

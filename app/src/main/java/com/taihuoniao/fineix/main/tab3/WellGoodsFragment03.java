@@ -63,7 +63,7 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
     private List<ProductBean.ProductListItem> productList;
     private List<SearchBean.Data.SearchItem> searchList;
 
-    private int currentPage = 0;
+    private int currentPage = 1;
 
     @Override
     protected void requestNet() {

@@ -24,7 +24,7 @@ import android.os.Message;
 
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 import com.taihuoniao.fineix.zxing.camera.CameraManager;
 import com.taihuoniao.fineix.zxing.decode.DecodeThread;
 
@@ -37,7 +37,7 @@ import com.taihuoniao.fineix.zxing.decode.DecodeThread;
  */
 public class CaptureActivityHandler extends Handler {
 
-	private final CaptureActivity activity;
+	private final CaptureActivityZxing activity;
 	private final DecodeThread decodeThread;
 	private final CameraManager cameraManager;
 	private State state;
@@ -46,7 +46,7 @@ public class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	public CaptureActivityHandler(CaptureActivity activity, CameraManager cameraManager) {
+	public CaptureActivityHandler(CaptureActivityZxing activity, CameraManager cameraManager) {
 		this.activity = activity;
 		decodeThread = new DecodeThread(activity, DecodeThread.ALL_MODE);
 		decodeThread.start();

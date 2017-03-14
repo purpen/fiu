@@ -39,7 +39,6 @@ import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.qjdetails.QJDetailActivity2;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.MyBarCodeActivity;
@@ -75,14 +74,14 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivity extends BaseActivity implements
+public final class CaptureActivityZxing extends ZxingBaseActivity implements
         SurfaceHolder.Callback {
     private static final String INFO_TYPE_QJ = "10";
     private static final int REQUEST_CODE = 100;
     private static final String INFO_TYPE_CJ = "11";
     private static final String INFO_TYPE_CP = "1";
     private static final String INFO_TYPE_USER = "13";
-    private static final String TAG = CaptureActivity.class.getSimpleName();
+    private static final String TAG = CaptureActivityZxing.class.getSimpleName();
 
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
@@ -307,21 +306,21 @@ public final class CaptureActivity extends BaseActivity implements
                     return;
                 }
                 if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
-                    intent=new Intent(CaptureActivity.this, UserCenterActivity.class);
+                    intent=new Intent(CaptureActivityZxing.this, UserCenterActivity.class);
                     intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.valueOf(infoId));
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转地盘详情
                     // TODO: 2017/3/4  跳入地盘
-                    intent = new Intent(CaptureActivity.this, ZoneDetailActivity.class);
+                    intent = new Intent(CaptureActivityZxing.this, ZoneDetailActivity.class);
                     intent.putExtra("id",infoId);
                     intent.putExtra("title","地盘详情");
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_CJ, infoType)) {//跳转情境详情
-                    intent = new Intent(CaptureActivity.this, QJDetailActivity2.class);
+                    intent = new Intent(CaptureActivityZxing.this, QJDetailActivity2.class);
                     intent.putExtra("id",infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
-                    intent=new Intent(CaptureActivity.this, BuyGoodsDetailsActivity.class);
+                    intent=new Intent(CaptureActivityZxing.this, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id",infoId);
                     intent.putExtra("storage_id",storage_id);
                     startActivity(intent);
@@ -364,7 +363,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void displayFrameworkBugMessageAndExit() {
-        new DefaultDialog(CaptureActivity.this, App.getString(R.string.app_name), App.getString(R.string.hint_dialog_open_camera_fail_content), App.getStringArray(R.array.text_dialog_button), new IDialogListener() {
+        new DefaultDialog(CaptureActivityZxing.this, App.getString(R.string.app_name), App.getString(R.string.hint_dialog_open_camera_fail_content), App.getStringArray(R.array.text_dialog_button), new IDialogListener() {
             @Override
             public void click(View view, int index) {
                 finish();
@@ -432,7 +431,7 @@ public final class CaptureActivity extends BaseActivity implements
                 light();
                 break;
             case R.id.tv_bar:
-                startActivity(new Intent(CaptureActivity.this, MyBarCodeActivity.class));
+                startActivity(new Intent(CaptureActivityZxing.this, MyBarCodeActivity.class));
                 break;
             default:
                 break;

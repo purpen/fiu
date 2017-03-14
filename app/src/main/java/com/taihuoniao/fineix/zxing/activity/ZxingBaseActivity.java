@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * baseActionBar Activity
  */
-public abstract class BaseActivity extends AppCompatActivity implements DialogControl, View.OnClickListener, BaseViewInterface {
+public abstract class ZxingBaseActivity extends AppCompatActivity implements DialogControl, View.OnClickListener, BaseViewInterface {
     protected final String TAG = getClass().getSimpleName();
     protected LayoutInflater mInflater;
     protected ActionBar mActionBar;

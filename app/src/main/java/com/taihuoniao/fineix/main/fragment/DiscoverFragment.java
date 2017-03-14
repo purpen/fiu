@@ -29,7 +29,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +100,7 @@ public class DiscoverFragment extends BaseFragment {
     void onClick(View v){
         switch (v.getId()){
             case R.id.title_left:
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                startActivity(new Intent(getActivity(), CaptureActivityZxing.class));
                 break;
             case R.id.title_right:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);

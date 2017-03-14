@@ -144,7 +144,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen" />
         <activity
-            android:name=".zxing.activity.CaptureActivity"
+            android:name=".zxing.activity.CaptureActivityZxing"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
@@ -375,9 +375,9 @@
             android:process=":remote" />
 
         <!-- 此处为测试value，线上版本务必更换 -->
-        <!-- <meta-data -->
-        <!-- android:name="com.baidu.lbsapi.API_KEY" -->
-        <!-- android:value="muQDLN6lCST6qMDvTAydAilM"/> -->
+         <!--<meta-data-->
+         <!--android:name="com.baidu.lbsapi.API_KEY"-->
+         <!--android:value="muQDLN6lCST6qMDvTAydAilM"/> -->
 
 
         <!-- 百度地图线上API_KEY -->
@@ -544,6 +544,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <activity android:name="com.taihuoniao.fineix.home.MoreWellGoodsActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
