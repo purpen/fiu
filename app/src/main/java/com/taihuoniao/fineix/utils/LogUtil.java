@@ -8,7 +8,7 @@ import android.util.Log;
  */
 public class LogUtil {
     private static final String TAG = "com.taihuoniao.fineix";
-    private static final boolean DEV_MODE = false;
+    private static final boolean DEV_MODE = true;
 
     public static void i(String tag, String msg) {
         if (DEV_MODE) {

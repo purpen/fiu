@@ -9,17 +9,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
-import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.GlideUtils;
-import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -83,37 +76,35 @@ public class ZoneEditCoversAdapter extends RecyclerView.Adapter<ZoneEditCoversAd
                 }
             });
         }
-        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HashMap<String, String> param = new HashMap<>();
-                param.put("id", item.id);
-                HttpRequest.post(param, URL.ZONE_COVER_DELETE, new GlobalDataCallBack() {
-                    @Override
-                    public void onSuccess(String json) {
-                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                        if (response.isSuccess()) {
-                            list.remove(position);
-                            notifyDataSetChanged();
-                            return;
-                        }
-                        ToastUtils.showError(response.getMessage());
-                    }
-
-                    @Override
-                    public void onFailure(String error) {
-                        ToastUtils.showError(R.string.network_err);
-                    }
-                });
-            }
-        });
+//        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                HashMap<String, String> param = new HashMap<>();
+//                param.put("id", item.id);
+//                HttpRequest.post(param, URL.ZONE_COVER_DELETE, new GlobalDataCallBack() {
+//                    @Override
+//                    public void onSuccess(String json) {
+//                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+//                        if (response.isSuccess()) {
+//                            list.remove(position);
+//                            notifyDataSetChanged();
+//                            return;
+//                        }
+//                        ToastUtils.showError(response.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onFailure(String error) {
+//                        ToastUtils.showError(R.string.network_err);
+//                    }
+//                });
+//            }
+//        });
         holder.iv.setLayoutParams(params);
         if (position == list.size() - 1) {
             GlideUtils.displayImageNoFading(R.mipmap.zone_upload_banner, holder.iv);
-            holder.ivDelete.setVisibility(View.GONE);
         } else {
             GlideUtils.displayImageNoFading(item.url, holder.iv);
-            holder.ivDelete.setVisibility(View.VISIBLE);
         }
     }
 

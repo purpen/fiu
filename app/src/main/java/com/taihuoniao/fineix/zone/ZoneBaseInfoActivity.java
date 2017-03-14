@@ -1,24 +1,44 @@
 package com.taihuoniao.fineix.zone;
 
+import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.album.ImageLoaderEngine;
+import com.taihuoniao.fineix.album.Picker;
+import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.user.ImageCropActivity;
+import com.taihuoniao.fineix.utils.FileCameraUtil;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
+import com.yanzhenjie.permission.AndPermission;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_CAPTURE_CAMERA;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_PICK_IMAGE;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
 
 
 /**
  * 地盘的基本信息
  */
-public class ZoneBaseInfoActivity extends BaseActivity {
+public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickListener{
     private static final int REQUEST_MODIFY_AVATAR = 99;
     private static final int REQUEST_MODIFY_TITLE = 100;
     private static final int REQUEST_MODIFY_SUBTITLE = 101;
@@ -37,7 +57,8 @@ public class ZoneBaseInfoActivity extends BaseActivity {
     @Bind(R.id.item_zone_tags)
     CustomItemLayout itemZoneTags;
     private ZoneDetailBean zoneDetailBean;
-
+    private Uri mUri;
+    private Bitmap bitmap;
     public ZoneBaseInfoActivity() {
         super(R.layout.activity_zone_base_info);
     }
@@ -67,12 +88,87 @@ public class ZoneBaseInfoActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_take_photo:
+                PopupWindowUtil.dismiss();
+                if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
+                    getImageFromCamera();
+                } else {
+                    // 申请权限。
+                    AndPermission.with(this)
+                            .requestCode(REQUEST_PERMISSION_CODE)
+                            .permission(Manifest.permission.CAMERA)
+                            .send();
+                }
+
+                break;
+            case R.id.tv_album:
+                PopupWindowUtil.dismiss();
+                if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    getImageFromAlbum();
+                } else {
+                    // 申请权限。
+                    AndPermission.with(this)
+                            .requestCode(REQUEST_PERMISSION_CODE)
+                            .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            .send();
+                }
+
+                break;
+            case R.id.tv_cancel:
+                PopupWindowUtil.dismiss();
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    protected void getImageFromAlbum() {
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .singleChoice()
+                .setEngine(new ImageLoaderEngine())
+                .forResult(REQUEST_CODE_PICK_IMAGE);
+
+    }
+
+
+    protected void getImageFromCamera() {
+        if (!Util.isExternalStorageStateMounted()) {
+            ToastUtils.showInfo("请插入SD卡");
+            return;
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mUri = FileCameraUtil.getUriForFile();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+        startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
+    }
+
+    private void toCropActivity(Uri uri) {
+        ImageCropActivity.setOnClipCompleteListener(new ImageCropActivity.OnClipCompleteListener() {
+            @Override
+            public void onClipComplete(Bitmap bitmap) {
+                ZoneBaseInfoActivity.this.bitmap=bitmap;
+                itemZoneAvatar.getAvatarIV().setImageBitmap(bitmap);
+            }
+        });
+        Intent intent = new Intent(activity, ImageCropActivity.class);
+        intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
+        intent.putExtra(ImageCropActivity.class.getName(), TAG);
+        intent.putExtra(TAG,zoneDetailBean._id);
+        startActivity(intent);
+    }
+
     @OnClick({R.id.item_zone_avatar, R.id.item_zone_title, R.id.item_sub_title, R.id.item_zone_category, R.id.item_zone_tags})
-    void onClick(View view) {
+    void performClick(View view) {
         Intent intent;
         switch (view.getId()) {
             case R.id.item_zone_avatar: //地盘头像
-
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "上传地盘logo"));
                 break;
             case R.id.item_zone_title: //地盘标题
                 if (zoneDetailBean == null) return;
@@ -93,12 +189,27 @@ public class ZoneBaseInfoActivity extends BaseActivity {
                 startActivityForResult(intent, REQUEST_ZONE_CATEGORY);
                 break;
             case R.id.item_zone_tags: //地盘标签
-
+                if (zoneDetailBean == null) return;
+                intent = new Intent(activity, ZoneEditTagActivity.class);
+                intent.putExtra(ZoneEditTagActivity.class.getSimpleName(), zoneDetailBean);
+                startActivityForResult(intent,REQUEST_ZONE_TAGS);
                 break;
             default:
 
                 break;
         }
+    }
+
+    private View initPopView(int layout, String title) {
+        View view = Util.inflateView(activity, layout, null);
+        ((TextView) view.findViewById(R.id.tv_title)).setText(title);
+        View iv_take_photo = view.findViewById(R.id.tv_take_photo);
+        View iv_take_album = view.findViewById(R.id.tv_album);
+        View iv_close = view.findViewById(R.id.tv_cancel);
+        iv_take_photo.setOnClickListener(this);
+        iv_take_album.setOnClickListener(this);
+        iv_close.setOnClickListener(this);
+        return view;
     }
 
     @Override
@@ -108,6 +219,17 @@ public class ZoneBaseInfoActivity extends BaseActivity {
         switch (requestCode) {
             case REQUEST_MODIFY_AVATAR: //修改头像
 
+                break;
+            case REQUEST_CODE_PICK_IMAGE:
+                List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                if (mSelected == null) return;
+                if (mSelected.size() == 0) return;
+                toCropActivity(mSelected.get(0));
+                break;
+            case REQUEST_CODE_CAPTURE_CAMERA:
+                if (mUri != null) {
+                    toCropActivity(mUri);
+                }
                 break;
             case REQUEST_MODIFY_TITLE: //修改标题
                 String zoneName = data.getStringExtra(ZoneEditTitleActivity.class.getSimpleName());
@@ -125,10 +247,18 @@ public class ZoneBaseInfoActivity extends BaseActivity {
                 itemZoneCategory.setTvArrowLeftStyle(true, zoneDetailBean.category.title, R.color.color_333);
                 break;
             case REQUEST_ZONE_TAGS:  //地盘标签
-
+                zoneDetailBean = data.getParcelableExtra(ZoneEditTagActivity.class.getSimpleName());
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bitmap!=null) bitmap.recycle();
+        if (mUri!=null) mUri=null;
+        if (zoneDetailBean!=null) zoneDetailBean=null;
     }
 }

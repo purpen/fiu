@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f8f8f8"
+    android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:hint="请输入地盘标签"
+        android:maxLength="100"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/dp16"
+        android:textColor="@color/color_222"
+        android:textColorHint="@color/color_999"
+        android:textSize="@dimen/sp14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="最多输入4个标签并用英文逗号隔开"
+        android:textColor="@color/color_999"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp15"
+        android:textSize="@dimen/sp12" />
+</LinearLayout>

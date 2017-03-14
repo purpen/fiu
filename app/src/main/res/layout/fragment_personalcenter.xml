@@ -195,6 +195,33 @@
                     />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rl_zone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp45"
+                android:background="@android:color/white"
+                android:layout_marginTop="@dimen/dp5"
+                android:visibility="gone"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp45"
+                    android:text="@string/my_zone"
+                    android:textSize="@dimen/sp14"
+                    android:textColor="@color/color_222"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp16"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:src="@mipmap/more"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp44"
                 android:layout_marginTop="@dimen/dp5"
@@ -365,6 +392,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp40"
                 android:text="店铺管理"
+                android:visibility="gone"
                 />
         </LinearLayout>
     </ScrollView>

@@ -12,19 +12,19 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -48,6 +48,10 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_CAPTURE_CAMERA;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_PICK_IMAGE;
+
 /**
  * @author lilin
  *         created at 2016/4/26 18:50
@@ -78,8 +82,8 @@ public class EditUserInfoActivity extends BaseActivity {
     private User user;
 
     private Bitmap bitmap;
-    private static final int REQUEST_CODE_PICK_IMAGE = 100;
-    private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
+//    private static final int REQUEST_CODE_PICK_IMAGE = 100;
+//    private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private static final int REQUEST_NICK_NAME = 3;
     private static final int REQUEST_SIGNATURE = 4;
@@ -409,7 +413,7 @@ public class EditUserInfoActivity extends BaseActivity {
     protected void refreshUI() {
         if (user != null) {
             if (!TextUtils.isEmpty(user.medium_avatar_url)) {
-                ImageLoader.getInstance().displayImage(user.medium_avatar_url,custom_user_avatar.getAvatarIV());
+                GlideUtils.displayImage(user.medium_avatar_url,custom_user_avatar.getAvatarIV());
             }
 //            custom_user_name.setTvArrowLeftStyle(true, userLogin.user_name, R.color.color_333);
 //            custom_user_name.sertTVRightTxt(userLogin.user_name);
@@ -456,7 +460,7 @@ public class EditUserInfoActivity extends BaseActivity {
             custom_signature.setTvArrowLeftStyle(true, user.label, R.color.color_333);
         }else if (!TextUtils.isEmpty(user.label)&&!TextUtils.isEmpty(user.summary)){
             String str=String.format("%s | %s",user.label,user.summary);
-            LogUtil.e("setLabelSignatrue",str);
+//            LogUtil.e("setLabelSignatrue",str);
             custom_signature.setTvArrowLeftStyle(true,str, R.color.color_333);
         }
     }

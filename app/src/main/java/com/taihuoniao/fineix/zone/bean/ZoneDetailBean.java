@@ -64,10 +64,11 @@ public class ZoneDetailBean implements Parcelable {
     public List<String> tags;
     public List<String> bright_spot;
     public List<NcoverBean> n_covers;
+    public int clickPosition;
     public static class NcoverBean implements Parcelable {
         public String id;
         public String url;
-        public int addPic;
+
         @Override
         public int describeContents() {
             return 0;

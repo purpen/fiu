@@ -503,6 +503,10 @@
             android:name=".product.ShareGoodsDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ShareDialogBottom" />
+        <activity
+            android:name=".zone.ZoneEditCoverDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ShareDialogBottom" />
         <activity android:name=".zone.ZoneEditTitleActivity" />
         <activity
             android:name=".zone.ZoneBaseInfoActivity"
@@ -515,6 +519,7 @@
         <activity android:name=".zone.ZoneEditTimeActivity" />
         <activity android:name=".zone.ZoneEditAddressActivity" />
         <activity android:name=".zone.ZoneMapSelectAddressActivity" />
+        <activity android:name=".zone.ZoneEditTagActivity" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.taihuoniao.fineix.fileProvider"

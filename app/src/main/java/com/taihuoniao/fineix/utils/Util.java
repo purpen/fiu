@@ -7,13 +7,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -239,23 +239,39 @@ public class Util {
         return file;
     }
 
-    public static String saveBitmap2Base64Str(Bitmap bitmap) {
+    public static String saveBitmap2Base64Str(Bitmap bitmap, int maxSize) {
         if (bitmap == null) return null;
         String imgStr = null;
         try {
-            ByteArrayOutputStream bao = new BufferedByteArrayOutputStream();
-
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bao);
-
-            byte[] ba = bao.toByteArray();
-
-            imgStr = Base64.encodeToString(ba, Base64.DEFAULT);
-            bao.flush();
-            bao.close();
+            Matrix matrix = new Matrix();
+            float scale = getScaleSize(bitmap,maxSize);
+            matrix.setScale(scale,scale);
+            bitmap=bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+            ByteArrayOutputStream baos = new BufferedByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100,baos);
+            byte[] byteArr=baos.toByteArray();
+            LogUtil.e("length==="+byteArr.length);
+            imgStr = Base64.encodeToString(byteArr, Base64.DEFAULT);
+            baos.flush();
+            baos.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return imgStr;
+    }
+
+    private static float getScaleSize(Bitmap bitmap,int maxSize){
+        float width = bitmap.getWidth();
+        float height = bitmap.getHeight();
+        if (width<maxSize || height<maxSize){
+            return 1;
+        }else {
+            float scaleX;
+            float scaleY;
+            scaleX = maxSize/width;
+            scaleY = maxSize/height;
+            return scaleX>scaleY?scaleY:scaleX;
+        }
     }
 
     public static String formatDouble(String price) throws NumberFormatException {
@@ -276,40 +292,26 @@ public class Util {
         Context context = MainApplication.getContext();
         String defaultValue = "10"; //默认官方渠道下载
         if (TextUtils.isEmpty(key)) {
-            Log.e("<<<", "键为空");
             return defaultValue;
         }
         String resultData = null;
         try {
             PackageManager packageManager = context.getPackageManager();
-            if (packageManager != null) {
-                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-                if (applicationInfo != null) {
-                    if (applicationInfo.metaData != null) {
-                        if (applicationInfo.metaData.containsKey(key)){
-                            resultData = applicationInfo.metaData.getInt(key)+"";
-                        }else {
-                            resultData=null;
-                        }
-                    } else {
-                        Log.e("<<<", "applicationInfo.metaData为空");
-                    }
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            if (applicationInfo.metaData != null) {
+                if (applicationInfo.metaData.containsKey(key)) {
+                    resultData = applicationInfo.metaData.getInt(key) + "";
                 } else {
-                    Log.e("<<<", "applicationInfo为空");
+                    resultData = null;
                 }
-            } else {
-                Log.e("<<<", "packageManager为空");
             }
         } catch (Exception e) {
-            Log.e("<<<", "异常");
             e.printStackTrace();
         }
 
         if (TextUtils.isEmpty(resultData)) {
-            Log.e("<<<", "渠道编号为空");
             return defaultValue;
         }
-        Log.e("<<<", "获取的渠道编号=" + resultData);
         return resultData;
     }
 
@@ -319,31 +321,40 @@ public class Util {
 
     /**
      * 获取版本号
+     *
      * @return 当前应用的版本号
      */
     public static String getVersionName() throws NameNotFoundException {
-            PackageManager manager = MainApplication.getContext().getPackageManager();
-            PackageInfo info = manager.getPackageInfo(MainApplication.getContext().getPackageName(), 0);
-            return info.versionName;
+        PackageManager manager = MainApplication.getContext().getPackageManager();
+        PackageInfo info = manager.getPackageInfo(MainApplication.getContext().getPackageName(), 0);
+        return info.versionName;
     }
 
-    public static final String getUUID(Context context){
-            final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            final String tmDevice, tmSerial, androidId;
-            tmDevice = "" + tm.getDeviceId();
-            tmSerial = "" + tm.getSimSerialNumber();
-            androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-            UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-            String uniqueId = deviceUuid.toString();
-            return uniqueId;
+    public static final String getUUID(Context context) {
+        final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        final String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        String uniqueId = deviceUuid.toString();
+        return uniqueId;
     }
 
-    public static final List<String> getPackageNames(Context context){
+    public static final List<String> getPackageNames(Context context) {
         ArrayList<String> list = new ArrayList<>();
         List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_ACTIVITIES);
-        for (PackageInfo packageInfo:packageInfos){
+        for (PackageInfo packageInfo : packageInfos) {
             list.add(packageInfo.packageName);
         }
         return list;
+    }
+
+    public static boolean isExternalStorageStateMounted() {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        }
+        return false;
     }
 }

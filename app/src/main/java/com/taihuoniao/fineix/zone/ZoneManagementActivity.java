@@ -3,17 +3,14 @@ package com.taihuoniao.fineix.zone;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.taihuoniao.fineix.BuildConfig;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
@@ -36,11 +33,11 @@ import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.adapter.ZoneEditCoversAdapter;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
+import com.taihuoniao.fineix.zone.fragment.ZoneBrowserCoverFragment;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +45,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_CAPTURE_CAMERA;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_PICK_IMAGE;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
 
@@ -55,11 +54,10 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
  * 地盘管理
  */
 public class ZoneManagementActivity extends BaseActivity implements View.OnClickListener{
-    private static final int REQUEST_MODIFY_BRIEF = 101;
-    private static final int REQUEST_MODIFY_PHONE = 102;
-    private static final int REQUEST_BUSINESS_TIME = 103;
-    private static final int REQUEST_CODE_PICK_IMAGE = 100;
-    private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
+//    private static final int REQUEST_MODIFY_BRIEF = 101;
+//    private static final int REQUEST_MODIFY_PHONE = 102;
+//    private static final int REQUEST_BUSINESS_TIME = 103;
+
     @Bind(R.id.custom_head)
     CustomHeadView customHeadView;
     @Bind(R.id.item_zone_base_info)
@@ -84,7 +82,6 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     private List<ZoneDetailBean.NcoverBean> list;
     private ZoneEditCoversAdapter adapter;
     private Uri mUri;
-    private String mFilePath;
     public ZoneManagementActivity() {
         super(R.layout.activity_zone_management);
     }
@@ -114,7 +111,6 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         recyclerView.addItemDecoration(new ZoneCoverMarginDecoration(activity,R.dimen.dp5));
         recyclerView.setLayoutManager(new GridLayoutManager(activity,4));
         recyclerView.setAdapter(adapter);
-        mFilePath = FileCameraUtil.getFileDir() + File.separator;
     }
 
     @Override
@@ -127,11 +123,21 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     protected void installListener() {
         adapter.setOnItemClickListener(new ZoneEditCoversAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View view, final int position) {
                 if (position==list.size()-1){
-                    PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换个人主页封面"));
+                    PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "上传地盘封面"));
                 }else {
-
+                    zoneDetailBean.clickPosition= position;
+                    ZoneBrowserCoverFragment fragment = ZoneBrowserCoverFragment.newInstance(zoneDetailBean);
+                    fragment.show(getSupportFragmentManager(), ZoneBrowserCoverFragment.class.getSimpleName());
+                    fragment.setOnFragmentInteractionListener(new ZoneBrowserCoverFragment.OnFragmentInteractionListener() {
+                        @Override
+                        public void onFragmentInteraction(int position) {
+                            if (null== zoneDetailBean.n_covers) return;
+                            ZoneManagementActivity.this.list.remove(position);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
             }
 
@@ -227,33 +233,10 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
             ToastUtils.showInfo("请插入SD卡");
             return;
         }
-
-//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-//            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        mUri = getUriForFile();
+        mUri = FileCameraUtil.getUriForFile();
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
         startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
-    }
-
-    public Uri getUriForFile() {
-        File path = new File(mFilePath);
-        if (!path.exists()) {
-            path.mkdirs();
-        }
-        String mFileName = "tmp.png";
-        File file = new File(path, mFileName);
-        if (file.exists()) {
-            file.delete();
-        }
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".fileProvider", file);
-        } else {
-            uri = Uri.fromFile(file);
-        }
-        return uri;
     }
 
     @Override

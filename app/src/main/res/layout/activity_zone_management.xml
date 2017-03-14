@@ -28,7 +28,9 @@
         <com.taihuoniao.fineix.view.CustomItemLayout
             android:id="@+id/item_light_spot"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
 
         <com.taihuoniao.fineix.view.CustomItemLayout
             android:id="@+id/item_zone_address"
@@ -50,7 +52,9 @@
             android:id="@+id/item_zone_auth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10" />
+            android:layout_marginTop="@dimen/dp10"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_pic"

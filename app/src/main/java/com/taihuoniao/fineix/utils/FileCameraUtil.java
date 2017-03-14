@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
 import com.taihuoniao.fineix.BuildConfig;
+import com.taihuoniao.fineix.main.MainApplication;
 
 import java.io.File;
 
@@ -47,7 +48,7 @@ public class FileCameraUtil {
     }
 
     public static String getFileDir() {
-        return mFileDir;
+        return mFileDir+File.separator;
     }
 
 
@@ -108,6 +109,25 @@ public class FileCameraUtil {
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             uri = FileProvider.getUriForFile(context.getApplicationContext(), BuildConfig.APPLICATION_ID+".fileProvider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
+    }
+
+    public static Uri getUriForFile() {
+        File path = new File(getFileDir());
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+        String mFileName = System.currentTimeMillis()+".png";
+        File file = new File(path, mFileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(MainApplication.getContext(), BuildConfig.APPLICATION_ID + ".fileProvider", file);
         } else {
             uri = Uri.fromFile(file);
         }

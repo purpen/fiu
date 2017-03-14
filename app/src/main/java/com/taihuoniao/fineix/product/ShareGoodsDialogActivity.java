@@ -64,6 +64,7 @@ public class ShareGoodsDialogActivity extends BaseActivity implements PlatformAc
 
     @Override
     protected void initView() {
+        setFinishOnTouchOutside(true);
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.gravity = Gravity.BOTTOM;

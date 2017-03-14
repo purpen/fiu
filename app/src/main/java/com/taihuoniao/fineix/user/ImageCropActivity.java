@@ -19,11 +19,11 @@ import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.taihuoniao.fineix.zone.ZoneBaseInfoActivity;
 import com.taihuoniao.fineix.zone.ZoneManagementActivity;
 
 import java.util.HashMap;
@@ -111,6 +111,8 @@ public class ImageCropActivity extends BaseActivity {
                     uploadUserAvatar(bitmap);
                 } else if (TextUtils.equals(ZoneManagementActivity.class.getSimpleName(), page)) { //上传地盘封面
                     uploadZoneCover(zoneId, bitmap);
+                } else if (TextUtils.equals(ZoneBaseInfoActivity.class.getSimpleName(), page)) {
+                    uploadZoneLogo(zoneId, bitmap);
                 } else {//上传背景封面
                     uploadFile(bitmap);
                 }
@@ -123,21 +125,21 @@ public class ImageCropActivity extends BaseActivity {
      */
     private void uploadZoneCover(String id, Bitmap bitmap) {
         if (bitmap == null) return;
-        String imgStr = Util.saveBitmap2Base64Str(bitmap);
+        if (dialog != null && !activity.isFinishing()) dialog.show();
+        String imgStr = Util.saveBitmap2Base64Str(bitmap,550);
         bitmap.recycle();
         HashMap params = ClientDiscoverAPI.getZoneCoverParams(id, imgStr, "1");
         HttpRequest.post(params, URL.ZONE_ADD_COVER, new GlobalDataCallBack() {
             @Override
             public void onStart() {
-                if (dialog!=null && !activity.isFinishing()) dialog.show();
                 setViewEnable(false);
             }
 
             @Override
             public void onSuccess(String json) {
-                if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
-                setViewEnable(true);
+                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
                 HttpResponse httpResponse = JsonUtil.fromJson(json, HttpResponse.class);
+                setViewEnable(true);
                 if (httpResponse.isSuccess()) {
                     ZoneUploadCoverBean response = JsonUtil.fromJson(json, new TypeToken<HttpResponse<ZoneUploadCoverBean>>() {
                     });
@@ -150,7 +152,7 @@ public class ImageCropActivity extends BaseActivity {
 
             @Override
             public void onFailure(String error) {
-                if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
+                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
                 setViewEnable(true);
                 ToastUtils.showError(R.string.network_err);
             }
@@ -160,7 +162,8 @@ public class ImageCropActivity extends BaseActivity {
 
     private void uploadFile(Bitmap bitmap) { //换个人中心背景图
         if (bitmap == null) return;
-        String imgStr = Util.saveBitmap2Base64Str(bitmap);
+        if (dialog != null && !activity.isFinishing()) dialog.show();
+        String imgStr = Util.saveBitmap2Base64Str(bitmap, 512);
         bitmap.recycle();
         try {
             HashMap<String, String> params = ClientDiscoverAPI.getuploadBgImgRequestParams(imgStr);
@@ -168,18 +171,13 @@ public class ImageCropActivity extends BaseActivity {
                 @Override
                 public void onStart() {
                     setViewEnable(false);
-                    if (dialog != null && !activity.isFinishing()) dialog.show();
                 }
 
                 @Override
                 public void onSuccess(String json) {
-                    setViewEnable(true);
                     if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-                    if (TextUtils.isEmpty(json)) {
-                        return;
-                    }
-                    LogUtil.e(TAG, json);
                     HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                    setViewEnable(true);
                     if (response.isSuccess()) {
                         ToastUtils.showSuccess("背景图上传成功");
                         activity.finish();
@@ -196,6 +194,7 @@ public class ImageCropActivity extends BaseActivity {
                 }
             });
         } catch (Exception e) {
+            bitmap.recycle();
             e.printStackTrace();
         } finally {
             setViewEnable(true);
@@ -212,25 +211,21 @@ public class ImageCropActivity extends BaseActivity {
     private void uploadUserAvatar(final Bitmap bitmap) {
         if (bitmap == null) return;
         String type = "3"; //上传头像
-        String imgStr = Util.saveBitmap2Base64Str(bitmap);
+        if (dialog != null && !activity.isFinishing()) dialog.show();
+        String imgStr = Util.saveBitmap2Base64Str(bitmap,200);
         try {
             HashMap<String, String> params = ClientDiscoverAPI.getuploadImgRequestParams(imgStr, type);
             HttpRequest.post(params, URL.UPLOAD_IMG_URL, new GlobalDataCallBack() {
                 @Override
                 public void onStart() {
-                    if (dialog != null && !activity.isFinishing()) dialog.show();
                     setViewEnable(false);
                 }
 
                 @Override
                 public void onSuccess(String json) {
                     if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-                    setViewEnable(true);
-                    if (TextUtils.isEmpty(json)) {
-                        return;
-                    }
-
                     HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                    setViewEnable(true);
                     if (response.isSuccess()) {
                         ToastUtils.showSuccess("头像上传成功");
                         if (listener != null) {
@@ -250,6 +245,54 @@ public class ImageCropActivity extends BaseActivity {
                 }
             });
         } catch (Exception e) {
+            bitmap.recycle();
+            e.printStackTrace();
+        } finally {
+            setViewEnable(true);
+            if (dialog != null && !activity.isFinishing()) dialog.dismiss();
+        }
+    }
+
+    //上传地盘logo
+    private void uploadZoneLogo(String id, final Bitmap bitmap) {
+        if (bitmap == null) return;
+        try {
+            if (dialog != null && !activity.isFinishing()) dialog.show();
+            String imgStr = Util.saveBitmap2Base64Str(bitmap, 200);
+            HashMap<String, String> params = new HashMap<>();
+            params.put("id", id);
+            params.put("avatar_tmp", imgStr);
+            HttpRequest.post(params, URL.SCENE_SCENE_SAVE_URL, new GlobalDataCallBack() {
+                @Override
+                public void onStart() {
+                    setViewEnable(false);
+                }
+
+                @Override
+                public void onSuccess(String json) {
+                    if (dialog != null && !activity.isFinishing()) dialog.dismiss();
+                    HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                    setViewEnable(true);
+                    if (response.isSuccess()) {
+                        ToastUtils.showSuccess("地盘logo上传成功");
+                        if (listener != null) {
+                            listener.onClipComplete(bitmap);
+                        }
+                        finish();
+                        return;
+                    }
+                    ToastUtils.showError(response.getMessage());
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    if (dialog != null && !activity.isFinishing()) dialog.dismiss();
+                    setViewEnable(true);
+                    ToastUtils.showError(R.string.network_err);
+                }
+            });
+        } catch (Exception e) {
+            bitmap.recycle();
             e.printStackTrace();
         } finally {
             setViewEnable(true);

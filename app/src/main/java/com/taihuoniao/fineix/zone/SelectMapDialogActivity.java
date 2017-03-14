@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.google.zxing.RGBLuminanceSource;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -53,6 +52,7 @@ public class SelectMapDialogActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        setFinishOnTouchOutside(true);
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.gravity = Gravity.BOTTOM;

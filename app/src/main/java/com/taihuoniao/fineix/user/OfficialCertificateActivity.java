@@ -210,7 +210,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
         }
 
         setViewsEnable(false);
-        HashMap<String, String> params =ClientDiscoverAPI. getuploadIdentityInfoRequestParams(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card));
+        HashMap<String, String> params =ClientDiscoverAPI. getuploadIdentityInfoRequestParams(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id,1024), Util.saveBitmap2Base64Str(bitmap_card,1024));
         HttpRequest.post(params, URL.UPLOAD_IDENTIFY_URL, new GlobalDataCallBack(){
 //        ClientDiscoverAPI.uploadIdentityInfo(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card), new RequestCallBack<String>() {
             @Override
@@ -246,7 +246,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             public void onFailure(String error) {
                 setViewsEnable(true);
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                ToastUtils.showError("网络异常，请确保网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
 
