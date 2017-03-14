@@ -48,7 +48,6 @@ import butterknife.OnClick;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_CAPTURE_CAMERA;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_PICK_IMAGE;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
-import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
 
 /**
  * 地盘管理
@@ -169,7 +168,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
                 } else {
                     // 申请权限。
                     AndPermission.with(this)
-                            .requestCode(REQUEST_PERMISSION_CODE)
+                            .requestCode(Constants.REQUEST_PERMISSION_CODE)
                             .permission(Manifest.permission.CAMERA)
                             .send();
                 }
@@ -182,7 +181,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
                 } else {
                     // 申请权限。
                     AndPermission.with(this)
-                            .requestCode(REQUEST_PERMISSION_CODE)
+                            .requestCode(Constants.REQUEST_PERMISSION_CODE)
                             .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
                             .send();
                 }
@@ -196,10 +195,20 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
     // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
     @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
     private void getRequestYes(List<String> grantedPermissions) {
-        getImageFromAlbum();
+        if (grantedPermissions.contains("android.permission.READ_EXTERNAL_STORAGE")){
+            getImageFromAlbum();
+        }else if(grantedPermissions.contains("android.permission.CAMERA")){
+            getImageFromCamera();
+        }
     }
 
     // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。

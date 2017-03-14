@@ -102,7 +102,7 @@ public class ZoneEditCoversAdapter extends RecyclerView.Adapter<ZoneEditCoversAd
 //        });
         holder.iv.setLayoutParams(params);
         if (position == list.size() - 1) {
-            GlideUtils.displayImageNoFading(R.mipmap.zone_upload_banner, holder.iv);
+            holder.iv.setImageResource(R.mipmap.zone_upload_banner);
         } else {
             GlideUtils.displayImageNoFading(item.url, holder.iv);
         }

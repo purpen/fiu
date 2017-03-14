@@ -24,6 +24,8 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ import butterknife.OnClick;
 
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_CAPTURE_CAMERA;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_PICK_IMAGE;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
 
 
@@ -146,6 +149,32 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
         mUri = FileCameraUtil.getUriForFile();
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
         startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(REQUEST_PERMISSION_CODE)
+    private void getRequestYes(List<String> grantedPermissions) {
+        if (grantedPermissions.contains("android.permission.READ_EXTERNAL_STORAGE")){
+            getImageFromAlbum();
+        }else if(grantedPermissions.contains("android.permission.CAMERA")){
+            getImageFromCamera();
+        }
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(REQUEST_PERMISSION_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+        }
     }
 
     private void toCropActivity(Uri uri) {
