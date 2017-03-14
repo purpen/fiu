@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,25 +24,31 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.google.zxing.WriterException;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BonusBean;
 import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.ShareCJRecyclerAdapter;
 import com.taihuoniao.fineix.beans.ShareDemoBean;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.QrCodeUtils;
 import com.taihuoniao.fineix.utils.TestShareUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.taihuoniao.fineix.zone.bean.ShareH5Url;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -85,6 +92,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
     private LinearLayout linearLayout;
     private TextView textView, expTv;
     private TestShareUtils testShareUtils;
+    private Bitmap mQRCodeBitmap;
 
     public ShareActivity() {
         super(0);
@@ -204,6 +212,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         if (!dialog.isShowing()) {
             dialog.show();
         }
+        requestQRCodeLink();
         sceneDetails(id);
     }
 
@@ -262,7 +271,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
             container.removeView(view);
         }
         double b = (double) container.getWidth() / MainApplication.getContext().getScreenWidth();
-        view = testShareUtils.selectStyle(this, position, netScene, b, container.getHeight(), container.getWidth());
+        view = testShareUtils.selectStyle(this, position, netScene, b, container.getHeight(), container.getWidth(),mQRCodeBitmap );
         container.addView(view);
         int currentPosition = position;
     }
@@ -308,10 +317,10 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 //                View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));
 //        //这个方法也非常重要，设置布局的尺寸和位置
 //        view.layout(0, 0, imgWidth, imgHeight);
-//        Bitmap bitmap = view.getDrawingCache();
+//        Bitmap mQRCodeBitmap = view.getDrawingCache();
 //        //获得绘图缓存中的Bitmap
 //        view.buildDrawingCache();
-//        return bitmap;
+//        return mQRCodeBitmap;
 //    }
     private Bitmap inflateView() {
         container.setDrawingCacheEnabled(true);
@@ -504,5 +513,31 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         if (detailsHandler != null)
             detailsHandler.cancel();
         super.onDestroy();
+    }
+
+    private void requestQRCodeLink(){
+        HttpRequest.post(ClientDiscoverAPI.getH5ShareParams(id, "2", null), URL.SHARE_H5_URL, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                HttpResponse<ShareH5Url> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ShareH5Url>>() {});
+                if (response.isSuccess()) {
+                    generateQRCodeImage(response.getData());
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+
+            }
+        });
+    }
+
+    private void generateQRCodeImage(ShareH5Url shareH5Url) {
+        try {
+            Bitmap logo = BitmapFactory.decodeResource(App.getContext().getResources(), R.mipmap.share_logo);
+            mQRCodeBitmap = QrCodeUtils.create2DCode(null, shareH5Url.o_url, DensityUtils.dp2px(this, 60), DensityUtils.dp2px(this, 60));
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
     }
 }
