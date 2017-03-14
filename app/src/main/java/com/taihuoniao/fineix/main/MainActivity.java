@@ -234,7 +234,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
-                switchFragmentandImg(CartFragment.class);
+                if (getVisibleFragment() instanceof CartFragment) return;
+                if (LoginInfo.isUserLogin()) {
+                    switchFragmentandImg(CartFragment.class);
+                } else {
+                    MainApplication.which_activity = 0;
+                    which = CartFragment.class.getSimpleName();
+                    removeMineFragment(CartFragment.class);
+                    startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                }
+
 
                 // TODO: 2017/2/14 发布情境
                 /*if (LoginInfo.isUserLogin()) {
@@ -266,7 +275,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     which = MineFragment.class.getSimpleName();
 
                     // TODO: 2017/1/18 移除MineFragment
-                    removeMineFragment();
+                    removeMineFragment(MineFragment.class);
                     startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }
                 break;
@@ -492,13 +501,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void removeMineFragment() {
-        Fragment fragment = fm.findFragmentByTag(MineFragment.class.getSimpleName());
+    private void removeMineFragment(Class clazz) {
+        Fragment fragment = fm.findFragmentByTag(clazz.getSimpleName());
         if (fragment != null) {
             fm.beginTransaction().remove(fragment).commitAllowingStateLoss();
         }
         for (int i = 0; i < fragments.size(); i++) {
-            if (fragments.get(i) instanceof MineFragment) {
+            if (fragments.get(i) == fragment) {
                 fragments.remove(i);
                 break;
             }
