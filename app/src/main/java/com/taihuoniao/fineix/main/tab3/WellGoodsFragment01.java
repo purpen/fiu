@@ -66,39 +66,39 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
     @Bind(R.id.pull_refresh_view_001)
     PullToRefreshListView pullRefreshView001;
 
-    private ListView mListView;
+    // 新鲜好货早知道
+    private List<FirstProductBean.DataBean.ItemsBean> firstProductList;
+    private FirstProductAdapter firstProductAdapter;
 
-    private List<FirstProductBean.DataBean.ItemsBean> firstProductList;//最新好货推荐数据
-    private FirstProductAdapter firstProductAdapter;//最新好货推荐适配器
+    // 好货人气王
+    private List<FirstProductBean.DataBean.ItemsBean> secondProductList;
+    private FirstProductAdapter secondProductAdapter;
 
-    private List<FirstProductBean.DataBean.ItemsBean> secondProductList;//最新好货推荐数据
-    private FirstProductAdapter secondProductAdapter;//最新好货推荐适配器
-
-    private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
-    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
+    // 好货专题(推荐)
+    private List<SubjectListBean.DataBean.RowsBean> subjectList;
+    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;
 
     private int currentPage = 0;
 
     @Override
     protected void requestNet() {
+        subjectList();
         firstProducts();
         secondProduct();
-        subjectList();
     }
 
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods_01, null);
         ButterKnife.bind(this, view);
-
-        initListView();        mListView.addHeaderView(getHeaderView());
-
+        initListView();
         return view;
     }
 
     private void initListView() {
         pullRefreshView001.animLayout();
-        mListView = pullRefreshView001.getRefreshableView();
+        ListView mListView = pullRefreshView001.getRefreshableView();
+        mListView.addHeaderView(getHeaderView());
         pullRefreshView001.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -112,14 +112,11 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
         subjectList = new ArrayList<>();
         wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
         mListView.setAdapter(wellgoodsSubjectAdapter);
-
         pullRefreshView001.animLayout();
-        mListView = pullRefreshView001.getRefreshableView();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -146,7 +143,6 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
             }
         });
         productRecycler.setAdapter(firstProductAdapter);
-
         RecyclerView productRecycler2 = (RecyclerView) headerView.findViewById(R.id.product_recycler2);
         productRecycler2.setHasFixedSize(true);
         productRecycler2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -180,10 +176,10 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
 
     //好货专题列表
     private void subjectList() {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "2");
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", "1", null, 5 + "", "1");
+//        HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "2");
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 
-            //        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 Log.e("<<<好货专题列表", json);
