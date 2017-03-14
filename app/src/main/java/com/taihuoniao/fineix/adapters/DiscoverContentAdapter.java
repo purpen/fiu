@@ -55,6 +55,7 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.view.setVisibility(View.GONE);
         switch (position) {
             case 0: //分类
                 holder.tvTitle.getPaint().setFakeBoldText(true);
@@ -135,6 +136,7 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
                 });
                 break;
             case 5: //发现好友
+                holder.view.setVisibility(View.VISIBLE);
                 holder.tvTitle.getPaint().setFakeBoldText(true);
                 holder.tvTitle.setText(titles.get(position + 1).indexName);
                 holder.gvCategory.setVisibility(View.VISIBLE);
@@ -213,7 +215,8 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
         CustomGridView gvStick;
         @Bind(R.id.gv_category)
         CustomGridView gvCategory;
-
+        @Bind(R.id.view)
+        View view;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
