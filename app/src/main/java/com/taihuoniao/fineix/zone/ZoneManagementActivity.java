@@ -52,7 +52,7 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 /**
  * 地盘管理
  */
-public class ZoneManagementActivity extends BaseActivity implements View.OnClickListener{
+public class ZoneManagementActivity extends BaseActivity implements View.OnClickListener {
 //    private static final int REQUEST_MODIFY_BRIEF = 101;
 //    private static final int REQUEST_MODIFY_PHONE = 102;
 //    private static final int REQUEST_BUSINESS_TIME = 103;
@@ -81,6 +81,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     private List<ZoneDetailBean.NcoverBean> list;
     private ZoneEditCoversAdapter adapter;
     private Uri mUri;
+
     public ZoneManagementActivity() {
         super(R.layout.activity_zone_management);
     }
@@ -105,10 +106,10 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         itemZoneBusiness.setTVStyle(0, R.string.zone_business_times, R.color.color_666);
         itemZoneAuth.setTVStyle(0, R.string.zone_auth, R.color.color_666);
         list = new ArrayList<>();
-        adapter = new ZoneEditCoversAdapter(activity,list);
+        adapter = new ZoneEditCoversAdapter(activity, list);
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new ZoneCoverMarginDecoration(activity,R.dimen.dp5));
-        recyclerView.setLayoutManager(new GridLayoutManager(activity,4));
+        recyclerView.addItemDecoration(new ZoneCoverMarginDecoration(activity, R.dimen.dp5));
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, 4));
         recyclerView.setAdapter(adapter);
     }
 
@@ -123,16 +124,16 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         adapter.setOnItemClickListener(new ZoneEditCoversAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
-                if (position==list.size()-1){
+                if (position == list.size() - 1) {
                     PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "上传地盘封面"));
-                }else {
-                    zoneDetailBean.clickPosition= position;
+                } else {
+                    zoneDetailBean.clickPosition = position;
                     ZoneBrowserCoverFragment fragment = ZoneBrowserCoverFragment.newInstance(zoneDetailBean);
                     fragment.show(getSupportFragmentManager(), ZoneBrowserCoverFragment.class.getSimpleName());
                     fragment.setOnFragmentInteractionListener(new ZoneBrowserCoverFragment.OnFragmentInteractionListener() {
                         @Override
                         public void onFragmentInteraction(int position) {
-                            if (null== zoneDetailBean.n_covers) return;
+                            if (null == zoneDetailBean.n_covers) return;
                             ZoneManagementActivity.this.list.remove(position);
                             adapter.notifyDataSetChanged();
                         }
@@ -146,6 +147,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
             }
         });
     }
+
     private View initPopView(int layout, String title) {
         View view = Util.inflateView(activity, layout, null);
         ((TextView) view.findViewById(R.id.tv_title)).setText(title);
@@ -204,9 +206,9 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
     @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
     private void getRequestYes(List<String> grantedPermissions) {
-        if (grantedPermissions.contains("android.permission.READ_EXTERNAL_STORAGE")){
+        if (grantedPermissions.contains("android.permission.READ_EXTERNAL_STORAGE")) {
             getImageFromAlbum();
-        }else if(grantedPermissions.contains("android.permission.CAMERA")){
+        } else if (grantedPermissions.contains("android.permission.CAMERA")) {
             getImageFromCamera();
         }
     }
@@ -272,13 +274,13 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         Intent intent = new Intent(activity, ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
         intent.putExtra(ImageCropActivity.class.getName(), TAG);
-        intent.putExtra(TAG,zoneDetailBean._id);
+        intent.putExtra(TAG, zoneDetailBean._id);
         startActivity(intent);
     }
 
     @Override
     protected void requestNet() {
-        HashMap params = ClientDiscoverAPI.getZoneDetailParams(zoneId,"1");
+        HashMap params = ClientDiscoverAPI.getZoneDetailParams(zoneId, "1");
         HttpRequest.post(params, URL.ZONE_DETAIL, new GlobalDataCallBack() {
             @Override
             public void onStart() {
@@ -308,15 +310,18 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void refreshUI() {
-        if (zoneDetailBean==null) return;
-        if (list.size()>0){
+        if (zoneDetailBean == null) return;
+
+        if (list.size() > 0) {
             list.clear();
         }
-        list.addAll(zoneDetailBean.n_covers);
+        if (null != zoneDetailBean.n_covers) {
+            list.addAll(zoneDetailBean.n_covers);
+        }
         list.add(new ZoneDetailBean.NcoverBean());
-        if (adapter==null){
-            adapter=new ZoneEditCoversAdapter(activity,list);
-        }else {
+        if (adapter == null) {
+            adapter = new ZoneEditCoversAdapter(activity, list);
+        } else {
             adapter.notifyDataSetChanged();
         }
         itemZoneAddress.setTvArrowLeftStyle(true, zoneDetailBean.address, R.color.color_333);
@@ -324,7 +329,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         itemZoneBusiness.setTvArrowLeftStyle(true, zoneDetailBean.extra.shop_hours, R.color.color_333);
     }
 
-    @OnClick({R.id.item_zone_base_info, R.id.item_zone_brief,R.id.item_zone_address,R.id.item_zone_phone,R.id.item_zone_business,R.id.item_zone_auth})
+    @OnClick({R.id.item_zone_base_info, R.id.item_zone_brief, R.id.item_zone_address, R.id.item_zone_phone, R.id.item_zone_business, R.id.item_zone_auth})
     void performClick(View view) {
         Intent intent;
         switch (view.getId()) {
