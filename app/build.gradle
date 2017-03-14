@@ -15,9 +15,8 @@ android {
         renderscriptSupportModeEnabled true
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
     }
-    signingConfigs {
+    signingConfigs {//C:/AndroidStudioProjects/fiu/app/fiu.jks
         release {
-//            storeFile file('C:/AndroidStudioProjects/fiu/app/fiu.jks')
             storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
@@ -55,10 +54,17 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     compile project(':PushSDK')
     compile project(':Gpu-Image')
     compile project(':pullrefreshlib')
     compile project(':flowlayout')
+    compile files('libs/baidumapapi_base_v4_2_0.jar')
+    compile files('libs/baidumapapi_cloud_v4_2_0.jar')
+    compile files('libs/baidumapapi_map_v4_2_0.jar')
+    compile files('libs/baidumapapi_radar_v4_2_0.jar')
+    compile files('libs/baidumapapi_search_v4_2_0.jar')
+    compile files('libs/baidumapapi_util_v4_2_0.jar')
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'
@@ -68,15 +74,9 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.yanzhenjie:permission:1.0.5'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okio:okio:1.7.0'
-    compile files('libs/baidumapapi_base_v4_2_0.jar')
-    compile files('libs/baidumapapi_cloud_v4_2_0.jar')
-    compile files('libs/baidumapapi_map_v4_2_0.jar')
-    compile files('libs/baidumapapi_radar_v4_2_0.jar')
-    compile files('libs/baidumapapi_search_v4_2_0.jar')
-    compile files('libs/baidumapapi_util_v4_2_0.jar')
-    compile 'com.android.support:multidex:1.0.1'
 }

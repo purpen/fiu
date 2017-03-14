@@ -24,6 +24,7 @@ import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.FileCameraUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PushUtils;
@@ -86,7 +87,7 @@ public class MainApplication extends Application {
         //初始化universal_image_load
 //        initImageLoader();
         UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_load);
-
+        FileCameraUtil.init();
         JsonUtil.init();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
 //        fiuPath = Environment.getRootDirectory().getAbsolutePath() + "/DCIM/Fiu浮游";

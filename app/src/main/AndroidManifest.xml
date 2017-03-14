@@ -375,9 +375,9 @@
             android:process=":remote" />
 
         <!-- 此处为测试value，线上版本务必更换 -->
-         <!--<meta-data-->
-         <!--android:name="com.baidu.lbsapi.API_KEY"-->
-         <!--android:value="muQDLN6lCST6qMDvTAydAilM"/> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.baidu.lbsapi.API_KEY" -->
+        <!-- android:value="muQDLN6lCST6qMDvTAydAilM"/> -->
 
 
         <!-- 百度地图线上API_KEY -->
@@ -484,6 +484,66 @@
         <activity android:name=".map.NaviToZoneActivity" android:screenOrientation="portrait"/>
         <activity android:name=".zone.ShareDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
         <activity android:name=".product.ShareGoodsDialogActivity" android:theme="@style/ShareDialogBottom" android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".zone.ZoneDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.QJSubjectDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".map.SelectCitiesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.PermissionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zone.LightSpotDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zone.ZoneManagementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zone.SelectMapDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ShareDialogBottom" />
+        <activity
+            android:name=".map.NaviToZoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zone.ShareDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ShareDialogBottom" />
+        <activity
+            android:name=".product.ShareGoodsDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ShareDialogBottom" />
+        <activity
+            android:name=".zone.ZoneEditCoverDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ShareDialogBottom" />
+        <activity android:name=".zone.ZoneEditTitleActivity" />
+        <activity
+            android:name=".zone.ZoneBaseInfoActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".zone.ZoneClassifyActivity" />
+        <activity android:name=".zone.ZoneEditSubtitleActivity" />
+        <activity android:name=".zone.ZoneEditBriefActivity" />
+        <activity android:name=".zone.ZoneEditPhoneActivity" />
+        <activity android:name=".zone.ZoneEditTimeActivity" />
+        <activity android:name=".zone.ZoneEditAddressActivity" />
+        <activity android:name=".zone.ZoneMapSelectAddressActivity" />
+        <activity android:name=".zone.ZoneEditTagActivity" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.taihuoniao.fineix.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

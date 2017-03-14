@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.zone;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -325,7 +324,7 @@ public class ZoneDetailActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        HashMap param = ClientDiscoverAPI.getZoneDetailParams(sZoneId);
+        HashMap param = ClientDiscoverAPI.getZoneDetailParams(sZoneId,"0");
         HttpRequest.post(param, URL.ZONE_DETAIL, new GlobalDataCallBack() {
 
             @Override

@@ -45,6 +45,7 @@ public class ZoneDetailBean implements Parcelable {
     public String sub_title;
     public String avatar_url;
     public String created_at;
+    public CategoryBean category;
     public UserBean user;
     public int love_count;
     public int view_count;
@@ -62,6 +63,78 @@ public class ZoneDetailBean implements Parcelable {
     public List<String> covers;
     public List<String> tags;
     public List<String> bright_spot;
+    public List<NcoverBean> n_covers;
+    public int clickPosition;
+    public static class NcoverBean implements Parcelable {
+        public String id;
+        public String url;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.url);
+        }
+
+        public NcoverBean() {
+        }
+
+        protected NcoverBean(Parcel in) {
+            this.id = in.readString();
+            this.url = in.readString();
+        }
+
+        public static final Creator<NcoverBean> CREATOR = new Creator<NcoverBean>() {
+            @Override
+            public NcoverBean createFromParcel(Parcel source) {
+                return new NcoverBean(source);
+            }
+
+            @Override
+            public NcoverBean[] newArray(int size) {
+                return new NcoverBean[size];
+            }
+        };
+    }
+    public static class CategoryBean implements Parcelable {
+        public String _id;
+        public String title;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeString(this.title);
+        }
+
+        public CategoryBean() {
+        }
+
+        protected CategoryBean(Parcel in) {
+            this._id = in.readString();
+            this.title = in.readString();
+        }
+
+        public static final Creator<CategoryBean> CREATOR = new Creator<CategoryBean>() {
+            @Override
+            public CategoryBean createFromParcel(Parcel source) {
+                return new CategoryBean(source);
+            }
+
+            @Override
+            public CategoryBean[] newArray(int size) {
+                return new CategoryBean[size];
+            }
+        };
+    }
 
     public static class UserBean implements Parcelable {
         /**
@@ -210,6 +283,9 @@ public class ZoneDetailBean implements Parcelable {
         };
     }
 
+    public ZoneDetailBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -222,6 +298,7 @@ public class ZoneDetailBean implements Parcelable {
         dest.writeString(this.sub_title);
         dest.writeString(this.avatar_url);
         dest.writeString(this.created_at);
+        dest.writeParcelable(this.category, flags);
         dest.writeParcelable(this.user, flags);
         dest.writeInt(this.love_count);
         dest.writeInt(this.view_count);
@@ -239,9 +316,7 @@ public class ZoneDetailBean implements Parcelable {
         dest.writeStringList(this.covers);
         dest.writeStringList(this.tags);
         dest.writeStringList(this.bright_spot);
-    }
-
-    public ZoneDetailBean() {
+        dest.writeTypedList(this.n_covers);
     }
 
     protected ZoneDetailBean(Parcel in) {
@@ -250,6 +325,7 @@ public class ZoneDetailBean implements Parcelable {
         this.sub_title = in.readString();
         this.avatar_url = in.readString();
         this.created_at = in.readString();
+        this.category = in.readParcelable(CategoryBean.class.getClassLoader());
         this.user = in.readParcelable(UserBean.class.getClassLoader());
         this.love_count = in.readInt();
         this.view_count = in.readInt();
@@ -267,6 +343,7 @@ public class ZoneDetailBean implements Parcelable {
         this.covers = in.createStringArrayList();
         this.tags = in.createStringArrayList();
         this.bright_spot = in.createStringArrayList();
+        this.n_covers = in.createTypedArrayList(NcoverBean.CREATOR);
     }
 
     public static final Creator<ZoneDetailBean> CREATOR = new Creator<ZoneDetailBean>() {

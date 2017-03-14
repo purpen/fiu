@@ -1,11 +1,13 @@
 package com.taihuoniao.fineix.user;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,15 +26,14 @@ import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.taihuoniao.fineix.BuildConfig;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FansAdapter;
-import com.taihuoniao.fineix.adapters.UserQJListAdapter;
 import com.taihuoniao.fineix.adapters.UserQJListAdapter1;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -40,6 +41,7 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCJListData;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -47,6 +49,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.Constants;
+import com.taihuoniao.fineix.utils.FileCameraUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -55,6 +58,9 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,6 +70,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
+
 /**
  * @author lilin
  *         created at 2016/4/26 17:43
@@ -71,7 +80,6 @@ import butterknife.ButterKnife;
 public class UserCenterActivity extends BaseActivity implements View.OnClickListener {
     private int curPage = 1;
     private UserQJListAdapter1 adapterCJ;
-    private UserQJListAdapter adapterQJ;
     private List<SceneListBean> mSceneList = new ArrayList<>();
     private List<QingJingListBean.QingJingItem> mQJList = new ArrayList<>();
     private LinearLayout ll_box;
@@ -102,12 +110,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private LinearLayout ll_fans;
     private RelativeLayout rl_qj;
     private User user;
+    private String mFilePath;
     private int which = MineFragment.REQUEST_CJ;
     private long userId = LoginInfo.getUserId();
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     private WaittingDialog dialog;
-    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
+    private Uri mUri;
+//    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
+
     @Bind(R.id.lv_cj)
     ListView lv_cj;
     @Bind(R.id.lv_qj)
@@ -119,6 +130,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private boolean isFirstLoad = true;
     private String flag;
     private View headView;
+
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -200,6 +212,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         } else {
             ll_btn_box.setVisibility(View.VISIBLE);
         }
+        mFilePath = FileCameraUtil.getFileDir() + File.separator;
     }
 
 
@@ -210,10 +223,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             LogUtil.e(TAG, "userId<=0");
             return;
         }
-        LogUtil.e(TAG, "requestNet==" + userId);
         HashMap<String, String> params = ClientDiscoverAPI.getgetMineInfoRequestParams(userId + "");
-        HttpRequest.post(params,  URL.MINE_INFO, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
+        HttpRequest.post(params, URL.MINE_INFO, new GlobalDataCallBack() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) dialog.show();
@@ -221,7 +232,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(String json) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) {
                     return;
                 }
@@ -237,7 +248,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(String error) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -248,11 +259,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 lv_cj.setVisibility(View.VISIBLE);
                 loadCJData();
                 break;
-//            case MineFragment.REQUEST_QJ:
-//                lv_cj.setVisibility(View.GONE);
-//                lv_qj.setVisibility(View.VISIBLE);
-//                loadQJData();
-//                break;
+            default:
+                break;
         }
     }
 
@@ -260,9 +268,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      * 加载情境数据
      */
     private void loadCJData() {
-        HashMap<String, String> params =  ClientDiscoverAPI.getSceneListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1");
-        HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1",new RequestCallBack<String>() {
+        HashMap<String, String> params = ClientDiscoverAPI.getSceneListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), "1");
+        HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) {
@@ -273,9 +280,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(String json) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("getSceneList", json);
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     UserCJListData listBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<UserCJListData>>() {
@@ -289,7 +294,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(String error) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -329,72 +334,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     }
 
-    @Deprecated
-    private void loadQJData() {
-        LogUtil.e("loadQJData", String.format("curPage==%s;;PAGE_SIZE==%s;;userId==%s", curPage, Constants.PAGE_SIZE, userId));
-        HashMap<String, String> params =ClientDiscoverAPI. getQJListRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId));
-        HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getQJList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
-            @Override
-            public void onStart() {
-                if (dialog != null && !activity.isFinishing()) {
-                    if (curPage == 1) dialog.show();
-                }
-                curPage++;
-            }
-
-            @Override
-            public void onSuccess(String json) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("getQJList", json);
-                QingJingListBean listBean = JsonUtil.fromJson(json, QingJingListBean.class);
-                if (listBean.isSuccess()) {
-                    List list = listBean.getData().getRows();
-                    LogUtil.e("每次请求==", list.size() + "");
-                    refreshQJUI(list);
-                    return;
-                }
-                ToastUtils.showError(listBean.getMessage());
-            }
-
-            @Override
-            public void onFailure(String error) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                ToastUtils.showError(R.string.network_err);
-            }
-        });
-    }
-
-
-    //更新情景UI
-    private void refreshQJUI(List<QingJingListBean.QingJingItem> list) {
-        if (list == null) return;
-        if (list.size() == 0) {
-            if (isFirstLoad) {
-                isFirstLoad = false;
-                ll_tips.setVisibility(View.VISIBLE);
-                if (LoginInfo.getUserId() == userId) {
-                    tv_tips.setText(R.string.user_center_qj_tip);
-                } else {
-                    tv_tips.setText(R.string.user_center_qj_tip1);
-                }
-            } else {
-                ll_tips.setVisibility(View.GONE);
-            }
-            return;
-        }
-        if (adapterQJ == null) {
-            mQJList.addAll(list);
-            adapterQJ = new UserQJListAdapter(mQJList, activity);
-            lv_qj.setAdapter(adapterQJ);
-        } else {
-            mQJList.addAll(list);
-            adapterQJ.notifyDataSetChanged();
-        }
-    }
-
-
     /**
      * 更新headview的UI
      */
@@ -403,7 +342,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (user == null) {
             return;
         }
-        LogUtil.e(TAG, "refreshUI===" + user._id);
         if (user.is_love == FansAdapter.NOT_LOVE) {
             setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white);
         } else {
@@ -517,20 +455,17 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
         lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
             private int headerHeight = 0;
+
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
-                    LogUtil.e("getLastVisiblePosition", absListView.getLastVisiblePosition() + "");
-                    LogUtil.e("mQJList.size", mSceneList.size() + "");
                     isFirstLoad = false;
                     if (mSceneList.size() % 2 == 0) {
                         if (absListView.getLastVisiblePosition() == mSceneList.size() / 2) {
-                            LogUtil.e("curPage==偶数", curPage + "");
                             loadCJData();
                         }
                     } else {
                         if (absListView.getLastVisiblePosition() == mSceneList.size() / 2 + 1) {
-                            LogUtil.e("curPage==奇数", curPage + "");
                             loadCJData();
                         }
                     }
@@ -557,27 +492,35 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         });
     }
 
-    public int getScrollY() {
-        View c = lv_cj.getChildAt(0);
-        if (c == null) {
-            return 0;
-        }
-        int firstVisiblePosition = lv_cj.getFirstVisiblePosition();
-        int top = c.getTop();
-        return -top + firstVisiblePosition * c.getHeight();
-    }
-
     @Override
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
             case R.id.tv_take_photo:
                 PopupWindowUtil.dismiss();
-                getImageFromCamera();
+                if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
+                    getImageFromCamera();
+                } else {
+                    // 申请权限。
+                    AndPermission.with(this)
+                            .requestCode(REQUEST_PERMISSION_CODE)
+                            .permission(Manifest.permission.CAMERA)
+                            .send();
+                }
+
                 break;
             case R.id.tv_album:
                 PopupWindowUtil.dismiss();
-                getImageFromAlbum();
+                if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    getImageFromAlbum();
+                } else {
+                    // 申请权限。
+                    AndPermission.with(this)
+                            .requestCode(REQUEST_PERMISSION_CODE)
+                            .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            .send();
+                }
+
                 break;
             case R.id.tv_cancel:
                 PopupWindowUtil.dismiss();
@@ -616,17 +559,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 bt_focus.setEnabled(false);
                 if (user.is_love == FansAdapter.NOT_LOVE) {
                     HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(userId + "");
-                    HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
+                    HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack() {
                         @Override
                         public void onSuccess(String json) {
                             bt_focus.setEnabled(true);
                             if (TextUtils.isEmpty(json)) return;
-                            LogUtil.e("focusOperate", json);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.LOVE;
-//                                bt_focus.setText("已关注");
                                 setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic);
                                 return;
                             }
@@ -641,18 +581,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     });
                 } else {
                     HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userId + "");
-                    HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelFocusOperate(userId + "", new RequestCallBack<String>() {
+                    HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack() {
                         @Override
                         public void onSuccess(String json) {
                             bt_focus.setEnabled(true);
                             PopupWindowUtil.dismiss();
                             if (TextUtils.isEmpty(json)) return;
-                            LogUtil.e("cancelFocusOperate", json);
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.NOT_LOVE;
-//                                bt_focus.setText("关注");
                                 setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white);
                                 return;
                             }
@@ -671,14 +608,28 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.ibtn:
                 Util.makeToast("认证");
                 break;
-//            case R.id.ll_cj:
-//                if (which == MineFragment.REQUEST_CJ) return;
-//                showCj();
-//                break;
             case R.id.rl_qj:
                 if (which == MineFragment.REQUEST_CJ) return;
                 showCj();
                 break;
+            default:
+                break;
+        }
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
+    private void getRequestYes(List<String> grantedPermissions) {
+        getImageFromAlbum();
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(Constants.REQUEST_PERMISSION_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
         }
     }
 
@@ -689,15 +640,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         which = MineFragment.REQUEST_CJ;
         adapterCJ = null;
         loadCJData();
-    }
-
-    private void showQJ() {
-        resetData();
-        lv_qj.setVisibility(View.VISIBLE);
-        lv_cj.setVisibility(View.GONE);
-        which = MineFragment.REQUEST_QJ;
-        adapterQJ = null;
-        loadQJData();
     }
 
     protected void getImageFromAlbum() {
@@ -716,13 +658,38 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     protected void getImageFromCamera() {
         String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
-        } else {
-            ToastUtils.showError("未检测到SD卡");
+        if (!state.equals(Environment.MEDIA_MOUNTED)) {
+            ToastUtils.showInfo("请插入SD卡");
+            return;
         }
+
+//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mUri = getUriForFile();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+        startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
+    }
+
+
+    public Uri getUriForFile() {
+        File path = new File(mFilePath);
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+        String mFileName = "tmp.jpg";
+        File file = new File(path, mFileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".fileProvider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
     }
 
     @Override
@@ -731,23 +698,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
-//                    Uri uri = data.getData();
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     if (mSelected == null) return;
                     if (mSelected.size() == 0) return;
-//                    if (uri != null) {
-//                        Bitmap bitmap = ImageUtils.decodeUriAsBitmap(uri);
-//                        mClipImageLayout.setImageBitmap(bitmap);
                     toCropActivity(mSelected.get(0));
-//                    } else {
-//                        Util.makeToast("抱歉，从相册获取图片失败");
-//                    }
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
-//                    Bitmap bitmap =ImageUtils.decodeUriAsBitmap(imageUri);
-                    if (imageUri != null) {
-//                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
-                        toCropActivity(imageUri);
+                    if (mUri != null) {
+                        toCropActivity(mUri);
                     }
                     break;
             }

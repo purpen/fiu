@@ -200,4 +200,15 @@ public class URL {
     public static final String SHARE_H5_URL = BASE_URL+"/gateway/share_link";
     public static final String PRODUCT_INDEX_HOT = BASE_URL+"/product/index_hot";
 
+    //新增地盘接口
+    public static final String SCENE_SCENE_SAVE_URL= BASE_URL+"/scene_scene/save";
+
+    //地盘cover删除
+    public static final java.lang.String ZONE_COVER_DELETE = BASE_URL + "/common/delete_asset";
+
+    //地盘增加封面
+    public static final java.lang.String ZONE_ADD_COVER = BASE_URL + "/common/upload_asset";
+
+    //设置默认封面
+    public static final java.lang.String ZONE_SET_DEFAULT_COVER = BASE_URL + "/common/set_default_cover";
 }

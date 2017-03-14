@@ -1239,9 +1239,10 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    public static HashMap<String, String> getZoneDetailParams(String id) {
+    public static HashMap<String, String> getZoneDetailParams(String id,String isEdit) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id", id);
+        params.put("is_edit",isEdit);
         return params;
     }
 
@@ -1271,6 +1272,27 @@ public class ClientDiscoverAPI {
         params.put("storage_id",storage_id);
         return params;
     }
+
+    //编辑参数
+    public static HashMap<String,String> getEditZoneInfo(String id,String title,String sub_title,String des,String category_id) {
+        HashMap<String,String> params= new HashMap<>();
+        params.put("id",id);
+        params.put("title",title);
+        params.put("sub_title",sub_title);
+        params.put("des",des);
+        params.put("category_id",category_id);
+        return params;
+    }
+
+    //地盘封面图
+    public static HashMap getZoneCoverParams(String id,String base64Str,String type) {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("id",id);
+        params.put("tmp",base64Str);
+        params.put("type",type);
+        return params;
+    }
+
 
     public static Map<String,String> getAllianceWithDraw01(String id,String alliance_id,String kind,String pay_type,String account,String bank_address ,String is_default,String username,String phone,String verify_code) {
         HashMap<String, String> params = new HashMap<>();

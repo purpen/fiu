@@ -5,7 +5,7 @@
     <View
         android:id="@+id/color_block"
         android:layout_width="@dimen/dp4"
-        android:layout_height="@dimen/dp15"
+        android:layout_height="@dimen/dp16"
         android:background="@color/yellow_bd8913"
         android:visibility="invisible"
         android:layout_centerVertical="true"

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:paddingTop="@dimen/dp15"
-        android:layout_marginBottom="@dimen/dp30"
+        android:layout_marginBottom="@dimen/dp20"
         >
         <View
             android:layout_width="@dimen/dp20"
@@ -38,7 +38,7 @@
     <RelativeLayout
         android:id="@+id/rl_box"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp150"
+        android:layout_height="wrap_content"
         >
 
         <RelativeLayout
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginLeft="@dimen/dp10"
                 android:layout_marginRight="@dimen/dp10"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp150"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/default_load" />
 
@@ -65,6 +65,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dp20"
+            android:layout_marginRight="@dimen/dp20"
             android:orientation="vertical">
 
             <TextView

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
 
@@ -123,5 +124,9 @@ public class GlideUtils {
 
     public static void displayImageWithId(int imgId,ImageView imageView){
         Glide.with(getContext()).load(imgId).placeholder(DEFAULT_IMAGEID).error(ERROR_IMAGEID).into(imageView);
+    }
+
+    public static <T> void displayImageNoFading(T T,ImageView imageView){
+        Glide.with(getContext()).load(T).diskCacheStrategy(DiskCacheStrategy.SOURCE ).crossFade(0).placeholder(DEFAULT_IMAGEID).error(ERROR_IMAGEID).into(imageView);
     }
 }

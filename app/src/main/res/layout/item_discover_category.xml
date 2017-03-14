@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/dp30"
-        android:layout_marginTop="@dimen/dp30"
+        android:layout_marginBottom="@dimen/dp20"
+        android:layout_marginTop="@dimen/dp20"
         >
         <View
             android:layout_width="@dimen/dp20"
@@ -45,7 +45,7 @@
         android:src="@mipmap/discover_coupon"
         android:visibility="gone"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/dp30"
+        android:layout_marginBottom="@dimen/dp20"
 
         />
     <com.taihuoniao.fineix.view.CustomGridView
@@ -70,5 +70,6 @@
         android:numColumns="3"
         android:visibility="gone"
         android:verticalSpacing="@dimen/dp10"
+        android:layout_marginBottom="@dimen/dp10"
         />
 </LinearLayout>

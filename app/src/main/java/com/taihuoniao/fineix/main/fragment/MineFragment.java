@@ -58,6 +58,7 @@ import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.zone.ZoneManagementActivity;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
@@ -116,11 +117,13 @@ public class MineFragment extends MyBaseFragment {
     TextView tvBonus;
     @Bind(R.id.rl_bonus)
     RelativeLayout rlBonus;
+    @Bind(R.id.rl_zone)
+    RelativeLayout rlZone;
+
     public static final int[] imgIds = {/*R.mipmap.gv_order,*/ R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects,
-            R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address,R.mipmap.gv_qj/*, R.mipmap.icon_personal_chargeback,
+            R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address, R.mipmap.gv_qj/*, R.mipmap.icon_personal_chargeback,
             R.mipmap.icon_personal_geren_tuikuanshouhou*/};
     public static final String[] imgTxt = MainApplication.getContext().getResources().getStringArray(R.array.mine_gv_txt);
-    public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
 
     private static OnMessageCountChangeListener listener;
@@ -180,18 +183,15 @@ public class MineFragment extends MyBaseFragment {
     @Override
     protected void loadData() {
         if (!LoginInfo.isUserLogin()) {
-            LogUtil.e(TAG, "isUserLogin()==false");
             return;
         }
         HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack() {
             @Override
             public void onStart() {
-//                if (!activity.isFinishing() && dialog != null) dialog.show();
             }
 
             @Override
             public void onSuccess(String json) {
-//                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 try {
                     HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
                     });
@@ -252,7 +252,7 @@ public class MineFragment extends MyBaseFragment {
             adapter = new PersonalCenterGVAdapter(gvList, activity);
             gv.setAdapter(adapter);
         }
-        item_partner.setTVStyle(0,R.string.company_dz,R.color.color_333);
+        item_partner.setTVStyle(0, R.string.company_dz, R.color.color_333);
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
     }
@@ -323,17 +323,28 @@ public class MineFragment extends MyBaseFragment {
         } else {
             tv_nick.setText(user.nickname);
         }
-
+        if (TextUtils.isEmpty(user.identify.storage_id)){
+            rlZone.setVisibility(View.GONE);
+        }else {
+            rlZone.setVisibility(View.VISIBLE);
+        }
         tv_lv.setText(String.format("Lv%s", user.rank_id));
         tv_qj.setText(String.valueOf(user.sight_count)); //场景改情景
         tv_focus.setText(String.valueOf(user.follow_count));
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-    @OnClick({R.id.iv_plan,R.id.rl_bonus, R.id.tv_all_order, R.id.tv_wait_pay, R.id.tv_wait_send, R.id.tv_wait_receive, R.id.tv_wait_comment, R.id.tv_wait_shouhou, R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
+    @OnClick({R.id.rl_zone, R.id.iv_plan, R.id.rl_bonus, R.id.tv_all_order, R.id.tv_wait_pay, R.id.tv_wait_send, R.id.tv_wait_receive, R.id.tv_wait_comment, R.id.tv_wait_shouhou, R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.rl_zone:
+                if (TextUtils.isEmpty(user.identify.storage_id)) return;
+                rlZone.setVisibility(View.VISIBLE);
+                intent = new Intent(activity, ZoneManagementActivity.class);
+                intent.putExtra(ZoneManagementActivity.class.getSimpleName(), user.identify.storage_id);
+                startActivity(intent);
+                break;
             case R.id.iv_plan:
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.COMPANY_PARTNER_URL);
@@ -399,9 +410,9 @@ public class MineFragment extends MyBaseFragment {
                 intent.putExtra(AboutUsActivity.class.getName(), getString(R.string.company_dz));
                 startActivity(intent);
                 break;
-//            case R.id.btn:
-//                startActivity(new Intent(activity, ZoneDetailActivity.class));
-//                break;
+            case R.id.btn:
+
+                break;
             default:
                 break;
         }
@@ -454,9 +465,9 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(new Intent(activity, SelectAddressActivity.class));
                         break;
                     case 7:
-                        if (AndPermission.hasPermission(activity,android.Manifest.permission.CAMERA)){
+                        if (AndPermission.hasPermission(activity, android.Manifest.permission.CAMERA)) {
                             startActivity(new Intent(activity, SelectPhotoOrCameraActivity.class));
-                        }else {
+                        } else {
                             // 申请权限。
                             AndPermission.with(activity)
                                     .requestCode(REQUEST_PHONE_STATE_CODE)
@@ -497,8 +508,8 @@ public class MineFragment extends MyBaseFragment {
         // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
             // 第一种：用默认的提示语。
-            AndPermission.defaultSettingDialog(this,REQUEST_CODE_SETTING).show();
-        }else {
+            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+        } else {
             activity.finish();
         }
     }
