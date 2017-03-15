@@ -8,16 +8,17 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 35
-        versionName "1.8.5"
+        versionCode 36
+        versionName "1.8.6"
         multiDexEnabled true
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
     }
-    signingConfigs {//C:/AndroidStudioProjects/fiu/app/fiu.jks
+    signingConfigs {
         release {
-            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
+//            storeFile file('//C:/AndroidStudioProjects/fiu/app/fiu.jks')
+//            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
             keyPassword 'taihuoniao798'
