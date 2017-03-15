@@ -131,7 +131,6 @@ public class DiscoverFragment extends BaseFragment {
         TextView textView;
         headView = View.inflate(activity, R.layout.item_discover_recommend, null);
         textView = ButterKnife.findById(headView, R.id.tv);
-        textView.getPaint().setFakeBoldText(true);
         textView.setText(array[0]);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

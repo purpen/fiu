@@ -58,7 +58,6 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
         holder.view.setVisibility(View.GONE);
         switch (position) {
             case 0: //分类
-                holder.tvTitle.getPaint().setFakeBoldText(true);
                 holder.tvTitle.setText(titles.get(position + 1).indexName);
                 holder.gvCategory.setVisibility(View.VISIBLE);
                 holder.gvCategory.setAdapter(new DiscoverGVCategoryAdapter(discoverBean.pro_category, activity));
@@ -73,7 +72,6 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
                 });
                 break;
             case 1: //地盘
-                holder.tvTitle.getPaint().setFakeBoldText(true);
                 holder.tvTitle.setText(titles.get(position + 1).indexName);
                 holder.gvStick.setVisibility(View.VISIBLE);
                 holder.gvStick.setAdapter(new DiscoverZoneRecommendAdapter(discoverBean.scene.stick, activity));
@@ -86,7 +84,6 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
                 });
                 break;
             case 2: //情境
-                holder.tvTitle.getPaint().setFakeBoldText(true);
                 holder.tvTitle.setText(titles.get(position + 1).indexName);
                 holder.gvStick.setVisibility(View.VISIBLE);
                 holder.gvStick.setAdapter(new DiscoverQJRecommendAdapter(discoverBean.sight.stick, activity));
@@ -110,7 +107,6 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
                 });
                 break;
             case 3: //品牌
-                holder.tvTitle.getPaint().setFakeBoldText(true);
                 holder.tvTitle.setText(titles.get(position + 1).indexName);
                 holder.gvCategory.setVisibility(View.VISIBLE);
                 holder.gvCategory.setAdapter(new DiscoverBrandCategoryAdapter(discoverBean.brand, activity));
@@ -124,7 +120,6 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
                 });
                 break;
             case 4://好货集合
-                holder.tvTitle.getPaint().setFakeBoldText(true);
                 holder.tvTitle.setText(titles.get(position + 1).indexName);
                 holder.gvStick.setVisibility(View.VISIBLE);
                 holder.gvStick.setAdapter(new DiscoverZJRecommendAdapter(discoverBean.product_subject, activity));
@@ -137,7 +132,6 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
                 break;
             case 5: //发现好友
                 holder.view.setVisibility(View.VISIBLE);
-                holder.tvTitle.getPaint().setFakeBoldText(true);
                 holder.tvTitle.setText(titles.get(position + 1).indexName);
                 holder.gvCategory.setVisibility(View.VISIBLE);
                 int[] imgs = {R.mipmap.share_wechat, R.mipmap.share_weibo, R.mipmap.share_user};

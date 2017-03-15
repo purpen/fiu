@@ -459,9 +459,9 @@ public class ZoneDetailActivity extends BaseActivity {
                 TextView textView = new TextView(activity);
                 textView.setLayoutParams(params);
                 textView.setText(split[1]);
-                textView.setLineSpacing(getResources().getDimensionPixelSize(R.dimen.dp3), 1);
-                textView.setTextColor(getResources().getColor(R.color.color_222));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                textView.setLineSpacing(1, 1.3f);
+                textView.setTextColor(getResources().getColor(R.color.color_666));
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
                 llContainer.addView(textView);
             } else if (TextUtils.equals(split[0], Constants.IMAGE_TYPE)) {
                 ImageView imageView = new ImageView(activity);

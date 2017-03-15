@@ -63,8 +63,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:divider="@null"
-            android:paddingLeft="@dimen/dp15"
-            android:paddingRight="@dimen/dp15"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
             android:scrollbars="none" />
     </LinearLayout>
 </LinearLayout>
