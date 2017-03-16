@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -16,7 +17,6 @@ import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
 
@@ -25,7 +25,7 @@ import com.taihuoniao.fineix.R;
  *
  * @author zhy
  */
-public class ClipZoomImageView extends ImageView implements OnTouchListener {
+public class ClipZoomImageView extends AppCompatImageView implements OnTouchListener {
     /**
      * 最大放大比率（相较于原图尺寸）
      */

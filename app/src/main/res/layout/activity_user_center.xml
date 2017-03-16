@@ -84,7 +84,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLength="15"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp14" />
 

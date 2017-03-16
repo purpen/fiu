@@ -1,18 +1,13 @@
 package com.taihuoniao.fineix.base;
 
-import android.app.Activity;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
-import com.taihuoniao.fineix.main.App;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 import com.taihuoniao.fineix.utils.OkHttpUtils;
-import com.taihuoniao.fineix.utils.Util;
 
 import org.apache.http.NameValuePair;
 
@@ -58,7 +53,7 @@ public class HttpRequest {
 
     private static Call post(final List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
         final BaseHandler handler = new BaseHandler(null, callBack);
-//        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString());
+        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
             requestUrlreal = URL.BASE_URL + requestUrl;

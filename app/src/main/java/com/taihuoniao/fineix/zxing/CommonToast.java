@@ -151,7 +151,7 @@ public class CommonToast {
 					R.layout.view_base_toast, this, true);
 			messageTv = (TextView) findViewById(R.id.title_tv);
 			messageIc = (ImageView) findViewById(R.id.icon_iv);
-			actionTv = (TextView) findViewById(R.id.title_tv);
+			actionTv = (TextView) findViewById(R.id.action_tv);
 			actionIv = (ImageView) findViewById(R.id.icon_iv);
 		}
 	}

@@ -116,7 +116,7 @@
                         android:id="@+id/activity_confirmorder_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
+                        android:maxLines = "1"
                         android:textColor="#212121"
                         android:textSize="14sp" />
 
@@ -126,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_confirmorder_name"
                         android:layout_marginTop="5dp"
-                        android:singleLine="true"
+                        android:maxLines = "1"
                         android:textColor="#212121"
                         android:textSize="11sp" />
 

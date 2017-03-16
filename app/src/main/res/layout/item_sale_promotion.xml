@@ -31,7 +31,7 @@
             android:paddingLeft="@dimen/dp15"
             android:paddingRight="@dimen/dp15"
             android:paddingTop="@dimen/dp5"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp16" />
 
@@ -47,7 +47,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp5"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp14" />
 

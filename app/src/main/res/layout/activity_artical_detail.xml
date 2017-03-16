@@ -42,7 +42,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp16"
                 android:drawableLeft="@mipmap/readed_black"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:ellipsize="end"
                 android:textSize="@dimen/sp12"
                 android:gravity="top" />
@@ -58,11 +58,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp25"
                 android:drawablePadding="@dimen/dp5"
-                android:layout_weight="1"
                 android:drawableLeft="@mipmap/comment_black"
                 android:gravity="top"
                 android:textSize="@dimen/sp12"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:ellipsize="end" />
         </RelativeLayout>
 
@@ -78,9 +77,8 @@
                 android:layout_height="@dimen/dp25"
                 android:drawablePadding="@dimen/dp5"
                 android:layout_marginRight="@dimen/dp16"
-                android:layout_weight="1"
                 android:drawableLeft="@mipmap/share_black"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:ellipsize="end"
                 android:textSize="@dimen/sp12"
                 android:gravity="top" />

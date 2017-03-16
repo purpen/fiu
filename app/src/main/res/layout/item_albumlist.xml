@@ -34,7 +34,7 @@
         android:layout_toRightOf="@id/item_albumlist_img"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
-        android:singleLine="true"
+        android:maxLines = "1"
         android:textColor="@android:color/white"
         android:textSize="15sp"/>
 

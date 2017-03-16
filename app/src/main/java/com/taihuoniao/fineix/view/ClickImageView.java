@@ -3,15 +3,15 @@ package com.taihuoniao.fineix.view;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 
 /**
  * Created by taihuoniao on 2016/9/12.
  */
-public class ClickImageView extends ImageView {
+public class ClickImageView extends AppCompatImageView {
     private OnClickListener onClickListener;
     private ValueAnimator smallAnimator, bigAnimator;
 

@@ -10,7 +10,7 @@
     android:paddingLeft="2dp"
     android:paddingRight="2dp"
     android:paddingTop="7dp"
-    android:singleLine="true"
+    android:maxLines = "1"
     android:textColor="@color/black333333"
     android:textSize="12sp">
 

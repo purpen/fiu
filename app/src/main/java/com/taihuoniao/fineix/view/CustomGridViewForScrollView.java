@@ -20,6 +20,7 @@ public class CustomGridViewForScrollView extends GridViewForScrollView {
 
 	@Override
 	public void requestLayout() {
+		super.requestLayout();
 		isInvaidata();
 	}
 

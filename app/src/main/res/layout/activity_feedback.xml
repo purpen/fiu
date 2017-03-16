@@ -50,7 +50,7 @@
         android:background="@drawable/shap_home_gridview"
         android:hint="手机号/QQ/邮箱"
         android:maxLength="50"
-        android:singleLine="true"
+        android:maxLines = "1"
         android:padding="5dp"
         android:textSize="14sp" />
 

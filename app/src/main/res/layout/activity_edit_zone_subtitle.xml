@@ -15,7 +15,6 @@
         android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:layout_below="@+id/head_view"
         android:layout_marginTop="@dimen/dp10"
         >
         <EditText

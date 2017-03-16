@@ -1,8 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,12 +13,12 @@ import android.widget.LinearLayout;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalCallBack;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -45,7 +43,7 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
-public class OptRegisterLoginActivity extends BaseActivity implements Handler.Callback, PlatformActionListener {
+public class OptRegisterLoginActivity extends BaseActivity implements PlatformActionListener {
     @Bind(R.id.btn_login)
     Button btnLogin;
     @Bind(R.id.btn_register)
@@ -75,29 +73,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
     public OptRegisterLoginActivity() {
         super(R.layout.activity_opt_register_login);
     }
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case DataConstants.PARSER_THIRD_LOGIN_CANCEL:
-                    if (mDialog != null) {
-                        mDialog.dismiss();
-                        ToastUtils.showInfo("取消授权");
-                    }
-                    break;
-                case DataConstants.PARSER_THIRD_LOGIN_ERROR:
-                    if (mDialog != null) {
-                        mDialog.dismiss();
-                        ToastUtils.showError("授权失败");
-                    }
-                    break;
-                case DataConstants.PARSER_THIRD_LOGIN:
-                    break;
-            }
-        }
-    };
 
     //执行授权,获取用户信息
     //文档：http://wiki.mob.com/Android_%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99
@@ -185,6 +160,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
         // 这个方法中不能放对话框、吐丝这些耗时的操作，否则会直接跳到onError()中执行
         //用户资源都保存到hashMap，通过打印hashMap数据看看有哪些数据是你想要的
+        LogUtil.e("开始获取数据=============");
         if (i == Platform.ACTION_USER_INFOR) {
             PlatformDb platDB = platform.getDb();//获取数平台数据DB
             //通过DB获取各种数据
@@ -219,13 +195,11 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
         if (TextUtils.isEmpty(userId)) return;
         if (TextUtils.isEmpty(token)) return;
         if (TextUtils.isEmpty(loginType)) return;
-
         HashMap<String, String> params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
         HttpRequest.post(params, URL.AUTH_THIRD_SIGN, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing() && mDialog != null) mDialog.show();
+//                if (!activity.isFinishing() && mDialog != null) mDialog.show();
             }
 
             @Override
@@ -311,11 +285,8 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
         String type = "1";//设置非首次登录
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("updateUserIdentity", json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");
@@ -338,7 +309,10 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
         btnSina.setEnabled(true);
         btnWechat.setEnabled(true);
         if (i == Platform.ACTION_USER_INFOR) {
-            mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
+            if (mDialog != null) {
+                mDialog.dismiss();
+                ToastUtils.showError("授权失败");
+            }
         }
         throwable.printStackTrace();
     }
@@ -349,12 +323,10 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
         btnSina.setEnabled(true);
         btnWechat.setEnabled(true);
         if (i == Platform.ACTION_USER_INFOR) {
-            mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);
+            if (mDialog != null) {
+                mDialog.dismiss();
+                ToastUtils.showInfo("取消授权");
+            }
         }
-    }
-
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
     }
 }

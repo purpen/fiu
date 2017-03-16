@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomBirthdaySelectView extends LinearLayout {
     private static final int DURING_YEAR = 100;
@@ -216,7 +217,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
     public void setCurrentDate(String date, String pattern) throws ParseException {
         if (TextUtils.isEmpty(date) || TextUtils.isEmpty(pattern)) return;
         Calendar calendar = new GregorianCalendar();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
         Date parse = simpleDateFormat.parse(date);
         calendar.setTime(parse);
         int curYear = calendar.get(Calendar.YEAR);

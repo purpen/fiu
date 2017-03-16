@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/riv"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:text="不知道这3种清洁技巧哪敢安心铺地铺"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp16"

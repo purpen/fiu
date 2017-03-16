@@ -335,6 +335,9 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 .getRotation();
         int degrees;
         switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
             case Surface.ROTATION_90:
                 degrees = 90;
                 break;

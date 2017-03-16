@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="#999999"
             android:textSize="10sp"/>
 
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="#999999"
             android:textSize="10sp"/>
     </LinearLayout>

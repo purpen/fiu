@@ -9,7 +9,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="18dp"
     android:text="鼓舞"
-    android:singleLine="true"
+    android:maxLines = "1"
     android:textColor="#666666"
     android:textSize="12sp">
 

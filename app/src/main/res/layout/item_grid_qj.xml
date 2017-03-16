@@ -39,7 +39,7 @@
             android:paddingRight="@dimen/dp8"
             android:layout_alignParentBottom="true"
             android:textSize="@dimen/sp12"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:ellipsize="end"
             android:textColor="@android:color/white"
             android:layout_marginBottom="@dimen/dp10" />
@@ -59,7 +59,7 @@
                 android:drawableLeft="@mipmap/location_white_width_16px"
                 android:drawablePadding="@dimen/dp5"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:text="北京市 七星集团"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12" />
@@ -100,7 +100,7 @@
             android:paddingRight="@dimen/dp8"
             android:layout_alignParentBottom="true"
             android:textSize="@dimen/sp12"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:ellipsize="end"
             android:textColor="@android:color/white"
             android:layout_marginBottom="@dimen/dp10" />
@@ -120,7 +120,7 @@
                 android:drawableLeft="@mipmap/location_white_width_16px"
                 android:drawablePadding="@dimen/dp5"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:text="北京市 七星集团"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12" />

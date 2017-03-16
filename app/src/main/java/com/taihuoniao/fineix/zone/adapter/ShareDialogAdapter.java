@@ -53,7 +53,7 @@ public class ShareDialogAdapter extends RecyclerView.Adapter<ShareDialogAdapter.
             holder.textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnItemClickListener.onItemClick(holder.textView, position);
+                    mOnItemClickListener.onItemClick(holder.textView, holder.getAdapterPosition());
                 }
             });
 

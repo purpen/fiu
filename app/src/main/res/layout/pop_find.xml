@@ -40,7 +40,7 @@
                 android:gravity="center_vertical"
                 android:hint="@string/input_product_title"
                 android:paddingLeft="19dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="@color/title_black"
                 android:textSize="15sp"/>
 
@@ -67,7 +67,7 @@
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:inputType="numberDecimal"
-                    android:singleLine="true"
+                    android:maxLines = "1"
                     android:textSize="15sp"/>
             </LinearLayout>
         </LinearLayout>

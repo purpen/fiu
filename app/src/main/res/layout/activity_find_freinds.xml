@@ -11,7 +11,6 @@
 
     <RelativeLayout
         android:id="@+id/rl_search_user"
-        android:layout_below="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
@@ -23,7 +22,6 @@
         android:background="@drawable/search_radius_border">
 
         <TextView
-            android:layout_toRightOf="@+id/iv"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

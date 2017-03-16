@@ -51,7 +51,7 @@
                 android:maxWidth="188dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="12dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:visibility="gone"/>
@@ -116,12 +116,11 @@
                     android:id="@+id/location_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:background="@null"
                     android:editable="false"
                     android:ellipsize="end"
                     android:hint="@string/add_address"
-                    android:singleLine="true"
+                    android:maxLines = "1"
                     android:textColor="#333333"
                     android:textColorHint="#333333"
                     android:textSize="12sp"/>
@@ -132,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:ellipsize="end"
-                    android:singleLine="true"
+                    android:maxLines = "1"
                     android:textColor="#999999"
                     android:textSize="10sp"
                     android:visibility="gone"/>

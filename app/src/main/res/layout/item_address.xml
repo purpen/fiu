@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:singleLine="true"
+                    android:maxLines = "1"
                     android:textColor="#ff000000"
                     android:textSize="12sp"/>
 
@@ -87,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:singleLine="true"
+                    android:maxLines = "1"
                     android:text="@string/detail_address"
                     android:textColor="#ff000000"
                     android:textSize="12sp"/>

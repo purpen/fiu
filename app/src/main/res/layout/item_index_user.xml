@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:padding="8dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="#212121"
                 android:textSize="12sp"/>
 
@@ -47,7 +47,7 @@
                 android:lineSpacingExtra="4dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="#666666"
                 android:textSize="10sp"/>
 
@@ -59,7 +59,7 @@
                 android:lineSpacingExtra="4dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="#666666"
                 android:textSize="10sp"/>
 

@@ -40,7 +40,6 @@
         android:id="@+id/btn_participate"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:layout_alignParentBottom="true"
         android:background="@color/color_af8323"
         android:text="参加活动"
         android:textColor="@android:color/white"

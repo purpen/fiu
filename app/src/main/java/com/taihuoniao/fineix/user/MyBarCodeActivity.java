@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -238,35 +236,16 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        handler.sendEmptyMessage(1);
+        ToastUtils.showSuccess("分享成功");
     }
 
     @Override
     public void onCancel(Platform platform, int i) {
-        handler.sendEmptyMessage(2);
+        ToastUtils.showInfo("您取消了分享");
     }
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        handler.sendEmptyMessage(3);
+        ToastUtils.showError("对不起，分享出错");
     }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 3:
-                    ToastUtils.showError("对不起，分享出错");
-//                    svProgressHUD.showErrorWithStatus("对不起，分享出错");
-                    break;
-                case 2:
-//                    Util.makeToast("您取消了分享");
-                    break;
-                case 1:
-                    ToastUtils.showSuccess("分享成功");
-//                    svProgressHUD.showSuccessWithStatus("分享成功");
-                    break;
-            }
-        }
-    };
 }
