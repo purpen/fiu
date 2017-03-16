@@ -138,7 +138,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
     protected void requestNet() {
         if (TextUtils.isEmpty(sZoneId)) return;
         HashMap param = ClientDiscoverAPI.getRelateScene(curPage, sZoneId, sort, stick);
-        HttpRequest.post(param, URL.ZONE_RELATE_SCENE, new GlobalDataCallBack() {
+        HttpRequest.post(param, URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
             public void onStart() {
                 isLoading = true;

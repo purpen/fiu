@@ -504,16 +504,16 @@ public class IndexQJListAdapter extends BaseAdapter {
             labelView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (productBean.getLoc() == 2) { //右边
+                    if (productBean.getLoc() == 2) { //左边
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
                         labelView.setLayoutParams(lp);
-                    } else { //
+                    } else { //右边
 //                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
                         labelView.llTag.setBackgroundResource(R.drawable.label_right);
                         RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
-                        layoutParams1.leftMargin = (int) (labelView.llTag.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
+                        layoutParams1.leftMargin = (int) (labelView.llTag.getMeasuredWidth() - labelView.pointWidth/2 - labelView.labelMargin);
                         labelView.pointContainer.setLayoutParams(layoutParams1);
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
@@ -607,6 +607,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             holder.loveImg.setImageResource(R.mipmap.index_love);
         }
         SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity);
+        holder.relativeLayoutQJdescription.setVisibility(TextUtils.isEmpty(spannableStringBuilder.toString()) ? View.GONE : View.VISIBLE);
         holder.qjDesTv.setText(spannableStringBuilder);
         holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
         holder.qjDesTv.setMaxLines(3);
@@ -684,6 +685,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         ClickImageView loveImg;
         @Bind(R.id.qj_des_tv)
         TextView qjDesTv;
+        @Bind(R.id.relativeLayout_qj_description)
+        RelativeLayout relativeLayoutQJdescription;
         @Bind(R.id.comment_list)
         ListViewForScrollView commentList;
         @Bind(R.id.more_comment)

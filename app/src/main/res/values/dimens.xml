@@ -61,7 +61,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <!--- LabelView -->
     <dimen name="label_point_width">32dp</dimen>
-    <dimen name="label_point_margin">3dp</dimen>
+    <dimen name="label_point_margin">6dp</dimen>
     <dimen name="delete_width">24dp</dimen>
     <!-- wellgoodsfragment -->
     <dimen name="title_height">45dp</dimen>
