@@ -22,6 +22,7 @@ android {
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
             keyPassword 'taihuoniao798'
+            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
         }
     }
     buildTypes {

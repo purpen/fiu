@@ -94,7 +94,7 @@ public class SelectMapDialogActivity extends BaseActivity {
                         String from = zoneDetailBean.location.myLocation.longitude+","+zoneDetailBean.location.myLocation.latitude;
                         String to=zoneDetailBean.location.coordinates.get(1)+","+zoneDetailBean.location.coordinates.get(0);
                         //调用百度地图
-                        String url="baidumap://map/direction?origin=latlng:"+from+"|name:我的位置&destination="+to+"|name:"+zoneDetailBean.title+"&mode=transit&sy=3&index=0&target=1";                        toExternalMapAPP(url);
+                        String url="baidumap://map/direction?origin=latlng:"+from+"|name:我的位置&destination="+to+"|name:"+zoneDetailBean.title+"&mode=transit&sy=3&index=0&target=1";
                         toExternalMapAPP(url);
                     }
 

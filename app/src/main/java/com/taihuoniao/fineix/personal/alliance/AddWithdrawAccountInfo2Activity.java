@@ -3,15 +3,12 @@ package com.taihuoniao.fineix.personal.alliance;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
@@ -29,11 +26,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.dialog.BaseDialogList;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -170,7 +163,7 @@ public class AddWithdrawAccountInfo2Activity extends BaseActivity {
             ToastUtils.showError("请输入短信验证码");
         } else if (phone != null && !TextUtils.equals(str3, phone)) {
             ToastUtils.showError("接收验证码手机号与当前手机号不一致");
-        }else {
+        } else {
             if (rowsEntity != null) {
                 createBankInfomation(rowsEntity.get_id(), AllianceRequstDeal.getAllianceValue(), "1", payType, str2, str, isDefault ? "1" : "0", str1, str3, str4);
             } else {
@@ -188,7 +181,8 @@ public class AddWithdrawAccountInfo2Activity extends BaseActivity {
         HttpRequest.post(allianceWithDraw01, URL.AUTH_VERIFY_CODE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                HttpResponse httpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<Object>>(){});
+                HttpResponse httpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<Object>>() {
+                });
                 if (httpResponse.isSuccess()) {
                     ToastUtils.showInfo("发送验证码成功");
                     startToTiming();

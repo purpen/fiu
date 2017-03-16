@@ -234,7 +234,7 @@
     <string name="add_chain">添加链接</string>
     <string name="back">返回</string>
     <string name="goods_category">好货分类</string>
-    <string name="goods_details">好货详情</string>
+    <string name="goods_details">商品详情</string>
     <string name="collect">收藏</string>
     <string name="share">分享</string>
     <string name="to_buy">去购买</string>
@@ -375,8 +375,8 @@
     <string name="product_list">好货列表</string>
     <string name="qingjing">情境</string>
     <string name="new_qingjing">最新情境</string>
-    <string name="detail_introduct">详情介绍</string>
-    <string name="product_bright">产品亮点</string>
+    <string name="detail_introduct">详情</string>
+    <string name="product_bright">推荐理由</string>
     <string name="choiceness_subject">精选主题</string>
     <string name="choiceness_qingjing">大家都在看</string>
     <string name="select_product_to_pic">选择产品添加到当前图片中</string>
