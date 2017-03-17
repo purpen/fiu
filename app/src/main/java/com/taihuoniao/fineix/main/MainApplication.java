@@ -90,14 +90,11 @@ public class MainApplication extends Application {
         FileCameraUtil.init();
         JsonUtil.init();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
-//        fiuPath = Environment.getRootDirectory().getAbsolutePath() + "/DCIM/Fiu浮游";
 //        try {
 //            LeakCanary.install(this);
 //        } catch (Exception e) {
 //        }
         initPush();
-//        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
-//        OkHttpFinal.getInstance().init(builder.build());
     }
 
 
