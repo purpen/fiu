@@ -10,9 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/black">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+
 
             <ImageView
                 android:id="@+id/title_left"
@@ -36,7 +34,6 @@
                 android:layout_height="45dp"
                 android:layout_centerInParent="true"
                 android:src="@mipmap/logo_white"/>
-        </RelativeLayout>
 
     </RelativeLayout>
 
