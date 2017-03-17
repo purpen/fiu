@@ -188,7 +188,7 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
         Intent intent = new Intent(activity, ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
         intent.putExtra(ImageCropActivity.class.getName(), TAG);
-        intent.putExtra(TAG,zoneDetailBean._id);
+        intent.putExtra(ZoneManagementActivity.class.getSimpleName(),zoneDetailBean._id);
         startActivity(intent);
     }
 

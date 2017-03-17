@@ -114,7 +114,6 @@
             android:id="@+id/tv_quick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_btn"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp16"
             android:drawableLeft="@mipmap/circle_down"

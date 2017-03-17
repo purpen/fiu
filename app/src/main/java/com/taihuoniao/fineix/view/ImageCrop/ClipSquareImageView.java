@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -21,11 +22,10 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
 
-public class ClipSquareImageView extends ImageView implements View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class ClipSquareImageView extends AppCompatImageView implements View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener {
     private final Paint mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);// 边框画笔
     private int BORDER_DISTANCE;// 距离屏幕的边距
     private int OUTSIDE_COLOR;// 外部背景颜色

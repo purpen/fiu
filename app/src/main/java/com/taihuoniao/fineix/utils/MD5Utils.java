@@ -1,9 +1,7 @@
 package com.taihuoniao.fineix.utils;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.App;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -93,7 +90,7 @@ public class MD5Utils {
             String value = nameValuePair.getValue();
             if (name.equals("tmp") || name.equals("id_card_a_tmp") || name.equals("business_card_tmp")
                     || name.equals("link") || name.equals("cover_url") || name.equals("banners_url") || value == null
-                    || TextUtils.isEmpty(value)) {
+                    || TextUtils.isEmpty(value) ||name.equals("avatar_tmp")) {
                 continue;
             }
             if (firstIn) {

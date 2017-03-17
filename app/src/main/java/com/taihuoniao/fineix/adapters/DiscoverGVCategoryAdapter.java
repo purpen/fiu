@@ -29,14 +29,14 @@ public class DiscoverGVCategoryAdapter extends CommonBaseAdapter<DiscoverBean.Pr
         DiscoverBean.ProCategoryBean item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(R.layout.item_discover_qj_category, null);
+            convertView = Util.inflateView(R.layout.item_discover_classify_category, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        GlideUtils.displayImage(item.app_cover_url, holder.iv);
+        GlideUtils.displayImage(item.back_url, holder.iv);
 
         holder.tvTag.setText(item.title);
 

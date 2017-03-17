@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:padding="3dp"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="@color/white"
             android:textSize="10sp"/>
         <TextView

@@ -52,7 +52,7 @@
         android:id="@+id/ll"
         android:background="@color/color_f7f7f7"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:dividerHeight="@dimen/dp05"
         android:layout_weight="100"
         />

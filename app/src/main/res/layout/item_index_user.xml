@@ -25,8 +25,9 @@
                 android:layout_height="60dp"
                 app:riv_border_width="1px"
                 app:riv_border_color="#cccccc"
+                app:riv_corner_radius="@dimen/dp100"
                 android:src="@mipmap/default_head"
-                app:riv_corner_radius="100dp"/>
+                />
 
             <TextView
                 android:id="@+id/name"
@@ -34,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:padding="8dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="#212121"
                 android:textSize="12sp"/>
 
@@ -46,7 +47,7 @@
                 android:lineSpacingExtra="4dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="#666666"
                 android:textSize="10sp"/>
 
@@ -58,7 +59,7 @@
                 android:lineSpacingExtra="4dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="#666666"
                 android:textSize="10sp"/>
 

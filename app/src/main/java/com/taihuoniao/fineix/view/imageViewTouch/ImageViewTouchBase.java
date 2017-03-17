@@ -8,6 +8,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
@@ -24,7 +25,7 @@ import com.taihuoniao.fineix.view.imageViewTouch.utils.IDisposable;
  * @author alessandro
  * 
  */
-public abstract class ImageViewTouchBase extends ImageView implements IDisposable {
+public abstract class ImageViewTouchBase extends AppCompatImageView implements IDisposable {
 
     public static final String VERSION = "1.0.5-SNAPSHOT";
 

@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.utils;
 import android.text.TextUtils;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 /**
  * Created by Stephen on 2017/1/21 11:04
@@ -19,7 +20,7 @@ public class StringFormatUtils {
         double d;
         try {
             d = Double.parseDouble(s);
-            return String.format("¥ %.2f", d);
+            return String.format(Locale.getDefault(),"¥ %.2f", d);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
 
@@ -120,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
-                    android:singleLine="true"
+                    android:maxLines = "1"
                     android:textColor="#8e8e8e"
                     android:textSize="10sp" />
 
@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:ellipsize="end"
-                    android:singleLine="true"
+                    android:maxLines = "1"
                     android:textColor="#8e8e8e"
                     android:textSize="10sp" />
 

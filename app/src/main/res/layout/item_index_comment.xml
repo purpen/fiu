@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#f4f4f4"
-                android:paddingBottom="3dp"
-                android:paddingTop="3dp"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#f4f4f4"
+    android:paddingBottom="3dp"
+    android:paddingTop="3dp">
 
     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
         android:id="@+id/head_img"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        app:riv_corner_radius="100dp"/>
+        app:riv_corner_radius="@dimen/dp100"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/content_tv"
@@ -27,5 +26,5 @@
         android:lineSpacingExtra="3dp"
         android:maxLines="2"
         android:text=""
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 </RelativeLayout>

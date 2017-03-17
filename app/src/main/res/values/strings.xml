@@ -234,7 +234,7 @@
     <string name="add_chain">添加链接</string>
     <string name="back">返回</string>
     <string name="goods_category">好货分类</string>
-    <string name="goods_details">好货详情</string>
+    <string name="goods_details">商品详情</string>
     <string name="collect">收藏</string>
     <string name="share">分享</string>
     <string name="to_buy">去购买</string>
@@ -375,8 +375,8 @@
     <string name="product_list">好货列表</string>
     <string name="qingjing">情境</string>
     <string name="new_qingjing">最新情境</string>
-    <string name="detail_introduct">详情介绍</string>
-    <string name="product_bright">产品亮点</string>
+    <string name="detail_introduct">详情</string>
+    <string name="product_bright">推荐理由</string>
     <string name="choiceness_subject">精选主题</string>
     <string name="choiceness_qingjing">大家都在看</string>
     <string name="select_product_to_pic">选择产品添加到当前图片中</string>
@@ -428,7 +428,7 @@
     <string name="relate_products">产品推荐</string>
     <string name="shop_info">地盘信息</string>
     <string name="business_hour">营业时间：</string>
-    <string name="business_tel">电话：</string>
+    <string name="business_tel">联系电话：</string>
     <string name="shop_tags">地址：</string>
     <string name="my_money">我的钱包</string>
     <string name="my_available_money">可提现金额</string>

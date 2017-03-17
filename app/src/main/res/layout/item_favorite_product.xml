@@ -30,7 +30,6 @@
             android:textSize="@dimen/sp10"
             android:lineSpacingMultiplier="1.2"
             android:maxLines="2"
-            android:singleLine="true"
             android:ellipsize="end"
             android:background="@color/black_touming_80"
             android:textColor="@android:color/white"
@@ -54,7 +53,7 @@
             android:textSize="@dimen/sp10"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/white"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:ellipsize="end" />
 
         <TextView
@@ -65,7 +64,7 @@
             android:textSize="@dimen/sp10"
             android:layout_centerHorizontal="true"
             android:textColor="@color/color_af8323"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:ellipsize="end" />
     </RelativeLayout>
 </LinearLayout>

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="#212121"
             android:textSize="13sp"/>
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColor="#999999"
             android:textSize="12sp"/>
     </RelativeLayout>
@@ -79,7 +79,7 @@
                 <!--android:id="@+id/item_comment_who_name"-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
-                <!--android:singleLine="true"-->
+                <!--android:maxLines = "1"-->
                 <!--android:text="狗蛋"-->
                 <!--android:textColor="#212121"-->
                 <!--android:textSize="11sp"/>-->

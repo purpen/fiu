@@ -47,7 +47,7 @@
             android:layout_toRightOf="@id/brand_img"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:singleLine="true"
+            android:maxLines = "1"
              android:textColor="@color/white"
             android:textSize="9sp"/>
     </RelativeLayout>

@@ -50,7 +50,7 @@
                 android:drawableLeft="@mipmap/location_white_width_16px"
                 android:drawablePadding="@dimen/dp5"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:text="北京市 七星集团"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp10" />

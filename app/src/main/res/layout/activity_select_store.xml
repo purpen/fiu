@@ -52,7 +52,7 @@
             android:background="@null"
             android:gravity="fill_vertical"
             android:hint="@string/search_products"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:textColorHint="#666666"
             android:textSize="14sp" />
     </RelativeLayout>

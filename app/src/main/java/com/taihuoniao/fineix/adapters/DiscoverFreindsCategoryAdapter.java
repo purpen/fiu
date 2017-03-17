@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DiscoverBean;
-import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -29,15 +28,15 @@ public class DiscoverFreindsCategoryAdapter extends CommonBaseAdapter<DiscoverBe
         DiscoverBean.UsersBean item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(R.layout.item_discover_gv_category, null);
+            convertView = Util.inflateView(R.layout.item_discover_share, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        GlideUtils.displayImageWithId(item.pic, holder.iv);
-
+//        GlideUtils.displayImageNoFading(item.pic, holder.iv);
+        holder.iv.setImageResource(item.pic);
         holder.tvTag.setText(item.nickname);
 
         return convertView;

@@ -55,7 +55,7 @@
                 android:layout_marginStart="6dp"
                 android:layout_toEndOf="@id/img"
                 android:layout_toRightOf="@id/img"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:textColor="@color/white"
                 android:textSize="10sp"/>
         </RelativeLayout>

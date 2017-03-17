@@ -27,7 +27,7 @@
             android:paddingRight="@dimen/dp8"
             android:layout_above="@+id/tv_title1"
             android:textSize="@dimen/sp12"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:ellipsize="end"
             android:textColor="@android:color/white"
             android:layout_marginBottom="@dimen/dp2" />

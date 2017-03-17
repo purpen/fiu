@@ -133,7 +133,7 @@ public class NaviToZoneActivity extends BaseActivity<SceneListBean> {
 
     private void showInfoWindow() {
         View view = getLayoutInflater().inflate(R.layout.info_window_layout, null);
-        GlideUtils.displayImage(zoneDetailBean.banners.get(0), ((ImageView) view.findViewById(R.id.iv)));
+        if (null!=zoneDetailBean.covers&&zoneDetailBean.covers.size()>0) GlideUtils.displayImage(zoneDetailBean.covers.get(0), ((ImageView) view.findViewById(R.id.iv)));
         ((TextView) view.findViewById(R.id.tv_desc)).setText(zoneDetailBean.title);
         ((TextView) view.findViewById(R.id.tv_location)).setText(zoneDetailBean.address);
         InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), latLng, -90,infoWindowClickListener);

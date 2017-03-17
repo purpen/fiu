@@ -91,7 +91,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private WebFragment webFragment;
     private CommentFragment commentFragment;
     private List<SearchFragment> fragmentList;
-    private static final String[] mtitles={"好货","好货详情","评价"};
+    private static final String[] mtitles={"商品","详情","评价"};
     private SearchViewPagerAdapter searchViewPagerAdapter;
     //popupwindow下的控件
     private PopupWindow popupWindow;

@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:maxLines = "1"
                 android:text="@string/color_or_category"
                 android:textColor="#999999"
                 android:textSize="13sp"/>
@@ -83,7 +83,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/activity_confirmorder_productimg"
-            android:singleLine="true"
+            android:maxLines = "1"
             android:text=""
             android:textColor="@color/yellow_bd8913"
             android:textSize="13sp"/>
