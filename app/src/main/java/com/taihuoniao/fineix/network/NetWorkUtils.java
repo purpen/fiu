@@ -7,12 +7,15 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
+import com.taihuoniao.fineix.BuildConfig;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -60,7 +63,7 @@ public class NetWorkUtils {
                     }
                     break;
                 case UPDATE_APK:
-                    installApk();
+//                    installApk();
                     break;
                 case INSTALL_APK:
                     hintUpdate(versionName);
@@ -97,24 +100,29 @@ public class NetWorkUtils {
         }
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() +  "/downLoad";
         File folder = new File(path);
-        if (!folder.exists()) {
+        if (!folder.isFile()) {
             folder.mkdir();//If there is no folder it will be created.
         }
         String fileName = "fiu_" + System.currentTimeMillis() + ".apk";
         apkFile = new File(path, fileName);
-        new DownLoadTask(mContext,apkFile.getAbsolutePath(), mHandler, showProgressDialog).execute(downloadUrl + "?timestamp=" + System.currentTimeMillis());
+        new DownLoadTask(mContext,apkFile, mHandler, showProgressDialog).execute(downloadUrl + "?timestamp=" + System.currentTimeMillis());
     }
 
-    private void installApk() {
+    public static void installApk(File apkFile, Context context) {
         try {
             if (!apkFile.exists()) {
                 return;
             }
-            // 通过Intent安装APK文件
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.setDataAndType(Uri.parse("file://" + apkFile.toString()), "application/vnd.android.package-archive");
-            mContext.startActivity(i);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //判断是否是AndroidN以及更高的版本
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            } else {
+                intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+            context.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
         }

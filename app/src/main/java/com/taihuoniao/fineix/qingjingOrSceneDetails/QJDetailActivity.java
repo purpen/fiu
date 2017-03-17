@@ -105,8 +105,8 @@ public class QJDetailActivity extends BaseActivity {
     ImageView qjImg;
     @Bind(R.id.qj_title_tv)
     TextView qjTitleTv;
-    @Bind(R.id.qj_title_tv2)
-    TextView qjTitleTv2;
+//    @Bind(R.id.qj_title_tv2)
+//    TextView qjTitleTv2;
     @Bind(R.id.label_container)
     RelativeLayout labelContainer;
     @Bind(R.id.container)
@@ -416,7 +416,13 @@ public class QJDetailActivity extends BaseActivity {
             moreComment.setVisibility(View.GONE);
         }
         //设置情景标题
-        SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, qjDetailBean.getData().getTitle());
+        if (TextUtils.isEmpty(qjDetailBean.getData().getTitle())) {
+            qjTitleTv.setVisibility(View.GONE);
+        } else {
+            qjTitleTv.setText(qjDetailBean.getData().getTitle());
+            qjTitleTv.setVisibility(View.VISIBLE);
+        }
+//        SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, qjDetailBean.getData().getTitle());
         //添加商品标签
         labelContainer.removeAllViews();
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : qjDetailBean.getData().getProduct()) {
