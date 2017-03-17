@@ -9,6 +9,7 @@
     <FrameLayout
         android:id="@+id/activity_main_fragment_group"
         android:layout_width="match_parent"
+        android:layout_marginBottom="49dp"
         android:layout_height="match_parent"/>
 
     <LinearLayout

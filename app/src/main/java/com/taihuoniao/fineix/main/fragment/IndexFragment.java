@@ -91,7 +91,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     @Bind(R.id.subs_img)ImageView subsImg;
 
     private boolean isScan;
-    private ListView listView;
     private ScrollableView scrollableView; //顶部轮播图
     private WaittingDialog dialog;//网络请求对话框
 
@@ -127,8 +126,9 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             titleRelative.setPadding(0, App.getStatusBarHeight(), 0, 0);
         }
-        listView = pullRefreshView.getRefreshableView();
-        listView.addHeaderView(getHeadView());
+        ListView listView = pullRefreshView.getRefreshableView();
+        listView.addHeaderView(getHeaderView());
+        listView.addFooterView(getFooterView());
 
         pullRefreshView.animLayout();
         listView.setDividerHeight(0);
@@ -379,6 +379,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private void sceneNet() {
         dialog.show();
         HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 20 + "", null, null, 2 + "", null, null, null);
+        sceneListRequestParams.put("is_product", "1");
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
@@ -485,7 +486,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
      *
      * @return headView
      */
-    private View getHeadView() {
+    private View getHeaderView() {
         View headerView = View.inflate(getActivity(), R.layout.header_index, null);
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
         RecyclerView recyclerView001 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_001);
@@ -619,7 +620,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
      * 新品
      */
     private void getLasteProduct(){
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, null, String.valueOf(4), null, null, null, "1", null);
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, "2", null, null, null, null, String.valueOf(4), null, null, null, "1", null);
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
@@ -726,5 +727,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         addNet(httpHandler);
     }
 
-
+    private View getFooterView(){
+        return View.inflate(getActivity(), R.layout.footerview_index_bottom, null);
+    }
 }
