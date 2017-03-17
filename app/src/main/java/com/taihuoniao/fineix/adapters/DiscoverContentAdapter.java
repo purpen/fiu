@@ -55,6 +55,8 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.gvStick.setVisibility(View.GONE);
+        holder.gvCategory.setVisibility(View.GONE);
         holder.view.setVisibility(View.GONE);
         switch (position) {
             case 0: //分类
