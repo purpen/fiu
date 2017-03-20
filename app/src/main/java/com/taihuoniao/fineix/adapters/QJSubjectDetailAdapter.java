@@ -11,7 +11,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -272,7 +271,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_love);
@@ -410,7 +408,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<删除场景", "数据解析异常");
                 }
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -446,7 +443,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
@@ -479,7 +475,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<取消收藏情景", "数据解析异常");
                 }
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -509,7 +504,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<收藏情景", "数据解析异常");
                 }
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());

@@ -53,7 +53,7 @@ public class HttpRequest {
 
     private static Call post(final List<NameValuePair> list, final String requestUrl, GlobalDataCallBack callBack, boolean isShowProgress) {
         final BaseHandler handler = new BaseHandler(null, callBack);
-        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString());
+//        LogUtil.e("请求接口为" + requestUrl + "\n" + "请求参数为" + list.toString());
         String requestUrlreal = requestUrl;
         if (!requestUrl.contains("http")) {
             requestUrlreal = URL.BASE_URL + requestUrl;
@@ -97,7 +97,7 @@ public class HttpRequest {
      */
     private static List<NameValuePair> removedUnnecessaryNameValuePairs(List<NameValuePair> nameValuePairs){
         if (nameValuePairs == null) {
-            return new ArrayList<NameValuePair>();
+            return new ArrayList<>();
         }
         for(int i = nameValuePairs.size() - 1; i >= 0; i--) {
             NameValuePair nameValuePair = nameValuePairs.get(i);

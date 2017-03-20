@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.utils.LogUtil;
 
 
 /**
@@ -29,7 +28,6 @@ public class CartActionProvider extends ActionProvider {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtil.e("onClick",TAG);
             }
         });
         return view;

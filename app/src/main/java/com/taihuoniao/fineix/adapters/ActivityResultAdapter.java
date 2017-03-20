@@ -163,7 +163,6 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
             if (item.user.is_follow == 0) {
                 HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item.user._id));
                 HttpRequest.post(params, URL.FOCUS_OPRATE_URL,new GlobalDataCallBack(){
-//                ClientDiscoverAPI.focusOperate(String.valueOf(item.user._id), new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         view.setEnabled(true);
@@ -192,7 +191,6 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
             } else {
                 HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.user._id + "");
                 HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.cancelFocusOperate(item.user._id + "", new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         view.setEnabled(true);

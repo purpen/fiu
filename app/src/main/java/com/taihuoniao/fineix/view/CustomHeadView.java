@@ -111,7 +111,6 @@ public class CustomHeadView extends RelativeLayout {
                     }
                     break;
                 case R.id.iv_left:
-                    //TODO
                     break;
 //                case R.id.head_view_shop:
 //                    if (LoginUtil.isLogin()){

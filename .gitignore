@@ -6,3 +6,8 @@ build
 /captures
 *.iml
 *.apk
+Gpu-Image/res/
+freeline.py
+freeline/
+freeline_core/
+freeline_project_description.json

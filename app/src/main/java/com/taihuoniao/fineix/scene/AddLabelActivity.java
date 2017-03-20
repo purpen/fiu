@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -148,7 +147,6 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         }
         HashMap<String, String> params = ClientDiscoverAPI.getusedLabelListRequestParams();
         Call httpHandler = HttpRequest.post(params, URL.USED_LABEL_LIST, new GlobalDataCallBack(){
-//       HttpHandler<String> httpHandler =  ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -159,7 +157,6 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                     }.getType();
                     usedLabelBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常" + e.toString());
                 }
                 if (usedLabelBean.isSuccess()) {
                     usedLabelList.clear();
@@ -199,10 +196,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     private void searchExpand(String str) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsearchExpandRequestParams(str, 20 + "");
        Call httpHandler =  HttpRequest.post(requestParams, URL.SEARCH_EXPANDED, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler=  ClientDiscoverAPI.searchExpand(str, 20 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<索搜建议", json);
                 SearchExpandBean searchExpandBean = new SearchExpandBean();
                 try {
                     Gson gson = new Gson();
@@ -210,7 +205,6 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                     }.getType();
                     searchExpandBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常" + e.toString());
                 }
                 if (searchExpandBean.isSuccess()) {
                     expandList.clear();

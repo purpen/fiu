@@ -100,7 +100,6 @@ public class AddAddressActivity extends BaseActivity {
                         public void clickRight() {
                             HashMap<String, String> params = ClientDiscoverAPI.getdeleteAddressNetRequestParams(addressBean._id);
                             Call httpHandler = HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS,new GlobalDataCallBack(){
-//                            HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean._id, new RequestCallBack<String>() {
                                 @Override
                                 public void onStart() {
                                     if (dialog != null && !activity.isFinishing()) dialog.show();
@@ -137,55 +136,6 @@ public class AddAddressActivity extends BaseActivity {
                             addNet(httpHandler);
                         }
                     });
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-//                    builder.setMessage("确认删除此收货地址吗？");
-//                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(final DialogInterface dialog1, int which) {
-//                            HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean._id, new RequestCallBack<String>() {
-//                                @Override
-//                                public void onStart() {
-//                                    if (dialog != null && !activity.isFinishing()) dialog.show();
-//                                }
-//
-//                                @Override
-//                                public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                    NetBean netBean = new NetBean();
-//                                    try {
-//                                        Gson gson = new Gson();
-//                                        Type type = new TypeToken<NetBean>() {
-//                                        }.getType();
-//                                        netBean = gson.fromJson(json, type);
-//                                    } catch (JsonSyntaxException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                    if (netBean.isSuccess()) {
-//                                        ToastUtils.showSuccess("删除成功");
-//                                        Intent intent = new Intent();
-//                                        intent.putExtra("address", 1);
-//                                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
-//                                        finish();
-//                                    } else {
-//                                        ToastUtils.showError(netBean.getMessage());
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(HttpException error, String msg) {
-//                                    dialog.dismiss();
-//                                    ToastUtils.showError(R.string.network_err);
-//                                }
-//                            });
-//                            addNet(httpHandler);
-//                        }
-//                    });
-//                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                        }
-//                    });
-//                    builder.create().show();
                 }
             });
             etConsigneeName.setText(addressBean.name);
@@ -351,7 +301,6 @@ public class AddAddressActivity extends BaseActivity {
 
         HashMap<String, String> params = ClientDiscoverAPI.getcommitAddressNetRequestParams(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default);
         HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.commitAddressNet(id, consigneeName, phone, provinceId, cityId, countyId, townId, addressDetail, etZipCode.getText().toString(), is_default, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 LogUtil.e(TAG, json);

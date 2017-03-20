@@ -141,15 +141,14 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
         int radius = 5000;
         HashMap<String, String> params = ClientDiscoverAPI.getQJDataRequestParams(ll, radius,String.valueOf(page),String.valueOf(pageSize),STICK_ALL);
         HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getQJData(ll, radius,String.valueOf(page),String.valueOf(pageSize),STICK_ALL,new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                //TODO 弹出加载框
+                // 弹出加载框
             }
 
             @Override
             public void onSuccess(String json) {
-                //TODO 关闭加载框
+                // 关闭加载框
                 if (json == null) {
                     return;
                 }
@@ -158,7 +157,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
                 try {
                     qingJingData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<QingJingData>>() {
                     });
-                } catch (JsonSyntaxException e) {//TODO log
+                } catch (JsonSyntaxException e) {
                     Util.makeToast(activity, "对不起,数据异常");
                 }
                 if (qingJingData == null) {
@@ -169,7 +168,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
 
             @Override
             public void onFailure(String error) {
-                //TODO 关闭加载框
+                // 关闭加载框
                 LogUtil.e(TAG, error);
             }
         });
@@ -181,15 +180,14 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
         pageSize=2;
         HashMap<String, String> params = ClientDiscoverAPI.getQJDataRequestParams(null,0,String.valueOf(page),String.valueOf(pageSize),STICK_SELECT);
         HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getQJData(null,0,String.valueOf(page),String.valueOf(pageSize),STICK_SELECT,new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                //TODO 弹出加载框
+                // 弹出加载框
             }
 
             @Override
             public void onSuccess(String json) {
-                //TODO 关闭加载框
+                // 关闭加载框
                 if (json == null) {
                     return;
                 }
@@ -198,7 +196,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
                 try {
                     qingJingData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<QingJingData>>() {
                     });
-                } catch (JsonSyntaxException e) {//TODO log
+                } catch (JsonSyntaxException e) {
                     Util.makeToast(activity, "对不起,数据异常");
                 }
                 if (qingJingData == null) {
@@ -209,7 +207,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
 
             @Override
             public void onFailure(String error) {
-                //TODO 关闭加载框
+                // 关闭加载框
                 LogUtil.e(TAG, error);
             }
         });
@@ -290,7 +288,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
         cgv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO 跳转详情页
+                // 跳转详情页
                 Util.makeToast(activity, "跳转地盘详情");
             }
         });
@@ -312,7 +310,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_all:
-                //TODO 跳转全部场景界面
+                // 跳转全部场景界面
                 Util.makeToast(activity, "跳转地盘列表");
                 break;
         }

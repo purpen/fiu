@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -21,7 +20,6 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.adapter.ZoneRelateSceneAdapter;
 
@@ -138,7 +136,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
     protected void requestNet() {
         if (TextUtils.isEmpty(sZoneId)) return;
         HashMap param = ClientDiscoverAPI.getRelateScene(curPage, sZoneId, sort, stick);
-        HttpRequest.post(param, URL.ZONE_RELATE_SCENE, new GlobalDataCallBack() {
+        HttpRequest.post(param, URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
             public void onStart() {
                 isLoading = true;
@@ -158,7 +156,6 @@ public class ZoneRelateSceneFragment extends BaseFragment {
                     }.getType();
                     sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "情景列表解析异常" + e.toString());
                 }
                 if (sceneL.getData().getRows().size() > 0) {
                     curPage++;
@@ -172,8 +169,6 @@ public class ZoneRelateSceneFragment extends BaseFragment {
             @Override
             public void onFailure(String error) {
                 isLoading = false;
-                LogUtil.e(error);
-//                if (dialog != null && !activity.isFinishing()) dialog.dismiss();
             }
         });
     }

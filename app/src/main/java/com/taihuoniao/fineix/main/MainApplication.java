@@ -11,7 +11,6 @@ import android.os.Vibrator;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.taihuoniao.fineix.R;
@@ -90,14 +89,11 @@ public class MainApplication extends Application {
         FileCameraUtil.init();
         JsonUtil.init();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
-//        fiuPath = Environment.getRootDirectory().getAbsolutePath() + "/DCIM/Fiu浮游";
 //        try {
 //            LeakCanary.install(this);
 //        } catch (Exception e) {
 //        }
         initPush();
-//        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
-//        OkHttpFinal.getInstance().init(builder.build());
     }
 
 
@@ -190,13 +186,13 @@ public class MainApplication extends Application {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
-                Log.e("<<<注册成功", "deviceToken=" + deviceToken);
+                LogUtil.e("<<<注册成功", "deviceToken=" + deviceToken);
                 addUserId();
             }
 
             @Override
             public void onFailure(String s, String s1) {
-                Log.e("<<<注册失败", "s=" + s + ",s1=" + s1);
+                LogUtil.e("<<<注册失败", "s=" + s + ",s1=" + s1);
             }
         });
     }
@@ -206,7 +202,7 @@ public class MainApplication extends Application {
         mPushAgent.addAlias(LoginInfo.getUserId() + "", DataConstants.FIU, new UTrack.ICallBack() {
             @Override
             public void onMessage(boolean isSuccess, String message) {
-                Log.e("<<<绑定用户", "userId=" + LoginInfo.getUserId());
+                LogUtil.e("<<<绑定用户", "userId=" + LoginInfo.getUserId());
             }
         });
     }

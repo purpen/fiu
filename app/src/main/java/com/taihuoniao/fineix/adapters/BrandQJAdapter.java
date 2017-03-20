@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -75,7 +74,6 @@ public class BrandQJAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("<<<品牌下的情景", sceneList.size() + "");
         final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(activity, R.layout.item_find_qj, null);
@@ -157,16 +155,13 @@ public class BrandQJAdapter extends BaseAdapter {
                 activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
             }
         });
-        Log.e("<<<", "sceneList.size=" + sceneList.size());
         if (qjPosition + 1 >= sceneList.size()) {
             holder.qjItem2.setVisibility(View.GONE);
         } else {
             holder.qjItem2.setVisibility(View.VISIBLE);
-//            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
             GlideUtils.displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
             //设置情景标题
             SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1, holder.qjTitle2Tv2, sceneList.get(qjPosition + 1).getSight().getTitle());
-//            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
             GlideUtils.displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
             holder.qjName2.setText(sceneList.get(qjPosition + 1).getSight().getUser_info().getNickname());
             if (sceneList.get(qjPosition + 1).getSight().getIs_love() == 1) {
@@ -206,15 +201,9 @@ public class BrandQJAdapter extends BaseAdapter {
                     if (LoginInfo.isUserLogin()) {
                         //已经登录
                         if (sceneList.get(qjPosition + 1).getSight().getIs_love() == 1) {
-//                            if (!dialog.isShowing()) {
-//                                dialog.show();
-//                            }
                             holder.qjLove2.setEnabled(false);
                             cancelLoveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).getSight().get_id(), holder, true);
                         } else {
-//                            if (!dialog.isShowing()) {
-//                                dialog.show();
-//                            }
                             holder.qjLove2.setEnabled(false);
                             loveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).getSight().get_id(), holder, true);
                         }
@@ -287,7 +276,6 @@ public class BrandQJAdapter extends BaseAdapter {
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder, final boolean isRight) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.qjLove1.setEnabled(true);
@@ -300,7 +288,6 @@ public class BrandQJAdapter extends BaseAdapter {
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     if (isRight) {
@@ -328,7 +315,6 @@ public class BrandQJAdapter extends BaseAdapter {
     private void loveQJ(final int position, String id, final ViewHolder holder, final boolean isRight) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.qjLove1.setEnabled(true);
@@ -341,7 +327,6 @@ public class BrandQJAdapter extends BaseAdapter {
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     if (isRight) {

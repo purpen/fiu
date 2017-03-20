@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,7 +25,6 @@ public class PictureViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        Log.e("<<<", "getCount=" + picList.size());
         return picList == null ? 0 : picList.size();
     }
 

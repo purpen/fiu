@@ -116,7 +116,6 @@ public class UserEditSignatureActivity extends BaseActivity{
         final String summary=et_nickname.getText().toString().trim();
         HashMap<String, String> params =ClientDiscoverAPI. getupdateSignatrueLabelRequestParams(label,summary);
         HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateSignatrueLabel(label,summary, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

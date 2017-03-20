@@ -21,7 +21,6 @@ import android.content.Context;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +49,6 @@ public class AutoFocusManager implements Camera.AutoFocusCallback {
 		this.camera = camera;
 		String currentFocusMode = camera.getParameters().getFocusMode();
 		useAutoFocus = FOCUS_MODES_CALLING_AF.contains(currentFocusMode);
-		Log.i(TAG, "Current focus mode '" + currentFocusMode + "'; use auto focus? " + useAutoFocus);
 		start();
 	}
 
@@ -72,7 +70,6 @@ public class AutoFocusManager implements Camera.AutoFocusCallback {
 				}
 				outstandingTask = newTask;
 			} catch (RejectedExecutionException ree) {
-				Log.w(TAG, "Could not request auto focus", ree);
 			}
 		}
 	}
@@ -87,7 +84,6 @@ public class AutoFocusManager implements Camera.AutoFocusCallback {
 				} catch (RuntimeException re) {
 					// Have heard RuntimeException reported in Android 4.0.x+;
 					// continue?
-					Log.w(TAG, "Unexpected exception while focusing", re);
 					// Try again later to keep cycle going
 					autoFocusAgainLater();
 				}
@@ -114,7 +110,6 @@ public class AutoFocusManager implements Camera.AutoFocusCallback {
 			} catch (RuntimeException re) {
 				// Have heard RuntimeException reported in Android 4.0.x+;
 				// continue?
-				Log.w(TAG, "Unexpected exception while cancelling focusing", re);
 			}
 		}
 	}

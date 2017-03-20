@@ -98,7 +98,7 @@ public class GPUImageView extends FrameLayout {
         return mGPUImage;
     }
 
-    // TODO Should be an xml attribute. But then GPUImage can not be distributed as .jar anymore.
+    // Should be an xml attribute. But then GPUImage can not be distributed as .jar anymore.
     public void setRatio(float ratio) {
         mRatio = ratio;
         mGLSurfaceView.requestLayout();

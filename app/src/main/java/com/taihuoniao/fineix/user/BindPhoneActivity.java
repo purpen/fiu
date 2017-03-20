@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -165,7 +164,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onSuccess(String json) {
-                        Log.e("<<<登录成功", json);
                         v.setEnabled(true);
                         mDialog.dismiss();
                         if (TextUtils.isEmpty(json)) return;
@@ -199,7 +197,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             case R.id.bt_login: //跳过绑定直接登录
                 HashMap<String, String> params3 =ClientDiscoverAPI. getskipBindNetRequestParams(openId, unionId, token, nickName, sex, avatarUrl, type);
                 HttpRequest.post(params3, URL.AUTH_THIRD_REGISTER_WITHOUT_PHONE, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.skipBindNet(openId, unionId, token, nickName, sex, avatarUrl, type, new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         v.setEnabled(false);
@@ -210,7 +207,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onSuccess(String json) {
-                        Log.e("<<<登录成功", json);
                         v.setEnabled(true);
                         mDialog.dismiss();
                         if (TextUtils.isEmpty(json)) return;
@@ -291,17 +287,13 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         String type = "1";//设置非首次登录
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("updateUserIdentity", json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
-                    LogUtil.e("updateUserIdentity", "成功改为非首次登录");
                     return;
                 }
-                LogUtil.e("改为非首次登录失败", json + "===" + response.getMessage());
             }
 
             @Override

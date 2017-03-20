@@ -99,7 +99,6 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
                 if (item.is_love == 0) {
                     HashMap<String, String> params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.loveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);
@@ -128,7 +127,6 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
                 } else {
                     HashMap<String, String> params = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelLoveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);

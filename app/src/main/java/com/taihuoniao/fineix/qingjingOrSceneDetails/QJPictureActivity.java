@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -307,11 +306,9 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
     private void isEditor() {
         HashMap<String, String> params = ClientDiscoverAPI.getisEditorRequestParams();
         Call httpHandler  = HttpRequest.post(params,URL.USER_IS_EDITOR, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.isEditor(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<权限", json);
                 IsEditorBean isEditorBean = new IsEditorBean();
                 try {
                     Gson gson = new Gson();
@@ -319,7 +316,6 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
                     }.getType();
                     isEditorBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<编辑权限", "解析异常" + e.toString());
                 }
                 isEditor = (isEditorBean.getData().getIs_editor() == 1);
             }
@@ -337,18 +333,15 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
     private void setFine() {
         HashMap<String, String> params = ClientDiscoverAPI.getsetFineRequestParams(id, isFine ? "0" : "1");
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_FINE, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.setFine(id, isFine ? "0" : "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<精选", json);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>(){}.getType();
                     netBean = gson.fromJson(json,type);
                 }catch (JsonSyntaxException e){
-                    Log.e("<<<精选","解析异常="+e.toString());
                 }
                 if(netBean.isSuccess()){
                     isFine = !isFine;
@@ -371,18 +364,15 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
     private void setStick() {
         HashMap<String, String> params = ClientDiscoverAPI.getsetStickRequestParams(id, isStick ? "0" : "1");
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_STICK, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.setStick(id, isStick ? "0" : "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<精选", json);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>(){}.getType();
                     netBean = gson.fromJson(json,type);
                 }catch (JsonSyntaxException e){
-                    Log.e("<<<精选","解析异常="+e.toString());
                 }
                 if(netBean.isSuccess()){
                     isStick = !isStick;
@@ -405,18 +395,15 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
     private void setCheck() {
         HashMap<String, String> params = ClientDiscoverAPI.getsetCheckRequestParams(id, isCheck ? "1" : "0");
         Call httpHandler = HttpRequest.post(params,URL.USER_DO_CHECK, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.setCheck(id, isCheck ? "1" : "0", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<精选", json);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<NetBean>(){}.getType();
                     netBean = gson.fromJson(json,type);
                 }catch (JsonSyntaxException e){
-                    Log.e("<<<精选","解析异常="+e.toString());
                 }
                 if(netBean.isSuccess()){
                     isCheck = !isCheck;

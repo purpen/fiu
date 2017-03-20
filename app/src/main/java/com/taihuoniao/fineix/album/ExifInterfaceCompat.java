@@ -7,7 +7,6 @@ package com.taihuoniao.fineix.album;
 
 import android.media.ExifInterface;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -35,7 +34,6 @@ public final class ExifInterfaceCompat {
         try {
             exif = newInstance(filepath);
         } catch (IOException var5) {
-            Log.e(TAG, "cannot read exif", var5);
             return null;
         }
 
@@ -48,7 +46,6 @@ public final class ExifInterfaceCompat {
                 e.setTimeZone(TimeZone.getTimeZone("UTC"));
                 return e.parse(date);
             } catch (ParseException var4) {
-                Log.d(TAG, "failed to parse date taken", var4);
                 return null;
             }
         }
@@ -65,7 +62,6 @@ public final class ExifInterfaceCompat {
         try {
             exif = newInstance(filepath);
         } catch (IOException var3) {
-            Log.e(TAG, "cannot read exif", var3);
             return -1;
         }
 

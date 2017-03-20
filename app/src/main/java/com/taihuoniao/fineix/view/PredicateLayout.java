@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -79,8 +78,6 @@ public class PredicateLayout extends LinearLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        // TODO Auto-generated method stub
-
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
@@ -88,7 +85,6 @@ public class PredicateLayout extends LinearLayout {
             if (pos != null) {
                 child.layout(pos.left, pos.top, pos.right, pos.bottom);
             } else {
-                Log.i("MyLayout", "error");
             }
         }
     }

@@ -150,12 +150,10 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING) {
                     if (mList.size() % 2 == 0) {
                         if (view.getLastVisiblePosition() == mList.size() / 2) {
-                            LogUtil.e("curPage==偶数", curPage + "");
                             loadData();
                         }
                     } else {
                         if (view.getLastVisiblePosition() == mList.size() / 2 + 1) {
-                            LogUtil.e("curPage==奇数", curPage + "");
                             loadData();
                         }
                     }
@@ -211,7 +209,6 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         if (TextUtils.isEmpty(id)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null) dialog.show();
@@ -247,7 +244,6 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         LogUtil.e(TAG, id);
         HashMap<String, String> params = ClientDiscoverAPI.getparticipateActivityRequestParams(String.valueOf(curPage), id);
         HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

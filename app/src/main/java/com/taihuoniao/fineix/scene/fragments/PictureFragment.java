@@ -10,7 +10,6 @@ import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -235,8 +234,6 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
                 }
                 galleries.put(sub, new AlbumBean(name, sub, new ArrayList<PhotoItem>()));
             }
-//            Log.e("<<<图片路径", data);
-//            if (data.endsWith(".png") || data.endsWith(".jpg") || data.endsWith(".jpeg")) {
             galleries.get(sub).getPhotos().add(new PhotoItem(cursor.getLong(0), data, (long) (cursor.getInt(2)) * 1000));
 //            }
         }
@@ -323,22 +320,18 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         dis(v.getParent());
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.e("<<<", "action_down=x=" + event.getX() + ",y=" + event.getY());
                 startP = new PointF(event.getRawX(), event.getRawY());
                 return true;
 //                break;
             case MotionEvent.ACTION_MOVE:
-                Log.e("<<<", "action_move=x=" + event.getX() + ",y=" + event.getY());
                 nowP = new PointF(event.getRawX(), event.getRawY());
                 if (startP != null && container.getPaddingTop() <= 0 && container.getPaddingTop() >= -MainApplication.getContext().getScreenWidth()) {
                     if (nowP.y < startP.y && startP.y >= titleLayout.getMeasuredHeight() + MainApplication.getContext().getScreenWidth()) {
-                        Log.e("<<<", "nowp<startp");
                         if (container.getPaddingTop() == -MainApplication.getContext().getScreenWidth()) {
                             return true;
                         }
                         container.setPadding(0, (int) (nowP.y - startP.y), 0, 0);
                     } else if (nowP.y > startP.y && startP.y <= titleLayout.getMeasuredHeight() + arrowContainer.getMeasuredHeight()) {
-                        Log.e("<<<", "nowp>startp");
                         if (container.getPaddingTop() == 0) {
                             return true;
                         }
@@ -355,7 +348,6 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                Log.e("<<<", "action_up");
                 if (nowP == null || Math.sqrt((startP.x - nowP.x) * (startP.x - nowP.x) + (startP.y - nowP.y) * (startP.y - nowP.y)) < DensityUtils.dp2px(getActivity(), 10)) {
                     //单击
                     if (container.getPaddingTop() == 0) {

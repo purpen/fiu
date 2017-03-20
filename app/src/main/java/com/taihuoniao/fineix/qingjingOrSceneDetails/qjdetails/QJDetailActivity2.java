@@ -31,7 +31,6 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.adapter.QJDetailsTopAdapter;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneDetailsBean2;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -102,7 +101,6 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 
@@ -122,7 +120,6 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
                 SceneDetailsBean2 bean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<SceneDetailsBean2>>() { });
                 if (bean != null) {
                     dealResult(bean);
-                    LogUtil.d("TAG", bean.toString());
                 } else {
                     Toast.makeText(QJDetailActivity2.this, "解析错误", Toast.LENGTH_SHORT).show();
                 }
@@ -157,8 +154,6 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
     private void refreshListView(String json) {
         SceneListBean2 bean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<SceneListBean2>>() { });
         if (bean != null) {
-            // TODO: 2017/3/2 加载数据
-
             if (currentPage == 1) {
                 sceneList.clear();
                 pullRefreshView.lastTotalItem = -1;
@@ -299,7 +294,7 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
         // 请求可能喜欢的产品
         loadData3(bean2);
 
-        // TODO: 2017/3/2 情境详情
+        // 2017/3/2 情境详情
         List<SceneList.DataBean.RowsBean> rowsBeen = Tools.newListConvertOldList2(bean2);
         sceneList2.addAll(rowsBeen);
 

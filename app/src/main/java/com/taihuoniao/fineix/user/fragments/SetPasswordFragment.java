@@ -116,7 +116,6 @@ public class SetPasswordFragment extends MyBaseFragment {
         if (registerInfo == null) return;
         HashMap<String, String> params = ClientDiscoverAPI.getregisterUserRequestParams(registerInfo.mobile, password, registerInfo.verify_code);
         HttpRequest.post(params, URL.AUTH_REGISTER, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.registerUser(registerInfo.mobile, password, registerInfo.verify_code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
@@ -170,11 +169,9 @@ public class SetPasswordFragment extends MyBaseFragment {
         String type = "1";//设置非首次登录
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("updateUserIdentity", json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");

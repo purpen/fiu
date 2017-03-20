@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -332,7 +331,6 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
     private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.e("<<<", "imgPath=" + MainApplication.getContext().getCacheDirPath());
             Platform.ShareParams params;
             String imgPath = MainApplication.getContext().getCacheDirPath() + File.separator + "fiu" + ".png";
             if (!dialog.isShowing()) {
@@ -403,11 +401,8 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
             @Override
             public void run() {
 
-//                ToastUtils.showSuccess("分享成功");
-//                DataPaser.getBonus(2 + "", 1 + "", id);
                 HashMap<String, String> params = ClientDiscoverAPI.getgetBonusRequestParams(2 + "", 1 + "", id);
                 bonusHandler =  HttpRequest.post(params,  URL.GET_BONUS, new GlobalDataCallBack(){
-//                bonusHandler = ClientDiscoverAPI.getBonus(2 + "", 1 + "", id, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         dialog.dismiss();
@@ -418,7 +413,6 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
                             }.getType();
                             bonusBean = gson.fromJson(json, type);
                         } catch (JsonSyntaxException e) {
-                            Log.e("<<<送积分", "数据解析异常:" + e.toString());
                         }
                         if (bonusBean.isSuccess() && bonusBean.getData().getExp() > 0) {
                             textView.setText("+ " + bonusBean.getData().getExp());
@@ -468,11 +462,9 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
     private void sceneDetails(String id) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsceneDetailsRequestParams(id);
         detailsHandler = HttpRequest.post(requestParams, URL.SCENE_DETAILS, new GlobalDataCallBack(){
-//        detailsHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<情景详情", json);
                 QJDetailBean qjDetailBean = new QJDetailBean();
                 try {
                     Gson gson = new Gson();
@@ -480,7 +472,6 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
                     }.getType();
                     qjDetailBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<情景详情", "解析异常=" + e.toString());
                 }
                 if (qjDetailBean.isSuccess()) {
                     netScene = qjDetailBean;
@@ -500,7 +491,6 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
             @Override
             public void onFailure(String error) {
                 dialog.dismiss();
-                Log.e("<<<", "网络错误=" + error);
                 ToastUtils.showError(R.string.net_fail);
             }
         });

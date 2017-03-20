@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -69,7 +68,6 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         }
         HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams(1 + "", 1 + "", 1 + "");
         Call httpHandler = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
-//       HttpHandler<String> httpHandler= ClientDiscoverAPI.categoryList(1 + "", 1 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
 //                dialog.dismiss();
@@ -80,9 +78,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                     }.getType();
                     categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
-//                handler.sendMessage(msg);
                 if (categoryListBean.isSuccess()) {
                     addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), categoryListBean);
                     viewPager.setAdapter(addProductViewPagerAdapter);

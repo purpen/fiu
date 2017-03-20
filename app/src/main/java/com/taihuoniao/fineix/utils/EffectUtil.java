@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -207,7 +206,6 @@ public class EffectUtil {
             final StickerDrawable stickerDrawable = ((StickerDrawable) view.getContent());
             RectF cropRect = view.getCropRectF();
             double bi = (double) mCanvas.getWidth() / MainApplication.getContext().getScreenWidth();
-            Log.e("<<<贴纸位置","rect="+cropRect.toString());
             Rect rect = new Rect((int) (bi * cropRect.left), (int) (bi* cropRect.top), (int) (bi* cropRect.right),
                     (int) (bi*cropRect.bottom));
 

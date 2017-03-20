@@ -36,6 +36,7 @@ public class ClientDiscoverAPI {
         params.put("sort", sort);
         params.put("category_id", category_id);
         params.put("brand_id", brand_id);
+        params.put("brand_id", brand_id);
         params.put("category_tags", category_tag_ids);
         params.put("page", page);
         params.put("size", size);

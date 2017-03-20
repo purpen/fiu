@@ -112,7 +112,6 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
         }
         HashMap<String, String> params =ClientDiscoverAPI. getRefundListRequestParams(String.valueOf(curPage), size);
         HttpRequest.post(params,URL.SHOPPING_REFUND_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getRefundList(String.valueOf(curPage), size, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 ChargeBackListBean refundListData = null;

@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -157,11 +156,8 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
     private void search() {
         HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(q, "12", null, page + "", "8", isContent ? "content" : "tag", null);
         Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "12", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<搜索主题", json);
-//                WriteJsonToSD.writeToSD("json", json);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
@@ -169,7 +165,6 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
                     }.getType();
                     searchBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);

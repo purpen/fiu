@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -160,7 +159,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements PlatformAc
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
         // 这个方法中不能放对话框、吐丝这些耗时的操作，否则会直接跳到onError()中执行
         //用户资源都保存到hashMap，通过打印hashMap数据看看有哪些数据是你想要的
-        LogUtil.e("开始获取数据=============");
         if (i == Platform.ACTION_USER_INFOR) {
             PlatformDb platDB = platform.getDb();//获取数平台数据DB
             //通过DB获取各种数据
@@ -204,7 +202,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements PlatformAc
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<登录成功",json);
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
@@ -289,7 +286,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements PlatformAc
             public void onSuccess(String json) {
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
-                    LogUtil.e("updateUserIdentity", "成功改为非首次登录");
                     return;
                 }
                 LogUtil.e("改为非首次登录失败", json + "===" + response.getMessage());

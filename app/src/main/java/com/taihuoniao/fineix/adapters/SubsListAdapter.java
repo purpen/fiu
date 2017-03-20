@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -165,7 +164,6 @@ public class SubsListAdapter extends BaseAdapter {
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE , new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.qjLove.setEnabled(true);
@@ -177,7 +175,6 @@ public class SubsListAdapter extends BaseAdapter {
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     holder.qjLove.setImageResource(R.mipmap.find_love);
@@ -200,7 +197,6 @@ public class SubsListAdapter extends BaseAdapter {
     private void loveQJ(final int position, String id, final ViewHolder holder) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.qjLove.setEnabled(true);
@@ -212,7 +208,6 @@ public class SubsListAdapter extends BaseAdapter {
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     holder.qjLove.setImageResource(R.mipmap.find_has_love);

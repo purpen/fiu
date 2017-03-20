@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -104,7 +103,6 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
     private void report(String target_id, String type, String evt) {
         HashMap<String, String> params = ClientDiscoverAPI.getreportRequestParams(target_id, type, evt);
         reportHandler = HttpRequest.post(params, URL.REPORT, new GlobalDataCallBack(){
-//        reportHandler = ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -114,7 +112,6 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常" + e.toString());
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {

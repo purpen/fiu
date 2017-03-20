@@ -196,11 +196,11 @@ public class SVProgressHUD {
                 configMaskType(R.color.bgColor_overlay, true, true);
                 break;
             case Gradient:
-                //TODO 设置半透明渐变背景
+                // 设置半透明渐变背景
                 configMaskType(R.drawable.bg_overlay_gradient, true, false);
                 break;
             case GradientCancel:
-                //TODO 设置半透明渐变背景
+                // 设置半透明渐变背景
                 configMaskType(R.drawable.bg_overlay_gradient, true, true);
                 break;
             default:

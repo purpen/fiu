@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -24,7 +23,6 @@ import com.taihuoniao.fineix.view.imageViewTouch.ImageViewTouch;
 
 public class MyHighlightView implements EditableDrawable.OnSizeChange {
 
-    static final String LOG_TAG = "myhighlightview";
 
     public enum AlignModeV {
         Top, Bottom, Center
@@ -123,7 +121,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
 
         float minSize = -1f;
 
-        Log.i(LOG_TAG, "DrawableHighlightView. styleId: " + styleId);
         mMoveEnabled = true;
         mRotateEnabled = true;
         mScaleEnabled = true;
@@ -320,25 +317,20 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
         }
 
         if (mScaleEnabled) {
-            Log.d(LOG_TAG, "scale enabled");
             if ((Math.abs(rect.left - x) < HIT_TOLERANCE) && verticalCheck
                     && UIUtils.checkBits(mResizeEdgeMode, GROW_LEFT_EDGE)) {
-                Log.d(LOG_TAG, "left");
                 retval |= GROW_LEFT_EDGE;
             }
             if ((Math.abs(rect.right - x) < HIT_TOLERANCE) && verticalCheck
                     && UIUtils.checkBits(mResizeEdgeMode, GROW_RIGHT_EDGE)) {
-                Log.d(LOG_TAG, "right");
                 retval |= GROW_RIGHT_EDGE;
             }
             if ((Math.abs(rect.top - y) < HIT_TOLERANCE) && horizCheck
                     && UIUtils.checkBits(mResizeEdgeMode, GROW_TOP_EDGE)) {
-                Log.d(LOG_TAG, "top");
                 retval |= GROW_TOP_EDGE;
             }
             if ((Math.abs(rect.bottom - y) < HIT_TOLERANCE) && horizCheck
                     && UIUtils.checkBits(mResizeEdgeMode, GROW_BOTTOM_EDGE)) {
-                Log.d(LOG_TAG, "bottom");
                 retval |= GROW_BOTTOM_EDGE;
             }
         }
@@ -351,9 +343,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
         if (mMoveEnabled && (retval == NONE) && rect.contains((int) x, (int) y)) {
             retval = MOVE;
         }
-
-        Log.d(LOG_TAG, "retValue: " + retval);
-
         return retval;
     }
 
@@ -475,7 +464,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
             rotateBy(event2.getX(), event2.getY(), dx, dy);
 
             invalidate();
-            // mContext.invalidate( getInvalidationRect() );
         } else {
 
             Matrix rotateMatrix = new Matrix();
@@ -508,27 +496,15 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
                     delta *= -1;
                 }
             }
-
-            Log.d(LOG_TAG, "x: " + xDelta + ", y: " + yDelta + ", final: " + delta);
-
             growBy(delta);
-
             invalidate();
-            // mContext.invalidate( getInvalidationRect() );
         }
     }
 
-//    void onMove(float dx, float dy) {
-//        moveBy(dx * (mCropRect.width() / mDrawRect.width()),
-//                dy * (mCropRect.height() / mDrawRect.height()));
-//    }
-
     public void invalidate() {
         mDrawRect = computeLayout(); // true
-        Log.d(LOG_TAG, "computeLayout: " + mDrawRect);
 
         if (mDrawRect != null && mDrawRect.left > 1200) {
-//            Log.e(LOG_TAG, "computeLayout: " + mDrawRect);
         }
         mRotateMatrix.reset();
         mRotateMatrix.postTranslate(-mDrawRect.centerX(), -mDrawRect.centerY());
@@ -582,22 +558,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
 
     }
 
-//    void onRotateAndGrow(double angle, float scaleFactor) {
-//
-//        if (!mRotateEnabled)
-//            mRotation -= (float) (angle);
-//
-//        if (mRotateEnabled) {
-//            mRotation -= (float) (angle);
-//            growBy(scaleFactor * (mCropRect.width() / mDrawRect.width()));
-//        }
-//
-//        invalidate();
-//    }
-
-//    public void setHidden(final boolean hidden) {
-//        mHidden = hidden;
-//    }
 
     public void setMinSize(final float size) {
         if (mRatio >= 1) {
@@ -608,16 +568,11 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
     }
 
     public void setMode(final int mode) {
-        Log.i(LOG_TAG, "setMode: " + mode);
         if (mode != mMode) {
             mMode = mode;
             updateDrawableState();
         }
     }
-
-//    public boolean isPressed() {
-//        return isSelected() && mMode != NONE;
-//    }
 
     protected void updateDrawableState() {
 
@@ -639,9 +594,7 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
             }
 
         } else {
-            // normal state
             mBackgroundDrawable.setState(STATE_SET_NONE);
-//            Log.e("<<<","失去焦点");
         }
     }
 
@@ -650,7 +603,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
     }
 
     public void setSelected(final boolean selected) {
-        Log.d(LOG_TAG, "setSelected: " + selected);
         boolean is_selected = isSelected();
         if (is_selected != selected) {
             mState ^= STATE_SELECTED;
@@ -662,22 +614,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
         return (mState & STATE_SELECTED) == STATE_SELECTED;
     }
 
-//    public void setFocused(final boolean value) {
-//        Log.i(LOG_TAG, "setFocused: " + value);
-//        boolean is_focused = isFocused();
-//        if (is_focused != value) {
-//            mState ^= STATE_FOCUSED;
-//
-//            if (null != mEditableContent) {
-//                if (value) {
-//                    mEditableContent.beginEdit();
-//                } else {
-//                    mEditableContent.endEdit();
-//                }
-//            }
-//            updateDrawableState();
-//        }
-//    }
 
     public boolean isFocused() {
         int STATE_FOCUSED = 1 << 2;
@@ -694,24 +630,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
         invalidate();
     }
 
-//    public void setup(final Context context, final Matrix m, final Rect imageRect,
-//                      final RectF cropRect, final boolean maintainAspectRatio, final float rotation) {
-//        mMatrix = new Matrix(m);
-//        mRotation = rotation;
-//        mRotateMatrix = new Matrix();
-//        mCropRect = cropRect;
-//        setMode(NONE);
-//        invalidate();
-//    }
-
-//    public void update(final Matrix imageMatrix, final Rect imageRect) {
-//        setMode(NONE);
-//        mMatrix = new Matrix(imageMatrix);
-//        mRotation = 0;
-//        mRotateMatrix = new Matrix();
-//        invalidate();
-//    }
-
     public FeatherDrawable getContent() {
         return mContent;
     }
@@ -723,7 +641,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
     }
 
     public boolean forceUpdate() {
-        Log.i(LOG_TAG, "forceUpdate");
 
         RectF cropRect = getCropRectF();
         RectF drawRect = getDrawRect();
@@ -770,7 +687,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
     @Override
     public void onSizeChanged(EditableDrawable content, float left, float top, float right,
                               float bottom) {
-        Log.i(LOG_TAG, "onSizeChanged: " + left + ", " + top + ", " + right + ", " + bottom);
         if (content.equals(mEditableContent) && null != mContext) {
 
             if (mDrawRect.left != left || mDrawRect.top != top || mDrawRect.right != right

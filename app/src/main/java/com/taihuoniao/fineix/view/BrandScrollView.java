@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
 
@@ -55,7 +54,6 @@ public class BrandScrollView extends ScrollView {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 if (isStop) {
-                    Log.e("<<<Touch事件", "拦截");
                     return true;
                 }
         }

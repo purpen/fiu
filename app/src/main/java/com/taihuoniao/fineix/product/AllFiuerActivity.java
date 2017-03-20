@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.product;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -71,18 +70,14 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         }
         HashMap<String, String> params = ClientDiscoverAPI.getfiuUserListRequestParams(1 + "", 100 + "", 1 + "");
         userHandler = HttpRequest.post(params,  URL.FIU_USER_LIST, new GlobalDataCallBack(){
-//        userHandler = ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<用户排行", json);
-//                WriteJsonToSD.writeToSD("json", json);
                 try {
                     Gson gson = new Gson();
                     Type type1 = new TypeToken<FiuUserListBean>() {
                     }.getType();
                     netUsers = gson.fromJson(json, type1);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
                 if (netUsers.isSuccess()) {

@@ -127,7 +127,6 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                 if (item.is_love == FansAdapter.NOT_LOVE){
                     HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(String.valueOf(item._id));
                     HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.focusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
                             button.setEnabled(true);
@@ -151,7 +150,6 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                 }else {
                     HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(String.valueOf(item._id));
                     HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelFocusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
                             button.setEnabled(true);

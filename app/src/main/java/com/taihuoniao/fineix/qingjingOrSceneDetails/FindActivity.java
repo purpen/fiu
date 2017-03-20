@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.Intent;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -110,13 +109,10 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
     private void getSceneList(final int page, String size, String scene_id, String category_ids, String sort, String fine, String dis, String lng, String lat) {
         HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(page + "", size, scene_id, category_ids, sort, fine, lng, lat);
         listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        listHandler = ClientDiscoverAPI.getSceneList(page + "", size, scene_id, category_ids, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
-//                progressBar.setVisibility(View.GONE);
-                Log.e("<<<情景列表", json);
                 SceneList sceneL = new SceneList();
                 try {
                     Gson gson = new Gson();
@@ -124,7 +120,6 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
                     }.getType();
                     sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "情景列表解析异常" + e.toString());
                 }
 
                 if (sceneL.isSuccess()) {
@@ -159,7 +154,6 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
                 if (count == -1) {
                     return;
                 }
-                Log.e("<<<首页接收评论数量", "count=" + count);
                 sceneList.get(findQJSceneListAdapter.getPos()).setComment_count(count);
                 findQJSceneListAdapter.notifyDataSetChanged();
                 break;

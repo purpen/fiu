@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -145,7 +144,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (intent.hasExtra(FocusActivity.USER_ID_EXTRA)) {
             userId = intent.getLongExtra(FocusActivity.USER_ID_EXTRA, LoginInfo.getUserId());
         }
-        Log.e("<<<", "接收到的userId=" + userId);
     }
 
     @Override

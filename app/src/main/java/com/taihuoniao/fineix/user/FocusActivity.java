@@ -99,12 +99,10 @@ public class FocusActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        LogUtil.e(TAG, "requestNet==" + userId);
         if (!activity.isFinishing() && dialog != null) dialog.show();
         int curPage = 1;
         HashMap<String, String> params = ClientDiscoverAPI.getFocusFansListRequestParams(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, null);
         HttpRequest.post(params, URL.FOCUS_FAVORITE_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (!activity.isFinishing() && dialog != null) dialog.dismiss();

@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -89,7 +88,6 @@ public class NoticeActivity extends BaseActivity {
         int curPage = 1;
         HashMap<String, String> params = ClientDiscoverAPI.getgetNoticeListRequestParams(String.valueOf(curPage), pageSize, type);
         HttpRequest.post(params,     URL.NOTICE_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getNoticeList(String.valueOf(curPage), pageSize, type, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 super.onStart();
@@ -98,7 +96,6 @@ public class NoticeActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<提醒", json);
                 dialog.dismiss();
                 NoticeBean noticeBean = new NoticeBean();
                 try {
@@ -107,7 +104,6 @@ public class NoticeActivity extends BaseActivity {
                     }.getType();
                     noticeBean = gson.fromJson(json, type1);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<提醒列表", "解析异常=" + e.toString());
                 }
                 if (noticeBean.isSuccess()) {
                     list = noticeBean.getData().getRows();

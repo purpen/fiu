@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails.bean;
 
-import android.transition.Scene;
 
 import java.util.List;
 

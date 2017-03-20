@@ -27,7 +27,6 @@ import com.taihuoniao.fineix.pay.alipay.AliPay;
 import com.taihuoniao.fineix.pay.jdpay.JdPay;
 import com.taihuoniao.fineix.pay.wxpay.WXPay;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.CustomDialogForPay;
@@ -238,19 +237,16 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                     WXPayEntryActivity.setWXPayResultListener(new WXPayEntryActivity.WXPayResultListener() {
                         @Override
                         public void onSuccess() {
-                            LogUtil.e("onSuccess", "支付成功");
                             delayThreeSeconds();
                         }
 
                         @Override
                         public void onCancel() {
-                            LogUtil.e("onCancel", "取消支付");
                             delayThreeSeconds();
                         }
 
                         @Override
                         public void onFailure() {
-                            LogUtil.e("onFailure", "支付失败");
                             delayThreeSeconds();
                         }
                     });

@@ -120,7 +120,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         mdialog.dismiss();
@@ -135,36 +134,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                if (!mdialog.isShowing()) {
-//                                    mdialog.show();
-//                                }
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        mdialog.dismiss();
-//                                        removeItem(position);
-//                                        notifyDataSetChanged();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//                                        mdialog.dismiss();
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
                     }
                 });
                 break;
@@ -189,12 +158,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getcancelOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_CANCEL_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         mdialog.dismiss();
                                         removeItem(position);
-                                        //TODO 待付款
+                                        // 待付款
                                         ((ShopOrderListActivity) context).changeNum(1);
                                         notifyDataSetChanged();
                                     }
@@ -206,38 +174,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要取消订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                if (!mdialog.isShowing()) {
-//                                    mdialog.show();
-//                                }
-//                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        mdialog.dismiss();
-//                                        removeItem(position);
-//                                        //TODO 待付款
-//                                        ((ShopOrderListActivity) context).changeNum(1);
-//                                        notifyDataSetChanged();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//                                        mdialog.dismiss();
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
                     }
                 });
                 break;
@@ -252,7 +188,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         mdialog.show();}
                         HashMap<String, String> params = ClientDiscoverAPI.gettixingFahuoRequestParams(rid);
                         HttpRequest.post(params, URL.SHOPPING_ALERT_SEND_GOODS, new GlobalDataCallBack(){
-//                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 mdialog.dismiss();
@@ -293,7 +228,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         removeItem(position);
@@ -307,32 +241,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        removeItem(position);
-//                                        notifyDataSetChanged();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
                     }
                 });
                 break;
@@ -347,11 +255,10 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getconfirmReceiveNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.SHOPPING_TAKE_DELIVERY, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         removeItem(position);
-                                        //TODO 待收货
+                                        // 待收货
                                         ((ShopOrderListActivity) context).changeNum(3);
                                         notifyDataSetChanged();
                                     }
@@ -363,34 +270,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您要确认收货吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        removeItem(position);
-//                                        //TODO 待收货
-//                                        ((ShopOrderListActivity) context).changeNum(3);
-//                                        notifyDataSetChanged();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
                     }
                 });
                 break;
@@ -406,7 +285,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         removeItem(position);
@@ -420,32 +298,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        removeItem(position);
-//                                        ((ShopOrderListActivity) context).changeNum(4);
-//                                        notifyDataSetChanged();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });
@@ -473,7 +325,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         removeItem(position);
@@ -487,32 +338,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        removeItem(position);
-//                                        notifyDataSetChanged();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });
@@ -528,7 +353,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         removeItem(position);
@@ -542,33 +366,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        removeItem(position);
-//                                        notifyDataSetChanged();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });

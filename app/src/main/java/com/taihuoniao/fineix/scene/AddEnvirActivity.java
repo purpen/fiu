@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +31,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.scene.fragments.AddEnvirFragment;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -140,7 +140,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         des.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.e("<<<", "before:s=" + s + ",start=" + start + ",count=" + count + ",after=" + after);
             }
 
             @Override
@@ -150,8 +149,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 } else {
                     deleteDes.setVisibility(View.GONE);
                 }
-                Log.e("<<<", "change:s=" + s + ",start=" + start
-                        + ",before=" + before + ",count=" + count);
                 if (count == before + 1 && before == 0 && s.toString().charAt(start) == '#') {
                     String s1 = s.toString().substring(0, start);
                     String s2 = "";
@@ -170,7 +167,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.e("<<<", "after:s=" + s);
             }
         });
         title.setText(titleIntent);
@@ -227,7 +223,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        Log.e("<<<", "跟布局onLayoutChange");
         Rect r = new Rect();
         activityView.getWindowVisibleDisplayFrame(r);
         boolean isShow = false;
@@ -237,14 +232,13 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
             isShow = false;
         }
         if (isShow) {
-            Log.e("<<<", "显示软键盘");
+            LogUtil.e("<<<", "显示软键盘");
             goneLinear.setBottom(r.bottom);
             goneLinear.setTop(r.bottom - DensityUtils.dp2px(AddEnvirActivity.this, 44));
             goneLinear.setAlpha(0f);
             goneLinear.setVisibility(View.VISIBLE);
             ObjectAnimator.ofFloat(goneLinear, "alpha", 0, 1).start();
         } else {
-            Log.e("<<<", "隐藏软键盘");
             ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(goneLinear, "alpha", 1, 0);
             objectAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -269,7 +263,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
             });
             objectAnimator.start();
         }
-        Log.e("<<<", "goneLinear,top=" + goneLinear.getTop() + ",bottom=" + goneLinear.getBottom());
     }
 
     @Override
@@ -312,7 +305,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
     private void categoryList() {
         HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams(1 + "", 11 + "", 1 + "");
         Call httpHandler=HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
 //                dialog.dismiss();
@@ -323,7 +315,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                     }.getType();
                     categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
                 if (categoryListBean.isSuccess()) {
                     fragmentList.clear();
@@ -357,17 +348,14 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
     private void activeTags() {
         HashMap<String, String> params = ClientDiscoverAPI.getactiveTagsRequestParams();
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SIGHT_STICK_ACTIVE_TAGS, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<活动标签", json);
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ActiveTagsBean>() {
                     }.getType();
                     activeTagsBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常" + e.toString());
                 }
             }
 

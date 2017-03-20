@@ -22,9 +22,9 @@ import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.os.Handler;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.zxing.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
@@ -103,9 +103,9 @@ public class CameraManager {
 	    configManager.setDesiredCameraParameters(theCamera, false);
 	} catch (RuntimeException re) {
 	    // Driver failed
-	    Log.w(TAG,
+		LogUtil.w(TAG,
 		    "Camera rejected parameters. Setting only minimal safe-mode parameters");
-	    Log.i(TAG, "Resetting to saved camera params: "
+		LogUtil.i(TAG, "Resetting to saved camera params: "
 		    + parametersFlattened);
 	    // Reset:
 	    if (parametersFlattened != null) {
@@ -116,7 +116,7 @@ public class CameraManager {
 		    configManager.setDesiredCameraParameters(theCamera, true);
 		} catch (RuntimeException re2) {
 		    // Well, darn. Give up
-		    Log.w(TAG,
+			LogUtil.w(TAG,
 			    "Camera rejected even safe-mode parameters! No configuration");
 		}
 	    }

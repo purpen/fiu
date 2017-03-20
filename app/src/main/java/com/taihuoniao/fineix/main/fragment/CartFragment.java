@@ -210,7 +210,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     StringBuilder addSubtractBuilder = new StringBuilder();
                     addSubtractBuilder.append("[");
                     for (int i = 0; i < integerStringHashMap.size(); i++) {
-                        // TODO: 2017/1/13 添加推广码 店铺ID
+                        // : 2017/1/13 添加推广码 店铺ID
                         addSubtractBuilder.append("{\"target_id\":")
                                 .append(totalList.get(i).get("keyTargetId"))
                                 .append(",\"n\":").append(integerStringHashMap.get(i))
@@ -227,7 +227,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     }
                     HashMap<String, String> params = ClientDiscoverAPI.getshopcartAddSubtractNetRequestParams(addSubtractArray);
                     HttpRequest.post(params,  URL.SHOPPINGN_EDIT_CART,  new GlobalDataCallBack(){
-                        //                    ClientDiscoverAPI.shopcartAddSubtractNet(addSubtractArray, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
                             DataPaser.shopCartParser(mHandler);
@@ -297,7 +296,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                 for (int i = 0; i < totalList.size(); i++) {
                     if ((boolean) totalList.get(i).get("status")) {
                         list_delete.add(totalList.get(i));
-                        // TODO: 2017/1/13 添加推广码 店铺ID
+                        // : 2017/1/13 添加推广码 店铺ID
                         builder.append("{\"target_id\":").append(totalList.get(i).get("keyTargetId"))
                                 .append(",\"n\":").append(totalList.get(i).get("keyCount"))
                                 .append(",\"type\":").append(totalList.get(i).get("keyType"))
@@ -320,7 +319,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     }
                     HashMap<String, String> params = ClientDiscoverAPI.getdeletShopCartNetRequestParams(array);
                     HttpRequest.post(params,  URL.SHOPPING_REMOVE_CART, new GlobalDataCallBack(){
-                        //                    ClientDiscoverAPI.deletShopCartNet(array, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
                             ToastUtils.showSuccess("删除成功");

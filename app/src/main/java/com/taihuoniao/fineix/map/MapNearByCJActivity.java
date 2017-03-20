@@ -199,7 +199,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                         List<SceneListBean> rows = response.getData().rows;
                         refreshUI(rows);
                     }
-                } catch (JsonSyntaxException e) {//TODO log
+                } catch (JsonSyntaxException e) {
                     Util.makeToast(activity, "对不起,数据异常");
                 }
             }
@@ -264,7 +264,6 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
     InfoWindow.OnInfoWindowClickListener infoWindowClickListener = new InfoWindow.OnInfoWindowClickListener() {
         public void onInfoWindowClick() {
-            // TODO InfoWindow 点击
 //          Util.makeToast(activity, "InfoWindow被点击");
         }
     };

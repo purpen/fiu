@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -119,10 +118,8 @@ public class QJFragment extends SearchFragment {
     private void getSubsQJ() {
         HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null);
         sceneListHandler =  HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
-//     sceneListHandler =    ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<情景列表", json);
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
@@ -133,7 +130,6 @@ public class QJFragment extends SearchFragment {
                     }.getType();
                     sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "情景列表解析异常" + e.toString());
                 }
                 if (sceneL.isSuccess()) {
                     pullRefreshView.setLoadingTime();

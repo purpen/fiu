@@ -27,7 +27,6 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -231,7 +230,6 @@ public class BadgeView extends AppCompatTextView {
 
             badgeContainer.addView(this);
         } else if (target.getParent() == null) {
-            Log.e(getClass().getSimpleName(), "ParentView is needed");
         }
 
     }

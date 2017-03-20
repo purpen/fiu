@@ -90,7 +90,6 @@ public class AliPay{
 	private static void getPayParams(String orderId){
 		HashMap<String, String> params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.ALI_PAY);
 		HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
-//		ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.ALI_PAY, new RequestCallBack<String>() {
 			@Override
 			public void onSuccess(String json) {
 				if (TextUtils.isEmpty(json)) return;

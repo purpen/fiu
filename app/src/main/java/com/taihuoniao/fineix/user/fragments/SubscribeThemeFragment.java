@@ -103,7 +103,6 @@ public class SubscribeThemeFragment extends MyBaseFragment {
     protected void loadData() {
         HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams();
         HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
@@ -156,7 +155,6 @@ public class SubscribeThemeFragment extends MyBaseFragment {
                 v.setEnabled(false);
                 HashMap<String, String> params = ClientDiscoverAPI.getsubscribeThemeRequestParams(builder.deleteCharAt(builder.length() - 1).toString());
                 HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.subscribeTheme(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         v.setEnabled(true);

@@ -82,7 +82,6 @@ public class UserEditNameActivity extends BaseActivity {
         EditUserInfoActivity.isSubmitAddress = false;
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserInfoRequestParams("nickname", nickName);
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserInfo("nickname", nickName, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
 

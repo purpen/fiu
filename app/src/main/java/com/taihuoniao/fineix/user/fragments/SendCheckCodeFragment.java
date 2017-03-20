@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +33,7 @@ import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.ToLoginActivity;
 import com.taihuoniao.fineix.user.ToRegisterActivity;
+import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
@@ -40,6 +41,7 @@ import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MaskedEditText;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+
 
 import java.util.HashMap;
 
@@ -140,26 +142,21 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         mDialog = new WaittingDialog(activity);
     }
 
-    public static int COUNT;
 
     @OnClick({R.id.bt_send_code, R.id.btn_wechat, R.id.btn_sina, R.id.btn_qq})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_send_code:
-//                String phone = maskedEditText.getUnmaskedText();
-//                if (TextUtils.isEmpty(phone)) {
-//                    ToastUtils.showInfo("请输入手机号");
-//                    return;
-//                }
-//                if (!EmailUtils.isMobileNO(phone)) {
-//                    ToastUtils.showInfo("请输入正确手机号");
-//                    return;
-//                }
-//                isPhoneRegisted(phone);
-
-                for(int i = 0; i< 1000000; i ++) {
-                    getCheckCode("15869584244");
+                String phone = maskedEditText.getUnmaskedText();
+                if (TextUtils.isEmpty(phone)) {
+                    ToastUtils.showInfo("请输入手机号");
+                    return;
                 }
+                if (!EmailUtils.isMobileNO(phone)) {
+                    ToastUtils.showInfo("请输入正确手机号");
+                    return;
+                }
+                isPhoneRegisted(phone);
                 break;
             case R.id.btn_wechat:
                 if (mDialog != null) {
@@ -193,81 +190,80 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         }
     }
 
-//    private void isPhoneRegisted(final String phone) { //true 未被注册
-//        ClientDiscoverAPI.getPhoneState(phone, new RequestCallBack<String>() {
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                if (responseInfo == null) return;
-//                if (TextUtils.isEmpty(json)) return;
-//                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-//                if (response.isSuccess()) {
-//                    getCheckCode(phone);
-//                    new Thread() {
-//                        @Override
-//                        public void run() {
-//                            super.run();
-//
-//                            int recordSed = 60;
-//                            Message msg = new Message();
-//                            msg.what = 1;
-//                            mHandler.sendMessage(msg);
-//
-//                            for (; ; ) {
-//                                if (--recordSed < 0)
-//                                    break;
-//
-//                                Message msg2 = new Message();
-//                                msg2.what = 2;
-//                                msg2.arg1 = recordSed;
-//                                mHandler.sendMessage(msg2);
-//                                try {
-//                                    Thread.sleep(1000);
-//                                } catch (InterruptedException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                            Message msg3 = new Message();
-//                            msg3.what = 3;
-//                            mHandler.sendMessage(msg3);
-//                        }
-//
-//                    }.start();
-//                } else {
-//                    ToastUtils.showError(response.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException e, String s) {
-//                ToastUtils.showError(R.string.network_err);
-//            }
-//        });
-//
-//    }
+    private void isPhoneRegisted(final String phone) { //true 未被注册
+        HashMap<String, String> defaultParams = ClientDiscoverAPI.getDefaultParams();
+        defaultParams.put("account", phone);
+        HttpRequest.post(defaultParams, URL.GET_REGIST_STATE, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                if (json == null) return;
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                if (response.isSuccess()) {
+                    getCheckCode(phone);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+
+                            int recordSed = 60;
+                            Message msg = new Message();
+                            msg.what = 1;
+                            mHandler.sendMessage(msg);
+
+                            for (; ; ) {
+                                if (--recordSed < 0)
+                                    break;
+
+                                Message msg2 = new Message();
+                                msg2.what = 2;
+                                msg2.arg1 = recordSed;
+                                mHandler.sendMessage(msg2);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            Message msg3 = new Message();
+                            msg3.what = 3;
+                            mHandler.sendMessage(msg3);
+                        }
+
+                    }.start();
+                } else {
+                    ToastUtils.showError(response.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showError(R.string.network_err);
+            }
+        });
+
+    }
 
     private void getCheckCode(final String phone) {
         HashMap<String, String> params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
         HttpRequest.post(params,URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (json == null) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
-                    COUNT ++;
-
-                    LogUtil.e(TAG, "--------> checkCode count: " + COUNT);
-//                    if (activity instanceof ToRegisterActivity) {
-//                        ToRegisterActivity registerActivity = (ToRegisterActivity) SendCheckCodeFragment.this.activity;
-//                        ViewPager viewPager = registerActivity.getViewPager();
-//                        if (null != viewPager) {
-//                            viewPager.setCurrentItem(1);
-//                            registerActivity.getRegisterInfo().mobile = phone;
-//                        }
-//                    }
+                    if (activity instanceof ToRegisterActivity) {
+                        ToRegisterActivity registerActivity = (ToRegisterActivity) SendCheckCodeFragment.this.activity;
+                        ViewPager viewPager = registerActivity.getViewPager();
+                        if (null != viewPager) {
+                            viewPager.setCurrentItem(1);
+                            registerActivity.getRegisterInfo().mobile = phone;
+                        }
+                    }
+                    return;
                 }
-//                ToastUtils.showError(response.getMessage());
+                ToastUtils.showError(response.getMessage());
             }
 
             @Override
@@ -329,7 +325,6 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         if (TextUtils.isEmpty(loginType)) return;
         HashMap<String, String> params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
         HttpRequest.post(params, URL.AUTH_THIRD_SIGN, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing() && mDialog != null) mDialog.show();
@@ -337,7 +332,6 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<登录成功",json);
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
@@ -418,11 +412,9 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         String type = "1";//设置非首次登录
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("updateUserIdentity", json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");

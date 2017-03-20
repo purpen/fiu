@@ -93,7 +93,6 @@ public class PayDetailsActivity extends BaseActivity {
         if (TextUtils.isEmpty(mRid)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
         HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (mDialog!=null) mDialog.show();

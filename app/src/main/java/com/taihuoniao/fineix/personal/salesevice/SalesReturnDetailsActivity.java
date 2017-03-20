@@ -88,7 +88,6 @@ public class SalesReturnDetailsActivity extends BaseActivity {
     private void requestResultInfo() {
         HashMap<String, String> params = ClientDiscoverAPI.getRefundSuccessInfoRequestParams(chargeBackId);
         HttpRequest.post(params, URL.SHOPPING_REFUND_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getRefundSuccessInfo(chargeBackId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 try {

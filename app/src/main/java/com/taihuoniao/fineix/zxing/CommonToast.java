@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.utils.LogUtil;
 
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -100,12 +99,12 @@ public class CommonToast {
 
 						@Override
 						public void onAnimationStart(Animator animation) {
-							// TODO Auto-generated method stub
+							//  Auto-generated method stub
 						}
 
 						@Override
 						public void onAnimationRepeat(Animator animation) {
-							// TODO Auto-generated method stub
+							//  Auto-generated method stub
 						}
 
 						@Override
@@ -122,7 +121,6 @@ public class CommonToast {
 				}
 			}, _duration);
 		} else {
-			LogUtil.e("CommonToast","Toast not shown! Content view is null!");
 		}
 	}
 

@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.TagItem;
+import com.taihuoniao.fineix.utils.LogUtil;
 
 
 /**
@@ -69,8 +69,8 @@ public class LabelView extends LinearLayout {
                     pointContainer.setLayoutParams(layoutParams);
                     tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentWidth));
                     tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
-                    Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
-                    Log.e("<<<","label.getMesureWidth="+nameTv.getMeasuredWidth());
+                    LogUtil.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
+                    LogUtil.e("<<<","label.getMesureWidth="+nameTv.getMeasuredWidth());
                 }
             });
         } else {
@@ -89,7 +89,7 @@ public class LabelView extends LinearLayout {
                         tagInfo.setX(than(left + deleteWidth + labelMargin + pointWidth / 2, parentWidth));
                     }
                     tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
-                    Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
+                    LogUtil.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
                 }
             });
         }
@@ -133,7 +133,7 @@ public class LabelView extends LinearLayout {
      * @param top
      */
     public void addTo(OnClickListener deleteListener, final MyImageViewTouch overlay, RelativeLayout parent, final int left, final int top) {
-        Log.e("<<<","addTo方法");
+        LogUtil.e("<<<","addTo方法");
         if (deleteListener != null) {
             deleteImg.setOnClickListener(deleteListener);
         }
@@ -146,7 +146,7 @@ public class LabelView extends LinearLayout {
     }
 
     private void setupLocation(int leftLoc, int topLoc) {
-        Log.e("<<<","setupLocation");
+        LogUtil.e("<<<","setupLocation");
         //在移动的时候，left的位置是相对于overlay的位置，而不是整个relative，。。。。。
         this.left = leftLoc;
         this.top = topLoc;
@@ -178,7 +178,7 @@ public class LabelView extends LinearLayout {
             tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentHeight));
         }
         tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
-        Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY()+",measureHeight="+getMeasuredHeight());
+        LogUtil.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY()+",measureHeight="+getMeasuredHeight());
     }
 
     public double than(double num1, double num2) {

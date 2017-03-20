@@ -76,7 +76,6 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
         if (TextUtils.isEmpty(phone)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getsubmitCheckCodeRequestParams(phone, text);
         HttpRequest.post(params, URL.AUTH_CHECK_VERIFY_CODE , new GlobalDataCallBack(){
-//        ClientDiscoverAPI.submitCheckCode(phone, text, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

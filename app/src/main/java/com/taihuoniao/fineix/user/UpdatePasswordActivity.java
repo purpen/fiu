@@ -76,7 +76,6 @@ public class UpdatePasswordActivity extends BaseActivity {
         }
         HashMap<String, String> params =ClientDiscoverAPI. getupdatePasswordRequestParams(originPsd, newPsd);
         HttpRequest.post(params,  URL.MY_MODIFY_PASSWORD, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updatePassword(originPsd, newPsd, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 v.setEnabled(false);

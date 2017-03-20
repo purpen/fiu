@@ -25,7 +25,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -155,7 +154,6 @@ public final class PhotoMetadataUtils {
         try {
             exif = ExifInterfaceCompat.newInstance(getPath(resolver, uri));
         } catch (IOException e) {
-            Log.e(TAG, "could not read exif info of the image: " + uri);
             return false;
         }
         int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);

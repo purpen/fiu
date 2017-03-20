@@ -126,7 +126,6 @@ public class ParticipateQJFragment extends MyBaseFragment {
         LogUtil.e(TAG, id);
         HashMap<String, String> requestParams = ClientDiscoverAPI.getparticipateActivityRequestParams(String.valueOf(curPage), id);
         HttpRequest.post(requestParams, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {

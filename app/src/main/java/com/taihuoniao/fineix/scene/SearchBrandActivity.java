@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.scene;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -201,7 +200,6 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                 onlyProduct = true;
                 addBrandRelative.setVisibility(View.GONE);
                 searchEditText.setHint("请输入产品名称");
-                Log.e("<<<", "接收产品名称=" + productIntent);
                 searchEditText.setText(productIntent);
             }
         }
@@ -242,11 +240,9 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         }
         HashMap<String, String> requestParams = ClientDiscoverAPI.getaddProductRequestParams(title, brand_id);
         Call httpHandler = HttpRequest.post(requestParams,URL.ADD_PRODUCT, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler= ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<添加产品", json);
                 AddProductBean addProductBean = new AddProductBean();
                 try {
                     Gson gson = new Gson();
@@ -254,7 +250,6 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     addProductBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 if (addProductBean.isSuccess()) {
                     String brand = brandName.getText().toString();
@@ -285,7 +280,6 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         }
         HashMap<String, String> requestParams = ClientDiscoverAPI.getaddBrandRequestParams(title);
         Call httpHandler = HttpRequest.post(requestParams,URL.SCENE_BRANDS_SUBMIT, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler= ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -296,7 +290,6 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     addBrandBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "添加品牌解析异常" + e.toString());
                 }
                 if (addBrandBean.isSuccess()) {
                     searchEditText.setHint("请输入产品名称");
@@ -326,10 +319,8 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     private void searchBrand(final String q) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsearchRequestParams(q, "13", null, "1", "100", "content", null);
         Call httpHandler = HttpRequest.post(requestParams , URL.SEARCH,new GlobalDataCallBack(){
-//       HttpHandler<String> httpHandler= ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<搜索品牌", json);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
@@ -337,7 +328,6 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     searchBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 if (searchBean.isSuccess()) {
                     brandList.clear();
@@ -366,10 +356,8 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     private void searchProduct(String title, String brand_id) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16");
         Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler=  ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<品牌下的产品",json);
                 ProductBean productBean = new ProductBean();
                 try {
                     Gson gson = new Gson();
@@ -377,7 +365,6 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     productBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<品牌下的产品","解析异常"+e.toString());
                 }
                 if (productBean.isSuccess()) {
                     productList = new ArrayList<>();

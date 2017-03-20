@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -125,10 +124,8 @@ public class SearchUserFragment extends SearchFragment {
     private void search() {
         HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(q, "14", null, page + "", "8", isContent ? "content" : "tag", null);
         Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "14", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<搜索用户", json);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
@@ -136,7 +133,6 @@ public class SearchUserFragment extends SearchFragment {
                     }.getType();
                     searchBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);

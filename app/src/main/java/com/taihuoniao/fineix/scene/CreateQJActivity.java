@@ -15,7 +15,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -156,7 +155,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         isDown = true;
-                        Log.e("<<<", "down,x=" + event.getX() + ",y=" + event.getY());
                         break;
                     case MotionEvent.ACTION_UP:
                         if (isDown && event.getX() >= 0 && event.getY() >= 0 && event.getX() <= desTv.getMeasuredWidth()
@@ -164,11 +162,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             onClick(desTv);
                             isDown = false;
                         }
-                        Log.e("<<<", "up,x=" + event.getX() + ",y=" + event.getY() + ",height=" + desTv.getMeasuredHeight()
-                                + ",width=" + desTv.getMeasuredWidth());
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        Log.e("<<<", "cancel");
                         break;
                 }
                 return false;
@@ -201,22 +196,15 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                             lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelMargin - pointWidth / 2);
                             lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
-                            Log.e("<<<", "getX=" + tagItem.getX() + ",screenWidth=" + MainApplication.getContext().getScreenWidth() +
-                                    ",labelMargin=" + labelMargin + ",pointWidth/2=" + pointWidth / 2 + ",leftMargin=" + lp.leftMargin);
-                            Log.e("<<<", "getY=" + tagItem.getY() + ",labelView.height=" + labelView.getMeasuredHeight() + ",topMargin=" + lp.topMargin);
                             labelView.setLayoutParams(lp);
                         } else {
                             labelView.nameTv.setBackgroundResource(R.drawable.label_right);
                             RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                             layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - pointWidth - labelMargin);
                             labelView.pointContainer.setLayoutParams(layoutParams1);
-                            Log.e("<<<", "nameTv.width=" + labelView.nameTv.getMeasuredWidth() + ",pointWidth=" + pointWidth + ",labelMargin=" + labelMargin + ",point.leftMargin=" + layoutParams1.leftMargin);
                             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                             lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelMargin + pointWidth / 2);
                             lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
-                            Log.e("<<<", "getX=" + tagItem.getX() + ",screenWidth=" + MainApplication.getContext().getScreenWidth() + ",labelWidth=" + labelView.getMeasuredWidth() +
-                                    ",labelMargin=" + labelMargin + ",pointWidth/2=" + pointWidth / 2 + ",leftMargin=" + lp.leftMargin);
-                            Log.e("<<<", "getY=" + tagItem.getY() + ",labelHeight=" + labelView.getMeasuredHeight() + ",topMargin=" + lp.topMargin);
                             labelView.setLayoutParams(lp);
                         }
                     }
@@ -354,7 +342,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             case R.id.des_tv:
             case R.id.qj_title_tv:
             case R.id.qj_title_tv2:
-                Log.e("<<<", "点击desTv");
                 Intent intent1 = new Intent(CreateQJActivity.this, AddEnvirActivity.class);
                 if (qjTitleTv2.getVisibility() == View.VISIBLE) {
                     intent1.putExtra("title", qjTitleTv2.getText().toString() + qjTitleTv.getText().toString());
@@ -376,23 +363,18 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     startActivity(new Intent(this, OptRegisterLoginActivity.class));
                     return;
                 }
-                Log.e("<<<", "已登录");
                 if (MainApplication.editBitmap == null) {
                     ToastUtils.showError("图片信息错误，请返回重试");
                     return;
                 }
-                Log.e("<<<", "图片不为空");
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
                 thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("<<<", "显示对话框");
                         String title = titleIntent;
-                        Log.e("<<<", "初始化名称");
                         String des = desIntent;
-                        Log.e("<<<", "初始化描述");
                         StringBuilder products = new StringBuilder();
                         if (MainApplication.tagInfoList != null && MainApplication.tagInfoList.size() > 0) {
                             products.append("[");
@@ -404,12 +386,10 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             }
                             products.append("]");
                         }
-                        Log.e("<<<", "初始化产品信息");
                         String address = null;
                         if (!TextUtils.isEmpty(locationTv.getText())) {
                             address = locationTv.getText().toString();
                         }
-                        Log.e("<<<", "初始化地址");
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         int sapleSize = 100;
                         do {
@@ -430,11 +410,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                 return;
                             }
                             MainApplication.editBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
-                            Log.e("<<<", "压缩" + sapleSize + ",大小=" + stream.size());
                         } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
-                        Log.e("<<<", "压缩图片");
                         String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                        Log.e("<<<", "初始化活动标签");
                         createQJ(qjId, title, des,MainApplication.zoneId, tags.length() > 0 ? tags.toString() : null, products.toString(), address, city, tmp, lat, lng, MainApplication.subjectId);
                     }
                 });
@@ -463,7 +440,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     private void createQJ(String id, String title, String des, final String scene_id, String tags,
                           String products, String address, String city, String tmp, String lat, String lng,
                           String subject_ids) {
-        Log.e("<<<", "开始上传");
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcreateSceneRequestParams(id, title, des, scene_id, tags, products, address, city,
                 tmp, lat, lng, subject_ids);
         Call httpHandler = HttpRequest.post(requestParams, URL.CREATE_SCENE, new GlobalDataCallBack(){
@@ -480,7 +456,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     }.getType();
                                     createQJBean = gson.fromJson(json, type);
                                 } catch (JsonSyntaxException e) {
-                                    Log.e("<<<", "解析异常");
                                 }
                                 if (createQJBean.isSuccess()) {
                                     MainApplication.zoneId = null;

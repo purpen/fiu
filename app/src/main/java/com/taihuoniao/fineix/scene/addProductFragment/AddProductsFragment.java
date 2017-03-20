@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -84,7 +83,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     private void search(String q, String t, String page, String evt, String sort) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsearchRequestParams(q, 7 + "", null, page, "8", evt, sort);
         Call httpHandler = HttpRequest.post(requestParams,URL.SEARCH, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, 7 + "", null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -97,7 +95,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }.getType();
                     searchBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
@@ -138,7 +135,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             if (position == 0) {
                 HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9");
                 Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
-//                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         dialog.dismiss();
@@ -159,7 +155,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             } else {
                 HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9");
                 Call httpHandler = HttpRequest.post(requestParams,URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
-//                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         dialog.dismiss();
@@ -182,8 +177,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void getProductList(String result) {
-        Log.e("<<<全部好货", result);
-//        WriteJsonToSD.writeToSD("json", result);
         ProductBean productBean = new ProductBean();
         try {
             Gson gson = new Gson();
@@ -309,11 +302,9 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         }
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgoodsDetailsRequestParams(ids);
         Call httpHandler = HttpRequest.post(requestParams,URL.GOOD_DETAILS, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.goodsDetails(ids, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<商品详情", json);
                 BuyGoodDetailsBean netGood = new BuyGoodDetailsBean();
                 try {
                     Gson gson = new Gson();
@@ -321,7 +312,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }.getType();
                     netGood = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<>>>", "数据异常" + e.toString());
                 }
                 if (netGood.isSuccess()) {
                     Intent intent = new Intent();

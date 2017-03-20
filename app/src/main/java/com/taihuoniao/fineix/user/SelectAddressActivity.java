@@ -174,7 +174,6 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         }
         HashMap<String, String> params = ClientDiscoverAPI.getdeleteAddressNetRequestParams(id);
         HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -209,7 +208,6 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
     private void getAddressList(String page) {
         HashMap<String, String> params = ClientDiscoverAPI.getgetAddressListRequestParams(page);
         HttpRequest.post(params, URL.URLSTRING_ADDRESS_LISTS, new GlobalDataCallBack() {
-//        ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse<AddressListBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AddressListBean>>() {

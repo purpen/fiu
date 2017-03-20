@@ -100,14 +100,12 @@ public class SubjectActivity extends BaseActivity {
     private WebViewClient webViewClient = new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            LogUtil.e("shouldOverrideUrlLoading", url);
             if (url.contains("infoType") && url.contains("infoId")) {
                 Intent intent;
                 url = url.substring(url.indexOf("?") + 1, url.length());
                 String[] args = url.split("&");
                 String infoType = args[0].split("=")[1];
                 String infoId = args[1].split("=")[1];
-                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
                 if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
                     LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
                     return true;
@@ -183,7 +181,6 @@ public class SubjectActivity extends BaseActivity {
         if (TextUtils.isEmpty(id)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
@@ -279,7 +276,6 @@ public class SubjectActivity extends BaseActivity {
             case 0:
                 HashMap<String, String> params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
                 HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.loveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -312,7 +308,6 @@ public class SubjectActivity extends BaseActivity {
             case 1:
                 HashMap<String, String> params2 = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(data._id), String.valueOf(13));
                 HttpRequest.post(params2,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.cancelLoveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -350,7 +345,6 @@ public class SubjectActivity extends BaseActivity {
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(url);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSubjectData(url, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

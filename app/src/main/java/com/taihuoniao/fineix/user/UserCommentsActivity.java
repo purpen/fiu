@@ -90,7 +90,6 @@ public class UserCommentsActivity extends BaseActivity {
         int curPage = 1;
         HashMap<String, String> params = ClientDiscoverAPI.getmycommentsListRequestParams(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE);
         HttpRequest.post(params, URL.MY_COMMENTS_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.mycommentsList(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing() && dialog != null) dialog.show();

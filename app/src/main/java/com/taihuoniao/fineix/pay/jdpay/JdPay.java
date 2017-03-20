@@ -33,7 +33,6 @@ public class JdPay {
     private static void getPayParams(final String orderId) {
         HashMap<String, String> params = ClientDiscoverAPI.getgetPayParamsRequestParams(orderId, ConstantCfg.JD_PAY);
         HttpRequest.post(params,  URL.PAY_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getPayParams(orderId, ConstantCfg.JD_PAY, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
@@ -306,8 +305,6 @@ public class MyImageViewTouch extends ImageViewTouch {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        Log.i(LOG_TAG, "onDown");
-
         mScrollStarted = false;
         mLastMotionScrollX = e.getX();
         mLastMotionScrollY = e.getY();
@@ -328,34 +325,12 @@ public class MyImageViewTouch extends ImageViewTouch {
             RectF displayRect = realNewSelection.getDisplayRect(realNewSelection.getMatrix(),
                     realNewSelection.getCropRectF());
             boolean invalidSize = realNewSelection.getContent().validateSize(displayRect);
-
-            Log.d(LOG_TAG, "invalidSize: " + invalidSize);
-
             if (!invalidSize) {
-                Log.w(LOG_TAG, "drawable too small!!!");
-
                 float minW = realNewSelection.getContent().getMinWidth();
                 float minH = realNewSelection.getContent().getMinHeight();
-
-                Log.d(LOG_TAG, "minW: " + minW);
-                Log.d(LOG_TAG, "minH: " + minH);
-
                 float minSize = Math.min(minW, minH) * 1.1f;
-
-                Log.d(LOG_TAG, "minSize: " + minSize);
-
                 float minRectSize = Math.min(displayRect.width(), displayRect.height());
-
-                Log.d(LOG_TAG, "minRectSize: " + minRectSize);
-
                 float diff = minSize / minRectSize;
-
-                Log.d(LOG_TAG, "diff: " + diff);
-
-                Log.d(LOG_TAG, "min.size: " + minW + "x" + minH);
-                Log.d(LOG_TAG, "cur.size: " + displayRect.width() + "x" + displayRect.height());
-                Log.d(LOG_TAG, "zooming to: " + (getScale() * diff));
-
                 zoomTo(getScale() * diff, displayRect.centerX(), displayRect.centerY(),
                         DEFAULT_ANIMATION_DURATION * 1.5f);
                 return true;
@@ -389,8 +364,6 @@ public class MyImageViewTouch extends ImageViewTouch {
 
     @Override
     public boolean onUp(MotionEvent e) {
-        Log.i(LOG_TAG, "onUp");
-
         if (mOverlayView != null) {
             mOverlayView.setMode(MyHighlightView.NONE);
             postInvalidate();
@@ -400,7 +373,6 @@ public class MyImageViewTouch extends ImageViewTouch {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        Log.i(LOG_TAG, "onSingleTapUp");
 
         if (mOverlayView != null) {
 
@@ -415,7 +387,6 @@ public class MyImageViewTouch extends ImageViewTouch {
             mOverlayView.setMode(MyHighlightView.NONE);
             postInvalidate();
 
-            Log.d(LOG_TAG, "selected items: " + mOverlayViews.size());
 
             if (mOverlayViews.size() != 1) {
                 setSelectedHighlightView(null);
@@ -430,8 +401,6 @@ public class MyImageViewTouch extends ImageViewTouch {
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.i(LOG_TAG, "onScroll");
-
         float dx, dy;
 
         float x = e2.getX();
@@ -470,8 +439,6 @@ public class MyImageViewTouch extends ImageViewTouch {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.i(LOG_TAG, "onFling");
-
         return !(mOverlayView != null && mOverlayView.getMode() != MyHighlightView.NONE) && super.onFling(e1, e2, velocityX, velocityY);
     }
 
@@ -511,7 +478,6 @@ public class MyImageViewTouch extends ImageViewTouch {
     }
 
     public void clearOverlays() {
-        Log.i(LOG_TAG, "clearOverlays");
         setSelectedHighlightView(null);
         while (mOverlayViews.size() > 0) {
             MyHighlightView hv = mOverlayViews.remove(0);
@@ -544,7 +510,6 @@ public class MyImageViewTouch extends ImageViewTouch {
     }
 
     public boolean removeHightlightView(MyHighlightView view) {
-        Log.i(LOG_TAG, "removeHightlightView");
         for (int i = 0; i < mOverlayViews.size(); i++) {
             if (mOverlayViews.get(i).equals(view)) {
                 MyHighlightView hv = mOverlayViews.remove(i);
@@ -560,7 +525,6 @@ public class MyImageViewTouch extends ImageViewTouch {
 
     @Override
     protected void onZoomAnimationCompleted(float scale) {
-        Log.i(LOG_TAG, "onZoomAnimationCompleted: " + scale);
         super.onZoomAnimationCompleted(scale);
 
         if (mOverlayView != null) {

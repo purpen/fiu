@@ -88,7 +88,6 @@ public class FocusUserFragment extends MyBaseFragment {
     protected void loadData() {
         HashMap<String, String> params = ClientDiscoverAPI.getfocusInterestUserRequestParams();
         HttpRequest.post(params, URL.USER_FIND_USER, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.focusInterestUser(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
@@ -212,7 +211,6 @@ public class FocusUserFragment extends MyBaseFragment {
                 LogUtil.e(TAG, builder.deleteCharAt(builder.length() - 1).toString());
                 HashMap<String, String> params = ClientDiscoverAPI.getfocusUsersRequestParams(builder.deleteCharAt(builder.length() - 1).toString());
                 HttpRequest.post(params,URL.FOLLOW_BATCH_FOLLOW, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.focusUsers(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         if (TextUtils.isEmpty(json)) return;

@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -265,7 +264,6 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
         if (TextUtils.isEmpty(loginType)) return;
         HashMap<String, String> params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
         HttpRequest.post(params, URL.AUTH_THIRD_SIGN, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing() && mDialog != null) mDialog.show();
@@ -352,11 +350,9 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
         String type = "1";//设置非首次登录
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("updateUserIdentity", json);
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");
@@ -415,7 +411,6 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
         HashMap<String, String> params = ClientDiscoverAPI.getclickLoginNetRequestParams(phone, password);
         HttpRequest.post(params, URL.AUTH_LOGIN, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.clickLoginNet(phone, password, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 v.setEnabled(false);
@@ -425,7 +420,6 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<登录成功",json);
                 v.setEnabled(true);
                 mDialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;

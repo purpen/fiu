@@ -67,7 +67,6 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
         WindowUtils.chenjin(getActivity());
@@ -98,7 +97,7 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
      * 相关情境
      */
     private void requestData002(){
-        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(1 + "", 10 + "", null, null, 0 + "", null, null, null);
+        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(1 + "", 10 + "", null, null, 1 + "", null, null, null);
         re.put("is_product", "1");
         HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
             @Override
@@ -115,8 +114,6 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
     private void refreshListView(String json) {
         SceneListBean2 bean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<SceneListBean2>>() { });
         if (bean != null) {
-            // TODO: 2017/3/2 加载数据
-
             if (currentPage == 1) {
                 sceneList.clear();
                 pullRefreshView001.lastTotalItem = -1;

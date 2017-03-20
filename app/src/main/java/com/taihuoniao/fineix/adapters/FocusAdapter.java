@@ -123,7 +123,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
             if (item.focus_flag) {
                 HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
                 HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         view.setEnabled(true);
@@ -182,7 +181,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     if (item.focus_flag) {
                         HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
                         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//                        ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 view.setEnabled(true);
@@ -205,7 +203,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     } else {
                         HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
                         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//                        ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 view.setEnabled(true);
@@ -277,7 +274,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
             HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String json) {
                     view.setEnabled(true);
@@ -300,7 +296,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         } else if (item.follows.is_love == LOVE) {
             HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String json) {
                     view.setEnabled(true);

@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -241,10 +240,8 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     private void sceneCategoryList() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcategoryListRequestParams("1", "13", null);
         Call httpHandler = HttpRequest.post(requestParams, URL.CATEGORY_LIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "13", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<分类列表", json);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();
@@ -252,7 +249,6 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                     }.getType();
                     categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
                 if (categoryListBean.isSuccess()) {
                     gridView.setVisibility(View.VISIBLE);
@@ -277,10 +273,8 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     private void subjectList() {
         HashMap<String, String> params = ClientDiscoverAPI.getsubjectListRequestParams("1", "2", null, "1", "1,2", null);
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "2", null, "1", "1,2", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<精选主题", json);
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
                     Gson gson = new Gson();
@@ -288,7 +282,6 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
                     subjectList.clear();
@@ -318,14 +311,10 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景列表
     private void sceneNet() {
-        // TODO: 1/7/2017 debug
         HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 10 + "", null, null, 0 + "", null, null, null);
         Call httpHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<情景列表", json);
-//                WriteJsonToSD.writeToSD("json", json);
                 SceneList sceneL = new SceneList();
                 try {
                     Gson gson = new Gson();
@@ -333,7 +322,6 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                     }.getType();
                     sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "情景列表解析异常" + e.toString());
                 }
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();

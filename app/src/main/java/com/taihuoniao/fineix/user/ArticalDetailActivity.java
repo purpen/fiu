@@ -260,7 +260,6 @@ public class ArticalDetailActivity extends BaseActivity {
         if (TextUtils.isEmpty(id)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
@@ -334,7 +333,6 @@ public class ArticalDetailActivity extends BaseActivity {
                     public void onSuccess() {
                         HashMap<String, String> params = ClientDiscoverAPI.getupdateShareCountRequestParams(id);
                         HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack(){
-//                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 if (TextUtils.isEmpty(json)) return;
@@ -384,7 +382,6 @@ public class ArticalDetailActivity extends BaseActivity {
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

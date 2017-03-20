@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -218,7 +217,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             return;
         }
        Call httpHandler=  HttpRequest.post(URL.CART_NUMBER, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 CartBean cartBean = new CartBean();
@@ -228,7 +226,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     }.getType();
                     cartBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<>>>", "数据异常" + e.toString());
                 }
                 CartBean netCartBean = cartBean;
                 if (netCartBean.isSuccess()) {
@@ -254,10 +251,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsubjectListRequestParams(currentPage + "", 8 + "", null, null, 5 + "", "2");
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
 
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<好货专题列表", json);
                 dialog.dismiss();
 //                progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
@@ -268,7 +263,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
                     if (currentPage == 1) {
@@ -296,11 +290,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     private void firstProducts() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getfirstProductsRequestParams();
        Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.firstProducts(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<最新好货推荐", json);
-//                WriteJsonToSD.writeToSD("json",json);
                 FirstProductBean firstProductBean = new FirstProductBean();
                 try {
                     Gson gson = new Gson();
@@ -308,7 +299,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     }.getType();
                     firstProductBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (firstProductBean.isSuccess()) {
                     firstProductList.clear();
@@ -329,10 +319,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     private void productCategoryList() {
         HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams("1", "1", null);
         Call  httpHandler  = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "1", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<分类列表", json);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();
@@ -340,7 +328,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     }.getType();
                     categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
                 if (categoryListBean.isSuccess()) {
                     gridView.setVisibility(View.GONE);

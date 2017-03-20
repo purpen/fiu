@@ -64,34 +64,5 @@ public class RuleFragment extends MyBaseFragment {
     @OnClick(R.id.btn)
     void onClick() {
 
-        //TODO 跳转参加活动界面
-
-//        ClientDiscoverAPI.participateActivity(id, new RequestCallBack<String>() {
-//            @Override
-//            public void onStart() {
-//                btn.setEnabled(false);
-//            }
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                btn.setEnabled(true);
-//                if (TextUtils.isEmpty(json)) return;
-//                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-//                if (response.isSuccess()){
-//                    btn.setBackgroundColor(getResources().getColor(R.color.color_222));
-//                    btn.setText("已参加");
-//                    btn.setTextColor(getResources().getColor(android.R.color.white));
-//                    btn.setEnabled(false);
-//                    return;
-//                }
-//                ToastUtils.showError(response.getMessage());
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException e, String s) {
-//                btn.setEnabled(true);
-//                ToastUtils.showError(R.string.network_err);
-//            }
-//        });
     }
 }

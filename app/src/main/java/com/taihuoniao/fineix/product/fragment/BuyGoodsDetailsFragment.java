@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
@@ -127,7 +126,11 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
     @Override
     public void refreshData(BuyGoodDetailsBean buyGoodDetailsBean) {
         this.mbuyGoodDetailsBean = buyGoodDetailsBean;
-        if (buyGoodDetailsBean.getData().getStage() != 9) {
+        BuyGoodDetailsBean.DataBean dataBean = buyGoodDetailsBean.getData();
+        if (dataBean == null) {
+            return;
+        }
+        if (dataBean.getStage() != 9) {
             holder.detailContainer.setVisibility(View.GONE);
             holder.price.setVisibility(View.GONE);
             holder.liangdianContainer.setVisibility(View.GONE);
@@ -144,48 +147,40 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         } else {
             viewPagerAdapter.notifyDataSetChanged();
         }
-        holder.title.setText(buyGoodDetailsBean.getData().getTitle());
-        holder.price.setText("¥" + buyGoodDetailsBean.getData().getSale_price());
-        if (buyGoodDetailsBean.getData().getMarket_price() > buyGoodDetailsBean.getData().getSale_price()) {
+        holder.title.setText(dataBean.getTitle());
+        holder.price.setText("¥" + dataBean.getSale_price());
+        if (dataBean.getMarket_price() > dataBean.getSale_price()) {
             holder.marketPrice.setVisibility(View.VISIBLE);
-            holder.marketPrice.setText("¥" + buyGoodDetailsBean.getData().getMarket_price());
+            holder.marketPrice.setText("¥" + dataBean.getMarket_price());
         } else {
             holder.marketPrice.setVisibility(View.INVISIBLE);
         }
-        if (buyGoodDetailsBean.getData().getStage() != 9) {
+        if (dataBean.getStage() != 9) {
             holder.marketPrice.setText("此产品为用户标记，暂未销售。浮游正在努力上架产品中ing...");
             holder.marketPrice.setVisibility(View.VISIBLE);
         }
-        if (TextUtils.isEmpty(buyGoodDetailsBean.getData().getAdvantage())) {
+        if (TextUtils.isEmpty(dataBean.getAdvantage())) {
             holder.liangdianContainer.setVisibility(View.GONE);
         } else {
-            holder.liangdian.setText(buyGoodDetailsBean.getData().getAdvantage());
+            holder.liangdian.setText(dataBean.getAdvantage());
         }
         try {
-            holder.brandName.setText(buyGoodDetailsBean.getData().getBrand().getTitle());
-            ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getData().getBrand().getCover_url(), holder.brandImg);
+            holder.brandName.setText(dataBean.getBrand().getTitle());
+            ImageLoader.getInstance().displayImage(dataBean.getBrand().getCover_url(), holder.brandImg);
             holder.brandContainer.setOnClickListener(this);
-            if ("1".equals(buyGoodDetailsBean.getData().getActive_summary().getOrder_reduce())) {
-                holder.marketPrice2.setVisibility(View.VISIBLE);
-            } else {
-                holder.marketPrice2.setVisibility(View.GONE);
-            }
         } catch (Exception e) {
             holder.brandContainer.setVisibility(View.GONE);
         }
-
+        holder.marketPrice2.setVisibility("1".equals(dataBean.getActive_summary().getOrder_reduce()) ? View.VISIBLE : View.GONE);
+        holder.marketPrice2.setVisibility("0".equals(dataBean.getExtra().getDisabled_app_reduce()) ? View.VISIBLE : View.GONE);
     }
 
     //获取商品相关的情境列表
     private void getSceneList() {
         HashMap<String, String> params =ClientDiscoverAPI. getproductAndSceneRequestParams(page + "", 8 + "", null, id, null);
        Call httpHandler = HttpRequest.post(params, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-
-                Log.e("<<<关联列表", json);
-//                WriteJsonToSD.writeToSD("json", json);
                 ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
                 try {
                     Gson gson = new Gson();
@@ -193,7 +188,6 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                     }.getType();
                     productAndSceneListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<关联列表", "解析异常=" + e.toString());
                 }
                 if (productAndSceneListBean.isSuccess()) {
                     if (page == 1) {
