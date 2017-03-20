@@ -92,6 +92,7 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
         private List<SkusBean> skus;
         private List<RelationProductsBean> relation_products;
         private ActiveSummary active_summary;
+        private Extra extra;
 
         public ActiveSummary getActive_summary() {
             return active_summary;
@@ -99,6 +100,14 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
 
         public void setActive_summary(ActiveSummary active_summary) {
             this.active_summary = active_summary;
+        }
+
+        public Extra getExtra() {
+            return extra;
+        }
+
+        public void setExtra(Extra extra) {
+            this.extra = extra;
         }
 
         public static class ActiveSummary implements Serializable {
@@ -119,6 +128,18 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
 
             public void setOther(String other) {
                 this.other = other;
+            }
+        }
+
+        public static class Extra implements Serializable {
+            private String disabled_app_reduce;
+
+            public String getDisabled_app_reduce() {
+                return disabled_app_reduce;
+            }
+
+            public void setDisabled_app_reduce(String disabled_app_reduce) {
+                this.disabled_app_reduce = disabled_app_reduce;
             }
         }
 

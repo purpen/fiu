@@ -9,6 +9,7 @@ import android.util.Log;
 public class LogUtil {
     private static final String TAG = "com.taihuoniao.fineix";
     private static final boolean DEV_MODE = true;
+    private static final int LOG_MAXLENGTH  = 2000;
 
     public static void i(String tag, String msg) {
         if (DEV_MODE) {
@@ -33,9 +34,22 @@ public class LogUtil {
             Log.e(tag, msg);
         }
     }
-     public static void e(String msg) {
-            if (DEV_MODE) {
-                Log.e(TAG, msg);
+
+    public static void e(String msg) {
+        if (DEV_MODE) {
+            int strLength = msg.length();
+            int start = 0;
+            int end = LOG_MAXLENGTH;
+            for (int i = 0; i < 100; i++) {
+                if (strLength > end) {
+                    Log.e(TAG, msg.substring(start, end));
+                    start = end;
+                    end = end + LOG_MAXLENGTH;
+                } else {
+                    Log.e(TAG, msg.substring(start, strLength));
+                    break;
+                }
             }
         }
+    }
 }
