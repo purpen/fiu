@@ -190,7 +190,6 @@ public class EditUserInfoActivity extends BaseActivity {
         CustomAddressSelectView addressView = (CustomAddressSelectView)view.findViewById(R.id.custom_address_select);
         String area = custom_area.getTvarrowLeftTxt();
         if (!TextUtils.isEmpty(area)) {
-            LogUtil.e("equals", TextUtils.equals(getResources().getString(R.string.select_city), area) + "");
             if (!TextUtils.equals(getResources().getString(R.string.select_city), area)) {
                 addressView.setCurrentAddress(area.split("\\s")[0], area.split("\\s")[1]);
             }
@@ -237,7 +236,6 @@ public class EditUserInfoActivity extends BaseActivity {
         ProvinceUtil.init();
         HashMap<String, String> params = ClientDiscoverAPI.getgetMineInfoRequestParams(LoginInfo.getUserId()+"");
         HttpRequest.post(params,  URL.MINE_INFO, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing()&&dialog!=null) dialog.show();
@@ -246,7 +244,6 @@ public class EditUserInfoActivity extends BaseActivity {
             @Override
             public void onSuccess(String json) {
                 if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
-                LogUtil.e("result", json);
                 if (TextUtils.isEmpty(json)) {
                     return;
                 }
@@ -379,7 +376,6 @@ public class EditUserInfoActivity extends BaseActivity {
     protected void submitData() {
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserInfoRequestParams(key, value);
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserInfo(key,value, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
 

@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.taihuoniao.fineix.view.imageViewTouch.easing.Cubic;
@@ -136,7 +135,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         if (scaleType == ScaleType.MATRIX) {
             super.setScaleType(scaleType);
         } else {
-            Log.w(LOG_TAG, "Unsupported scaletype. Only MATRIX can be used");
         }
     }
 
@@ -153,7 +151,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
     public void setDisplayType(DisplayType type) {
         if (type != mScaleType) {
             if (LOG_ENABLED) {
-                Log.i(LOG_TAG, "setDisplayType: " + type);
             }
             mUserScaled = false;
             mScaleType = type;
@@ -168,7 +165,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
 
     protected void setMinScale(float value) {
         if (LOG_ENABLED) {
-            Log.d(LOG_TAG, "setMinZoom: " + value);
         }
 
         mMinZoom = value;
@@ -176,7 +172,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
 
     protected void setMaxScale(float value) {
         if (LOG_ENABLED) {
-            Log.d(LOG_TAG, "setMaxZoom: " + value);
         }
         mMaxZoom = value;
     }
@@ -232,18 +227,12 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
                 float new_matrix_scale = getScale(mBaseMatrix);
 
                 if (LOG_ENABLED) {
-                    Log.d(LOG_TAG, "old matrix scale: " + old_matrix_scale);
-                    Log.d(LOG_TAG, "new matrix scale: " + new_matrix_scale);
-                    Log.d(LOG_TAG, "old min scale: " + old_min_scale);
-                    Log.d(LOG_TAG, "old scale: " + old_scale);
                 }
 
                 // 1. bitmap changed or scaletype changed
                 if (mBitmapChanged || mScaleTypeChanged) {
 
                     if (LOG_ENABLED) {
-                        Log.d(LOG_TAG, "display type: " + mScaleType);
-                        Log.d(LOG_TAG, "newMatrix: " + mNextMatrix);
                     }
 
                     if (mNextMatrix != null) {
@@ -284,9 +273,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
                     }
 
                     if (LOG_ENABLED) {
-                        Log.d(LOG_TAG, "old min scale: " + old_default_scale);
-                        Log.d(LOG_TAG, "old scale: " + old_scale);
-                        Log.d(LOG_TAG, "new scale: " + scale);
                     }
 
                 }
@@ -312,7 +298,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
                     mBitmapChanged = false;
 
                 if (LOG_ENABLED) {
-                    Log.d(LOG_TAG, "new scale: " + getScale());
                 }
             }
         } else {
@@ -341,7 +326,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
 
     public void resetMatrix() {
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "resetMatrix");
         }
         mSuppMatrix = new Matrix();
 
@@ -349,7 +333,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         setImageMatrix(getImageViewMatrix());
 
         if (LOG_ENABLED) {
-            Log.d(LOG_TAG, "default scale: " + scale + ", scale: " + getScale());
         }
 
         if (scale != getScale()) {
@@ -445,14 +428,11 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
                                      float min_zoom, float max_zoom) {
 
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "_setImageDrawable");
         }
 
         if (drawable != null) {
 
             if (LOG_ENABLED) {
-                Log.d(LOG_TAG,
-                    "size: " + drawable.getIntrinsicWidth() + "x" + drawable.getIntrinsicHeight());
             }
             super.setImageDrawable(drawable);
         } else {
@@ -505,7 +485,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
      */
     protected void onDrawableChanged(final Drawable drawable) {
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "onDrawableChanged");
         }
         fireOnDrawableChangeListener(drawable);
     }
@@ -534,7 +513,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
      */
     protected void onLayoutChanged(int left, int top, int right, int bottom) {
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "onLayoutChanged");
         }
         fireOnLayoutChangeListener(left, top, right, bottom);
     }
@@ -551,7 +529,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         float scale = Math.max(fw, fh) * 8;
 
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "computeMaxZoom: " + scale);
         }
         return scale;
     }
@@ -567,7 +544,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         scale = Math.min(1f, 1f / scale);
 
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "computeMinZoom: " + scale);
         }
 
         return scale;
@@ -664,7 +640,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         float viewHeight = mThisHeight;
 
         if (LOG_ENABLED) {
-            Log.d(LOG_TAG, "getProperBaseMatrix. view: " + viewWidth + "x" + viewHeight);
         }
 
         float w = drawable.getIntrinsicWidth();
@@ -733,8 +708,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         float scaley = getValue(matrix, Matrix.MSCALE_Y);
         float tx = getValue(matrix, Matrix.MTRANS_X);
         float ty = getValue(matrix, Matrix.MTRANS_Y);
-        Log.d(LOG_TAG, "matrix: { x: " + tx + ", y: " + ty + ", scalex: " + scalex + ", scaley: "
-                       + scaley + " }");
     }
 
     public RectF getBitmapRect() {
@@ -784,7 +757,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         if (rect.left != 0 || rect.top != 0) {
 
             if (LOG_ENABLED) {
-                Log.i(LOG_TAG, "center");
             }
             postTranslate(rect.left, rect.top);
         }
@@ -828,7 +800,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
     public void postTranslate(float deltaX, float deltaY) {
         if (deltaX != 0 || deltaY != 0) {
             if (LOG_ENABLED) {
-                Log.i(LOG_TAG, "postTranslate: " + deltaX + "x" + deltaY);
             }
             mSuppMatrix.postTranslate(deltaX, deltaY);
             setImageMatrix(getImageViewMatrix());
@@ -837,7 +808,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
 
     protected void postScale(float scale, float centerX, float centerY) {
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "postScale: " + scale + ", center: " + centerX + "x" + centerY);
         }
         mSuppMatrix.postScale(scale, scale, centerX, centerY);
         setImageMatrix(getImageViewMatrix());
@@ -849,7 +819,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
 
     protected void zoomTo(float scale) {
         if (LOG_ENABLED) {
-            Log.i(LOG_TAG, "zoomTo: " + scale);
         }
 
         if (scale > getMaxScale())
@@ -858,7 +827,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
             scale = getMinScale();
 
         if (LOG_ENABLED) {
-            Log.d(LOG_TAG, "sanitized scale: " + scale);
         }
 
         PointF center = getCenter();

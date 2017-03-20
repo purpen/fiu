@@ -68,7 +68,6 @@ public class SubscribeThemeActivity extends BaseActivity {
                 if (themeQJ.isSubscribed) {
                     HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelSubscribeRequestParams(themeQJ._id);
                     HttpRequest.post(requestParams, URL.MY_REMOVE_INTEREST_SCENE_ID, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelSubscribe(themeQJ._id, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             super.onStart();
@@ -103,7 +102,6 @@ public class SubscribeThemeActivity extends BaseActivity {
                 } else {
                     HashMap<String, String> requestParams = ClientDiscoverAPI.getsubscribeRequestParams(themeQJ._id);
                     HttpRequest.post(requestParams, URL.MY_ADD_INTEREST_SCENE_ID, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.subscribe(themeQJ._id, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             super.onStart();
@@ -135,26 +133,6 @@ public class SubscribeThemeActivity extends BaseActivity {
                         }
                     });
                 }
-
-//                ClientDiscoverAPI.subscribeTheme(themeQJ._id, new RequestCallBack<String>() {
-//                    @Override
-//                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                        view.setEnabled(true);
-//                        if (TextUtils.isEmpty(json)) return;
-//                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-//                        if (response.isSuccess()) {
-//                            LogUtil.e(TAG, "订阅成功");
-//                            return;
-//                        }
-//                        ToastUtils.showError(response.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onFailure(HttpException e, String s) {
-//                        view.setEnabled(true);
-//                        ToastUtils.showError(R.string.network_err);
-//                    }
-//                });
             }
         });
     }
@@ -163,7 +141,6 @@ public class SubscribeThemeActivity extends BaseActivity {
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getcategoryListRequestParams();
         HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.categoryList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

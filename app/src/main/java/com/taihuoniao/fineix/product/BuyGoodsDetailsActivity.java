@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -122,7 +121,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     protected void getIntentData() {
         id = getIntent().getStringExtra("id");
         storage_id = getIntent().getStringExtra("storage_id");
-        Log.e("<<<商品详情", "id=" + id);
         if (id == null) {
             ToastUtils.showError("好货不存在或已下架");
             finish();
@@ -385,14 +383,12 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<商品详情", json);
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<BuyGoodDetailsBean>() {
                     }.getType();
                     buyGoodDetailsBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<商品详情", "解析异常=" + e.toString());
                 }
                 if (buyGoodDetailsBean.isSuccess()) {
                     if (fragmentList.size() == 0) {
@@ -470,7 +466,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     }.getType();
                     cartBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<>>>", "数据异常" + e.toString());
                 }
                 CartBean netCartBean = cartBean;
                 if (netCartBean.isSuccess()) {
@@ -500,7 +495,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<取消收藏情景", "数据解析异常");
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
@@ -525,7 +519,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private void favorate() {
         HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(id, "1");
         shoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
-            //        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -535,7 +528,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<收藏情景", "数据解析异常");
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
@@ -560,12 +552,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private void buyNow(String target_id, String type, String n) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getbuyNowRequestParams(target_id, type, n, storage_id);
         buyHandler = HttpRequest.post(requestParams, URL.URLSTRING_BUY_NOW, new GlobalDataCallBack() {
-            //        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<立即购买", json);
-//                WriteJsonToSD.writeToSD("json", json);
                 NowBuyBean nowBuyBean = new NowBuyBean();
                 try {
                     Gson gson = new Gson();
@@ -573,7 +562,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     }.getType();
                     nowBuyBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<立即购买", "解析异常=" + e.toString());
                 }
                 if (nowBuyBean.isSuccess()) {
                     Intent intent = new Intent(BuyGoodsDetailsActivity.this, ConfirmOrderActivity.class);

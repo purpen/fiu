@@ -140,7 +140,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         if (userId == LoginInfo.getUserId()) {
             HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String json) {
                     view.setEnabled(true);
@@ -203,7 +202,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                     if (item == null || item.follows == null) return;
                     HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
                     HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
                             view.setEnabled(true);
@@ -264,7 +262,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
             HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String json) {
                     view.setEnabled(true);
@@ -288,7 +285,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         } else if (item.follows.is_love == LOVE) {//取消关注
             HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.follows.user_id + "");
             HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String json) {
                     view.setEnabled(true);

@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -55,7 +54,6 @@ import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ScrollableView;
@@ -296,10 +294,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private void getUserList() {
         HashMap<String, String> re = ClientDiscoverAPI.getUserListRequestParams(5);
         Call httpHandler = HttpRequest.post(re, URL.USER_FIND_USER, new GlobalDataCallBack() {
-            //        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<首页用户列表", json);
                 IndexUserListBean indexUserListBean = new IndexUserListBean();
                 try {
                     Gson gson = new Gson();
@@ -307,7 +303,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                     }.getType();
                     indexUserListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<首页用户列表", "解析异常=" + e.toString());
                 }
                 if (indexUserListBean.isSuccess()) {
                     userList.clear();
@@ -358,7 +353,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
 //                    subjectList.clear();
@@ -369,7 +363,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
             @Override
             public void onFailure(String error) {
-                LogUtil.e("getIndexChosenSubject", getResources().getString(R.string.network_err));
             }
         });
         addNet(httpHandler);
@@ -383,7 +376,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<情景列表", json);
 //                WriteJsonToSD.writeToSD("json", json);
                 SceneList sceneL = new SceneList();
                 try {
@@ -392,7 +384,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                     }.getType();
                     sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "情景列表解析异常" + e.toString());
                 }
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
@@ -461,7 +452,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("<<<", "评论返回,requestCode=" + requestCode + ",resultCode=" + resultCode + ",intent=" + data);
         if (data == null) {
             return;
         }
@@ -474,7 +464,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 if (count == -1) {
                     return;
                 }
-                Log.e("<<<首页接收评论数量", "count=" + count);
                 sceneList.get(indexQJListAdapter.getPos()).setComment_count(count);
                 indexQJListAdapter.notifyDataSetChanged();
                 break;
@@ -665,7 +654,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
                     subjectList003.clear();

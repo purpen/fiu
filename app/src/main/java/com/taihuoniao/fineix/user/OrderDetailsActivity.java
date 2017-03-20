@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -116,7 +114,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
         }
         HashMap<String, String> params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
         HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
@@ -128,7 +125,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                     }
                     orderDetailBean = response.getData();
                 } catch (Exception e) {
-                    LogUtil.e(TAG, "-----------> e: " + e);
                 }
 
                 refreshUI();
@@ -192,7 +188,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                     textViewExpressTracking.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // TODO: 2016/12/8 查看物流信息
+                            //  查看物流信息
                             Intent intent = new Intent(OrderDetailsActivity.this, OrderTrackActivity.class);
                             intent.putExtra("rid", orderDetailBean.getRid());
                             intent.putExtra("express_no", orderDetailBean.getExpress_no());
@@ -235,7 +231,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                 textViewExpressTracking.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 2016/12/8 查看物流信息
+                        //  查看物流信息
                         Intent intent = new Intent(OrderDetailsActivity.this, OrderTrackActivity.class);
                         intent.putExtra("rid", orderDetailBean.getRid());
                         intent.putExtra("express_no", orderDetailBean.getExpress_no());
@@ -527,7 +523,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         toShopOrderListActivity();
@@ -540,31 +535,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        toShopOrderListActivity();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
                     }
                 });
                 break;
@@ -590,7 +560,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getcancelOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_CANCEL_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         toShopOrderListActivity();
@@ -602,31 +571,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要取消订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        toShopOrderListActivity();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
-
                     }
                 });
                 break;
@@ -645,7 +589,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                         }
                         HashMap<String, String> params = ClientDiscoverAPI.gettixingFahuoRequestParams(rid);
                         HttpRequest.post(params, URL.SHOPPING_ALERT_SEND_GOODS, new GlobalDataCallBack(){
-//                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 mDialog.dismiss();
@@ -656,7 +599,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                     }.getType();
                                     netBean = gson.fromJson(json, type);
                                 } catch (JsonSyntaxException e) {
-                                    Log.e("<<<提醒发货", "数据解析异常");
                                 }
                                 if (netBean.isSuccess()) {
                                     ToastUtils.showSuccess("提醒发货成功!");
@@ -686,7 +628,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         toShopOrderListActivity();
@@ -699,31 +640,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        toShopOrderListActivity();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });
@@ -741,7 +657,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getconfirmReceiveNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.SHOPPING_TAKE_DELIVERY, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         toShopOrderListActivity();
@@ -754,31 +669,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您要确认收货吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        toShopOrderListActivity();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });
@@ -795,7 +685,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         toShopOrderListActivity();
@@ -808,30 +697,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        toShopOrderListActivity();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });
@@ -856,7 +721,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         toShopOrderListActivity();
@@ -869,31 +733,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        toShopOrderListActivity();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });
@@ -909,7 +748,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                             public void clickRight() {
                                 HashMap<String, String> params = ClientDiscoverAPI.getdeleteOrderNetRequestParams(rid);
                                 HttpRequest.post(params,  URL.MY_DELETE_ORDER, new GlobalDataCallBack(){
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(String json) {
                                         toShopOrderListActivity();
@@ -922,31 +760,6 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                                 });
                             }
                         });
-//                        alertDialog.setTitle("您确定要删除订单吗？");
-//                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-//                                    @Override
-//                                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                        toShopOrderListActivity();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(HttpException e, String s) {
-//
-//                                    }
-//                                });
-//                            }
-//                        });
-//                        alertDialog.show();
 
                     }
                 });

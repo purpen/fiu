@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -54,7 +53,6 @@ public class ClickImageView extends AppCompatImageView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.e("<<<clickimageview", "x=" + event.getX() + ",y=" + event.getY());
         if (smallAnimator == null || bigAnimator == null) {
             initAnim();
         }

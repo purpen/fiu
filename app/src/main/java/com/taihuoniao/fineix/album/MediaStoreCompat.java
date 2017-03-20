@@ -20,7 +20,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Images.Thumbnails;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -208,7 +207,6 @@ public class MediaStoreCompat {
             this.generateThumbnails(ContentUris.parseId(imageUri));
             return imageUri;
         } catch (Exception e) {
-            Log.w(TAG, "cannot insert", e);
             return null;
         }
     }

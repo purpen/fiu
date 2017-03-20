@@ -119,79 +119,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         addressLinear.setOnClickListener(this);
         isDefaultImg.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
-//        if (addressBean != null) {
-//            headView.getHeadRightTV().setText(R.string.delete);
-//            headView.getHeadRightTV().setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(AddNewAddressActivity.this);
-//                    builder.setMessage("确认删除此收货地址吗？");
-//                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                            if (!AddNewAddressActivity.this.dialog.isShowing()) {
-//                                AddNewAddressActivity.this.dialog.show();
-//                            }
-//                            HttpHandler<String> httpHandler = ClientDiscoverAPI.deleteAddressNet(addressBean.get_id(), new RequestCallBack<String>() {
-//                                @Override
-//                                public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                    AddNewAddressActivity.this.dialog.dismiss();
-//                                    NetBean netBean = new NetBean();
-//                                    try {
-//                                        Gson gson = new Gson();
-//                                        Type type = new TypeToken<NetBean>() {
-//                                        }.getType();
-//                                        netBean = gson.fromJson(responseInfo.result, type);
-//                                    } catch (JsonSyntaxException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                    if (netBean.isSuccess()) {
-//                                        ToastUtils.showSuccess("删除成功");
-//                                        Intent intent = new Intent();
-//                                        intent.putExtra("address", 1);
-//                                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
-//                                        finish();
-//                                    } else {
-//                                        ToastUtils.showError(netBean.getMessage());
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(HttpException error, String msg) {
-//                                    AddNewAddressActivity.this.dialog.dismiss();
-//                                    ToastUtils.showError("网络错误");
-//                                }
-//                            });
-//                            addNet(httpHandler);
-//                        }
-//                    });
-//                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                        }
-//                    });
-//                    builder.create().show();
-//                }
-//            });
-//            nameEdt.setText(addressBean.getName());
-//            phoneEdt.setText(addressBean.getPhone());
-//            provinceTv.setText(addressBean.getProvince_name());
-//            provinceId = addressBean.getProvince();
-//            cityId = addressBean.getCity();
-//            cityTv.setText(addressBean.getCity_name());
-//
-//            detailsAddressEdt.setText(addressBean.getAddress());
-//            postcodeEdt.setText(addressBean.getZip());
-//            if (addressBean.getIs_default().equals("0")) {
-//                isdefault = false;
-//                isDefaultImg.setImageResource(R.mipmap.switch_off);
-//            } else {
-//                isdefault = true;
-//                isDefaultImg.setImageResource(R.mipmap.switch_on);
-//            }
-//        }
     }
 
     private void getProvinceData() {
@@ -199,7 +126,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
             dialog.show();
         }
         Call httpHandler = HttpRequest.post(URL.URLSTRING_PROVINCE_CITIES, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -365,7 +291,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         String countyId = "0";
         HashMap<String, String> params = ClientDiscoverAPI.getcommitAddressNetRequestParams(addressBean == null ? null : addressBean._id, nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, countyId, townId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0");
 Call httpHandler = HttpRequest.post(params, URL.URLSTRING_NEW_ADDRESS, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean._id, nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, countyId, townId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();

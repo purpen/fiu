@@ -51,7 +51,6 @@ public class DiscoverFragment extends BaseFragment {
     @Bind(R.id.lv_content)
     ListView lvContent;
     private WaittingDialog dialog;
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private List<DiscoverIndexBean> indexList;

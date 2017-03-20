@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -133,10 +132,8 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
     private void getSubsQJ() {
         HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(page + "", 8 + "", null, ids, null, null, null, null);
         Call listHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        HttpHandler<String> listHandler = ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<情景列表", json);
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
@@ -147,7 +144,6 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                     }.getType();
                     sceneL = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "情景列表解析异常" + e.toString());
                 }
                 if (sceneL.isSuccess()) {
                     subsListAdapter.setPage(sceneL.getData().getCurrent_page());
@@ -176,10 +172,8 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
     //获取订阅情境主题个数
     private void hasSubsCount() {
         Call httpHandler = HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<个人信息", json);
                 UserInfo userInfo = new UserInfo();
                 try {
                     Gson gson = new Gson();
@@ -187,7 +181,6 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                     }.getType();
                     userInfo = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<个人信息", "解析异常=" + e.toString());
                 }
                 if (userInfo.isSuccess()) {
                     hasSubsCountTv.setText("已订阅" + userInfo.getData().getInterest_scene_cate().size() + "个情境主题");

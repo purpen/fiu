@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,8 +27,6 @@ import com.taihuoniao.fineix.main.fragment.DiscoverFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 //import com.taihuoniao.fineix.main.fragment.WellGoodsNewFragment;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.NetWorkUtils;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -245,7 +242,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
 
 
-                // TODO: 2017/2/14 发布情境
+                // : 2017/2/14 发布情境
                 /*if (LoginInfo.isUserLogin()) {
                     startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 } else {
@@ -274,7 +271,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     MainApplication.which_activity = 0;
                     which = MineFragment.class.getSimpleName();
 
-                    // TODO: 2017/1/18 移除MineFragment
+                    // : 2017/1/18 移除MineFragment
                     removeMineFragment(MineFragment.class);
                     startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }
@@ -461,7 +458,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("<<<", "MainActivity,,onActivityResult");
         for (Fragment fragment : fragments) {
             fragment.onActivityResult(requestCode, resultCode, data);
         }

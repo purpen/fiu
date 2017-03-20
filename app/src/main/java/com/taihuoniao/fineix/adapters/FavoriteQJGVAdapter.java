@@ -93,7 +93,6 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
                 if (item.is_follow == 0) {
                     HashMap<String, String> params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(item.sight._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.loveNet(String.valueOf(item.sight._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);
@@ -122,7 +121,6 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
                 } else {
                     HashMap<String, String> params = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(item.sight._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelLoveNet(String.valueOf(item.sight._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);

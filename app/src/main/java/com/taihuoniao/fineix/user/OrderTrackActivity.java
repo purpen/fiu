@@ -76,7 +76,6 @@ public class OrderTrackActivity extends BaseActivity {
         }
         HashMap<String, String> params = ClientDiscoverAPI.getShoppingTrackingRequestParams(s1, s2, s3);
         HttpRequest.post(params,URL.SHOPPING_TRACKING, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.shoppingTracking(s1, s2, s3, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (mDialog != null && mDialog.isShowing()) {

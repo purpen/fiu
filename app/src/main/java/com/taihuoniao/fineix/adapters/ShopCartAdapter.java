@@ -17,7 +17,6 @@ import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
@@ -201,7 +200,6 @@ public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
     private void inventory() {
         HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_PRODUCT_COUUNT, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 List<ShopCartInventoryItemBean> list = new ArrayList<>();

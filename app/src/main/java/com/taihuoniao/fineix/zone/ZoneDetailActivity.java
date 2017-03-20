@@ -159,7 +159,6 @@ public class ZoneDetailActivity extends BaseActivity {
         tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                LogUtil.e(TAG, "onGlobalLayout");
                 try {
                     setIndicatorWidth();
                 } catch (NoSuchFieldException e) {
@@ -402,7 +401,6 @@ public class ZoneDetailActivity extends BaseActivity {
         idFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                // TODO
                 return true;
             }
         });

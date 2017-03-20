@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.album;
 
-import android.util.Log;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -20,7 +19,6 @@ public class CloseableUtils {
             try {
                 closeable.close();
             } catch (IOException var2) {
-                Log.e(TAG, "something went wrong on close", var2);
             }
 
         }

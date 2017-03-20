@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.personal.alliance.bean.WithDrawRecordBean;
 import com.taihuoniao.fineix.utils.StringFormatUtils;

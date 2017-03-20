@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -143,7 +142,6 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     private void search() {
         HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "");
       Call httpHandler =  HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
-//     HttpHandler<String> httpHandler= ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -155,7 +153,6 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     netSearch = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 if (netSearch == null) {
                     return;

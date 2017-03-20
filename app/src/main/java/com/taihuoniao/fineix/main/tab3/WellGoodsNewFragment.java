@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +86,6 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -150,8 +148,6 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int position) {
-        // TODO: 2017/3/3 跳过一页
-
 //        Toast.makeText(activity, mStringList.get(position), Toast.LENGTH_SHORT).show();
     }
 
@@ -208,7 +204,6 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
                     }.getType();
                     categoryListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
                 if (categoryListBean.isSuccess()) {
                     categoryListItems = categoryListBean.getData().getRows();

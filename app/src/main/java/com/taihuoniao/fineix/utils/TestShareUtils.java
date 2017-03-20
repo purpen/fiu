@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -11,13 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.zxing.WriterException;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
-import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 

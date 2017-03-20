@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -310,7 +309,7 @@ public final class CaptureActivityZxing extends ZxingBaseActivity implements
                     intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.valueOf(infoId));
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转地盘详情
-                    // TODO: 2017/3/4  跳入地盘
+                    // 跳入地盘
                     intent = new Intent(CaptureActivityZxing.this, ZoneDetailActivity.class);
                     intent.putExtra("id",infoId);
                     intent.putExtra("title","地盘详情");
@@ -339,8 +338,6 @@ public final class CaptureActivityZxing extends ZxingBaseActivity implements
             throw new IllegalStateException("No SurfaceHolder provided");
         }
         if (cameraManager.isOpen()) {
-            Log.w(TAG,
-                    "initCamera() while already open -- late SurfaceView callback?");
             return;
         }
         try {
@@ -354,10 +351,8 @@ public final class CaptureActivityZxing extends ZxingBaseActivity implements
 
             initCrop();
         } catch (IOException ioe) {
-            Log.w(TAG, ioe);
             displayFrameworkBugMessageAndExit();
         } catch (RuntimeException e) {
-            Log.w(TAG, "Unexpected error initializing camera", e);
             displayFrameworkBugMessageAndExit();
         }
     }
@@ -456,13 +451,11 @@ public final class CaptureActivityZxing extends ZxingBaseActivity implements
 
     @Override
     public void initView() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void initData() {
-        // TODO Auto-generated method stub
 
     }
 }

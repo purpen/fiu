@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;

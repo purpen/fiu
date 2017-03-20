@@ -87,7 +87,6 @@ public class RankTagActivity extends BaseActivity{
         et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                LogUtil.e("onFocusChange",b+"");
                 if (b){
                     iv_clear.setVisibility(View.VISIBLE);
                 }else {
@@ -117,11 +116,9 @@ public class RankTagActivity extends BaseActivity{
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         HttpRequest.post(params,URL.MY_FETCH_TALENT, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("getAuthStatus",json);
                 HttpResponse<AuthData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AuthData>>() {});
                 if (response.isSuccess()){
                     authData = response.getData();
@@ -186,7 +183,6 @@ public class RankTagActivity extends BaseActivity{
         if (TextUtils.isEmpty(value)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserInfoRequestParams(key, value);
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateUserInfo(key, value, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

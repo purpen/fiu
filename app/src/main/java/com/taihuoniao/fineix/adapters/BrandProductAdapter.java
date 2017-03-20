@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -67,10 +66,8 @@ public class BrandProductAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Log.e("<<<品牌下的产品", "list.size=" + list.size());
         final int leftPosition = position * 2;
         final int rightPosition = leftPosition + 1;
-//        ImageLoader.getInstance().displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
         GlideUtils.displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
         holder.nameLeft.setText(list.get(leftPosition).getTitle());
         holder.priceLeft.setText("¥" + list.get(leftPosition).getSale_price());

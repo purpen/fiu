@@ -17,7 +17,6 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -66,7 +65,6 @@ public class CertificateStatusActivity extends BaseActivity{
     protected void requestNet() {
         HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         HttpRequest.post(params,URL.MY_FETCH_TALENT, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog!=null) dialog.show();
@@ -76,7 +74,6 @@ public class CertificateStatusActivity extends BaseActivity{
             public void onSuccess(String json) {
                 if (dialog!=null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("getAuthStatus",json);
                 HttpResponse<AuthData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AuthData>>() {});
                 if (response.isSuccess()){
                     authData = response.getData();

@@ -82,7 +82,6 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
             public void onClick(final View view) {
                 HashMap<String, String> requestParams = ClientDiscoverAPI.getsubsQingjingRequestParams(item.get_id());
                 HttpRequest.post(requestParams, URL.SUBS_QINGJING, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.subsQingjing(item.get_id(), new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         if (progressBar!=null) progressBar.setVisibility(View.VISIBLE);

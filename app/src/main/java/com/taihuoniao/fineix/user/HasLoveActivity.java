@@ -101,7 +101,6 @@ public class HasLoveActivity extends BaseActivity {
     protected void requestNet() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetSupportQJRequestParams(String.valueOf(curPage), "12", "2");
         HttpRequest.post(requestParams, URL.FAVORITE_GET_NEW_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSupportQJ(String.valueOf(curPage), "12", "2", new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 super.onStart();

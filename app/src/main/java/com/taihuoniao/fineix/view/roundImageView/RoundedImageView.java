@@ -32,7 +32,6 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.taihuoniao.fineix.R;
 
@@ -268,7 +267,6 @@ public class RoundedImageView extends AppCompatImageView {
       try {
         d = rsrc.getDrawable(mResource);
       } catch (Exception e) {
-        Log.w(TAG, "Unable to find resource: " + mResource, e);
         // Don't try again.
         mResource = 0;
       }
@@ -306,7 +304,6 @@ public class RoundedImageView extends AppCompatImageView {
       try {
         d = rsrc.getDrawable(mBackgroundResource);
       } catch (Exception e) {
-        Log.w(TAG, "Unable to find resource: " + mBackgroundResource, e);
         // Don't try again.
         mBackgroundResource = 0;
       }
@@ -346,7 +343,6 @@ public class RoundedImageView extends AppCompatImageView {
       if (mHasColorFilter) {
         mDrawable.setColorFilter(mColorFilter);
       }
-      // TODO: support, eventually...
       //mDrawable.setXfermode(mXfermode);
       //mDrawable.setAlpha(mAlpha * mViewAlphaScale >> 8);
     }

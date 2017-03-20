@@ -26,7 +26,6 @@ public class ProvinceUtil {
     public static void init() {
         HashMap<String, String> params =ClientDiscoverAPI. getgetAllCitiesRequestParams();
         HttpRequest.post(params,  URL.ALL_CITY_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getAllCities(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)){
@@ -46,12 +45,10 @@ public class ProvinceUtil {
 
     private static void dealData(){
         if (data==null){
-            LogUtil.e(TAG,"dealData---->data==null");
             return;
         }
 
         if (data.rows==null ||data.rows.size()==0){
-            LogUtil.e(TAG,"dealData---->data.rows==null || data.rows.size()==0");
             return;
         }
         provinceCityMap = new HashMap<>();

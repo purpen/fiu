@@ -113,7 +113,6 @@ public class UsableRedPacketActivity extends BaseActivity {
     protected void requestNet() {//请求可用红包
         HashMap<String, String> params = ClientDiscoverAPI.getmyRedBagNetRequestParams(String.valueOf(curPage), PAGE_SIZE, UNUSED, UNTIMEOUT);
         HttpRequest.post(params,   URL.MY_BONUS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage), PAGE_SIZE, UNUSED, UNTIMEOUT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing() && mDialog != null&& isFirstLoad) mDialog.show();

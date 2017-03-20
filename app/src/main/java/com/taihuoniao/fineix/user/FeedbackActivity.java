@@ -49,7 +49,6 @@ public class FeedbackActivity extends BaseActivity {
                 }
                 HashMap<String, String> params = ClientDiscoverAPI.getcommitSuggestionRequestParams(et_suggestion.getText().toString(), et_contact.getText().toString());
                 HttpRequest.post(params,  URL.SUGGESTION_URL, new GlobalDataCallBack(){
-//                 ClientDiscoverAPI.commitSuggestion(et_suggestion.getText().toString(), et_contact.getText().toString(), new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
 

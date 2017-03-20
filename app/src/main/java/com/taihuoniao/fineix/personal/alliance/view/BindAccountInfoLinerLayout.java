@@ -5,15 +5,12 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.common.GlobalCallBack;
-import com.taihuoniao.fineix.user.fragments.AddressSelectFragment;
 import com.taihuoniao.fineix.utils.StringFormatUtils;
 
 /**

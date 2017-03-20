@@ -101,7 +101,6 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                 if (item.sight.is_love == 0) {
                     HashMap<String, String> params = ClientDiscoverAPI.getloveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_LOVE, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.loveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);
@@ -131,7 +130,6 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                 } else {
                     HashMap<String, String> params = ClientDiscoverAPI.getcancelLoveNetRequestParams(String.valueOf(item._id), TYPE_QJ);
                     HttpRequest.post(params,  URL.URLSTRING_CANCELLOVE, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelLoveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
                             ibtn.setEnabled(false);

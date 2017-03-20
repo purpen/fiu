@@ -152,7 +152,6 @@ public class SearchUserFragment extends DialogFragment {
         }
         HashMap<String, String> params =ClientDiscoverAPI.getsearchUserRequestParams(query, String.valueOf(curPage));
         HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.searchUser(query, String.valueOf(curPage), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null) dialog.show();

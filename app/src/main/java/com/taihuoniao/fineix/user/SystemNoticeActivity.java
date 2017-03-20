@@ -121,7 +121,6 @@ public class SystemNoticeActivity extends BaseActivity {
         int curPage = 1;
         HashMap<String, String> params =ClientDiscoverAPI. getgetSystemNoticeRequestParams(String.valueOf(curPage), PAGE_SIZE);
         HttpRequest.post(params,  URL.SYSTEM_NOTICE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing()&& dialog!=null) dialog.show();

@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.product;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -18,7 +17,6 @@ import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.fragment.GoodListFragment;
@@ -31,7 +29,6 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -117,56 +114,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
             cartNumber();
     }
 
-    //    //获取子分类
-//    private void categoryList() {
-//        ClientDiscoverAPI.categoryLabel(id, new RequestCallBack<String>() {
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-////                dialog.dismiss();
-//                CategoryLabelListBean categoryLabelListBean = new CategoryLabelListBean();
-//                try {
-//                    Gson gson = new Gson();
-//                    Type type = new TypeToken<CategoryLabelListBean>() {
-//                    }.getType();
-//                    categoryLabelListBean = gson.fromJson(json, type);
-//                } catch (JsonSyntaxException e) {
-//                    Log.e("<<<", "数据解析异常" + e.toString());
-//                }
-//                if (categoryLabelListBean.isSuccess()) {
-//                    fragmentList.clear();
-//                    categoryList.clear();
-//                    titleList.clear();
-//                    categoryList.addAll(categoryLabelListBean.getData().getTags());
-//                    for (int i = 0; i < categoryList.size(); i++) {
-//                        titleList.add(categoryList.get(i).getTitle_cn());
-//                        fragmentList.add(GoodListFragment.newInstance(id, categoryList.get(i).get_id()));
-//                    }
-//                    if (fragmentList.size() == 0) {
-//                        fragmentList.add(GoodListFragment.newInstance(id, null));
-//                        titleList.add("");
-//                        tabLayout.setVisibility(View.GONE);
-//                        SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
-//                        viewPager.setAdapter(searchViewPagerAdapter);
-//                        return;
-//                    }
-//                    tabLayout.setVisibility(View.VISIBLE);
-//                    SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
-//                    viewPager.setAdapter(searchViewPagerAdapter);
-//                    tabLayout.setupWithViewPager(viewPager);
-//                    viewPager.setOffscreenPageLimit(fragmentList.size());
-//                } else {
-//                    dialog.dismiss();
-//                    ToastUtils.showError(categoryLabelListBean.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException error, String msg) {
-//                dialog.dismiss();
-//                ToastUtils.showError(R.string.net_fail);
-//            }
-//        });
-//    }
     private Call cartHandler;
 
     //获取购物车数量
@@ -176,7 +123,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
             return;
         }
         cartHandler = HttpRequest.post( URL.CART_NUMBER, new GlobalDataCallBack(){
-//        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 CartBean cartBean = new CartBean();
@@ -186,7 +132,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                     }.getType();
                     cartBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<>>>", "数据异常" + e.toString());
                 }
                 CartBean netCartBean = cartBean;
                 if (netCartBean.isSuccess()) {

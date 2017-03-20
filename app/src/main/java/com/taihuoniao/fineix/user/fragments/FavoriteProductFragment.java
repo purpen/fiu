@@ -113,7 +113,6 @@ public class FavoriteProductFragment extends MyBaseFragment {
     protected void loadData() {
         HashMap<String, String> params = ClientDiscoverAPI.getgetCollectOrderedRequestParams(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT);
         HttpRequest.post(params, URL.FAVORITE_GET_NEW_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getCollectOrdered(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {

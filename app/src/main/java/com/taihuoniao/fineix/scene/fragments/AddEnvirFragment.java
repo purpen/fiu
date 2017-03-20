@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.scene.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -91,7 +90,6 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
     private void envirList() {
         HashMap<String, String> params = ClientDiscoverAPI.getenvirListRequestParams(page + "", 8 + "", 1 + "", cid, null);
         Call httpHandler = HttpRequest.post(params,  URL.SCENE_CONTEXT_GETLIST, new GlobalDataCallBack(){
-//       HttpHandler<String> httpHandler= ClientDiscoverAPI.envirList(page + "", 8 + "", 1 + "", cid, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -105,7 +103,6 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
                     }.getType();
                     netSearch = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 if (netSearch == null) {
                     return;

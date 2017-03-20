@@ -28,7 +28,6 @@ import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackBean;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackResultBean;
 import com.taihuoniao.fineix.utils.DPUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
@@ -134,7 +133,6 @@ public class ChargeBackActivity extends BaseActivity {
     private void requestGetChargeBackInfo(){
         HashMap<String, String> params = ClientDiscoverAPI.getChargeBackInfoRequestParams(rId, skuId);
         HttpRequest.post(params,URL.SHOPPING_CHECK_REFUND, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getChargeBackInfo(rId, skuId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 try {
@@ -162,14 +160,10 @@ public class ChargeBackActivity extends BaseActivity {
         HashMap<String, String> params = ClientDiscoverAPI.getApplyProductRefundRequestParams(rId, skuId, refund_type, refundReason, refundContent,
                 price);
         HttpRequest.post(params,URL.SHOPPING_APPLY_PRODUCT_REFUND, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getApplyProductRefund(rId, skuId, refund_type, refundReason, refundContent,
-//                price, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
 
                 HttpResponse<ChargeBackResultBean> chargeBackResultBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ChargeBackResultBean>>(){});
-                LogUtil.e(TAG, "--------> responseInfo: " + json);
-
                 if (chargeBackResultBeanHttpResponse.isSuccess()) {
                     Toast.makeText(activity, App.getString(R.string.hint_salesAfter_chargeBack_request_success), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ChargeBackActivity.this, ChargeBackDetailsActivity.class);

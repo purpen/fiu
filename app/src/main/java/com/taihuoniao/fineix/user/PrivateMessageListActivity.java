@@ -86,7 +86,6 @@ public class PrivateMessageListActivity extends BaseActivity{
         int curPage = 1;
         HashMap<String, String> params = ClientDiscoverAPI.getgetPrivateMessageListRequestParams(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL);
         HttpRequest.post(params,  URL.MESSAGE_RECORD, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getPrivateMessageList(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!activity.isFinishing()&&dialog!=null) dialog.show();

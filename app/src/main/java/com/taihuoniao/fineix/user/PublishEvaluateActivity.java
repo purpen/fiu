@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -101,10 +100,8 @@ public class PublishEvaluateActivity extends Base2Activity {
                         builder.append("]");
                         builder.replace(builder.length() - 2, builder.length() - 1, "");
                         String array = builder.toString();
-//                        Log.e(">>>", ">>>arrayratingbar>>" + array);
                         HashMap<String, String> params = ClientDiscoverAPI.getpublishEvaluateNetRequestParams(mRid, array);
                          HttpRequest.post(params,  URL.PRODUCT_AJAX_COMMENT, new GlobalDataCallBack(){
-//                        ClientDiscoverAPI.publishEvaluateNet(mRid, array, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 Gson gson = new Gson();
@@ -114,7 +111,6 @@ public class PublishEvaluateActivity extends Base2Activity {
                                     }.getType();
                                     netBean = gson.fromJson(json, type);
                                 } catch (JsonSyntaxException e) {
-                                    Log.e("<<<", "数据解析异常" + e.toString());
                                 }
                                 dialog.dismiss();
 //                                Toast.makeText(PublishEvaluateActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
@@ -143,18 +139,16 @@ public class PublishEvaluateActivity extends Base2Activity {
 
     private void initData() {
         mRid = getIntent().getStringExtra("rid");
-//        DataPaser.orderPayDetailsParser(mRid, mHandler);
+
         //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取
         HashMap<String, String> params = ClientDiscoverAPI.getOrderPayNetRequestParams(mRid);
         HttpRequest.post(params,  URL.SHOPPING_DETAILS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
 
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderDetailBean>>() {});
                 if (response.isError()) {
-//                    LogUtil.e(TAG, "---------> responseInfo: "  + responseInfo.reasonPhrase);
                     return;
                 }
                 shoppingDetailBean = response.getData();

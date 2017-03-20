@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.product.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -93,11 +92,8 @@ public class CommentFragment extends SearchFragment {
         progressBar.setVisibility(View.VISIBLE);
         HashMap<String, String> params =ClientDiscoverAPI. getGoodsDetailsCommentsListRequestParams(target_id, page + "");
        Call httpHandler =  HttpRequest.post(params, URL.COMMENTS_LIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<商品评论", json);
-//                WriteJsonToSD.writeToSD("json",json);
                 List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(json);
                 progressBar.setVisibility(View.GONE);
                 if (page == 1) {

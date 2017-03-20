@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -258,11 +257,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private void deleteComment(String id) {
         HashMap<String, String> params = ClientDiscoverAPI. getdeleteCommentRequestParams(id);
         delelteHandler = HttpRequest.post(params, URL.DELETE_COMMENT, new GlobalDataCallBack(){
-//        delelteHandler = ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.DELETE_COMMENT;
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -270,17 +266,14 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<删除评论", "数据解析异常" + e.toString());
                 }
                 popupWindow.dismiss();
-//                    Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
                 if (netBean.isSuccess()) {
                     currentPage = 1;
                     getComments(currentPage + "", 8 + "", target_id, null, type);
                 } else {
                     dialog.dismiss();
                     ToastUtils.showError(netBean.getMessage());
-//                        dialog.showErrorWithStatus(netBean1.getMessage());
                 }
             }
 
@@ -298,7 +291,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private void sendComments(String target_i, String conten, String typ, String target_user_id, String is_r, String reply_i, String reply_user_i) {
         HashMap<String, String> params = ClientDiscoverAPI.getsendCommentRequestParams(target_id, conten, type, target_user_id, is_reply, reply_id, reply_user_id);
         sendHandler = HttpRequest.post(params, URL.SEND_COMMENT, new GlobalDataCallBack(){
-//        sendHandler = ClientDiscoverAPI.sendComment(target_i, conten, typ, target_user_id, is_r, reply_i, reply_user_i, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -308,7 +300,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-//                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
 //                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                 if (netBean.isSuccess()) {
@@ -343,10 +334,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private void getComments(String page, String size, String target_id, String target_user_id, String type) {
         HashMap<String, String> params =ClientDiscoverAPI. getcommentsListRequestParams(page, size, target_id, target_user_id, type);
         HttpRequest.post(params,URL.COMMENTS_LIST, new GlobalDataCallBack(){
-//        commentsHander = ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<评论列表", json);
                 CommentsBean netComments = new CommentsBean();
                 try {
                     Gson gson = new Gson();
@@ -354,7 +343,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     netComments = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
                 pullToRefreshLayout.onRefreshComplete();

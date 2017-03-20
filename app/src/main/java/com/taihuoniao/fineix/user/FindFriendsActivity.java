@@ -18,7 +18,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.fragments.SearchUserFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -111,13 +110,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         item_wx.setOnClickListener(this);
         item_sina.setOnClickListener(this);
         item_contacts.setOnClickListener(this);
-//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                //TODO 跳转个人中心//场景详情
-//                Util.makeToast(i+"");
-//            }
-//        });
     }
 
     @Override
@@ -125,7 +117,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         String sight_count = "5";
         HashMap<String, String> params = ClientDiscoverAPI.getfindFriendsRequestParams(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT);
         HttpRequest.post(params,  URL.FIND_FRIENDS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.findFriends(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null) {
@@ -137,7 +128,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             public void onSuccess(String json) {
                 dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
-                LogUtil.e("getSceneList", json);
                 HttpResponse<FindFriendData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FindFriendData>>() {
                 });
                 if (response.isSuccess()) {

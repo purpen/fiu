@@ -139,7 +139,6 @@ public class DecadeSelectFragment extends MyBaseFragment {
                 v.setEnabled(false);
                 HashMap<String, String> params =ClientDiscoverAPI. getupdateAgeAssetsRequestParams(age_group, assets);
                 HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
-//                ClientDiscoverAPI.updateAgeAssets(age_group, assets, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         v.setEnabled(true);

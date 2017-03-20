@@ -24,7 +24,6 @@ import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.bean.CheckVersionBean;
 import com.taihuoniao.fineix.network.bean.UpdateInfoBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
@@ -146,7 +145,6 @@ public class NetWorkUtils {
     public void updateToLatestVersion() {
         HashMap<String, String> params = ClientDiscoverAPI.getupdateToLatestVersionRequestParams();
         HttpRequest.post(params,URL.FETCH_LATEST_VERSION, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateToLatestVersion(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 try {
@@ -160,7 +158,6 @@ public class NetWorkUtils {
                         mHandler.sendEmptyMessage(INSTALL_APK);
                     }
                 } catch (Exception e) {
-                    LogUtil.e(this.getClass().getSimpleName(), "<<<<< " + json);
                 }
             }
 
@@ -178,7 +175,6 @@ public class NetWorkUtils {
         String appVersionName = getAppVersionName(mContext);
         HashMap<String, String> params = ClientDiscoverAPI.getcheckVersionInfoRequestParams(appVersionName);
         HttpRequest.post(params, URL.CHECK_VERSION_INFO, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.checkVersionInfo(appVersionName, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 try {
@@ -189,7 +185,6 @@ public class NetWorkUtils {
                         mHandler.sendEmptyMessage(checkVersionBean.getCode());
                     }
                 } catch (Exception e) {
-                    LogUtil.e(this.getClass().getSimpleName(), "<<<<< " + json);
                 }
             }
 

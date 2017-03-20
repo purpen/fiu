@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -452,7 +451,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 }
             });
             holder.labelContainer.addView(labelView);
-//            Log.e("<<<", "开启动画" + holder.qjTitleTv.getText() + ",现在位置=" + position);
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -482,7 +480,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             holder.locationImg.setVisibility(View.VISIBLE);
             holder.locationTv.setVisibility(View.VISIBLE);
         }
-        Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
         if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
             //自己的话隐藏关注按钮
             holder.attentionBtn.setVisibility(View.GONE);
@@ -589,7 +586,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private void cancelShoucang(final int position) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(sceneList.get(position).get_id(), "12");
         HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -599,7 +595,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<取消收藏情景", "数据解析异常");
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
@@ -622,7 +617,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private void shoucang(final int position) {
         HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(sceneList.get(position).get_id(), "12");
         HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -632,7 +626,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<收藏情景", "数据解析异常");
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
@@ -655,7 +648,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private void deleteScene(String i) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(i);
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NetBean netBean = new NetBean();
@@ -665,7 +657,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<删除场景", "数据解析异常");
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
@@ -688,7 +679,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelLoveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.CANCEL_LOVE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.loveImg.setEnabled(true);
@@ -700,7 +690,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_love);
@@ -725,7 +714,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private void loveQJ(final int position, String id, final ViewHolder holder) {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getloveQJRequestParams(id);
         HttpRequest.post(requestParams, URL.LOVE_SCENE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 holder.loveImg.setEnabled(true);
@@ -737,7 +725,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     }.getType();
                     sceneLoveBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
@@ -762,11 +749,9 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<关注用户", json);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -774,7 +759,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
@@ -803,7 +787,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private void cancelFollow(final SceneList.DataBean.RowsBean item, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_info().getUser_id());
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelFocusOperate(item.getUser_info().getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -814,7 +797,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);

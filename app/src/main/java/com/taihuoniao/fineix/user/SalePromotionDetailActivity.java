@@ -141,7 +141,6 @@ public class SalePromotionDetailActivity extends BaseActivity {
                     public void onSuccess() {
                         HashMap<String, String> params = ClientDiscoverAPI.getupdateShareCountRequestParams(id);
                         HttpRequest.post(params, URL.SCENE_SUBJECT_RECORD_SHARE_COUNT, new GlobalDataCallBack() {
-                            //                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(String json) {
                                 if (TextUtils.isEmpty(json)) return;

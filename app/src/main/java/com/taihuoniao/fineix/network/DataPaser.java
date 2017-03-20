@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.network;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -55,7 +54,6 @@ public class DataPaser {
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
         HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(q, t, null, page, "8", evt, sort);
         HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.search(q, t, null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 Message msg = handler.obtainMessage();
@@ -67,7 +65,6 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 handler.sendMessage(msg);
             }
@@ -149,7 +146,6 @@ public class DataPaser {
     public static void findPasswordParser(final Handler handler, String phone, String password, String code) {
         HashMap<String, String> params = ClientDiscoverAPI.getfindPasswordNetRequestParams(phone, password, code);
         HttpRequest.post(params, URL.AUTH_FIND_PWD, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.findPasswordNet(phone, password, code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 FindPasswordInfo findPasswordInfo = null;
@@ -185,7 +181,6 @@ public class DataPaser {
     public static void checkRedbagUsableParser(String rid, String code, final Handler handler) {
         HashMap<String, String> params = ClientDiscoverAPI.getcheckRedBagUsableNetRequestParams(rid, code);
         HttpRequest.post(params,  URL.SHOPPING_USE_BONUS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.checkRedBagUsableNet(rid, code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 CheckRedBagUsable checkRedBagUsable = null;
@@ -224,7 +219,6 @@ public class DataPaser {
      */
     public static Call shopCartParser(final Handler handler) {
         return HttpRequest.post(URL.SHOPPING_FETCH_CART, new GlobalDataCallBack(){
-//        return ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 List<ShopCart> list = null;
@@ -288,7 +282,6 @@ public class DataPaser {
     public static Call shopCartNumberParser(final Handler handler) {
         HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         return HttpRequest.post(params,  URL.SHOPPING_FETCH_CART_COUNT, new GlobalDataCallBack(){
-//        return ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 ShopCartNumber shopCartNumber = null;
@@ -322,7 +315,6 @@ public class DataPaser {
     public static void shopCartCalculateParser(String array, final Handler handler) {
         HashMap<String, String> params = ClientDiscoverAPI.getcalculateShopCartNetRequestParams(array);
         HttpRequest.post(params,  URL.SHOPING_CHECKOUT, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.calculateShopCartNet(array, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(String json) {
                         List<CartDoOrder> list = null;
@@ -440,7 +432,6 @@ public class DataPaser {
     public static void orderListParser(String status, String page, String size, final Handler handler) {
         HashMap<String, String> params = ClientDiscoverAPI.getorderListNetRequestParams(status, page, size);
         HttpRequest.post(params,  URL.SHOPPING_ORDERS, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.orderListNet(status, page, size, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 List<OrderEntity> list = null;

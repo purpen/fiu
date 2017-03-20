@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -78,7 +77,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     protected void initView() {
         q = getIntent().getStringExtra("q");
         t = getIntent().getIntExtra("t", 9);
-        Log.e("<<<搜索接收", "q=" + q + ",t=" + t);
         if (!TextUtils.isEmpty(q)) {
             editText.setText(q);
             isContent = false;

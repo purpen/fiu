@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.util.Log;
 
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -24,8 +23,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Stephen on 2016/12/6 19:31
@@ -148,11 +145,9 @@ public class DownLoadTask extends AsyncTask<String, Integer, File> {
             }
 
             public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                Log.i(TAG, "checkClientTrusted");
             }
 
             public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                Log.i(TAG, "checkServerTrusted");
             }
         } };
 

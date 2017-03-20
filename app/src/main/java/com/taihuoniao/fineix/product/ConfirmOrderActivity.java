@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -120,10 +119,8 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
 
     private void getDefaultAddress() {
         addressHandler = HttpRequest.post(URL.URLSTRING_DEFAULT_ADDRESS, new GlobalDataCallBack() {
-//        addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<默认收货地址", json);
                 DefaultAddressBean defaultAddressBean = new DefaultAddressBean();
                 try {
                     Gson gson = new Gson();
@@ -131,7 +128,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                     }.getType();
                     defaultAddressBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<默认收货地址", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
                 DefaultAddressBean netAddress = defaultAddressBean;
@@ -186,7 +182,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 freight = nowBuyBean.getData().getOrder_info().getDict().getFreight();
                 transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(freight) ? "0" : freight));
 
-                // TODO: 2016/12/2 优惠立减
+                // 2016/12/2 优惠立减
                 if ("5".equals(nowBuyBean.getData().getOrder_info().getKind())) {
                     String coin_money = nowBuyBean.getData().getOrder_info().getDict().getCoin_money();
                     privilegeprice = Double.parseDouble(coin_money);
@@ -210,7 +206,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 freight = cartBean.getDictBeen().get(0).getFreight();
                 transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(freight) ? "0" : freight));
 
-                // TODO: 2016/12/2 优惠立减
+                // 2016/12/2 优惠立减
                 if ("5".equals(cartBean.getKind())) {
                     String coin_money = cartBean.getDictBeen().get(0).getCoin_money();
                     privilegeprice = Double.parseDouble(coin_money);
@@ -310,7 +306,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     private void confirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
         HashMap<String, String> params =ClientDiscoverAPI. getnowConfirmOrderRequestParams(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code);
         confirmHandler = HttpRequest.post(params,  URL.URLSTRING_NOW_CONFIRMORDER, new GlobalDataCallBack(){
-//       confirmHandler =  ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 NowConfirmBean nowConfirmBean = new NowConfirmBean();
@@ -485,12 +480,11 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
             confirmHandler.cancel();
     }
 
-    // TODO: 2016/12/8 计算邮费
+    // 2016/12/8 计算邮费
     private void fetchFreight(String addbook_id, String rid){
         String rid2 = nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getData().getOrder_info().getRid();
         HashMap<String, String> params = ClientDiscoverAPI.getFetchFreightRequestParams(addbook_id, rid2);
         HttpRequest.post(params,URL.SHOPPING_FETCH_FREIGHT, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.fetchFreight(addbook_id, rid2, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse<FreightBean> freightBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FreightBean>>() {

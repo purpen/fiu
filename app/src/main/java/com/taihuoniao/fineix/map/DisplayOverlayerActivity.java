@@ -150,7 +150,6 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
         int radius = 0;
         HashMap<String, String> params = ClientDiscoverAPI.getQJDataRequestParams(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL);
         HttpRequest.post(params, URL.QING_JING, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (waittingDialog!=null) waittingDialog.show();
@@ -167,7 +166,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
                 try {
                     qingJingData = JsonUtil.fromJson(json, new TypeToken<HttpResponse<QingJingData>>() {
                     });
-                } catch (JsonSyntaxException e) {//TODO log
+                } catch (JsonSyntaxException e) {
                     Util.makeToast(activity, "对不起,数据异常");
                 }
                 if (qingJingData == null) {
@@ -210,7 +209,6 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
                 }
                 InfoWindow.OnInfoWindowClickListener listener = new InfoWindow.OnInfoWindowClickListener() {
                     public void onInfoWindowClick() {
-                        // TODO InfoWindow 点击
                         Util.makeToast(activity, "InfoWindow被点击");
                     }
                 };

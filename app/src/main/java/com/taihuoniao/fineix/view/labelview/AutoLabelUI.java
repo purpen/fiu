@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.taihuoniao.fineix.R;
@@ -108,7 +107,6 @@ public class AutoLabelUI extends AutoViewGroup implements Label.OnClickCrossList
                         getResources().getDimensionPixelSize(R.dimen.padding_label_view));
 
             } catch (Exception e) {
-                Log.e(LOG_TAG, "Error while creating the view AutoLabelUI: ", e);
             } finally {
                 typedArray.recycle();
             }

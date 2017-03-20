@@ -199,7 +199,6 @@ public class Util {
                 }
             }
             file.delete();
-            LogUtil.e("删除完毕", "fsafdsaf");
         } else {
             LogUtil.e("文件：", "文件不存在");
         }
@@ -250,7 +249,6 @@ public class Util {
             ByteArrayOutputStream baos = new BufferedByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100,baos);
             byte[] byteArr=baos.toByteArray();
-            LogUtil.e("length==="+byteArr.length);
             imgStr = Base64.encodeToString(byteArr, Base64.DEFAULT);
             baos.flush();
             baos.close();

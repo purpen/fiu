@@ -14,7 +14,6 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.ItemQJCollect;
 import com.taihuoniao.fineix.user.fragments.FavoriteProductFragment;
 import com.taihuoniao.fineix.user.fragments.FavoriteQJFragment;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
@@ -85,7 +84,6 @@ public class CollectionsActivity extends BaseActivity<ItemQJCollect> {
         tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                LogUtil.e(TAG, "onGlobalLayout");
                 try {
                     setIndicatorWidth();
                 } catch (NoSuchFieldException e) {
@@ -117,38 +115,4 @@ public class CollectionsActivity extends BaseActivity<ItemQJCollect> {
             }
         });
     }
-
-//    @Override
-//    protected void requestNet() {
-//        ClientDiscoverAPI.getCollectOrdered(String.valueOf(curPage), PAGE_SIZE, PAGE_TYPE, PAGE_EVENT, new RequestCallBack<String>() {
-//            @Override
-//            public void onStart() {
-//                if (curPage == 1) dialog.show();
-//            }
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                dialog.dismiss();
-//                if (responseInfo == null) return;
-//                if (TextUtils.isEmpty(responseInfo.result)) return;
-//                HttpResponse<DataQJCollect> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataQJCollect>>() {
-//                });
-//                if (response.isSuccess()) {
-//                    List list = response.getData().rows;
-//                    refreshUI(list);
-//                    return;
-//                }
-//                ToastUtils.showError(response.getMessage());
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException e, String s) {
-//                dialog.dismiss();
-//                if (TextUtils.isEmpty(s)) return;
-//                Util.makeToast(s);
-//            }
-//        });
-//    }
-
-
 }

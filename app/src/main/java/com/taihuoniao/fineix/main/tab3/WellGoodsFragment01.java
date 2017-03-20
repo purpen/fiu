@@ -1,19 +1,15 @@
 package com.taihuoniao.fineix.main.tab3;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -21,27 +17,18 @@ import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.FirstProductAdapter;
-import com.taihuoniao.fineix.adapters.WellGoodsProductCategoryAdapter;
 import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.FirstProductBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectListBean;
-import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
-import com.taihuoniao.fineix.main.ShopMarginDecoration;
-import com.taihuoniao.fineix.main.tab3.adapter.WellGoodsCategoryAdapter;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
-import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -54,7 +41,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 
-import static com.taihuoniao.fineix.R.id.listView;
 
 /**
  * Created by Stephen on 2017/3/3 23:00
@@ -182,7 +168,6 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<好货专题列表", json);
                 pullRefreshView001.onRefreshComplete();
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
@@ -191,7 +176,6 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
                     if (currentPage == 1) {
@@ -219,7 +203,6 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
         Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<最新好货推荐", json);
                 FirstProductBean firstProductBean = new FirstProductBean();
                 try {
                     Gson gson = new Gson();
@@ -227,7 +210,6 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
                     }.getType();
                     firstProductBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (firstProductBean.isSuccess()) {
                     firstProductList.clear();

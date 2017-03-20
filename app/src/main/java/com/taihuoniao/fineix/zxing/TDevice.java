@@ -403,7 +403,6 @@ public class TDevice {
             return MainApplication.getContext().getPackageManager()
                     .getPackageInfo(pckName, 0);
         } catch (NameNotFoundException e) {
-            LogUtil.e("getPackageInfo",e.getMessage());
         }
         return null;
     }

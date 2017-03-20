@@ -122,7 +122,6 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                     //获取手机验证码
                     HashMap<String, String> params = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
                     HttpRequest.post(params, URL.AUTH_VERIFY_CODE, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
 
@@ -155,7 +154,6 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                                 try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
-                                    // TODO Auto-generated catch block
                                     e.printStackTrace();
                                 }
                             }

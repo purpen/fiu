@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;

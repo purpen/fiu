@@ -119,8 +119,6 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, id, null, tag_id, page + "", 8 + "", null, null,
                 null, null, "9");
         Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler= ClientDiscoverAPI.getProductList(null, null, id, null, tag_id, page + "", 8 + "", null, null,
-//                null, null,"9", new RequestCallBack<String>() {
 
                     @Override
                     public void onSuccess(String json) {

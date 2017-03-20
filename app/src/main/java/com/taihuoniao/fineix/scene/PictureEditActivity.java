@@ -20,7 +20,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -198,8 +197,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             public void click(int postion, String filterName) {
 
                 setAjustTitileStatus(true, filterName); //设置标题栏文字
-
-                // TODO: 2016/12/21 弹框
                 View view = LayoutInflater.from(PictureEditActivity.this).inflate(R.layout.popup_editpicture_adjust_seek, null, false);
                 textView = (TextView)view. findViewById(R.id.textView1);
                 seekBar1 = (SeekBar)view. findViewById(R.id.seekBar1);
@@ -278,7 +275,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                             ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTemperature(progress * 100f);
                             ((GPUImageWhiteBalanceFilter)ajustGPUImageFilter).setTint((progress - 50) /100f);
                         } else {
-                            // TODO: 2016/12/21
                         }
 //                        mGPUImageView.setFilter(ajustGPUImageFilter);
                         mGPUImageView.requestRender();
@@ -425,7 +421,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 }
                 if (productName.getText().toString().length() > 0) {
                     intent2.putExtra("product", productName.getText().toString());
-                    Log.e("<<<", "传递产品名称=" + productName.getText().toString());
                 }
                 startActivityForResult(intent2, 1);
                 break;
@@ -457,7 +452,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         cv.drawBitmap(ajustBitmap == null ? MainApplication.cropBitmap : ajustBitmap, null, dst, null);
         //加商品
         EffectUtil.applyOnSave(cv, imageViewTouch);
-        Log.e("<<<", "屏幕宽度=" + w + ",图片尺寸=width=" + MainApplication.cropBitmap.getWidth() + ",height=" + MainApplication.cropBitmap.getHeight());
         mGPUImageView.setImage(newBitmap);
 //        onGpuImageFilterChosenListener(currentFilter, currentPosition);
         Bitmap bitmap = null;
@@ -486,7 +480,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             tagInfoList.add(label.getTagInfo());
         }
         MainApplication.tagInfoList = tagInfoList;
-        Log.e("<<<上传之前", tagInfoList.toString());
         if (ajustBitmap != null) {
             mGPUImageView.setImage(ajustBitmap);
         }
@@ -755,7 +748,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                             }
                         });
                     } catch (Exception e) {
-                        Log.e("<<<", "没有褪底图");
                     }
 
                     break;
@@ -839,28 +831,23 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onFocusChange(MyHighlightView newFocus, MyHighlightView oldFocus) {
-            Log.e("<<<图片编辑", "onFocusChange");
         }
 
         @Override
         public void onDown(MyHighlightView view) {
-            Log.e("<<<图片编辑", "onDown");
         }
 
         @Override
         public void onMove(MyHighlightView view) {
-            Log.e("<<<图片编辑", "onMove");
         }
 
         @Override
         public void onClick(MyHighlightView view) {
-            Log.e("<<<图片编辑", "onClick");
             isClick = true;
         }
 
         @Override
         public void onClick(final LabelView label) {
-            Log.e("<<<标签", "onClick");
             labelView = label;
             labelView.setLeftOrRight();
         }

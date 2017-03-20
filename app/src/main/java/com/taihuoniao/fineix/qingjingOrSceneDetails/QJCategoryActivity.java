@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -113,11 +112,9 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
     //获取订阅情境主题个数
     private void hasSubsCount() {
         HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack(){
-//        userCenterHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<个人信息", json);
                 UserInfo userInfo = new UserInfo();
                 try {
                     Gson gson = new Gson();
@@ -125,7 +122,6 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
                     }.getType();
                     userInfo = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<个人信息", "解析异常=" + e.toString());
                 }
                 if (userInfo.isSuccess()) {
                     if (userInfo.getData().getInterest_scene_cate().contains(id)) {
@@ -186,10 +182,8 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
     private void cancelSubs() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getcancelSubscribeRequestParams(id);
         cancelSubsHandler = HttpRequest.post(requestParams, URL.MY_REMOVE_INTEREST_SCENE_ID, new GlobalDataCallBack(){
-//        cancelSubsHandler = ClientDiscoverAPI.cancelSubscribe(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<取消订阅", json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -198,7 +192,6 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<订阅情景分类", "解析异常=" + e.toString());
                 }
                 if (netBean.isSuccess()) {
                     isSubs = 1;
@@ -222,10 +215,8 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
     private void subs() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getsubscribeRequestParams(id);
         subsHandler = HttpRequest.post(requestParams, URL.MY_ADD_INTEREST_SCENE_ID, new GlobalDataCallBack(){
-//        subsHandler = ClientDiscoverAPI.subscribe(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<订阅", json);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -234,7 +225,6 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<订阅情景分类", "解析异常=" + e.toString());
                 }
                 if (netBean.isSuccess()) {
                     isSubs = 2;

@@ -111,7 +111,6 @@ public class NewProductFragment extends MyBaseFragment {
     protected void loadData() {
         HashMap<String, String> params = ClientDiscoverAPI.getChoosenSubjectRequestParams(String.valueOf(curPage), PAGE_TYPE, FINE, SORT);
         HttpRequest.post(params, URL.CHOOSEN_SUBJECT_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getChoosenSubject(String.valueOf(curPage), PAGE_TYPE, FINE, SORT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {

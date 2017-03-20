@@ -183,7 +183,6 @@ public class NewProductDetailActivity extends BaseActivity {
         if (TextUtils.isEmpty(id)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
         HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
@@ -233,7 +232,6 @@ public class NewProductDetailActivity extends BaseActivity {
                 if (data.product.is_favorite == 0) {
                     HashMap<String, String> params = ClientDiscoverAPI.getfavoriteRequestParams(data.product._id, "1");
                     HttpRequest.post(params,  URL.FAVORITE_PRODUCT, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.favorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
                             v.setEnabled(true);
@@ -256,7 +254,6 @@ public class NewProductDetailActivity extends BaseActivity {
                 } else {
                     HashMap<String, String> params = ClientDiscoverAPI.getcancelFavoriteRequestParams(data.product._id, "1");
                     HttpRequest.post(params, URL.CANCEL_FAVORITE_PRODUCT, new GlobalDataCallBack(){
-//                    ClientDiscoverAPI.cancelFavorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(String json) {
                             v.setEnabled(true);
@@ -291,7 +288,6 @@ public class NewProductDetailActivity extends BaseActivity {
     protected void requestNet() {
             HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
             HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//            ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;

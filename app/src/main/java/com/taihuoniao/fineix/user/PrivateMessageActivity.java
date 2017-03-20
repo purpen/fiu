@@ -93,7 +93,6 @@ public class PrivateMessageActivity extends BaseActivity{
         if (user._id<=0) return;
         HashMap<String, String> params =ClientDiscoverAPI. getmessageDetailListRequestParams(String.valueOf(user._id));
         HttpRequest.post(params,  URL.MESSAGE_DETAIL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.messageDetailList(String.valueOf(user._id),new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog!=null&&!isSendMsg) dialog.show();
@@ -146,10 +145,8 @@ public class PrivateMessageActivity extends BaseActivity{
         }
         HashMap<String, String> params = ClientDiscoverAPI.getsendMessageRequestParams(String.valueOf(user._id), content);
         HttpRequest.post(params,  URL.SEND_MESSAGE, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.sendMessage(String.valueOf(user._id), content, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-//                if (dialog!=null) dialog.show();
                 v.setEnabled(false);
             }
 
@@ -157,7 +154,6 @@ public class PrivateMessageActivity extends BaseActivity{
             public void onSuccess(String json) {
                 isSendMsg=true;
                 v.setEnabled(true);
-//                dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()){
@@ -174,7 +170,6 @@ public class PrivateMessageActivity extends BaseActivity{
             @Override
             public void onFailure(String error) {
                 v.setEnabled(true);
-//                dialog.dismiss();
                 Util.makeToast("请您检查网络！");
             }
         });

@@ -168,7 +168,6 @@ public class SystemSettingsActivity extends BaseActivity {
     private void logout() {
         HashMap<String, String> params = ClientDiscoverAPI.getlogoutRequestParams();
         HttpRequest.post(params,  URL.LOGOUT, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.logout(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) return;
@@ -196,7 +195,6 @@ public class SystemSettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 

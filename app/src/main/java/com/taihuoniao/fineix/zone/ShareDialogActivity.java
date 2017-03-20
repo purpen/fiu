@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -204,7 +203,6 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
     public void onError(Platform platform, int i, Throwable throwable) {
         ToastUtils.showInfo(platform.getName() + " 分享失败啦");
         if (throwable != null) {
-            Log.e("throw", "throw:" + throwable.getMessage());
         }
     }
 

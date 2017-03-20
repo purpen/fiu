@@ -1,10 +1,6 @@
 package com.taihuoniao.fineix.home;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -79,7 +75,6 @@ public class MoreWellGoodsActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<好货专题列表", json);
                 pullToRefreshListViewWellGoodsMore.onRefreshComplete();
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
@@ -88,7 +83,6 @@ public class MoreWellGoodsActivity extends BaseActivity {
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
                     if (currentPage == 1) {

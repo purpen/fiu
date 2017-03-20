@@ -242,7 +242,6 @@ public class AddressSelectFragment extends DialogFragment {
     private void requestNet() {
         HashMap<String, String> params =ClientDiscoverAPI. getrequestAddressRequestParams(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer));
         HttpRequest.post(params,URL.SHOPPING_FETCH_CHINA_CITY, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.requestAddress(String.valueOf(oid), String.valueOf(pid), String.valueOf(layer), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 progressbar.setVisibility(View.VISIBLE);

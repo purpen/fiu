@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
@@ -180,12 +179,8 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
     private void getSceneList() {
         HashMap<String, String> params =ClientDiscoverAPI. getproductAndSceneRequestParams(page + "", 8 + "", null, id, null);
        Call httpHandler = HttpRequest.post(params, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
-//        HttpHandler<String> httpHandler = ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
-
-                Log.e("<<<关联列表", json);
-//                WriteJsonToSD.writeToSD("json", json);
                 ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
                 try {
                     Gson gson = new Gson();
@@ -193,7 +188,6 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                     }.getType();
                     productAndSceneListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<关联列表", "解析异常=" + e.toString());
                 }
                 if (productAndSceneListBean.isSuccess()) {
                     if (page == 1) {

@@ -127,7 +127,6 @@ public class OrderQJActivity extends BaseActivity {
         if (TextUtils.isEmpty(builder)) return;
         HashMap<String, String> params = ClientDiscoverAPI.getQJListRequestParams(String.valueOf(curPage), builder.deleteCharAt(builder.length() - 1).toString());
         HttpRequest.post(params, URL.SCENE_LIST, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.getQJList(String.valueOf(curPage), builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {

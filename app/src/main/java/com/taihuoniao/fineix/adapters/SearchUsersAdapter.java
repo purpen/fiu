@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -146,11 +145,9 @@ public class SearchUsersAdapter extends BaseAdapter {
     private void fllow(final int position, String otherUserId, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(otherUserId);
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                Log.e("<<<关注用户", json);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -158,7 +155,6 @@ public class SearchUsersAdapter extends BaseAdapter {
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
                     holder.focusBtn.setBackgroundResource(R.drawable.border_radius5_pressed);
@@ -214,7 +210,6 @@ public class SearchUsersAdapter extends BaseAdapter {
     private void cancelFollow(final SearchBean.Data.SearchItem item, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_id());
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.cancelFocusOperate(item.getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -225,7 +220,6 @@ public class SearchUsersAdapter extends BaseAdapter {
                     }.getType();
                     netBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
                     holder.focusBtn.setPadding(0, 0, 0, 0);

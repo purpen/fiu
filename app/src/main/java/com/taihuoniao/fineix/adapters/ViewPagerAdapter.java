@@ -143,81 +143,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                 public void onClick(View v) {
                     final BannerBean.RowsBean banner = (BannerBean.RowsBean) content;
                     GoToNextUtils.goToIntent(activity, Integer.valueOf(banner.type), banner.web_url);
-/*                      Intent intent;
-                  switch (Integer.valueOf(banner.getType())) {
-                        case 1:      //url地址
-                            Uri uri = Uri.parse(banner.getWeb_url());
-                            intent = new Intent(Intent.ACTION_VIEW, uri);
-                            activity.startActivity(intent);
-                            break;
-                        case 2://商品
-                            intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                            intent.putExtra("id", banner.getWeb_url());
-                            activity.startActivity(intent);
-                            break;
-                        case 4://app专题
-                            intent = new Intent(activity, SubjectActivity.class);
-                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.getWeb_url());
-                            intent.putExtra(SubjectActivity.class.getName(), banner.getTitle());
-                            activity.startActivity(intent);
-                            break;
-                        case 8:     //情境
-                            intent = new Intent(activity, QJDetailActivity.class);
-                            intent.putExtra("id", banner.getWeb_url());
-                            activity.startActivity(intent);
-                            break;
-                        case 9:     //产品
-                            intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                            intent.putExtra("id", banner.getWeb_url());
-                            activity.startActivity(intent);
-                            break;
-                        case 11:    //情境专题
-                            Log.e("<<<", "banner.toString=" + banner.toString());
-                            HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(banner.getWeb_url());
-                            HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-//                            ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
-                                @Override
-                                public void onSuccess(String json) {
-                                    HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
-                                    });
-
-                                    if (response.isSuccess()) {
-                                        SubjectData data = response.getData();
-                                        Intent intent;
-                                        switch (data.type) {
-                                            case 1: //文章详情
-                                                intent = new Intent(activity, ArticalDetailActivity.class);
-                                                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), banner.getWeb_url());
-                                                activity.startActivity(intent);
-                                                break;
-                                            case 2: //活动详情
-                                                intent = new Intent(activity, ActivityDetailActivity.class);
-                                                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), banner.getWeb_url());
-                                                activity.startActivity(intent);
-                                                break;
-                                            case 4: //新品
-                                                intent = new Intent(activity, NewProductDetailActivity.class);
-                                                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), banner.getWeb_url());
-                                                activity.startActivity(intent);
-                                                break;
-                                            case 3: //促销
-                                                intent = new Intent(activity, SalePromotionDetailActivity.class);
-                                                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), banner.getWeb_url());
-                                                activity.startActivity(intent);
-                                                break;
-                                        }
-                                        return;
-                                    }
-                                    ToastUtils.showError(response.getMessage());
-                                }
-
-                                @Override
-                                public void onFailure(String error) {
-                                    ToastUtils.showError(R.string.network_err);
-                                }
-                            });
-                            break;
-                    }*/
 
                 }
             });
@@ -250,7 +175,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         }
         HashMap<String, String> params = ClientDiscoverAPI.getsubmitInviteCodeRequestParams(code);
         HttpRequest.post(params, URL.GATEWAY_VALIDE_INVITE_CODE , new GlobalDataCallBack(){
-//        ClientDiscoverAPI.submitInviteCode(code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) {
@@ -274,7 +198,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     private void updateInviteCodeStatus() {
         HashMap<String, String> params = ClientDiscoverAPI.getupdateInviteCodeStatusRequestParams(code);
         HttpRequest.post(params, URL.GATEWAY_DEL_INVITE_CODE , new GlobalDataCallBack(){
-//        ClientDiscoverAPI.updateInviteCodeStatus(code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 if (TextUtils.isEmpty(json)) {
@@ -306,7 +229,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         }
         HashMap<String, String> params = ClientDiscoverAPI.getDefaultParams();
         HttpRequest.post(params,URL.GATEWAY_IS_INVITED, new GlobalDataCallBack(){
-//        ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();

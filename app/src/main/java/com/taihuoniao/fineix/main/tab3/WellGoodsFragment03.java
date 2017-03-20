@@ -2,9 +2,6 @@ package com.taihuoniao.fineix.main.tab3;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,8 +15,6 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
-import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
-import com.taihuoniao.fineix.adapters.FirstProductAdapter;
 import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -105,7 +100,6 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -159,7 +153,6 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
 
             @Override
             public void onSuccess(String json) {
-                Log.e("<<<好货专题列表", json);
                 pullRefreshView001.onRefreshComplete();
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
@@ -168,7 +161,6 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
                     }.getType();
                     subjectListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
                     if (currentPage == 1) {

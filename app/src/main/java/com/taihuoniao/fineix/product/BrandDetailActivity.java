@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -134,12 +133,10 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private void getQJList() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getproductAndSceneRequestParams(qjPage + "", 8 + "", null, null, id);
         HttpRequest.post(requestParams, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
-//        qjHandler = ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                Log.e("<<<品牌下的情景", json);
                 ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
                 try {
                     Gson gson = new Gson();
@@ -147,7 +144,6 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     productAndSceneListBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<品牌下的情景", "解析异常=" + e.toString());
                 }
                 if (productAndSceneListBean.isSuccess()) {
                     if (qjPage == 1) {
@@ -179,7 +175,6 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private void getProductList() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9");
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
-//        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
@@ -225,7 +220,6 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private void brandDetails() {
         HashMap<String, String> requestParams = ClientDiscoverAPI.getbrandDetailRequestParams(id);
         HttpRequest.post(requestParams, URL.BRAND_DETAIL, new GlobalDataCallBack(){
-//        brandHandler = ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String json) {
                 BrandDetailBean brandDetailBean = new BrandDetailBean();
@@ -235,7 +229,6 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     brandDetailBean = gson.fromJson(json, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 if (brandDetailBean.isSuccess()) {
                     titleName.setText(brandDetailBean.getData().getTitle());
