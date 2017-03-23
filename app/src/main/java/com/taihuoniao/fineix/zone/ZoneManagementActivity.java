@@ -53,10 +53,6 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
  * 地盘管理
  */
 public class ZoneManagementActivity extends BaseActivity implements View.OnClickListener {
-//    private static final int REQUEST_MODIFY_BRIEF = 101;
-//    private static final int REQUEST_MODIFY_PHONE = 102;
-//    private static final int REQUEST_BUSINESS_TIME = 103;
-
     @Bind(R.id.custom_head)
     CustomHeadView customHeadView;
     @Bind(R.id.item_zone_base_info)
@@ -121,6 +117,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void installListener() {
+        itemLightSpot.setOnClickListener(this);
         adapter.setOnItemClickListener(new ZoneEditCoversAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
@@ -163,6 +160,10 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.item_light_spot:
+                Intent intent = new Intent(activity,ZoneEditBrightActivity.class);
+                startActivity(intent);
+                break;
             case R.id.tv_take_photo:
                 PopupWindowUtil.dismiss();
                 if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {

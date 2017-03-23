@@ -40,6 +40,7 @@ public class Constants {
 
     //从获取相册图片
     public static final int REQUEST_CODE_PICK_IMAGE = 105;
+
     //拍照获取图片
     public static final int REQUEST_CODE_CAPTURE_CAMERA = 106;
 }

@@ -39,6 +39,8 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.taihuoniao.fineix.utils.ImageUtils.getSmallBitmap;
+
 public class Util {
 
     public static String ToSBC(String input) {
@@ -355,4 +357,12 @@ public class Util {
         }
         return false;
     }
+
+    //把bitmap转换成String
+     public static String bitmap2String(Bitmap bitmap) {
+         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         bitmap.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+         byte[] b = baos.toByteArray();
+         return Base64.encodeToString(b, Base64.DEFAULT);
+     }
 }

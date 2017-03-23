@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.zone;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +19,7 @@ import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * 亮点详情
@@ -43,9 +45,22 @@ public class LightSpotDetailActivity extends BaseActivity {
 
     }
 
+    @OnClick({R.id.tv_head_right})
+    void OnClick(View view){
+        switch (view.getId()){
+            case R.id.tv_head_right:
+                Intent intent = new Intent(activity,ZoneEditBrightActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     protected void initView() {
         highLight.getPaint().setFakeBoldText(true);
+        customHeadView.setHeadRightTxtShow(true, R.string.zone_edit_bright);
         if (zoneDetailBean==null) return;
         customHeadView.setHeadCenterTxtShow(true,zoneDetailBean.title);
         setBrightSpots(zoneDetailBean.bright_spot);
