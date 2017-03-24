@@ -13,13 +13,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchBrandAdapter;
 import com.taihuoniao.fineix.adapters.SearchProductAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AddBrandBean;
@@ -28,12 +27,12 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +67,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     @Bind(R.id.add_product_name)
     TextView addProductName;
     private ListView listView;
-    private List<SearchBean.Data.SearchItem> brandList;
+    private List<SearchBean.SearchItem> brandList;
     private SearchBrandAdapter searchBrandAdapter;
     private String currentInBrand;//正在输入的品牌名称
     private WaittingDialog dialog;
@@ -243,25 +242,18 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                AddProductBean addProductBean = new AddProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<AddProductBean>() {
-                    }.getType();
-                    addProductBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                if (addProductBean.isSuccess()) {
+                HttpResponse<AddProductBean> addProductBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AddProductBean>>() {});
+                if (addProductBeanHttpResponse.isSuccess()) {
                     String brand = brandName.getText().toString();
                     Intent intent = new Intent();
                     intent.putExtra("brand", brand);
                     intent.putExtra("brandId", cuurentBrandId);
                     intent.putExtra("product", searchEditText.getText().toString());
-                    intent.putExtra("productId", addProductBean.getData().getId());
+                    intent.putExtra("productId", addProductBeanHttpResponse.getData().getId());
                     setResult(1, intent);
                     finish();
                 } else {
-                    ToastUtils.showError(addProductBean.getMessage());
+                    ToastUtils.showError(addProductBeanHttpResponse.getMessage());
                 }
             }
 
@@ -283,14 +275,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                AddBrandBean addBrandBean = new AddBrandBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<AddBrandBean>() {
-                    }.getType();
-                    addBrandBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<AddBrandBean> addBrandBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<AddBrandBean>>() {});
                 if (addBrandBean.isSuccess()) {
                     searchEditText.setHint("请输入产品名称");
                     searchEditText.setText("");
@@ -321,14 +306,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams , URL.SEARCH,new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                SearchBean searchBean = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    searchBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SearchBean> searchBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SearchBean>>() { });
                 if (searchBean.isSuccess()) {
                     brandList.clear();
                     brandList.addAll(searchBean.getData().getRows());
@@ -350,7 +328,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         addNet(httpHandler);
     }
 
-    private List<ProductBean.ProductListItem> productList;
+    private List<ProductBean.RowsEntity> productList;
     private SearchProductAdapter searchProductAdapter;
 
     private void searchProduct(String title, String brand_id) {
@@ -358,14 +336,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         Call httpHandler = HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                 if (productBean.isSuccess()) {
                     productList = new ArrayList<>();
                     productList.addAll(productBean.getData().getRows());

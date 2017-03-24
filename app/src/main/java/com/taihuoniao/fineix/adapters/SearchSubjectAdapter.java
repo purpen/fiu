@@ -20,9 +20,9 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/24.
  */
 public class SearchSubjectAdapter extends BaseAdapter {
-    private List<SearchBean.Data.SearchItem> list;
+    private List<SearchBean.SearchItem> list;
 
-    public SearchSubjectAdapter(List<SearchBean.Data.SearchItem> list) {
+    public SearchSubjectAdapter(List<SearchBean.SearchItem> list) {
         this.list = list;
     }
 

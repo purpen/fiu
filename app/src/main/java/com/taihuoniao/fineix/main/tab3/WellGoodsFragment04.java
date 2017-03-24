@@ -11,12 +11,11 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubjectListBean;
@@ -27,12 +26,12 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.pulltorefresh.HeaderGridView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView2;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,12 +50,12 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
     @Bind(R.id.pull_refresh_view_001)
     PullToRefreshGridView2 pullToRefreshGridView;
 
-    private List<SubjectListBean.DataBean.RowsBean> subjectList2;
+    private List<SubjectListBean.RowsEntity> subjectList2;
     private WellgoodsSubjectAdapter2 wellgoodsSubjectAdapter2;
 
     private ProductListGridAdapter indexAdapter002;
-    private List<ProductBean.ProductListItem> productList;
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<ProductBean.RowsEntity> productList;
+    private List<SearchBean.SearchItem> searchList;
 
     private int currentPage = 1;
     private String categoryId;
@@ -170,15 +169,7 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
             @Override
             public void onSuccess(String json) {
                 pullToRefreshGridView.onRefreshComplete();
-                SubjectListBean subjectListBean = new SubjectListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SubjectListBean>() {
-                    }.getType();
-                    subjectListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
+                HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 String total_rows = subjectListBean.getData().getTotal_rows();
                 if (subjectListBean.isSuccess() &&  !TextUtils.isEmpty(total_rows) && Integer.valueOf(total_rows) > 0) {
                     if (currentPage == 1) {
@@ -211,15 +202,7 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
             @Override
             public void onSuccess(String json) {
                 pullToRefreshGridView.onRefreshComplete();
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
+                HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                 if (productBean.isSuccess()) {
                     if (currentPage == 1) {
                         searchList.clear();

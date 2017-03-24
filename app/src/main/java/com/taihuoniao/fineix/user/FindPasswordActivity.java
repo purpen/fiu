@@ -12,16 +12,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.FindPasswordInfo;
+import com.taihuoniao.fineix.beans.FindPasswordInfoBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.EmailUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.util.HashMap;
@@ -55,16 +58,13 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                 btGetVerifyCode.setText("发送验证码");
             }
             if (msg.what == DataConstants.PARSER_FIND_PASSWORD) {
-                if (msg.obj instanceof FindPasswordInfo) {
-                    FindPasswordInfo info = (FindPasswordInfo) msg.obj;
-                    if (info.getSuccess()) {
-                        Toast.makeText(FindPasswordActivity.this, info.getMessage(),
-                                Toast.LENGTH_SHORT).show();
+                if (msg.obj instanceof HttpResponse) {
+                    HttpResponse<FindPasswordInfoBean> info = (HttpResponse<FindPasswordInfoBean>) msg.obj;
+                    if (info.isSuccess()) {
+                        Toast.makeText(FindPasswordActivity.this, info.getMessage(),Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(FindPasswordActivity.this,
-                                info.getMessage(), Toast.LENGTH_SHORT)
-                                .show();
+                        Toast.makeText(FindPasswordActivity.this,info.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -180,7 +180,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                         if (!TextUtils.isEmpty(phone1)
                                 && EmailUtils.isMobileNO(phone1)) {
 
-                            DataPaser.findPasswordParser(mHandler, phone1, newPassword, verifyCode);
+                            findPasswordParser(mHandler, phone1, newPassword, verifyCode);
 
                         } else {
                             ToastUtils.showInfo("请输入手机号");
@@ -200,5 +200,31 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
     protected void onDestroy() {
         super.onDestroy();
         this.getContentResolver().unregisterContentObserver(readSmsContent);
+    }
+
+
+    /**
+     * 找回密码的解析
+     * @param handler handler
+     * @param phone phone
+     * @param password password
+     * @param code code
+     */
+    private void findPasswordParser(final Handler handler, String phone, String password, String code) {
+        HashMap<String, String> params = ClientDiscoverAPI.getfindPasswordNetRequestParams(phone, password, code);
+        HttpRequest.post(params, URL.AUTH_FIND_PWD, new GlobalDataCallBack(){
+            @Override
+            public void onSuccess(String json) {
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_FIND_PASSWORD;
+                msg.obj = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FindPasswordInfoBean>>(){});
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
     }
 }

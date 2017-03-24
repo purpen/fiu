@@ -7,28 +7,28 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SubsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.SceneList;
-import com.taihuoniao.fineix.beans.UserInfo;
+import com.taihuoniao.fineix.beans.UserInfoBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.user.SubscribeThemeActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +55,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
     private WaittingDialog dialog;
 
     private int page = 1;//订阅情景列表页码
-    private List<SceneList.DataBean.RowsBean> sceneList;//订阅的情景列表数据
+    private List<SceneListBean2.RowsEntity> sceneList;//订阅的情景列表数据
     private SubsListAdapter subsListAdapter;//订阅情景列表适配器
     private ArrayList<String> subsId;//订阅的情景主题
     private String ids;//订阅的情景主题id
@@ -137,16 +137,9 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                SceneList sceneL = new SceneList();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneList>() {
-                    }.getType();
-                    sceneL = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneListBean2> sceneL = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneListBean2>>() {});
                 if (sceneL.isSuccess()) {
-                    subsListAdapter.setPage(sceneL.getData().getCurrent_page());
+                    subsListAdapter.setPage(TypeConversionUtils.StringConvertInt(sceneL.getData().getCurrent_page()));
                     pullRefreshView.setLoadingTime();
                     if (page == 1) {
                         sceneList.clear();
@@ -174,14 +167,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
         Call httpHandler = HttpRequest.post(URL.USER_CENTER, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                UserInfo userInfo = new UserInfo();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<UserInfo>() {
-                    }.getType();
-                    userInfo = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<UserInfoBean> userInfo = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<UserInfoBean>>() { });
                 if (userInfo.isSuccess()) {
                     hasSubsCountTv.setText("已订阅" + userInfo.getData().getInterest_scene_cate().size() + "个情境主题");
                     subsId = new ArrayList<>();

@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 
 import java.util.List;
 
@@ -38,9 +39,9 @@ import butterknife.ButterKnife;
 
 public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapter.VH>{
     private Context mContext;
-    private List<SubjectListBean.DataBean.RowsBean> mRowsBeens;
+    private List<SubjectListBean.RowsEntity> mRowsBeens;
 
-    public ProductAlbumAdapter(Context context, List<SubjectListBean.DataBean.RowsBean> list) {
+    public ProductAlbumAdapter(Context context, List<SubjectListBean.RowsEntity> list) {
         this.mContext = context;
         this.mRowsBeens = list;
     }
@@ -77,7 +78,7 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
             holder.container.setPadding(0, 0, 0, 0);
         }
 
-        SubjectListBean.DataBean.RowsBean rowsBean = mRowsBeens.get(adapterPosition);
+        SubjectListBean.RowsEntity rowsBean = mRowsBeens.get(adapterPosition);
         if (rowsBean == null) {
             return;
         }
@@ -130,10 +131,10 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
     static class RecyclerAdapter extends RecyclerView.Adapter<ProductAlbumAdapter.RecyclerAdapter.VH> {
 
         private Activity activity;
-        private List<SubjectListBean.DataBean.RowsBean.ProductsBean> list;
+        private List<SubjectListBean.RowsEntity.ProductsEntity> list;
         private EditRecyclerAdapter.ItemClick itemClick;
 
-        public RecyclerAdapter(Activity activity, List<SubjectListBean.DataBean.RowsBean.ProductsBean> list, EditRecyclerAdapter.ItemClick itemClick) {
+        public RecyclerAdapter(Activity activity, List<SubjectListBean.RowsEntity.ProductsEntity> list, EditRecyclerAdapter.ItemClick itemClick) {
             this.activity = activity;
             this.list = list;
             this.itemClick = itemClick;
@@ -199,7 +200,7 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
 
     private void clickBigImage(int position){
         Intent intent = new Intent();
-        switch (mRowsBeens.get(position).getType()) {
+        switch (TypeConversionUtils.StringConvertInt(mRowsBeens.get(position).getType())) {
             case 1: //文章详情
                 intent = new Intent(mContext, ArticalDetailActivity.class);
                 intent.putExtra(ArticalDetailActivity.class.getSimpleName(), mRowsBeens.get(position).get_id());

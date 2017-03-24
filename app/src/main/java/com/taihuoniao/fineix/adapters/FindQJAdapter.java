@@ -10,10 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.FindActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -36,13 +36,14 @@ import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,12 +57,12 @@ public class FindQJAdapter extends BaseAdapter {
     private final int ITEM_QJ = 0;
     private final int ITEM_SUBJECT = 1;
     private Activity activity;
-    private List<SubjectListBean.DataBean.RowsBean> subjectList;
-    private List<SceneList.DataBean.RowsBean> sceneList;
+    private List<SubjectListBean.RowsEntity> subjectList;
+    private List<SceneListBean2.RowsEntity> sceneList;
     private WaittingDialog dialog;
     private int page;
 
-    public FindQJAdapter(Activity activity, List<SubjectListBean.DataBean.RowsBean> subjectList, List<SceneList.DataBean.RowsBean> sceneList) {
+    public FindQJAdapter(Activity activity, List<SubjectListBean.RowsEntity> subjectList, List<SceneListBean2.RowsEntity> sceneList) {
         this.activity = activity;
         this.subjectList = subjectList;
         this.sceneList = sceneList;
@@ -146,7 +147,7 @@ public class FindQJAdapter extends BaseAdapter {
                 GlideUtils.displayImage(sceneList.get(qjPosition).getUser_info().getAvatar_url(), holder.qjHeadImg1);
 
                 holder.qjName1.setText(sceneList.get(qjPosition).getUser_info().getNickname());
-                if (sceneList.get(qjPosition).getIs_love() == 1) {
+                if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition).getIs_love()) == 1) {
                     holder.qjLove1.setImageResource(R.mipmap.find_has_love);
                 } else {
                     holder.qjLove1.setImageResource(R.mipmap.find_love);
@@ -184,7 +185,7 @@ public class FindQJAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         if (LoginInfo.isUserLogin()) {
                             //已经登录
-                            if (sceneList.get(qjPosition).getIs_love() == 1) {
+                            if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition).getIs_love()) == 1) {
 //                                if (!dialog.isShowing()) {
 //                                    dialog.show();
 //                                }
@@ -219,7 +220,7 @@ public class FindQJAdapter extends BaseAdapter {
                     GlideUtils.displayImage(sceneList.get(qjPosition + 1).getUser_info().getAvatar_url(), holder.qjHeadImg2);
 
                     holder.qjName2.setText(sceneList.get(qjPosition + 1).getUser_info().getNickname());
-                    if (sceneList.get(qjPosition + 1).getIs_love() == 1) {
+                    if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition + 1).getIs_love()) == 1) {
                         holder.qjLove2.setImageResource(R.mipmap.find_has_love);
                     } else {
                         holder.qjLove2.setImageResource(R.mipmap.find_love);
@@ -257,7 +258,7 @@ public class FindQJAdapter extends BaseAdapter {
                         public void onClick(View v) {
                             if (LoginInfo.isUserLogin()) {
                                 //已经登录
-                                if (sceneList.get(qjPosition + 1).getIs_love() == 1) {
+                                if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition + 1).getIs_love()) == 1) {
 //                                    if (!dialog.isShowing()) {
 //                                        dialog.show();
 //                                    }
@@ -298,7 +299,7 @@ public class FindQJAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
-                        switch (subjectList.get(subjectPosition).getType()) {
+                        switch (TypeConversionUtils.StringConvertInt(subjectList.get(subjectPosition).getType())) {
                             case 1:
                                 intent.setClass(activity, ArticalDetailActivity.class);
                                 intent.putExtra(ArticalDetailActivity.class.getSimpleName(), subjectList.get(subjectPosition).get_id());
@@ -319,7 +320,7 @@ public class FindQJAdapter extends BaseAdapter {
                         activity.startActivity(intent);
                     }
                 });
-                switch (subjectList.get(subjectPosition).getType()) {
+                switch (TypeConversionUtils.StringConvertInt(subjectList.get(subjectPosition).getType())) {
                     case 1:
                         holder.subjectLabel.setImageResource(R.mipmap.subject_wenzhang_big);
                         break;
@@ -401,21 +402,14 @@ public class FindQJAdapter extends BaseAdapter {
                 holder.qjLove1.setEnabled(true);
                 holder.qjLove2.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     if (isRight) {
                         holder.qjLove2.setImageResource(R.mipmap.find_love);
                     } else {
                         holder.qjLove1.setImageResource(R.mipmap.find_love);
                     }
-                    sceneList.get(position).setIs_love(0);
+                    sceneList.get(position).setIs_love(TypeConversionUtils.IntConvertString(0));
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }
@@ -440,21 +434,14 @@ public class FindQJAdapter extends BaseAdapter {
                 holder.qjLove1.setEnabled(true);
                 holder.qjLove2.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     if (isRight) {
                         holder.qjLove2.setImageResource(R.mipmap.find_has_love);
                     } else {
                         holder.qjLove1.setImageResource(R.mipmap.find_has_love);
                     }
-                    sceneList.get(position).setIs_love(1);
+                    sceneList.get(position).setIs_love(TypeConversionUtils.IntConvertString(1));
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }

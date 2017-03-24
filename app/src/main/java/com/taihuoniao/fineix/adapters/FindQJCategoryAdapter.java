@@ -22,9 +22,9 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/22.
  */
 public class FindQJCategoryAdapter extends BaseAdapter {
-    private List<CategoryListBean.CategoryListItem> list;
+    private List<CategoryListBean.RowsEntity> list;
 
-    public FindQJCategoryAdapter(List<CategoryListBean.CategoryListItem> list) {
+    public FindQJCategoryAdapter(List<CategoryListBean.RowsEntity> list) {
         this.list = list;
     }
 

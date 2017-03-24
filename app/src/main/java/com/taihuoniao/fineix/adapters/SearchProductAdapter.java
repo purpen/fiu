@@ -18,9 +18,9 @@ import butterknife.ButterKnife;
  */
 public class SearchProductAdapter extends BaseAdapter {
     private String brandName;
-    private List<ProductBean.ProductListItem> productList;
+    private List<ProductBean.RowsEntity> productList;
 
-    public SearchProductAdapter(String brandName, List<ProductBean.ProductListItem> productList) {
+    public SearchProductAdapter(String brandName, List<ProductBean.RowsEntity> productList) {
         this.brandName = brandName;
         this.productList = productList;
     }

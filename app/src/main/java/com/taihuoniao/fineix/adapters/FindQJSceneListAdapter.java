@@ -28,13 +28,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
+import com.taihuoniao.fineix.beans.QJFavoriteBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -50,15 +49,18 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.QJPictureActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.LabelView;
@@ -78,7 +80,7 @@ import butterknife.ButterKnife;
  */
 public class FindQJSceneListAdapter extends BaseAdapter {
     private Activity activity;
-    private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
+    private List<SceneListBean2.RowsEntity> sceneList;//情景列表数据
     private WaittingDialog dialog;
     private int pos;
     //popupwindow下的控件
@@ -89,7 +91,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private TextView jubaoTv;
     private TextView cancelTv;
 
-    public FindQJSceneListAdapter(Activity activity, List<SceneList.DataBean.RowsBean> sceneList) {
+    public FindQJSceneListAdapter(Activity activity, List<SceneListBean2.RowsEntity> sceneList) {
         this.activity = activity;
         this.sceneList = sceneList;
         dialog = new WaittingDialog(activity);
@@ -142,7 +144,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             bianjiTv.setVisibility(View.GONE);
             jubaoTv.setText("举报");
         }
-        if (sceneList.get(position).getIs_favorite() == 1) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_favorite()) == 1) {
             shoucangTv.setText("取消收藏");
         } else {
             shoucangTv.setText("收藏");
@@ -165,7 +167,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (sceneList.get(position).getIs_favorite() == 1) {
+                if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_favorite()) == 1) {
                     if (!dialog.isShowing()) {
                         dialog.show();
                     }
@@ -258,8 +260,8 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         }
 //        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
-        List<SceneList.DataBean.RowsBean.ProductBean> productBeanList = sceneList.get(position).getProduct();
-        if (productBeanList != null && compareble(productBeanList, (List<SceneList.DataBean.RowsBean.ProductBean>) holder.labelContainer.getTag(R.id.label_container))) {
+        List<SceneListBean2.RowsEntity.ProductEntity> productBeanList = sceneList.get(position).getProduct();
+        if (productBeanList != null && compareble(productBeanList, (List<SceneListBean2.RowsEntity.ProductEntity>) holder.labelContainer.getTag(R.id.label_container))) {
             holder.labelContainer.setTag(R.id.label_container, productBeanList);
         } else {
             stopAnimate(holder); //停止商品动画 移除所有标签
@@ -284,7 +286,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             public void onClick(View v) {
 //                跳转到地图界面，查看附近的情境
                 String address = sceneList.get(position).getAddress();
-                LatLng ll = new LatLng(sceneList.get(position).getLocation().getCoordinates().get(1), sceneList.get(position).getLocation().getCoordinates().get(0));
+                LatLng ll = new LatLng(TypeConversionUtils.StringConvertDouble(sceneList.get(position).getLocation().getCoordinates().get(1)), TypeConversionUtils.StringConvertDouble(sceneList.get(position).getLocation().getCoordinates().get(0)));
                 Intent intent2 = new Intent(activity, MapNearByCJActivity.class);
                 intent2.putExtra("address", address);
                 intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
@@ -301,7 +303,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                         //过滤自己
                         return;
                     }
-                    if (sceneList.get(position).getUser_info().getIs_follow() == 0) {
+                    if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_follow()) == 0) {
                         if (!dialog.isShowing()) {
                             dialog.show();
                         }
@@ -322,7 +324,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
-                    if (sceneList.get(position).getIs_love() == 1) {
+                    if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_love()) == 1) {
                         holder.loveImg.setEnabled(false);
                         cancelLoveQJ(position, sceneList.get(position).get_id(), holder);
                     } else {
@@ -414,17 +416,17 @@ public class FindQJSceneListAdapter extends BaseAdapter {
      * @param holder
      */
     private void addGoodsTag(int position, final ViewGroup parent, ViewHolder holder) {
-        for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
+        for (final SceneListBean2.RowsEntity.ProductEntity productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(parent.getContext());
             labelView.nameTv.setText(productBean.getTitle());
-            if (TextUtils.equals("0",productBean.price)){
+            if (TextUtils.equals("0",productBean.getPrice())){
                 labelView.price.setVisibility(View.GONE);
             }else {
-                labelView.price.setText("¥"+productBean.price);
+                labelView.price.setText("¥"+productBean.getPrice());
             }
             labelView.setLayoutParams(layoutParams);
-            if (productBean.getLoc() == 2) {
+            if (TypeConversionUtils.StringConvertInt(productBean.getLoc()) == 2) {
                 labelView.llTag.setBackgroundResource(R.drawable.label_left);
                 RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
@@ -433,7 +435,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             labelView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (productBean.getLoc() == 2) {
+                    if (TypeConversionUtils.StringConvertInt(productBean.getLoc()) == 2) {
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
@@ -465,7 +467,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     }
 
     private void method1(final int position, final ViewHolder holder) {
-        if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_expert()) == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
         } else {
             holder.vImg.setVisibility(View.GONE);
@@ -485,7 +487,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             holder.attentionBtn.setVisibility(View.GONE);
         } else {
             holder.attentionBtn.setVisibility(View.VISIBLE);
-            if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
+            if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_follow()) == 1) {
 //                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.attentionBtn.setText("已关注");
@@ -504,16 +506,16 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(activity, QJPictureActivity.class);
                 intent.putExtra("img", sceneList.get(position).getCover_url());
-                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
-                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
-                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
+                intent.putExtra("fine", TypeConversionUtils.StringConvertInt(sceneList.get(position).getFine()) == 1);
+                intent.putExtra("stick", TypeConversionUtils.StringConvertInt(sceneList.get(position).getStick()) == 1);
+                intent.putExtra("check", TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_check()) == 0);
                 intent.putExtra("id",sceneList.get(position).get_id());
                 activity.startActivity(intent);
             }
         });
         holder.viewCount.setText(sceneList.get(position).getView_count());
         holder.loveCount.setText(sceneList.get(position).getLove_count());
-        if (sceneList.get(position).getIs_love() == 1) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_love()) == 1) {
             holder.loveImg.setImageResource(R.mipmap.index_has_love);
         } else {
             holder.loveImg.setImageResource(R.mipmap.index_love);
@@ -533,7 +535,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
         });
         holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
-        if (sceneList.get(position).getComment_count() > 0) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getComment_count()) > 0) {
             holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
             holder.moreComment.setVisibility(View.GONE);
         } else {
@@ -552,7 +554,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     }
 
     //取消关注弹窗
-    private void showFocusFansConfirmView(final SceneList.DataBean.RowsBean item, final ViewHolder holder) {
+    private void showFocusFansConfirmView(final SceneListBean2.RowsEntity item, final ViewHolder holder) {
         View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
         RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
@@ -588,20 +590,13 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    sceneList.get(position).setIs_favorite(0);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
+                    sceneList.get(position).setIs_favorite(TypeConversionUtils.IntConvertString(0));
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -619,20 +614,13 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    sceneList.get(position).setIs_favorite(1);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
+                    sceneList.get(position).setIs_favorite(TypeConversionUtils.IntConvertString(1));
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -650,14 +638,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -683,18 +664,11 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.loveImg.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_love);
-                    holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    sceneList.get(position).setIs_love(0);
+                    holder.loveCount.setText(sceneLoveBean.getData().getLove_count());
+                    sceneList.get(position).setIs_love(TypeConversionUtils.IntConvertString(0));
                     sceneList.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
@@ -718,18 +692,11 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.loveImg.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    sceneList.get(position).setIs_love(1);
+                    sceneList.get(position).setIs_love(TypeConversionUtils.IntConvertString(1));
                     sceneList.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
@@ -752,22 +719,15 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                     holder.attentionBtn.setText("");
                     holder.attentionBtn.setPadding(0, 0, 0, 0);
                     holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+                    for (SceneListBean2.RowsEntity rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
-                            rowsBean.getUser_info().setIs_follow(1);
+                            rowsBean.getUser_info().setIs_follow(TypeConversionUtils.IntConvertString(1));
                         }
                     }
                 } else {
@@ -784,28 +744,21 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     }
 
     //取消关注
-    private void cancelFollow(final SceneList.DataBean.RowsBean item, final ViewHolder holder) {
+    private void cancelFollow(final SceneListBean2.RowsEntity item, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_info().getUser_id());
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
                     holder.attentionBtn.setText("");
                     holder.attentionBtn.setPadding(0, 0, 0, 0);
                     holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+                    for (SceneListBean2.RowsEntity rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(item.getUser_info().getUser_id())) {
-                            rowsBean.getUser_info().setIs_follow(0);
+                            rowsBean.getUser_info().setIs_follow(TypeConversionUtils.IntConvertString(0));
                         }
                     }
                     return;
@@ -900,9 +853,9 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     }
 
     static class IndexCommentAdapter extends BaseAdapter {
-        private List<SceneList.DataBean.RowsBean.CommentsBean> commentList;
+        private List<SceneListBean2.RowsEntity.CommentsEntity> commentList;
 
-        public IndexCommentAdapter(List<SceneList.DataBean.RowsBean.CommentsBean> commentList) {
+        public IndexCommentAdapter(List<SceneListBean2.RowsEntity.CommentsEntity> commentList) {
             this.commentList = commentList;
         }
 
@@ -961,7 +914,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         }
     }
 
-    private boolean compareble(List<SceneList.DataBean.RowsBean.ProductBean> list1, List<SceneList.DataBean.RowsBean.ProductBean> list2){
+    private boolean compareble(List<SceneListBean2.RowsEntity.ProductEntity> list1, List<SceneListBean2.RowsEntity.ProductEntity> list2){
         return list1.equals(list2);
     }
 }

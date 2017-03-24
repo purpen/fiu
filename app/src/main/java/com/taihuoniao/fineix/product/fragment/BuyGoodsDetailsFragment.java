@@ -12,13 +12,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodDetailsSceneListAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
@@ -30,11 +29,11 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +59,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
     private ViewPagerAdapter<String> viewPagerAdapter;
     private BuyGoodDetailsBean mbuyGoodDetailsBean;
     private int page = 1;//相关情景列表页码
-    private List<ProductAndSceneListBean.ProductAndSceneItem> sceneList;
+    private List<ProductAndSceneListBean.RowsEntity> sceneList;
     private GoodDetailsSceneListAdapter goodDetailsSceneListAdapter;
 
     public static BuyGoodsDetailsFragment newInstance(String id) {
@@ -124,9 +123,8 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
 
     //用来刷新页面
     @Override
-    public void refreshData(BuyGoodDetailsBean buyGoodDetailsBean) {
-        this.mbuyGoodDetailsBean = buyGoodDetailsBean;
-        BuyGoodDetailsBean.DataBean dataBean = buyGoodDetailsBean.getData();
+    public void refreshData(BuyGoodDetailsBean dataBean) {
+        this.mbuyGoodDetailsBean = dataBean;
         if (dataBean == null) {
             return;
         }
@@ -138,7 +136,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
             holder.marketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter<>(activity,mbuyGoodDetailsBean.getData().getAsset());
+            viewPagerAdapter = new ViewPagerAdapter<>(activity,mbuyGoodDetailsBean.getAsset());
             holder.scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
             holder.scrollableView.setAutoScrollDurationFactor(8);
             holder.scrollableView.setInterval(4000);
@@ -181,14 +179,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
        Call httpHandler = HttpRequest.post(params, URL.PRODUCT_AND_SCENELIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductAndSceneListBean>() {
-                    }.getType();
-                    productAndSceneListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<ProductAndSceneListBean> productAndSceneListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductAndSceneListBean>>() {});
                 if (productAndSceneListBean.isSuccess()) {
                     if (page == 1) {
                         sceneList.clear();
@@ -253,7 +244,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                     return;
                 }
                 Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
-                intent.putExtra("id", mbuyGoodDetailsBean.getData().getBrand().get_id());
+                intent.putExtra("id", mbuyGoodDetailsBean.getBrand().get_id());
                 getActivity().startActivity(intent);
                 break;
         }

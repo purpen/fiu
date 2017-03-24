@@ -20,14 +20,14 @@ import java.util.List;
  * Created by taihuoniao on 2016/3/7.
  */
 public class ConfirmOrderProductsAdapter extends BaseAdapter {
-    private List<NowBuyBean.DataBean.OrderInfoBean.DictBean.ItemsBean> list;
+    private List<NowBuyBean.OrderInfoBean.DictBean.ItemsBean> list;
     private Context context;
     private List<CartOrderContentItem> cartList;
     //图片加载
     private ImageLoader imageLoader;
     private DisplayImageOptions options;
 
-    public ConfirmOrderProductsAdapter(List<NowBuyBean.DataBean.OrderInfoBean.DictBean.ItemsBean> list, Context context, List<CartOrderContentItem> cartList) {
+    public ConfirmOrderProductsAdapter(List<NowBuyBean.OrderInfoBean.DictBean.ItemsBean> list, Context context, List<CartOrderContentItem> cartList) {
         this.list = list;
         this.context = context;
         this.cartList = cartList;

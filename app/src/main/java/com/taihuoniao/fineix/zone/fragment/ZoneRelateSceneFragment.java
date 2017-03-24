@@ -8,22 +8,21 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.SceneList;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.adapter.ZoneRelateSceneAdapter;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +40,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
     private WaittingDialog dialog;
     private String sZoneId;
     private int curPage = 1;
-    private List<SceneList.DataBean.RowsBean> relateSceneList;
+    private List<SceneListBean2.RowsEntity> relateSceneList;
     private boolean isBottom;
     private boolean isLoading;
     private OnFragmentInteractionListener mListener;
@@ -147,16 +146,7 @@ public class ZoneRelateSceneFragment extends BaseFragment {
             public void onSuccess(String json) {
                 isLoading =false;
                 if (dialog != null && !activity.isFinishing()) dialog.dismiss();
-//                HttpResponse<ZoneRelateSceneBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ZoneRelateSceneBean>>() {
-//                });
-                SceneList sceneL = new SceneList();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneList>() {
-                    }.getType();
-                    sceneL = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneListBean2> sceneL = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneListBean2>>() {});
                 if (sceneL.getData().getRows().size() > 0) {
                     curPage++;
                     relateSceneList.addAll(sceneL.getData().getRows());

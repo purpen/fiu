@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.utils.GlideUtils;
 
@@ -23,7 +24,7 @@ public class WellGoodsCategoryAdapter extends RecyclerView.Adapter<WellGoodsCate
 
     private LayoutInflater mLayoutInflater;
     private GlobalCallBack mGlobalCallBack;
-    private List<com.taihuoniao.fineix.beans.CategoryListBean.CategoryListItem> categoryListItems;
+    private List<CategoryListBean.RowsEntity> categoryListItems;
 
     public WellGoodsCategoryAdapter(Context context, GlobalCallBack globalCallBack) {
         this.mGlobalCallBack = globalCallBack;
@@ -37,7 +38,7 @@ public class WellGoodsCategoryAdapter extends RecyclerView.Adapter<WellGoodsCate
 
     @Override
     public void onBindViewHolder(WellGoodsCategoryAdapter.VH holder, int position) {
-        final com.taihuoniao.fineix.beans.CategoryListBean.CategoryListItem rowsEntity = categoryListItems.get(position);
+        final CategoryListBean.RowsEntity rowsEntity = categoryListItems.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +69,7 @@ public class WellGoodsCategoryAdapter extends RecyclerView.Adapter<WellGoodsCate
         }
     }
 
-    public void putList(List<com.taihuoniao.fineix.beans.CategoryListBean.CategoryListItem> categoryListItems){
+    public void putList(List<CategoryListBean.RowsEntity> categoryListItems){
         this.categoryListItems = categoryListItems;
         notifyDataSetChanged();
     }

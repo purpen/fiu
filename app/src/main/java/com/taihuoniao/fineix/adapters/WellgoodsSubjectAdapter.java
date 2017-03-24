@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 
 import java.util.List;
 
@@ -29,9 +30,9 @@ import butterknife.ButterKnife;
  */
 public class WellgoodsSubjectAdapter extends BaseAdapter {
     private Activity activity;
-    private List<SubjectListBean.DataBean.RowsBean> list;
+    private List<SubjectListBean.RowsEntity> list;
 
-    public WellgoodsSubjectAdapter(Activity activity, List<SubjectListBean.DataBean.RowsBean> list) {
+    public WellgoodsSubjectAdapter(Activity activity, List<SubjectListBean.RowsEntity> list) {
         this.activity = activity;
         this.list = list;
     }
@@ -81,7 +82,7 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
                                                  @Override
                                                  public void onClick(View v) {
 //                                                     LogUtil.e("title==="+list.get(position).getTitle()+";id==="+list.get(position).get_id());
-                                                     GoToNextUtils.goNext(activity, list.get(position).getType(), list.get(position).get_id());
+                                                     GoToNextUtils.goNext(activity, TypeConversionUtils.StringConvertInt(list.get(position).getType()), list.get(position).get_id());
 //                                                     Intent intent = new Intent();
 //                                                     switch (list.get(position).getType()) {
 //                                                         case 1: //文章详情
@@ -144,10 +145,10 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
     static class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.VH> {
 
         private Activity activity;
-        private List<SubjectListBean.DataBean.RowsBean.ProductsBean> list;
+        private List<SubjectListBean.RowsEntity.ProductsEntity> list;
         private EditRecyclerAdapter.ItemClick itemClick;
 
-        public RecyclerAdapter(Activity activity, List<SubjectListBean.DataBean.RowsBean.ProductsBean> list, EditRecyclerAdapter.ItemClick itemClick) {
+        public RecyclerAdapter(Activity activity, List<SubjectListBean.RowsEntity.ProductsEntity> list, EditRecyclerAdapter.ItemClick itemClick) {
             this.activity = activity;
             this.list = list;
             this.itemClick = itemClick;

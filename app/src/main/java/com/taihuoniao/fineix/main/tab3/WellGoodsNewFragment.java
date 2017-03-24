@@ -14,13 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.App;
@@ -34,10 +33,10 @@ import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +68,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     private List<String> mStringList;
     private List<BaseFragment> mBaseFragments;
-    private List<CategoryListBean.CategoryListItem> categoryListItems;
+    private List<CategoryListBean.RowsEntity> categoryListItems;
     private WellGoodsAdapter wellGoodsAdapter;
 
     @Override
@@ -102,22 +101,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         viewPagerWellGoodsList.setAdapter(wellGoodsAdapter);
         viewPagerWellGoodsList.addOnPageChangeListener(this);
         tabLayoutWellGoodsCategory.setupWithViewPager(viewPagerWellGoodsList);
-
-        tabLayoutWellGoodsCategory.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                try {
-                    setIndicatorWidth();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    tabLayoutWellGoodsCategory.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    tabLayoutWellGoodsCategory.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-            }
-        });
+        setTabLayoutIndicatorWidth();
         viewPagerWellGoodsList.setOffscreenPageLimit(mBaseFragments.size());
         viewPagerWellGoodsList.setCurrentItem(0, false);
     }
@@ -197,14 +181,7 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                CategoryListBean categoryListBean = new CategoryListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryListBean>() {
-                    }.getType();
-                    categoryListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<CategoryListBean> categoryListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CategoryListBean>>() {});
                 if (categoryListBean.isSuccess()) {
                     categoryListItems = categoryListBean.getData().getRows();
                     addExtraCategory(categoryListItems);
@@ -218,10 +195,10 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         });
     }
 
-    private void addExtraCategory(List<CategoryListBean.CategoryListItem> categoryListItems) {
+    private void addExtraCategory(List<CategoryListBean.RowsEntity> categoryListItems) {
         if (categoryListItems != null) {
             for (int i = 0; i < categoryListItems.size(); i++) {
-                CategoryListBean.CategoryListItem categoryListItem = categoryListItems.get(i);
+                CategoryListBean.RowsEntity categoryListItem = categoryListItems.get(i);
                 mStringList.add(categoryListItem.getTitle());
                 WellGoodsFragment04 fragment04 = new WellGoodsFragment04();
                 Bundle bundle = new Bundle();
@@ -264,4 +241,23 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
                 break;
         }
     }
+
+    private void setTabLayoutIndicatorWidth() {
+        tabLayoutWellGoodsCategory.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                try {
+                    setIndicatorWidth();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    tabLayoutWellGoodsCategory.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    tabLayoutWellGoodsCategory.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+    }
+
 }

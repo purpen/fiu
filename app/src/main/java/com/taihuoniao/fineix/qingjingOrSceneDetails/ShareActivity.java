@@ -20,8 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.zxing.WriterException;
 import com.taihuoniao.fineix.R;
@@ -50,7 +48,6 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.bean.ShareH5Url;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -406,14 +403,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
                     @Override
                     public void onSuccess(String json) {
                         dialog.dismiss();
-                        BonusBean bonusBean = new BonusBean();
-                        try {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<BonusBean>() {
-                            }.getType();
-                            bonusBean = gson.fromJson(json, type);
-                        } catch (JsonSyntaxException e) {
-                        }
+                        HttpResponse<BonusBean> bonusBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<BonusBean>>() {});
                         if (bonusBean.isSuccess() && bonusBean.getData().getExp() > 0) {
                             textView.setText("+ " + bonusBean.getData().getExp());
                             expTv.setText(bonusBean.getData().getExp() + "");
@@ -465,16 +455,9 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                QJDetailBean qjDetailBean = new QJDetailBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<QJDetailBean>() {
-                    }.getType();
-                    qjDetailBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                if (qjDetailBean.isSuccess()) {
-                    netScene = qjDetailBean;
+                HttpResponse<QJDetailBean> qjDetailBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJDetailBean>>(){});
+                if (qjDetailBeanHttpResponse.isSuccess()) {
+                    netScene = qjDetailBeanHttpResponse.getData();
                     setImgParams();
                     recyclerView.setVisibility(View.VISIBLE);
                     new Handler().post(new Runnable() {
@@ -484,7 +467,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
                         }
                     });
                 } else {
-                    ToastUtils.showError(qjDetailBean.getMessage());
+                    ToastUtils.showError(qjDetailBeanHttpResponse.getMessage());
                 }
             }
 

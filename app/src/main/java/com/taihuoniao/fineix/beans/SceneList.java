@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/18.
  */
-public class SceneList extends NetBean implements Serializable {
+public class SceneList implements Serializable {
     private boolean is_error;
     private DataBean data;
 

@@ -8,11 +8,10 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListFragmentAdapter;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ProductBean;
@@ -22,12 +21,12 @@ import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +50,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
     private String tag_id;//子分类id
     private WaittingDialog dialog;
     private int page = 1;//产品列表页码
-    private List<ProductBean.ProductListItem> list;
+    private List<ProductBean.RowsEntity> list;
     private GoodListFragmentAdapter goodListFragmentAdapter;
 
     public static GoodListFragment newInstance(String id, String tag_id) {
@@ -125,15 +124,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
                         dialog.dismiss();
                         pullRefreshView.onRefreshComplete();
                         progressBar.setVisibility(View.GONE);
-                        ProductBean productBean = new ProductBean();
-                        try {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<ProductBean>() {
-                            }.getType();
-                            productBean = gson.fromJson(json, type);
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
-                        }
+                        HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                         if (productBean.isSuccess()) {
                             if (page == 1) {
                                 list.clear();
@@ -172,7 +163,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ProductBean.ProductListItem productListItem = (ProductBean.ProductListItem) gridView.getAdapter().getItem(position);
+        ProductBean.RowsEntity productListItem = (ProductBean.RowsEntity) gridView.getAdapter().getItem(position);
         Intent intent = new Intent(getActivity(), BuyGoodsDetailsActivity.class);
         intent.putExtra("id", productListItem.get_id());
         startActivity(intent);

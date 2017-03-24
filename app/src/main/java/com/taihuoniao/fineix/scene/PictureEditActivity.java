@@ -714,13 +714,13 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
                     final BuyGoodDetailsBean productListBean = (BuyGoodDetailsBean) data.getSerializableExtra("product");
                     //是自动添加标签还是后添加
-                    TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price() + "");
-                    tag.setId(productListBean.getData().get_id());
+                    TagItem tag = new TagItem(productListBean.getTitle(), productListBean.getSale_price() + "");
+                    tag.setId(productListBean.get_id());
                     tag.setLoc(2);
                     tag.setType(2);
                     addLabel(tag);
                     try {
-                        String url = productListBean.getData().getPng_asset().get(0).getUrl();
+                        String url = productListBean.getPng_asset().get(0).getUrl();
                         ImageLoader.getInstance().loadImage(url, new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String imageUri, View view) {

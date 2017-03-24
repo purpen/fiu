@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  * @author lilin
  *         created at 2016/5/4 19:24
  */
-public class NoticeAdapter extends CommonBaseAdapter<NoticeBean.DataBean.RowsBean> {
+public class NoticeAdapter extends CommonBaseAdapter<NoticeBean.RowsBean> {
     private ImageLoader imageLoader;
 
     public NoticeAdapter(List list, Activity activity) {
@@ -37,7 +37,7 @@ public class NoticeAdapter extends CommonBaseAdapter<NoticeBean.DataBean.RowsBea
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final NoticeBean.DataBean.RowsBean item = list.get(position);
+        final NoticeBean.RowsBean item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(R.layout.item_notice, null);

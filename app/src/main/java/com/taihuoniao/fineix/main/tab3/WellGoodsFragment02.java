@@ -15,6 +15,7 @@ import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.SceneList;
+import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
@@ -43,7 +44,7 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
 
     // 相关情境
     private ListView mListView;
-    private List<SceneList.DataBean.RowsBean> sceneList;
+    private List<SceneListBean2.RowsEntity> sceneList;
     private IndexQJListAdapter indexQJListAdapter;
 
     private int currentPage;
@@ -88,7 +89,7 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
         mListView.setOnScrollListener(this);
 
         sceneList = new ArrayList<>();
-        List<IndexUserListBean.DataBean.UsersBean> userList = new ArrayList<>();
+        ArrayList<User> userList = new ArrayList<>();
         indexQJListAdapter = new IndexQJListAdapter(activity, sceneList, userList);
         mListView.setAdapter(indexQJListAdapter);
     }
@@ -120,8 +121,8 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
                 pullRefreshView001.lastSavedFirstVisibleItem = -1;
             }
             List<SceneListBean2.RowsEntity> rows = bean.getRows();
-            List<SceneList.DataBean.RowsBean> rowsBeen = Tools.newListConvertOldList(rows);
-            sceneList.addAll(rowsBeen);
+//            List<SceneList.DataBean.RowsBean> rowsBeen = Tools.newListConvertOldList(rows);
+            sceneList.addAll(rows);
             new android.os.Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

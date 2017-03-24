@@ -9,10 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -28,13 +27,13 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,11 +45,11 @@ import butterknife.ButterKnife;
  */
 public class SearchQJAdapter extends BaseAdapter {
     private Activity activity;
-    private List<SearchBean.Data.SearchItem> list;
+    private List<SearchBean.SearchItem> list;
     private WaittingDialog dialog;
     private int page;
 
-    public SearchQJAdapter(Activity activity, List<SearchBean.Data.SearchItem> list) {
+    public SearchQJAdapter(Activity activity, List<SearchBean.SearchItem> list) {
         this.activity = activity;
         this.list = list;
         dialog = new WaittingDialog(activity);
@@ -164,14 +163,7 @@ public class SearchQJAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.qjLove.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.qjLove.setImageResource(R.mipmap.find_love);
                     list.get(position).setIs_love(0);
@@ -197,14 +189,7 @@ public class SearchQJAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.qjLove.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.qjLove.setImageResource(R.mipmap.find_has_love);
                     list.get(position).setIs_love(1);

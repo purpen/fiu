@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/5/11.
  */
-public class FiuUserListBean extends NetBean {
+public class FiuUserListBean {
 
     /**
      * total_rows : 1492

@@ -5,12 +5,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.NoticeBean;
@@ -18,12 +17,12 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class NoticeActivity extends BaseActivity {
     CustomHeadView custom_head;
     @Bind(R.id.lv)
     ListView lv;
-    private List<NoticeBean.DataBean.RowsBean> list;
+    private List<NoticeBean.RowsBean> list;
     private static final String pageSize = "9999";
     private static final String COMMENT_TYPE = "12";
     private WaittingDialog dialog;
@@ -61,7 +60,7 @@ public class NoticeActivity extends BaseActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                NoticeBean.DataBean.RowsBean item = list.get(i);
+                NoticeBean.RowsBean item = list.get(i);
                 Intent intent = new Intent();
                 if (item.getKind() == 12) { //情景
                     intent.setClass(activity,QJDetailActivity.class);
@@ -97,14 +96,7 @@ public class NoticeActivity extends BaseActivity {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NoticeBean noticeBean = new NoticeBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type1 = new TypeToken<NoticeBean>() {
-                    }.getType();
-                    noticeBean = gson.fromJson(json, type1);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<NoticeBean> noticeBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<NoticeBean>>() {});
                 if (noticeBean.isSuccess()) {
                     list = noticeBean.getData().getRows();
                     if (adapter == null) {

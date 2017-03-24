@@ -34,24 +34,24 @@ public class TestShareUtils {
         selectStyle(position);
         View view = View.inflate(context, layout, null);
         final ViewHolder holder = new ViewHolder(view);
-        ImageLoader.getInstance().displayImage(sceneDetails.getData().getCover_url(), holder.backgroundImg);
-        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneDetails.getData().getTitle());
-        holder.userName.setText(sceneDetails.getData().getUser_info().getNickname());
-        CharSequence date = DateFormat.format("yyyy-MM-dd", sceneDetails.getData().getCreated_on()* 1000L);
+        ImageLoader.getInstance().displayImage(sceneDetails.getCover_url(), holder.backgroundImg);
+        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneDetails.getTitle());
+        holder.userName.setText(sceneDetails.getUser_info().getNickname());
+        CharSequence date = DateFormat.format("yyyy-MM-dd", sceneDetails.getCreated_on()* 1000L);
         holder.publishTime.setText(date);
-        holder.locationTv.setText(sceneDetails.getData().getAddress());
-        if (TextUtils.isEmpty(sceneDetails.getData().getAddress())) {
+        holder.locationTv.setText(sceneDetails.getAddress());
+        if (TextUtils.isEmpty(sceneDetails.getAddress())) {
             holder.locationImg.setVisibility(View.GONE);
         } else {
             holder.locationImg.setVisibility(View.VISIBLE);
         }
-        holder.des.setText(sceneDetails.getData().getDes());
+        holder.des.setText(sceneDetails.getDes());
 
         holder.imageViewShareStyleQRCode.setImageBitmap(qrcodeBitmap);
         setStyle(position, holder);
         //添加商品标签
         holder.labelContainer.removeAllViews();
-        for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneDetails.getData().getProduct()) {
+        for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneDetails.getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(context);
             labelView.nameTv.setText(productBean.getTitle());

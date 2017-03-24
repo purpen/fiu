@@ -6,11 +6,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SearchBean;
@@ -18,12 +17,12 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.scene.AddEnvirActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +44,7 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
     ProgressBar progressBar;
     private WaittingDialog dialog;
     private int page = 1;
-    private List<SearchBean.Data.SearchItem> list = new ArrayList<>();
+    private List<SearchBean.SearchItem> list = new ArrayList<>();
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
 
     public static AddEnvirFragment newInstance(String cid) {
@@ -96,17 +95,7 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
-                SearchBean netSearch = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    netSearch = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                if (netSearch == null) {
-                    return;
-                }
+                HttpResponse<SearchBean> netSearch = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SearchBean>>() {});
                 if (netSearch.isSuccess()) {
                     if (page == 1) {
                         list.clear();
@@ -140,7 +129,7 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) listView.getAdapter().getItem(position);
+        SearchBean.SearchItem searchItem = (SearchBean.SearchItem) listView.getAdapter().getItem(position);
         if (searchItem == null) {
             return;
         }

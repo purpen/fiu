@@ -29,16 +29,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.QJDetailBean;
+import com.taihuoniao.fineix.beans.QJFavoriteBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -54,6 +53,7 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -66,7 +66,6 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -169,18 +168,12 @@ public class QJDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                qjDetailBean = new QJDetailBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<QJDetailBean>() {
-                    }.getType();
-                    qjDetailBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                if (qjDetailBean.isSuccess()) {
+                HttpResponse<QJDetailBean> qjDetailBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJDetailBean>>(){});
+                if (qjDetailBeanHttpResponse.isSuccess()) {
+                    qjDetailBean = qjDetailBeanHttpResponse.getData();
                     setData();
                 } else {
-                    ToastUtils.showError(qjDetailBean.getMessage());
+                    ToastUtils.showError(qjDetailBeanHttpResponse.getMessage());
                 }
             }
 
@@ -240,7 +233,7 @@ public class QJDetailActivity extends BaseActivity {
             requestNet();
             return;
         }
-        if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getData().getUser_id())) {
+        if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getUser_id())) {
             //自己不能举报自己。改为删除
             jubaoTv.setText("删除");
             bianjiTv.setVisibility(View.VISIBLE);
@@ -248,7 +241,7 @@ public class QJDetailActivity extends BaseActivity {
             bianjiTv.setVisibility(View.GONE);
             jubaoTv.setText("举报");
         }
-        if (qjDetailBean.getData().getIs_favorite() == 1) {
+        if (qjDetailBean.getIs_favorite() == 1) {
             shoucangTv.setText("取消收藏");
         } else {
             shoucangTv.setText("收藏");
@@ -257,7 +250,7 @@ public class QJDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, CreateQJActivity.class);
-                intent.putExtra(IndexFragment.class.getSimpleName(), qjDetailBean.getData());
+                intent.putExtra(IndexFragment.class.getSimpleName(), qjDetailBean);
                 activity.startActivity(intent);
                 popupWindow.dismiss();
             }
@@ -271,7 +264,7 @@ public class QJDetailActivity extends BaseActivity {
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (qjDetailBean.getData().getIs_favorite() == 1) {
+                if (qjDetailBean.getIs_favorite() == 1) {
                     if (!dialog.isShowing()) {
                         dialog.show();
                     }
@@ -293,7 +286,7 @@ public class QJDetailActivity extends BaseActivity {
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getData().getUser_id())) {
+                if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getUser_id())) {
                     if (!dialog.isShowing()) {
                         dialog.show();
                     }
@@ -302,7 +295,7 @@ public class QJDetailActivity extends BaseActivity {
                     return;
                 }
                 Intent intent1 = new Intent(activity, ReportActivity.class);
-                intent1.putExtra("target_id", qjDetailBean.getData().get_id());
+                intent1.putExtra("target_id", qjDetailBean.get_id());
                 intent1.putExtra("type", 4 + "");
                 activity.startActivity(intent1);
             }
@@ -343,28 +336,28 @@ public class QJDetailActivity extends BaseActivity {
         layoutParams2.width = MainApplication.getContext().getScreenWidth();
         layoutParams2.height = layoutParams2.width;
         container.setLayoutParams(layoutParams2);
-        ImageLoader.getInstance().displayImage(qjDetailBean.getData().getUser_info().getAvatar_url(), headImg);
-        if (qjDetailBean.getData().getUser_info().getIs_expert() == 1) {
+        ImageLoader.getInstance().displayImage(qjDetailBean.getUser_info().getAvatar_url(), headImg);
+        if (qjDetailBean.getUser_info().getIs_expert() == 1) {
             vImg.setVisibility(View.VISIBLE);
         } else {
             vImg.setVisibility(View.GONE);
         }
-        userNameTv.setText(qjDetailBean.getData().getUser_info().getNickname());
-        publishTime.setText(qjDetailBean.getData().getCreated_at());
-        if (TextUtils.isEmpty(qjDetailBean.getData().getAddress())) {
+        userNameTv.setText(qjDetailBean.getUser_info().getNickname());
+        publishTime.setText(qjDetailBean.getCreated_at());
+        if (TextUtils.isEmpty(qjDetailBean.getAddress())) {
             locationImg.setVisibility(View.GONE);
             locationTv.setVisibility(View.GONE);
         } else {
-            locationTv.setText(qjDetailBean.getData().getCity() + " " + qjDetailBean.getData().getAddress());
+            locationTv.setText(qjDetailBean.getCity() + " " + qjDetailBean.getAddress());
             locationImg.setVisibility(View.VISIBLE);
             locationTv.setVisibility(View.VISIBLE);
         }
-        if (qjDetailBean.getData().getUser_id() != null && LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getData().getUser_id())) {
+        if (qjDetailBean.getUser_id() != null && LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getUser_id())) {
             //自己的话隐藏关注按钮
             attentionBtn.setVisibility(View.GONE);
         } else {
             attentionBtn.setVisibility(View.VISIBLE);
-            if (qjDetailBean.getData().getUser_info().getIs_follow() == 1) {
+            if (qjDetailBean.getUser_info().getIs_follow() == 1) {
 //                attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                 attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 attentionBtn.setText("已关注");
@@ -378,48 +371,48 @@ public class QJDetailActivity extends BaseActivity {
                 attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
-        ImageLoader.getInstance().displayImage(qjDetailBean.getData().getCover_url(), qjImg);
+        ImageLoader.getInstance().displayImage(qjDetailBean.getCover_url(), qjImg);
         qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(QJDetailActivity.this, QJPictureActivity.class);
-                intent.putExtra("img", qjDetailBean.getData().getCover_url());
-                intent.putExtra("fine", qjDetailBean.getData().getFine() == 1);
-                intent.putExtra("stick", qjDetailBean.getData().getStick() == 1);
-                intent.putExtra("check", qjDetailBean.getData().getIs_check() == 0);
-                intent.putExtra("id", qjDetailBean.getData().get_id());
+                intent.putExtra("img", qjDetailBean.getCover_url());
+                intent.putExtra("fine", qjDetailBean.getFine() == 1);
+                intent.putExtra("stick", qjDetailBean.getStick() == 1);
+                intent.putExtra("check", qjDetailBean.getIs_check() == 0);
+                intent.putExtra("id", qjDetailBean.get_id());
                 startActivity(intent);
             }
         });
-        viewCount.setText(qjDetailBean.getData().getView_count());
-        loveCount.setText(qjDetailBean.getData().getLove_count());
-        if (qjDetailBean.getData().getIs_love() == 1) {
+        viewCount.setText(qjDetailBean.getView_count());
+        loveCount.setText(qjDetailBean.getLove_count());
+        if (qjDetailBean.getIs_love() == 1) {
             loveImg.setImageResource(R.mipmap.index_has_love);
         } else {
             loveImg.setImageResource(R.mipmap.index_love);
         }
-        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(qjDetailBean.getData().getDes(), activity);
+        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(qjDetailBean.getDes(), activity);
         qjDesTv.setText(spannableStringBuilder);
         qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
         qjDesTv.setMaxLines(Integer.MAX_VALUE);
-        commentList.setAdapter(new IndexCommentAdapter(qjDetailBean.getData().getComments()));
-        if (qjDetailBean.getData().getComment_count() > 0) {
-            moreComment.setText("查看所有" + qjDetailBean.getData().getComment_count() + "条评论");
+        commentList.setAdapter(new IndexCommentAdapter(qjDetailBean.getComments()));
+        if (qjDetailBean.getComment_count() > 0) {
+            moreComment.setText("查看所有" + qjDetailBean.getComment_count() + "条评论");
             moreComment.setVisibility(View.GONE);
         } else {
             moreComment.setVisibility(View.GONE);
         }
         //设置情景标题
-        if (TextUtils.isEmpty(qjDetailBean.getData().getTitle())) {
+        if (TextUtils.isEmpty(qjDetailBean.getTitle())) {
             qjTitleTv.setVisibility(View.GONE);
         } else {
-            qjTitleTv.setText(qjDetailBean.getData().getTitle());
+            qjTitleTv.setText(qjDetailBean.getTitle());
             qjTitleTv.setVisibility(View.VISIBLE);
         }
-//        SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, qjDetailBean.getData().getTitle());
+//        SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, qjDetailBean.getTitle());
         //添加商品标签
         labelContainer.removeAllViews();
-        for (final SceneList.DataBean.RowsBean.ProductBean productBean : qjDetailBean.getData().getProduct()) {
+        for (final SceneList.DataBean.RowsBean.ProductBean productBean : qjDetailBean.getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(this);
             labelView.nameTv.setText(productBean.getTitle());
@@ -467,7 +460,7 @@ public class QJDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(QJDetailActivity.this, UserCenterActivity.class);
-                long l = Long.valueOf(qjDetailBean.getData().getUser_info().getUser_id());
+                long l = Long.valueOf(qjDetailBean.getUser_info().getUser_id());
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
                 startActivity(intent);
             }
@@ -477,8 +470,8 @@ public class QJDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 //                跳转到地图界面，查看附近的情境
-                String address = qjDetailBean.getData().getAddress();
-                LatLng ll = new LatLng(qjDetailBean.getData().getLocation().getCoordinates().get(1), qjDetailBean.getData().getLocation().getCoordinates().get(0));
+                String address = qjDetailBean.getAddress();
+                LatLng ll = new LatLng(qjDetailBean.getLocation().getCoordinates().get(1), qjDetailBean.getLocation().getCoordinates().get(0));
                 Intent intent2 = new Intent(activity, MapNearByCJActivity.class);
                 intent2.putExtra("address", address);
                 intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
@@ -491,11 +484,11 @@ public class QJDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
-                    if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getData().getUser_id())) {
+                    if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getUser_id())) {
                         //过滤自己
                         return;
                     }
-                    if (qjDetailBean.getData().getUser_info().getIs_follow() == 0) {
+                    if (qjDetailBean.getUser_info().getIs_follow() == 0) {
                         if (!dialog.isShowing()) {
                             dialog.show();
                         }
@@ -516,7 +509,7 @@ public class QJDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
-                    if (qjDetailBean.getData().getIs_love() == 1) {
+                    if (qjDetailBean.getIs_love() == 1) {
                         loveImg.setEnabled(false);
                         cancelLoveQJ();
                     } else {
@@ -534,9 +527,9 @@ public class QJDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent3 = new Intent(activity, CommentListActivity.class);
-                intent3.putExtra("target_id", qjDetailBean.getData().get_id());
+                intent3.putExtra("target_id", qjDetailBean.get_id());
                 intent3.putExtra("type", 12 + "");
-                intent3.putExtra("target_user_id", qjDetailBean.getData().getUser_info().getUser_id());
+                intent3.putExtra("target_user_id", qjDetailBean.getUser_info().getUser_id());
                 activity.startActivityForResult(intent3, 1);
             }
         });
@@ -544,9 +537,9 @@ public class QJDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> pare, View vie, int positi, long d) {
                 Intent intent3 = new Intent(activity, CommentListActivity.class);
-                intent3.putExtra("target_id", qjDetailBean.getData().get_id());
+                intent3.putExtra("target_id", qjDetailBean.get_id());
                 intent3.putExtra("type", 12 + "");
-                intent3.putExtra("target_user_id", qjDetailBean.getData().getUser_info().getUser_id());
+                intent3.putExtra("target_user_id", qjDetailBean.getUser_info().getUser_id());
                 activity.startActivityForResult(intent3, 1);
             }
         });
@@ -554,9 +547,9 @@ public class QJDetailActivity extends BaseActivity {
 //            @Override
 //            public void onClick(View v) {
 //                Intent intent3 = new Intent(activity, CommentListActivity.class);
-//                intent3.putExtra("target_id", qjDetailBean.getData().get_id());
+//                intent3.putExtra("target_id", qjDetailBean.get_id());
 //                intent3.putExtra("type", 12 + "");
-//                intent3.putExtra("target_user_id", qjDetailBean.getData().getUser_info().getUser_id());
+//                intent3.putExtra("target_user_id", qjDetailBean.getUser_info().getUser_id());
 //                activity.startActivityForResult(intent3, 1);
 //            }
 //        });
@@ -565,7 +558,7 @@ public class QJDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent4 = new Intent(activity, ShareActivity.class);
-                intent4.putExtra("id", qjDetailBean.getData().get_id());
+                intent4.putExtra("id", qjDetailBean.get_id());
                 activity.startActivity(intent4);
             }
         });
@@ -582,24 +575,17 @@ public class QJDetailActivity extends BaseActivity {
 
     //取消收藏情景
     private void cancelShoucang() {
-        HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(qjDetailBean.getData().get_id(), "12");
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelShoucangRequestParams(qjDetailBean.get_id(), "12");
         cancelShoucangHandler = HttpRequest.post(params,URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    qjDetailBean.getData().setIs_favorite(0);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
+                    qjDetailBean.setIs_favorite(0);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -615,24 +601,17 @@ public class QJDetailActivity extends BaseActivity {
 
     //收藏情景
     private void shoucang() {
-        HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(qjDetailBean.getData().get_id(), "12");
+        HashMap<String, String> params = ClientDiscoverAPI.getshoucangRequestParams(qjDetailBean.get_id(), "12");
         shoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    qjDetailBean.getData().setIs_favorite(1);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
+                    qjDetailBean.setIs_favorite(1);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -648,18 +627,11 @@ public class QJDetailActivity extends BaseActivity {
 
     //删除情景
     private void deleteScene() {
-        HashMap<String, String> requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(qjDetailBean.getData().get_id());
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getdeleteSceneRequestParams(qjDetailBean.get_id());
         detailHandler = HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -687,19 +659,12 @@ public class QJDetailActivity extends BaseActivity {
             public void onSuccess(String json) {
                 loveImg.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     loveImg.setImageResource(R.mipmap.index_love);
                     loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    qjDetailBean.getData().setIs_love(0);
-                    qjDetailBean.getData().setLove_count(sceneLoveBean.getData().getLove_count() + "");
+                    qjDetailBean.setIs_love(0);
+                    qjDetailBean.setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }
@@ -724,19 +689,12 @@ public class QJDetailActivity extends BaseActivity {
             public void onSuccess(String json) {
                 loveImg.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     loveImg.setImageResource(R.mipmap.index_has_love);
                     loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    qjDetailBean.getData().setIs_love(1);
-                    qjDetailBean.getData().setLove_count(sceneLoveBean.getData().getLove_count() + "");
+                    qjDetailBean.setIs_love(1);
+                    qjDetailBean.setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }
@@ -755,25 +713,18 @@ public class QJDetailActivity extends BaseActivity {
 
     //关注用户
     private void fllow() {
-        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(qjDetailBean.getData().getUser_id());
+        HashMap<String, String> params = ClientDiscoverAPI.getfocusOperateRequestParams(qjDetailBean.getUser_id());
         HttpRequest.post(params, URL.FOCUS_OPRATE_URL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                     attentionBtn.setText("");
                     attentionBtn.setPadding(0, 0, 0, 0);
                     attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    qjDetailBean.getData().getUser_info().setIs_follow(1);
+                    qjDetailBean.getUser_info().setIs_follow(1);
                 } else {
                     ToastUtils.showError(netBean.getMessage());
                 }
@@ -794,8 +745,8 @@ public class QJDetailActivity extends BaseActivity {
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        ImageLoader.getInstance().displayImage(qjDetailBean.getData().getUser_info().getAvatar_url(), riv);
-        tv_take_photo.setText(String.format("取消关注" + " %s ?", qjDetailBean.getData().getUser_info().getNickname()));
+        ImageLoader.getInstance().displayImage(qjDetailBean.getUser_info().getAvatar_url(), riv);
+        tv_take_photo.setText(String.format("取消关注" + " %s ?", qjDetailBean.getUser_info().getNickname()));
         tv_album.setText("取消关注");
         tv_album.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -821,25 +772,18 @@ public class QJDetailActivity extends BaseActivity {
 
     //取消关注
     private void cancelFollow() {
-        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(qjDetailBean.getData().getUser_id());
+        HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(qjDetailBean.getUser_id());
         cancelShoucangHandler = HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     attentionBtn.setBackgroundResource(R.mipmap.index_attention);
                     attentionBtn.setText("");
                     attentionBtn.setPadding(0, 0, 0, 0);
                     attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    qjDetailBean.getData().getUser_info().setIs_follow(0);
+                    qjDetailBean.getUser_info().setIs_follow(0);
                     return;
                 }
                 ToastUtils.showError(netBean.getMessage());

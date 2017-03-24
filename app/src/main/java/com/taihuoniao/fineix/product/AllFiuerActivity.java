@@ -6,12 +6,11 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllFiuerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FiuUserListBean;
@@ -19,13 +18,13 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -72,16 +71,10 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         userHandler = HttpRequest.post(params,  URL.FIU_USER_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                try {
-                    Gson gson = new Gson();
-                    Type type1 = new TypeToken<FiuUserListBean>() {
-                    }.getType();
-                    netUsers = gson.fromJson(json, type1);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<FiuUserListBean> netUsers = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FiuUserListBean>>() { });
                 dialog.dismiss();
                 if (netUsers.isSuccess()) {
-                    AllFiuerAdapter allFiuerAdapter = new AllFiuerAdapter(AllFiuerActivity.this, netUsers);
+                    AllFiuerAdapter allFiuerAdapter = new AllFiuerAdapter(AllFiuerActivity.this, netUsers.getData());
                     listView.setAdapter(allFiuerAdapter);
                 } else {
                     ToastUtils.showError(netUsers.getMessage());

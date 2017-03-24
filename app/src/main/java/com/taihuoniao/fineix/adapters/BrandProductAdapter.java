@@ -15,6 +15,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ import butterknife.ButterKnife;
  */
 public class BrandProductAdapter extends BaseAdapter {
     private Activity activity;
-    private List<ProductBean.ProductListItem> list;
+    private List<ProductBean.RowsEntity> list;
 
-    public BrandProductAdapter(Activity activity, List<ProductBean.ProductListItem> list) {
+    public BrandProductAdapter(Activity activity, List<ProductBean.RowsEntity> list) {
         this.activity = activity;
         this.list = list;
     }
@@ -71,7 +72,7 @@ public class BrandProductAdapter extends BaseAdapter {
         GlideUtils.displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
         holder.nameLeft.setText(list.get(leftPosition).getTitle());
         holder.priceLeft.setText("¥" + list.get(leftPosition).getSale_price());
-        if(list.get(leftPosition).getStage()==9){
+        if(TypeConversionUtils.StringConvertInt(list.get(leftPosition).getStage())==9){
             holder.priceLeft.setVisibility(View.VISIBLE);
         }else{
             holder.priceLeft.setVisibility(View.INVISIBLE);
@@ -82,7 +83,7 @@ public class BrandProductAdapter extends BaseAdapter {
             GlideUtils.displayImage(list.get(rightPosition).getCover_url(), holder.productImgRight);
             holder.nameRight.setText(list.get(rightPosition).getTitle());
             holder.priceRight.setText("¥" + list.get(rightPosition).getSale_price());
-            if(list.get(rightPosition).getStage()==9){
+            if(TypeConversionUtils.StringConvertInt(list.get(rightPosition).getStage())==9){
                 holder.priceRight.setVisibility(View.VISIBLE);
             }else{
                 holder.priceRight.setVisibility(View.INVISIBLE);

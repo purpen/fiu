@@ -7,23 +7,22 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchQJAdapter;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +46,7 @@ public class SearchQJFragment extends SearchFragment {
     private GridView gridView;
     private WaittingDialog dialog;
     private int page = 1;
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<SearchBean.SearchItem> searchList;
     private SearchQJAdapter searchQJAdapter;
 
     public static SearchQJFragment newInstance(String q, boolean isContent) {
@@ -127,22 +126,10 @@ public class SearchQJFragment extends SearchFragment {
         Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                SearchBean searchBean = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    searchBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SearchBean> netSearch = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SearchBean>>() { });
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
-
-                if (searchBean == null) {
-                    return;
-                }
-                SearchBean netSearch = searchBean;
                 if (netSearch.isSuccess()) {
                     searchQJAdapter.setPage(netSearch.getData().getCurrent_page());
                     pullRefreshView.setLoadingTime();

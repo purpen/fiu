@@ -5,12 +5,12 @@ import java.io.Serializable;
 /**
  * Created by android on 2016/3/29.
  */
-public class CheckRedBagUsable implements Serializable {
+public class CheckRedBagUsableBean implements Serializable {
     private String code,coin_money,useful;
 
     @Override
     public String toString() {
-        return "CheckRedBagUsable{" +
+        return "CheckRedBagUsableBean{" +
                 "code='" + code + '\'' +
                 ", coin_money='" + coin_money + '\'' +
                 ", useful='" + useful + '\'' +

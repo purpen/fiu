@@ -5,27 +5,15 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/21.
  */
-public class CommentsBean extends NetBean {
-    private Data data;
+public class CommentsBean {
+    private List<CommentItem> rows;
 
-    public Data getData() {
-        return data;
+    public List<CommentItem> getRows() {
+        return rows;
     }
 
-    public void setData(Data data) {
-        this.data = data;
-    }
-
-    public static class Data {
-        private List<CommentItem> rows;
-
-        public List<CommentItem> getRows() {
-            return rows;
-        }
-
-        public void setRows(List<CommentItem> rows) {
-            this.rows = rows;
-        }
+    public void setRows(List<CommentItem> rows) {
+        this.rows = rows;
     }
 
     public static class CommentItem{
@@ -39,6 +27,7 @@ public class CommentsBean extends NetBean {
         public String target_small_cover_url;
         public boolean is_unread;
         private ReplyComment reply_comment;
+        private String star;
 
         public ReplyComment getReply_comment() {
             return reply_comment;
@@ -86,6 +75,14 @@ public class CommentsBean extends NetBean {
 
         public void setUser(User user) {
             this.user = user;
+        }
+
+        public String getStar() {
+            return star;
+        }
+
+        public void setStar(String star) {
+            this.star = star;
         }
     }
 

@@ -8,22 +8,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AddressData;
 import com.taihuoniao.fineix.beans.AddressListBean;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.fragments.AddressSelectFragment;
 import com.taihuoniao.fineix.utils.EmailUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -31,7 +29,6 @@ import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -107,15 +104,7 @@ public class AddAddressActivity extends BaseActivity {
 
                                 @Override
                                 public void onSuccess(String json) {
-                                    NetBean netBean = new NetBean();
-                                    try {
-                                        Gson gson = new Gson();
-                                        Type type = new TypeToken<NetBean>() {
-                                        }.getType();
-                                        netBean = gson.fromJson(json, type);
-                                    } catch (JsonSyntaxException e) {
-                                        e.printStackTrace();
-                                    }
+                                    HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                                     if (netBean.isSuccess()) {
                                         ToastUtils.showSuccess("删除成功");
                                         Intent intent = new Intent();
@@ -305,15 +294,7 @@ public class AddAddressActivity extends BaseActivity {
             public void onSuccess(String json) {
                 LogUtil.e(TAG, json);
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
                     Intent intent = new Intent();

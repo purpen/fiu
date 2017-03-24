@@ -58,6 +58,8 @@ public class User implements Serializable {
     public String assets;
     public ArrayList<String> interest_scene_cate;
     public ArrayList<String> areas;
+    public int is_follow;
+
     public class Counter implements Serializable{
         public int notice_count;
         public int message_count;

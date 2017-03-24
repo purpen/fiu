@@ -8,15 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -29,6 +26,7 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -48,10 +46,10 @@ import butterknife.ButterKnife;
  */
 public class SearchUsersAdapter extends BaseAdapter {
     private Activity activity;
-    private List<SearchBean.Data.SearchItem> list;
+    private List<SearchBean.SearchItem> list;
     private WaittingDialog dialog;
 
-    public SearchUsersAdapter(Activity activity, List<SearchBean.Data.SearchItem> list) {
+    public SearchUsersAdapter(Activity activity, List<SearchBean.SearchItem> list) {
         this.activity = activity;
         this.list = list;
         dialog = new WaittingDialog(activity);
@@ -148,14 +146,7 @@ public class SearchUsersAdapter extends BaseAdapter {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.focusBtn.setBackgroundResource(R.drawable.border_radius5_pressed);
                     holder.focusBtn.setText("已关注");
@@ -177,7 +168,7 @@ public class SearchUsersAdapter extends BaseAdapter {
     }
 
     //取消关注弹窗
-    private void showFocusFansConfirmView(final SearchBean.Data.SearchItem item, final ViewHolder holder) {
+    private void showFocusFansConfirmView(final SearchBean.SearchItem item, final ViewHolder holder) {
         View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
         RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
@@ -207,20 +198,13 @@ public class SearchUsersAdapter extends BaseAdapter {
     }
 
     //取消关注
-    private void cancelFollow(final SearchBean.Data.SearchItem item, final ViewHolder holder) {
+    private void cancelFollow(final SearchBean.SearchItem item, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(item.getUser_id());
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.focusBtn.setPadding(0, 0, 0, 0);
                     holder.focusBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

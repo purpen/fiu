@@ -5,122 +5,95 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/8/23.
  */
-public class FirstProductBean extends NetBean {
-
+public class FirstProductBean {
 
     /**
-     * is_error : false
-     * data : {"items":[{"_id":1011513749,"title":"a1螺丝刀","cover_url":"http://frbird.qiniudn.com/product/160127/56a858723ffca269098bb039-4-p500x500.jpg","brand_id":"5764f2443ffca227798b47f0","brand_cover_url":"","sale_price":0.15},{"_id":1011497183,"title":"干衣架","cover_url":"http://frbird.qiniudn.com/product/160126/56a717da3ffca27b4b8b70e0-1-p500x500.jpg","brand_id":"","brand_cover_url":"","sale_price":15.01},{"_id":1011497097,"title":"优胜仕磁吸数据线","cover_url":"http://frbird.qiniudn.com/product/160126/56a7183c3ffca268098bae83-4-p500x500.jpg","brand_id":"5764f2443ffca227798b47f0","brand_cover_url":"","sale_price":199},{"_id":1011497090,"title":"化妆镜","cover_url":"http://frbird.qiniudn.com/product/160126/56a718823ffca26e098baed1-1-p500x500.jpg","brand_id":"","brand_cover_url":"","sale_price":188},{"_id":1011497069,"title":"扩大器","cover_url":"http://frbird.qiniudn.com/product/160126/56a718b93ffca26a098baf2c-5-p500x500.jpg","brand_id":"5764f2063ffca227798b47ef","brand_cover_url":"","sale_price":19}],"current_user_id":924789}
+     * items : [{"_id":1048989219,"title":"车听宝 智能车载","cover_url":"https://p4.taihuoniao.com/product/161125/5837ec65fc8b12d1058b79cb-1-p500x500.jpg","brand_id":"","brand_cover_url":"","sale_price":199},{"_id":1156412102,"title":"飞利浦蓝牙音箱","cover_url":"https://p4.taihuoniao.com//161208/5848ef74fc8b12c7408b9461-1-p500x500.jpg","brand_id":"56f0e3b4fc8b127c6f8b4e2f","brand_cover_url":"https://p4.taihuoniao.com/scene_brands/160713/57860379fc8b12bd1c8bc861-1-ava.jpg","sale_price":199},{"_id":1049278575,"title":"Autobot智能金刚支架","cover_url":"https://p4.taihuoniao.com/product/161125/5837c526fc8b1258658b4e68-1-p500x500.jpg","brand_id":"576cee2efc8b12654d8b4aaa","brand_cover_url":"https://p4.taihuoniao.com/scene_brands/160624/576ced22fc8b1269368b57f4-1-ava.jpg","sale_price":59},{"_id":1049277857,"title":"喜马拉雅喜马拉雅","cover_url":"https://p4.taihuoniao.com/product/161124/58369f94fc8b12cd058b70d7-1-p500x500.jpg","brand_id":"57d6bb09fc8b1276048b6777","brand_cover_url":"https://p4.taihuoniao.com/scene_brands/160912/57d6ba3cfc8b12e47a8b5f81-1-ava.jpg","sale_price":118},{"_id":1048989219,"title":"车听宝 智能车载","cover_url":"https://p4.taihuoniao.com/product/161125/5837ec65fc8b12d1058b79cb-1-p500x500.jpg","brand_id":"","brand_cover_url":"","sale_price":199},{"_id":1023327936,"title":"卡蛙酷博车载空气净化器","cover_url":"https://p4.taihuoniao.com/product/160325/56f52c05fc8b12606f8b8d26-1-p500x500.jpg","brand_id":"576cd774fc8b12f2248be895","brand_cover_url":"https://p4.taihuoniao.com/scene_brands/160624/576cd6e5fc8b12654d8b463f-1-ava.jpg","sale_price":99}]
+     * current_user_id : 1136552
      */
 
-    private boolean is_error;
-    /**
-     * items : [{"_id":1011513749,"title":"a1螺丝刀","cover_url":"http://frbird.qiniudn.com/product/160127/56a858723ffca269098bb039-4-p500x500.jpg","brand_id":"5764f2443ffca227798b47f0","brand_cover_url":"","sale_price":0.15},{"_id":1011497183,"title":"干衣架","cover_url":"http://frbird.qiniudn.com/product/160126/56a717da3ffca27b4b8b70e0-1-p500x500.jpg","brand_id":"","brand_cover_url":"","sale_price":15.01},{"_id":1011497097,"title":"优胜仕磁吸数据线","cover_url":"http://frbird.qiniudn.com/product/160126/56a7183c3ffca268098bae83-4-p500x500.jpg","brand_id":"5764f2443ffca227798b47f0","brand_cover_url":"","sale_price":199},{"_id":1011497090,"title":"化妆镜","cover_url":"http://frbird.qiniudn.com/product/160126/56a718823ffca26e098baed1-1-p500x500.jpg","brand_id":"","brand_cover_url":"","sale_price":188},{"_id":1011497069,"title":"扩大器","cover_url":"http://frbird.qiniudn.com/product/160126/56a718b93ffca26a098baf2c-5-p500x500.jpg","brand_id":"5764f2063ffca227798b47ef","brand_cover_url":"","sale_price":19}]
-     * current_user_id : 924789
-     */
+    private String current_user_id;
+    private List<ItemsEntity> items;
 
-    private DataBean data;
-
-    public boolean isIs_error() {
-        return is_error;
+    public String getCurrent_user_id() {
+        return current_user_id;
     }
 
-    public void setIs_error(boolean is_error) {
-        this.is_error = is_error;
+    public void setCurrent_user_id(String current_user_id) {
+        this.current_user_id = current_user_id;
     }
 
-    public DataBean getData() {
-        return data;
+    public List<ItemsEntity> getItems() {
+        return items;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setItems(List<ItemsEntity> items) {
+        this.items = items;
     }
 
-    public static class DataBean {
-        private String current_user_id;
+    public static class ItemsEntity {
         /**
-         * _id : 1011513749
-         * title : a1螺丝刀
-         * cover_url : http://frbird.qiniudn.com/product/160127/56a858723ffca269098bb039-4-p500x500.jpg
-         * brand_id : 5764f2443ffca227798b47f0
-         * brand_cover_url :
-         * sale_price : 0.15
+         * _id : 1048989219
+         * title : 车听宝 智能车载
+         * cover_url : https://p4.taihuoniao.com/product/161125/5837ec65fc8b12d1058b79cb-1-p500x500.jpg
+         * brand_id : 
+         * brand_cover_url : 
+         * sale_price : 199
          */
 
-        private List<ItemsBean> items;
+        private String _id;
+        private String title;
+        private String cover_url;
+        private String brand_id;
+        private String brand_cover_url;
+        private String sale_price;
 
-        public String getCurrent_user_id() {
-            return current_user_id;
+        public String get_id() {
+            return _id;
         }
 
-        public void setCurrent_user_id(String current_user_id) {
-            this.current_user_id = current_user_id;
+        public void set_id(String _id) {
+            this._id = _id;
         }
 
-        public List<ItemsBean> getItems() {
-            return items;
+        public String getTitle() {
+            return title;
         }
 
-        public void setItems(List<ItemsBean> rows) {
-            this.items = rows;
+        public void setTitle(String title) {
+            this.title = title;
         }
 
-        public static class ItemsBean {
-            private String _id;
-            private String title;
-            private String cover_url;
-            private String brand_id;
-            private String brand_cover_url;
-            private double sale_price;
+        public String getCover_url() {
+            return cover_url;
+        }
 
-            public String get_id() {
-                return _id;
-            }
+        public void setCover_url(String cover_url) {
+            this.cover_url = cover_url;
+        }
 
-            public void set_id(String _id) {
-                this._id = _id;
-            }
+        public String getBrand_id() {
+            return brand_id;
+        }
 
-            public String getTitle() {
-                return title;
-            }
+        public void setBrand_id(String brand_id) {
+            this.brand_id = brand_id;
+        }
 
-            public void setTitle(String title) {
-                this.title = title;
-            }
+        public String getBrand_cover_url() {
+            return brand_cover_url;
+        }
 
-            public String getCover_url() {
-                return cover_url;
-            }
+        public void setBrand_cover_url(String brand_cover_url) {
+            this.brand_cover_url = brand_cover_url;
+        }
 
-            public void setCover_url(String cover_url) {
-                this.cover_url = cover_url;
-            }
+        public String getSale_price() {
+            return sale_price;
+        }
 
-            public String getBrand_id() {
-                return brand_id;
-            }
-
-            public void setBrand_id(String brand_id) {
-                this.brand_id = brand_id;
-            }
-
-            public String getBrand_cover_url() {
-                return brand_cover_url;
-            }
-
-            public void setBrand_cover_url(String brand_cover_url) {
-                this.brand_cover_url = brand_cover_url;
-            }
-
-            public double getSale_price() {
-                return sale_price;
-            }
-
-            public void setSale_price(double sale_price) {
-                this.sale_price = sale_price;
-            }
+        public void setSale_price(String sale_price) {
+            this.sale_price = sale_price;
         }
     }
 }

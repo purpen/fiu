@@ -16,24 +16,23 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import okhttp3.Call;
@@ -70,17 +69,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         Call httpHandler = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-//                dialog.dismiss();
-                CategoryListBean categoryListBean = new CategoryListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryListBean>() {
-                    }.getType();
-                    categoryListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<CategoryListBean> categoryListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CategoryListBean>>() {});
                 if (categoryListBean.isSuccess()) {
-                    addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), categoryListBean);
+                    addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), categoryListBean.getData());
                     viewPager.setAdapter(addProductViewPagerAdapter);
                     viewPager.setOffscreenPageLimit(categoryListBean.getData().getRows().size());
                     slidingTab.setupWithViewPager(viewPager);

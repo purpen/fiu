@@ -9,10 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -23,18 +22,20 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,10 +47,10 @@ import butterknife.ButterKnife;
  */
 public class QJCateogryAdapter extends BaseAdapter {
     private Activity activity;
-    private List<SceneList.DataBean.RowsBean> list;
+    private List<SceneListBean2.RowsEntity> list;
     private WaittingDialog dialog;
 
-    public QJCateogryAdapter(Activity activity, List<SceneList.DataBean.RowsBean> list) {
+    public QJCateogryAdapter(Activity activity, List<SceneListBean2.RowsEntity> list) {
         this.activity = activity;
         this.list = list;
         dialog = new WaittingDialog(activity);
@@ -89,7 +90,7 @@ public class QJCateogryAdapter extends BaseAdapter {
 //        ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.qjHeadImg);
         GlideUtils.displayImageFadein(list.get(position).getCover_url(), holder.qjBackgroundImg);
         GlideUtils.displayImage(list.get(position).getUser_info().getAvatar_url(), holder.qjHeadImg);
-        if (list.get(position).getIs_love() == 1) {
+        if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_love()) == 1) {
             holder.qjLove.setImageResource(R.mipmap.find_has_love);
         } else {
             holder.qjLove.setImageResource(R.mipmap.find_love);
@@ -131,7 +132,7 @@ public class QJCateogryAdapter extends BaseAdapter {
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (list.get(position).getIs_love() == 1) {
+                if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_love()) == 1) {
 //                    if (!dialog.isShowing()) {
 //                        dialog.show();
 //                    }
@@ -157,17 +158,10 @@ public class QJCateogryAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.qjLove.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.qjLove.setImageResource(R.mipmap.find_love);
-                    list.get(position).setIs_love(0);
+                    list.get(position).setIs_love(TypeConversionUtils.IntConvertString(0));
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }
@@ -190,17 +184,10 @@ public class QJCateogryAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.qjLove.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.qjLove.setImageResource(R.mipmap.find_has_love);
-                    list.get(position).setIs_love(1);
+                    list.get(position).setIs_love(TypeConversionUtils.IntConvertString(1));
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }

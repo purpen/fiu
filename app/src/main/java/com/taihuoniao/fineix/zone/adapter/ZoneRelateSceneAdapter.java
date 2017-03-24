@@ -26,13 +26,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
+import com.taihuoniao.fineix.beans.QJFavoriteBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -51,6 +50,7 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -59,7 +59,6 @@ import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -380,19 +379,12 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
                     list.get(position).setIs_favorite(0);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -409,14 +401,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
                     notifyDataSetChanged();
@@ -439,19 +424,12 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
                     list.get(position).setIs_favorite(1);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -476,14 +454,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             @Override
             public void onSuccess(String json) {
                 holder.loveContainer.setEnabled(true);
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
@@ -514,14 +485,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             @Override
             public void onSuccess(String json) {
                 holder.loveContainer.setEnabled(true);
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");

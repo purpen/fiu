@@ -20,8 +20,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -30,9 +28,10 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.CartBean;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.NowBuyBean;
+import com.taihuoniao.fineix.beans.QJFavoriteBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -44,12 +43,12 @@ import com.taihuoniao.fineix.product.fragment.WebFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -214,7 +213,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
-                if (buyGoodDetailsBean.getData().getIs_favorite() == 1) {
+                if (buyGoodDetailsBean.getIs_favorite() == 1) {
                     cancelFavorate();
                 } else {
                     favorate();
@@ -254,7 +253,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     cartNumber();
                     return;
                 }
-                if (buyGoodDetailsBean.getData().getSkus_count() > 0) {
+                if (buyGoodDetailsBean.getSkus_count() > 0) {
                     if (which == -1) {
                         ToastUtils.showError("请选择颜色/分类");
                     } else {
@@ -262,9 +261,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                             dialog.show();
                         }
                         if (isBuy) {
-                            buyNow(buyGoodDetailsBean.getData().getSkus().get(which).get_id(), "2", numberTv.getText().toString());
+                            buyNow(buyGoodDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                         } else {
-                            addToCart(buyGoodDetailsBean.getData().getSkus().get(which).get_id(), "2", numberTv.getText().toString());
+                            addToCart(buyGoodDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                         }
                     }
                 } else {
@@ -332,12 +331,12 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void addSkuToLinear() {
-        if (buyGoodDetailsBean.getData().getSkus_count() > 0) {
+        if (buyGoodDetailsBean.getSkus_count() > 0) {
             scrollLinear.removeAllViews();
-            for (int i = 0; i < buyGoodDetailsBean.getData().getSkus().size(); i++) {
+            for (int i = 0; i < buyGoodDetailsBean.getSkus().size(); i++) {
                 View view = View.inflate(this, R.layout.item_dialog_horizontal, null);
                 TextView textView = (TextView) view.findViewById(R.id.item_dialog_horizontal_textview);
-                textView.setText(buyGoodDetailsBean.getData().getSkus().get(i).getMode());
+                textView.setText(buyGoodDetailsBean.getSkus().get(i).getMode());
                 view.setTag(textView);
                 final int j = i;
                 view.setOnClickListener(new View.OnClickListener() {
@@ -356,11 +355,11 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                         which = j;
                         number = 1;
                         numberTv.setText(number + "");
-                        maxNumber = Integer.parseInt(buyGoodDetailsBean.getData().getSkus().get(j).getQuantity());
+                        maxNumber = Integer.parseInt(buyGoodDetailsBean.getSkus().get(j).getQuantity());
                         quantity.setText(maxNumber + "");
-                        priceTv.setText("¥ " + buyGoodDetailsBean.getData().getSkus().get(j).getPrice());
-                        String cover_url = buyGoodDetailsBean.getData().getSkus().get(j).getCover_url();
-                        GlideUtils.displayImage(TextUtils.isEmpty(cover_url) ? buyGoodDetailsBean.getData().getCover_url() : cover_url, productsImg);
+                        priceTv.setText("¥ " + buyGoodDetailsBean.getSkus().get(j).getPrice());
+                        String cover_url = buyGoodDetailsBean.getSkus().get(j).getCover_url();
+                        GlideUtils.displayImage(TextUtils.isEmpty(cover_url) ? buyGoodDetailsBean.getCover_url() : cover_url, productsImg);
                     }
                 });
                 scrollLinear.addView(view);
@@ -383,19 +382,14 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<BuyGoodDetailsBean>() {
-                    }.getType();
-                    buyGoodDetailsBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                if (buyGoodDetailsBean.isSuccess()) {
+                HttpResponse<BuyGoodDetailsBean> buyGoodDetailsBean2 = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<BuyGoodDetailsBean>>() { });
+                if (buyGoodDetailsBean2.isSuccess()) {
+                    buyGoodDetailsBean = buyGoodDetailsBean2.getData();
                     if (fragmentList.size() == 0) {
 //                        titleList.add("好货");
                         buyGoodsDetailsFragment = BuyGoodsDetailsFragment.newInstance(id);
                         fragmentList.add(buyGoodsDetailsFragment);
-                        if (buyGoodDetailsBean.getData().getStage() == 9) {
+                        if (buyGoodDetailsBean.getStage() == 9) {
 //                            titleList.add("商品详情");
                             webFragment = WebFragment.newInstance();
 
@@ -418,19 +412,19 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                         //刷新数据
                     }
                     buyGoodsDetailsFragment.refreshData(buyGoodDetailsBean);
-                    if (buyGoodDetailsBean.getData().getStage() == 9) {
-                        webFragment.refreshData(buyGoodDetailsBean.getData().getContent_view_url());
+                    if (buyGoodDetailsBean.getStage() == 9) {
+                        webFragment.refreshData(buyGoodDetailsBean.getContent_view_url());
                     }
-                    if (buyGoodDetailsBean.getData().getIs_favorite() == 1) {
+                    if (buyGoodDetailsBean.getIs_favorite() == 1) {
                         shoucangImg.setImageResource(R.mipmap.shoucang_yes);
                     } else {
                         shoucangImg.setImageResource(R.mipmap.shoucang_not);
                     }
                     //初始化popwindow数据
-                    priceTv.setText("¥ " + buyGoodDetailsBean.getData().getSale_price());
-                    ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getData().getCover_url(), productsImg);
-                    productsTitle.setText(buyGoodDetailsBean.getData().getTitle());
-                    maxNumber = buyGoodDetailsBean.getData().getInventory();
+                    priceTv.setText("¥ " + buyGoodDetailsBean.getSale_price());
+                    ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getCover_url(), productsImg);
+                    productsTitle.setText(buyGoodDetailsBean.getTitle());
+                    maxNumber = buyGoodDetailsBean.getInventory();
                     quantity.setText(maxNumber + "");
                     addSkuToLinear();
 //                    tabLayout.setVisibility(View.GONE);
@@ -459,15 +453,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         cartHandler = HttpRequest.post(URL.CART_NUMBER, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                CartBean cartBean = new CartBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CartBean>() {
-                    }.getType();
-                    cartBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                CartBean netCartBean = cartBean;
+                HttpResponse<CartBean> netCartBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CartBean>>(){});
                 if (netCartBean.isSuccess()) {
                     titleLayout.setCartNum(netCartBean.getData().getCount());
                     return;
@@ -488,20 +474,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         cancelShoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    buyGoodDetailsBean.getData().setIs_favorite(0);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    buyGoodDetailsBean.setIs_favorite(0);
                     shoucangImg.setImageResource(R.mipmap.shoucang_not);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -521,20 +500,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         shoucangHandler = HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    buyGoodDetailsBean.getData().setIs_favorite(1);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    buyGoodDetailsBean.setIs_favorite(1);
                     shoucangImg.setImageResource(R.mipmap.shoucang_yes);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -555,14 +527,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NowBuyBean nowBuyBean = new NowBuyBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NowBuyBean>() {
-                    }.getType();
-                    nowBuyBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<NowBuyBean> nowBuyBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<NowBuyBean>>() {});
                 if (nowBuyBean.isSuccess()) {
                     Intent intent = new Intent(BuyGoodsDetailsActivity.this, ConfirmOrderActivity.class);
                     intent.putExtra("NowBuyBean", nowBuyBean);
@@ -588,15 +553,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         addCartHandler = HttpRequest.post(requestParams, URL.URLSTRING_ADD_TO_CART, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type1 = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type1);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());

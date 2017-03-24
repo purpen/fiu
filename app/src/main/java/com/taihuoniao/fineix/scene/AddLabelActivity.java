@@ -14,14 +14,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.ExpandAdapter;
 import com.taihuoniao.fineix.adapters.UsedLabelAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ActiveTagsBean;
@@ -29,10 +28,10 @@ import com.taihuoniao.fineix.beans.SearchExpandBean;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -150,14 +149,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                UsedLabelBean usedLabelBean = new UsedLabelBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<UsedLabelBean>() {
-                    }.getType();
-                    usedLabelBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<UsedLabelBean> usedLabelBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<UsedLabelBean>>(){});
                 if (usedLabelBean.isSuccess()) {
                     usedLabelList.clear();
                     usedLabelList.addAll(usedLabelBean.getData().getTags());
@@ -198,14 +190,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
        Call httpHandler =  HttpRequest.post(requestParams, URL.SEARCH_EXPANDED, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                SearchExpandBean searchExpandBean = new SearchExpandBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchExpandBean>() {
-                    }.getType();
-                    searchExpandBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SearchExpandBean> searchExpandBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SearchExpandBean>>() { });
                 if (searchExpandBean.isSuccess()) {
                     expandList.clear();
                     expandList.addAll(searchExpandBean.getData().getData().getSwords());

@@ -34,7 +34,7 @@ public class UsedLabelAdapter extends BaseAdapter {
         if (activeTagsBean == null) {
             return 0;
         }
-        if (position == activeTagsBean.getData().getItems().size() + 1) {
+        if (position == activeTagsBean.getItems().size() + 1) {
             return 1;
         }
         return 0;
@@ -49,9 +49,9 @@ public class UsedLabelAdapter extends BaseAdapter {
             return list.size() + 1;
         }
         if (list.size() >= 10) {
-            return 12 + activeTagsBean.getData().getItems().size();
+            return 12 + activeTagsBean.getItems().size();
         }
-        return list.size() + 2 + activeTagsBean.getData().getItems().size();
+        return list.size() + 2 + activeTagsBean.getItems().size();
     }
 
     @Override
@@ -62,10 +62,10 @@ public class UsedLabelAdapter extends BaseAdapter {
         if (activeTagsBean == null) {
             return "#" + list.get(position - 1) + " ";
         }
-        if (position  <= activeTagsBean.getData().getItems().size()) {
-            return "#" + activeTagsBean.getData().getItems().get(position - 1).get(0) + " ";
+        if (position  <= activeTagsBean.getItems().size()) {
+            return "#" + activeTagsBean.getItems().get(position - 1).get(0) + " ";
         }
-        return "#" + list.get(position - 2 - activeTagsBean.getData().getItems().size()) + " ";
+        return "#" + list.get(position - 2 - activeTagsBean.getItems().size()) + " ";
     }
 
     @Override
@@ -95,15 +95,15 @@ public class UsedLabelAdapter extends BaseAdapter {
             if (position == 0) {
                 holder.name.setTextColor(parent.getResources().getColor(R.color.color_999));
                 holder.name.setText("推荐标签");
-            } else if (position == activeTagsBean.getData().getItems().size() + 1) {
+            } else if (position == activeTagsBean.getItems().size() + 1) {
                 holder.name.setTextColor(parent.getResources().getColor(R.color.color_999));
                 holder.name.setText("最近使用的标签");
-            } else if (position <= activeTagsBean.getData().getItems().size()) {
+            } else if (position <= activeTagsBean.getItems().size()) {
                 holder.name.setTextColor(parent.getResources().getColor(R.color.title_black));
-                holder.name.setText("#" + activeTagsBean.getData().getItems().get(position - 1).get(0) + " ");
+                holder.name.setText("#" + activeTagsBean.getItems().get(position - 1).get(0) + " ");
             } else {
                 holder.name.setTextColor(parent.getResources().getColor(R.color.title_black));
-                holder.name.setText("#" + list.get(position - 2 - activeTagsBean.getData().getItems().size()) + " ");
+                holder.name.setText("#" + list.get(position - 2 - activeTagsBean.getItems().size()) + " ");
             }
         }
         return convertView;

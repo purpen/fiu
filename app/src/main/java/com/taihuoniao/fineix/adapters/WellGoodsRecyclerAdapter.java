@@ -19,10 +19,10 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/23.
  */
 public class WellGoodsRecyclerAdapter extends RecyclerView.Adapter<WellGoodsRecyclerAdapter.VH> {
-    private List<CategoryListBean.CategoryListItem> list;
+    private List<CategoryListBean.RowsEntity> list;
     private EditRecyclerAdapter.ItemClick itemClick;
 
-    public WellGoodsRecyclerAdapter(List<CategoryListBean.CategoryListItem> list, EditRecyclerAdapter.ItemClick itemClick) {
+    public WellGoodsRecyclerAdapter(List<CategoryListBean.RowsEntity> list, EditRecyclerAdapter.ItemClick itemClick) {
         this.list = list;
         this.itemClick = itemClick;
     }

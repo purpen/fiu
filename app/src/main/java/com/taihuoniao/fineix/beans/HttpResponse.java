@@ -12,6 +12,7 @@ public class HttpResponse<T> implements Serializable {
     private String status;
     private String message;
     private T data;
+    private String current_user_id;
 
     public boolean isSuccess() {
         return success;
@@ -33,4 +34,7 @@ public class HttpResponse<T> implements Serializable {
         return data;
     }
 
+    public String getCurrent_user_id() {
+        return current_user_id;
+    }
 }

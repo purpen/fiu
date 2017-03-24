@@ -26,12 +26,12 @@ public class AddProductViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return categoryBean.getData().getRows().get(position).getTitle();
+        return categoryBean.getRows().get(position).getTitle();
     }
 
     @Override
     public int getCount() {
-        return categoryBean.getData().getRows().size() ;
+        return categoryBean.getRows().size() ;
     }
 
     @Override

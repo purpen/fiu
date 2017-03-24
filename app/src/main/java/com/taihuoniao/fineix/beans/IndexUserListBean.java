@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/8/26.
  */
-public class IndexUserListBean extends NetBean {
+public class IndexUserListBean {
 
     /**
      * is_error : false

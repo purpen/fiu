@@ -11,8 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
@@ -42,7 +40,6 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
@@ -121,20 +118,11 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         addressHandler = HttpRequest.post(URL.URLSTRING_DEFAULT_ADDRESS, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                DefaultAddressBean defaultAddressBean = new DefaultAddressBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<DefaultAddressBean>() {
-                    }.getType();
-                    defaultAddressBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                dialog.dismiss();
-                DefaultAddressBean netAddress = defaultAddressBean;
+                HttpResponse<DefaultAddressBean> netAddress = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DefaultAddressBean>>() {});
                 dialog.dismiss();
                 if (netAddress.getData().getHas_default() == 1) {
-                    addressDefaultBean = netAddress;
-                    curAddressId=addressDefaultBean.getData().get_id();
+                    addressDefaultBean = netAddress.getData();
+                    curAddressId=addressDefaultBean.get_id();
                     setAddressData(addressDefaultBean);
                 } else {
                     ToastUtils.showInfo("默认地址不存在!");
@@ -167,24 +155,24 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         redBagRelative.setOnClickListener(this);
         payBtn.setOnClickListener(this);
         if (nowBuyBean != null) {
-            productsAdapter = new ConfirmOrderProductsAdapter(nowBuyBean.getData().getOrder_info().getDict().getItems(), ConfirmOrderActivity.this, null);
+            productsAdapter = new ConfirmOrderProductsAdapter(nowBuyBean.getOrder_info().getDict().getItems(), ConfirmOrderActivity.this, null);
         } else if (cartBean != null) {
             productsAdapter = new ConfirmOrderProductsAdapter(null, ConfirmOrderActivity.this, cartBean.getCartOrderContentItems());
         }
         productsListView.setAdapter(productsAdapter);
         if (nowBuyBean != null) {
-            sumPrice = nowBuyBean.getData().getPay_money();
+            sumPrice = nowBuyBean.getPay_money();
             payPriceTv.setText(String.format("¥ %s" , sumPrice));
-            if (nowBuyBean.getData().getBonus().size() > 0) {
+            if (nowBuyBean.getBonus().size() > 0) {
                 redBagTv.setText("选择红包");
             }
             try {
-                freight = nowBuyBean.getData().getOrder_info().getDict().getFreight();
+                freight = nowBuyBean.getOrder_info().getDict().getFreight();
                 transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(freight) ? "0" : freight));
 
                 // 2016/12/2 优惠立减
-                if ("5".equals(nowBuyBean.getData().getOrder_info().getKind())) {
-                    String coin_money = nowBuyBean.getData().getOrder_info().getDict().getCoin_money();
+                if ("5".equals(nowBuyBean.getOrder_info().getKind())) {
+                    String coin_money = nowBuyBean.getOrder_info().getDict().getCoin_money();
                     privilegeprice = Double.parseDouble(coin_money);
                     textView_privilege.setText(String.format("¥ %s", coin_money));
                     saveMoneyTv.setText(String.format(" ¥ %s", coin_money));
@@ -279,7 +267,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
 
                 //跳转到红包界面
                 Intent intent2 = new Intent(ConfirmOrderActivity.this, UsableRedPacketActivity.class);
-                intent2.putExtra("rid", nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getData().getOrder_info().getRid());
+                intent2.putExtra("rid", nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getOrder_info().getRid());
 
                 startActivityForResult(intent2, DataConstants.REQUESTCODE_REDBAG);
                 break;
@@ -296,9 +284,9 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                     return;
                 }
                 if (nowBuyBean != null)
-                    confirmOrder(nowBuyBean.getData().getOrder_info().get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem._id, nowBuyBean.getData().getIs_nowbuy() + "", editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(nowBuyBean.getOrder_info().get_id(), addressListItem == null ? addressDefaultBean.get_id() : addressListItem._id, nowBuyBean.getIs_nowbuy() + "", editText.getText().toString(), transfer_time, bonus_code);
                 else if (cartBean != null)
-                    confirmOrder(cartBean.get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem._id, cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(cartBean.get_id(), addressListItem == null ? addressDefaultBean.get_id() : addressListItem._id, cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
                 break;
         }
     }
@@ -404,7 +392,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                     redBagTv.setText("使用了" + money + "元红包");
                     redBagCancelTv.setText("您使用了一张" + money + "元红包，下单后将不可恢复");
                     if (nowBuyBean != null) {
-                        double nowPrice = nowBuyBean.getData().getPay_money() - Double.parseDouble(money);
+                        double nowPrice = nowBuyBean.getPay_money() - Double.parseDouble(money);
                         if (nowPrice <= 0) {
                             payPriceTv.setText("¥ 0.00");
                             sumPrice = 0D;
@@ -457,11 +445,10 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
 
     private void setAddressData(DefaultAddressBean address) {
         noAddressTv.setVisibility(View.GONE);
-        DefaultAddressBean.Data data = address.getData();
-        nameTv.setText(data.getName());
-        addressTv.setText(data.province + " " + data.city+" "+data.county+" "+data.town);
-        addressDetailsTv.setText(data.getAddress());
-        phoneTv.setText(data.getPhone());
+        nameTv.setText(address.getName());
+        addressTv.setText(address.province + " " + address.city+" "+ address.county+" "+ address.town);
+        addressDetailsTv.setText(address.getAddress());
+        phoneTv.setText(address.getPhone());
     }
 
     private void setAddressData(AddressListBean.RowsEntity address) {
@@ -482,7 +469,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
 
     // 2016/12/8 计算邮费
     private void fetchFreight(String addbook_id, String rid){
-        String rid2 = nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getData().getOrder_info().getRid();
+        String rid2 = nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getOrder_info().getRid();
         HashMap<String, String> params = ClientDiscoverAPI.getFetchFreightRequestParams(addbook_id, rid2);
         HttpRequest.post(params,URL.SHOPPING_FETCH_FREIGHT, new GlobalDataCallBack(){
             @Override

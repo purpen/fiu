@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/8.
  */
-public class HotLabel extends NetBean {
+public class HotLabel {
     private Data data;
 
     public Data getData() {

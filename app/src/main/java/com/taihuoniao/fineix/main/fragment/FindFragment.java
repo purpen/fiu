@@ -27,8 +27,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
@@ -36,10 +34,10 @@ import com.taihuoniao.fineix.adapters.FindQJAdapter;
 import com.taihuoniao.fineix.adapters.FindQJCategoryAdapter;
 import com.taihuoniao.fineix.adapters.FindRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
@@ -52,16 +50,18 @@ import com.taihuoniao.fineix.product.AllFiuerActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJCategoryActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,15 +100,15 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     private ListView listView;
     //HeaderView中控件
     private CustomGridViewForScrollView gridView;
-    private List<CategoryListBean.CategoryListItem> categoryList;//分类列表数据
+    private List<CategoryListBean.RowsEntity> categoryList;//分类列表数据
     private FindRecyclerAdapter findRecyclerAdapter;//分类小图列表适配器
     private FindQJCategoryAdapter findQJCategoryAdapter;//分类列表适配器
     private int sneceComplete;//判断情景是否加载完毕 0，情景主题都没加载 1,情景加载完毕等待主题加载 2，主题加载完毕等待情景加载
     private int currentPage = 1;//情景列表页面
     private WaittingDialog dialog;//耗时操作对话框
 
-    private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
-    private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
+    private List<SceneListBean2.RowsEntity> sceneList;//情景列表数据
+    private List<SubjectListBean.RowsEntity> subjectList;//主题列表数据
     private FindQJAdapter findQJAdapter;//情景列表适配器
 
     //SharePop
@@ -242,14 +242,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         Call httpHandler = HttpRequest.post(requestParams, URL.CATEGORY_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                CategoryListBean categoryListBean = new CategoryListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryListBean>() {
-                    }.getType();
-                    categoryListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<CategoryListBean> categoryListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CategoryListBean>>() {});
                 if (categoryListBean.isSuccess()) {
                     gridView.setVisibility(View.VISIBLE);
                     categoryList.clear();
@@ -275,14 +268,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                SubjectListBean subjectListBean = new SubjectListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SubjectListBean>() {
-                    }.getType();
-                    subjectListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
                     subjectList.clear();
                     subjectList.addAll(subjectListBean.getData().getRows());
@@ -315,19 +301,12 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         Call httpHandler = HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                SceneList sceneL = new SceneList();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneList>() {
-                    }.getType();
-                    sceneL = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneListBean2> sceneL = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneListBean2>>() {});
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 if (sceneL.isSuccess()) {
-                    findQJAdapter.setPage(sceneL.getData().getCurrent_page());
+                    findQJAdapter.setPage(TypeConversionUtils.StringConvertInt(sceneL.getData().getCurrent_page()));
                     if (currentPage == 1) {
                         sceneList.clear();
                         pullRefreshView.lastTotalItem = -1;
