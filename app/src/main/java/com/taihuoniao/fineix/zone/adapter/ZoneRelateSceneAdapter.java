@@ -32,7 +32,6 @@ import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QJFavoriteBean;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -45,6 +44,7 @@ import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJPictureActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -53,6 +53,7 @@ import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.LabelView;
@@ -86,7 +87,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private ISortListener sortListener;
 
     private Activity activity;
-    private List<SceneList.DataBean.RowsBean> list;
+    private List<SceneListBean2.RowsEntity> list;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -190,8 +191,8 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             //设置情景标题
             SceneTitleSetUtils.setTitle(((ViewHolder)holder).qjTitleTv, ((ViewHolder)holder).qjTitleTv2, list.get(itemPosition).getTitle());
             //添加商品标签
-            List<SceneList.DataBean.RowsBean.ProductBean> productBeanList = list.get(itemPosition).getProduct();
-            if (productBeanList != null && compareble(productBeanList, (List<SceneList.DataBean.RowsBean.ProductBean>) ((ViewHolder)holder).labelContainer.getTag(R.id.label_container))) {
+            List<SceneListBean2.RowsEntity.ProductEntity> productBeanList = list.get(itemPosition).getProduct();
+            if (productBeanList != null && compareble(productBeanList, (List<SceneListBean2.RowsEntity.ProductEntity>) ((ViewHolder)holder).labelContainer.getTag(R.id.label_container))) {
                 ((ViewHolder)holder).labelContainer.setTag(R.id.label_container, productBeanList);
             } else {
                 stopAnimate(((ViewHolder)holder)); //停止商品动画 移除所有标签
@@ -233,7 +234,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View v) {
 //                跳转到地图界面，查看附近的情境
                     String address = list.get(itemPosition).getAddress();
-                    LatLng ll = new LatLng(list.get(itemPosition).getLocation().getCoordinates().get(1), list.get(itemPosition).getLocation().getCoordinates().get(0));
+                    LatLng ll = new LatLng(TypeConversionUtils.StringConvertDouble(list.get(itemPosition).getLocation().getCoordinates().get(1)), TypeConversionUtils.StringConvertDouble(list.get(itemPosition).getLocation().getCoordinates().get(0)));
                     Intent intent2 = new Intent(activity, MapNearByCJActivity.class);
                     intent2.putExtra("address", address);
                     intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
@@ -247,7 +248,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View v) {
                     if (LoginInfo.isUserLogin()) {
                         //已经登录
-                        if (list.get(itemPosition).getIs_love() == 1) {
+                        if (TypeConversionUtils.StringConvertInt(list.get(itemPosition).getIs_love()) == 1) {
                             ((ViewHolder)holder).loveContainer.setEnabled(false);
                             cancelLoveQJ(itemPosition, list.get(itemPosition).get_id(), ((ViewHolder)holder));
                         } else {
@@ -310,7 +311,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             bianjiTv.setVisibility(View.GONE);
             jubaoTv.setText("举报");
         }
-        if (list.get(position).getIs_favorite() == 1) {
+        if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_favorite()) == 1) {
             shoucangTv.setText("取消收藏");
         } else {
             shoucangTv.setText("收藏");
@@ -333,7 +334,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (list.get(position).getIs_favorite() == 1) {
+                if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_favorite()) == 1) {
                     cancelShoucang(position);
                 } else {
                     shoucang(position);
@@ -349,7 +350,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (LoginInfo.getUserId() == list.get(position).getIs_favorite()) {
+                if (LoginInfo.getUserId() == TypeConversionUtils.StringConvertLong(list.get(position).getIs_favorite())) {
                     deleteScene(list.get(position).get_id());
                     //过滤自己
                     return;
@@ -382,7 +383,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 if (qjFavoriteBeanHttpResponse.isSuccess()) {
                     ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
-                    list.get(position).setIs_favorite(0);
+                    list.get(position).setIs_favorite(TypeConversionUtils.IntConvertString(0));
                 } else {
                     ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
@@ -427,7 +428,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 if (qjFavoriteBeanHttpResponse.isSuccess()) {
                     ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
-                    list.get(position).setIs_favorite(1);
+                    list.get(position).setIs_favorite(TypeConversionUtils.IntConvertString(1));
                 } else {
                     ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
@@ -458,7 +459,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    list.get(position).setIs_love(0);
+                    list.get(position).setIs_love(TypeConversionUtils.IntConvertString(0));
                     list.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
@@ -489,7 +490,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    list.get(position).setIs_love(1);
+                    list.get(position).setIs_love(TypeConversionUtils.IntConvertString(1));
                     list.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
@@ -512,17 +513,17 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
      * @param holder
      */
     private void addGoodsTag(int position, ZoneRelateSceneAdapter.ViewHolder holder) {
-        for (final SceneList.DataBean.RowsBean.ProductBean productBean : list.get(position).getProduct()) {
+        for (final SceneListBean2.RowsEntity.ProductEntity productBean : list.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(activity);
             labelView.nameTv.setText(productBean.getTitle());
-            if (TextUtils.equals("0",productBean.price)){
+            if (TextUtils.equals("0",productBean.getPrice())){
                 labelView.price.setVisibility(View.GONE);
             }else {
-                labelView.price.setText("¥"+productBean.price);
+                labelView.price.setText("¥"+productBean.getPrice());
             }
             labelView.setLayoutParams(layoutParams);
-            if (productBean.getLoc() == 2) {
+            if (TypeConversionUtils.StringConvertInt(productBean.getLoc()) == 2) {
                 labelView.llTag.setBackgroundResource(R.drawable.label_left);
                 RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
@@ -531,7 +532,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             labelView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (productBean.getLoc() == 2) {
+                    if (TypeConversionUtils.StringConvertInt(productBean.getLoc()) == 2) {
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
@@ -575,7 +576,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 
     private void method1(final int position, final ZoneRelateSceneAdapter.ViewHolder holder) {
-        if (list.get(position).getUser_info().getIs_expert() == 1) {
+        if (TypeConversionUtils.StringConvertInt(list.get(position).getUser_info().getIs_expert()) == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
         } else {
             holder.vImg.setVisibility(View.GONE);
@@ -595,16 +596,16 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             public void onClick(View v) {
                 Intent intent = new Intent(activity, QJPictureActivity.class);
                 intent.putExtra("img", list.get(position).getCover_url());
-                intent.putExtra("fine", list.get(position).getFine() == 1);
-                intent.putExtra("stick", list.get(position).getStick() == 1);
-                intent.putExtra("check", list.get(position).getIs_check() == 0);
+                intent.putExtra("fine", TypeConversionUtils.StringConvertInt(list.get(position).getFine()) == 1);
+                intent.putExtra("stick", TypeConversionUtils.StringConvertInt(list.get(position).getStick()) == 1);
+                intent.putExtra("check", TypeConversionUtils.StringConvertInt(list.get(position).getIs_check()) == 0);
                 intent.putExtra("id", list.get(position).get_id());
                 activity.startActivity(intent);
             }
         });
         holder.viewCount.setText(list.get(position).getView_count());
         holder.loveCount.setText(list.get(position).getLove_count());
-        if (list.get(position).getIs_love() == 1) {
+        if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_love()) == 1) {
             holder.loveImg.setImageResource(R.mipmap.index_has_love);
         } else {
             holder.loveImg.setImageResource(R.mipmap.index_love);
@@ -624,7 +625,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         });
         holder.commentList.setAdapter(new ZoneRelateSceneAdapter.IndexCommentAdapter(list.get(position).getComments()));
-        if (list.get(position).getComment_count() > 0) {
+        if (TypeConversionUtils.StringConvertInt(list.get(position).getComment_count()) > 0) {
             holder.moreComment.setText("查看所有" + list.get(position).getComment_count() + "条评论");
             holder.moreComment.setVisibility(View.GONE);
         } else {
@@ -633,9 +634,9 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     static class IndexCommentAdapter extends BaseAdapter {
-        private List<SceneList.DataBean.RowsBean.CommentsBean> commentList;
+        private List<SceneListBean2.RowsEntity.CommentsEntity> commentList;
 
-        public IndexCommentAdapter(List<SceneList.DataBean.RowsBean.CommentsBean> commentList) {
+        public IndexCommentAdapter(List<SceneListBean2.RowsEntity.CommentsEntity> commentList) {
             this.commentList = commentList;
         }
 
@@ -768,7 +769,7 @@ public class ZoneRelateSceneAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    private boolean compareble(List<SceneList.DataBean.RowsBean.ProductBean> list1, List<SceneList.DataBean.RowsBean.ProductBean> list2) {
+    private boolean compareble(List<SceneListBean2.RowsEntity.ProductEntity> list1, List<SceneListBean2.RowsEntity.ProductEntity> list2) {
         return list1.equals(list2);
     }
 }

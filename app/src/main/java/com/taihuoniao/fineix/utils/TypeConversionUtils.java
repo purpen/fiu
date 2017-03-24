@@ -25,6 +25,15 @@ public class TypeConversionUtils {
         return "";
     }
 
+    public static long StringConvertLong(String str){
+        try {
+            return Long.valueOf(str);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static String LongConvertString(long number){
         try {
             return String.valueOf(number);
