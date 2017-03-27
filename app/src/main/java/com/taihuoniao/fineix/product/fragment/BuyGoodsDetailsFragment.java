@@ -153,10 +153,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         } else {
             holder.marketPrice.setVisibility(View.INVISIBLE);
         }
-        if (dataBean.getStage() != 9) {
-            holder.marketPrice.setText("此产品为用户标记，暂未销售。浮游正在努力上架产品中ing...");
-            holder.marketPrice.setVisibility(View.VISIBLE);
-        }
+
         if (TextUtils.isEmpty(dataBean.getAdvantage())) {
             holder.liangdianContainer.setVisibility(View.GONE);
         } else {
@@ -171,6 +168,12 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         }
         holder.marketPrice2.setVisibility("1".equals(dataBean.getActive_summary().getOrder_reduce()) ? View.VISIBLE : View.GONE);
         holder.marketPrice2.setVisibility("0".equals(dataBean.getExtra().getDisabled_app_reduce()) ? View.VISIBLE : View.GONE);
+
+        if (dataBean.getStage() != 9) {
+            holder.marketPrice.setText("此产品为用户标记，暂未销售。浮游正在努力上架产品中ing...");
+            holder.marketPrice.setVisibility(View.VISIBLE);
+            holder.marketPrice2.setVisibility(View.GONE);
+        }
     }
 
     //获取商品相关的情境列表
