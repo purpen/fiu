@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.taihuoniao.fineix.R.dimen.dp30;
 import static com.taihuoniao.fineix.R.dimen.dp5;
 import static com.taihuoniao.fineix.R.id.edit_imageView;
 
@@ -209,13 +209,17 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
     /**
      * 生成文本输入框
      */
-    private EditText createEditText(String content, String hint, int paddingTop) {
+    private EditText createEditText(String content, String hint, int padding) {
         EditText editText = (EditText) inflater.inflate(R.layout.edit_item, null);
         editText.setOnKeyListener(keyListener);
         editText.setTag(viewTagIndex++);
-//        editText.setPadding(editNormalPadding, paddingTop, editNormalPadding, 0);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(dp30));
+        padding = getResources().getDimensionPixelSize(R.dimen.dp15);
+        editText.setPadding(0, padding,0,padding);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER_VERTICAL;
         editText.setLayoutParams(params);
+        editText.setLineSpacing(1,1.3f);
+        editText.setMinHeight(getResources().getDimensionPixelSize(R.dimen.dp30));
         editText.setHint(hint);
         editText.setText(content);
         editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);

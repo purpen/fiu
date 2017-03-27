@@ -14,12 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/top_layout"
-        android:background="@color/backround_black"
+        android:background="@color/color_999"
         android:gravity="center"
-        android:horizontalSpacing="@dimen/dp2"
-        android:numColumns="4"
+        android:horizontalSpacing="@dimen/dp1"
+        android:numColumns="3"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/dp2" />
+        android:verticalSpacing="@dimen/dp1" />
 
     <FrameLayout
         android:id="@+id/listViewParent"
