@@ -1,8 +1,10 @@
 package com.taihuoniao.fineix.utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -324,7 +326,7 @@ public class ImageUtils {
      */
     public static byte[] bitmap2ByteArray(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         return baos.toByteArray();
     }
 
@@ -358,7 +360,7 @@ public class ImageUtils {
         if (state.equals(Environment.MEDIA_MOUNTED)) {
             Picker.from(activity)
                     .count(count)
-                    .enableCamera(false)
+                    .enableCamera(true)
                     .setEngine(new ImageLoaderEngine())
                     .forResult(Constants.REQUEST_CODE_PICK_IMAGE);
         } else {
@@ -395,5 +397,34 @@ public class ImageUtils {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "'IMG'_yyyy_MM_dd_HH_mm_ss");
         return dateFormat.format(date) + ".jpg";
+    }
+
+    /**
+     * 根据Uri获取图片文件的绝对路径
+     */
+    public static String getRealFilePath(final Uri uri) {
+        if (null == uri) {
+            return null;
+        }
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = MainApplication.getContext().getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
     }
 }

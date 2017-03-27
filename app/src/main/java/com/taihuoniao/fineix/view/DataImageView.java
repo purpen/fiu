@@ -11,6 +11,8 @@ public class DataImageView extends AppCompatImageView {
 
 	private Bitmap bitmap;
 
+	public boolean isUpload; //判断是否上传完毕
+
 	public DataImageView(Context context) {
 		this(context, null);
 	}

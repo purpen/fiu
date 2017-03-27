@@ -496,10 +496,15 @@
     <string name="title_zone_select_address">选择地盘地址</string>
     <string name="title_modify_address">修改地盘地址</string>
     <string name="zone_base_info">基本信息</string>
-    <string name="zone_edit_bright">编辑亮点</string>
+    <string name="zone_public_bright">发布</string>
+    <string name="zone_edit_spot">亮点</string>
     <string name="title_zone_classify">地盘分类</string>
     <string name="my_zone">我的地盘</string>
     <string name="item_zone_pic">地盘图片</string>
+    <string name="add_pic">添加图片</string>
+    <string name="data_err">数据异常</string>
+    <string name="lightspot_count_limit">亮点最多只能发布10张图片</string>
+    <string name="uploading_image_waiting">上传亮点图片中，请稍后</string>
     <string-array name="zone_classifies">
         <item>体验店</item>
         <item>创意店</item>

@@ -11,7 +11,6 @@ public class BrightItemBean implements Parcelable {
     public int id;
     public String img;
     public String content;
-
     public BrightItemBean() {
     }
 

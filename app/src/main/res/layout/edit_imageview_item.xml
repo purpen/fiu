@@ -18,5 +18,12 @@
         android:layout_marginTop="@dimen/dp10"
         android:scaleType="fitXY"
         android:src="@mipmap/zone_edit_delete" />
-
+    <ImageView
+        android:id="@+id/image_scale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/scale_xy" />
 </RelativeLayout>

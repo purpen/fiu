@@ -162,6 +162,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.item_light_spot:
                 Intent intent = new Intent(activity,ZoneEditBrightActivity.class);
+                intent.putExtra(ZoneEditBrightActivity.class.getSimpleName(),zoneDetailBean);
                 startActivity(intent);
                 break;
             case R.id.tv_take_photo:

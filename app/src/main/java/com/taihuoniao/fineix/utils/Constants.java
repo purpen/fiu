@@ -25,6 +25,7 @@ public class Constants {
     public static final String SEPERATOR = ":!";
     public static final String TEXT_TYPE = "[text]";
     public static final String IMAGE_TYPE = "[img]";
+    public static final int LIGHT_SPOT_IMAGE_COUNT = 10;
 
     public static final String URL_TYPE = "1";  //URL
     public static final String GOODS_TYPE = "2"; //商品

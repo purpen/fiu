@@ -83,7 +83,7 @@ public class GridViewItemRelativeLayout extends RelativeLayout {
                     GridViewItemRelativeLayout.this.imageView.clearColorFilter();
                 } else {
                     GridViewItemRelativeLayout.this.mCollection.add(item.buildContentUri());
-                    GridViewItemRelativeLayout.this.imageCheck.setImageResource(R.mipmap.pick_photo_checkbox_check);
+                    GridViewItemRelativeLayout.this.imageCheck.setImageResource(R.mipmap.pick_photo_check);
                     GridViewItemRelativeLayout.this.imageView.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                 }
             }
@@ -96,7 +96,7 @@ public class GridViewItemRelativeLayout extends RelativeLayout {
         imageCheck.setImageResource(R.mipmap.pick_photo_checkbox_normal);
         if (mCollection.isSelected(item.buildContentUri())) {
             imageView.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-            imageCheck.setImageResource(R.mipmap.pick_photo_checkbox_check);
+            imageCheck.setImageResource(R.mipmap.pick_photo_check);
         }
         imageCheck.setVisibility(mCollection.isSingleChoose() || item.isCapture() ? View.GONE : View.VISIBLE);
         disPlay();

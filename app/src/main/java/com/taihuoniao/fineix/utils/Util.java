@@ -39,8 +39,6 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.taihuoniao.fineix.utils.ImageUtils.getSmallBitmap;
-
 public class Util {
 
     public static String ToSBC(String input) {
@@ -249,7 +247,28 @@ public class Util {
             matrix.setScale(scale,scale);
             bitmap=bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
             ByteArrayOutputStream baos = new BufferedByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100,baos);
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+            byte[] byteArr=baos.toByteArray();
+            imgStr = Base64.encodeToString(byteArr, Base64.DEFAULT);
+            baos.flush();
+            baos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return imgStr;
+    }
+
+    /**
+     * bitmap转string
+     * @param bitmap
+     * @return
+     */
+    public static String saveBitmap2Base64Str(Bitmap bitmap) {
+        if (bitmap == null) return null;
+        String imgStr = null;
+        try {
+            ByteArrayOutputStream baos = new BufferedByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
             byte[] byteArr=baos.toByteArray();
             imgStr = Base64.encodeToString(byteArr, Base64.DEFAULT);
             baos.flush();
@@ -358,11 +377,4 @@ public class Util {
         return false;
     }
 
-    //把bitmap转换成String
-     public static String bitmap2String(Bitmap bitmap) {
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.JPEG, 40, baos);
-         byte[] b = baos.toByteArray();
-         return Base64.encodeToString(b, Base64.DEFAULT);
-     }
 }

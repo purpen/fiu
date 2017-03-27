@@ -60,7 +60,6 @@ public class LightSpotDetailActivity extends BaseActivity {
     @Override
     protected void initView() {
         highLight.getPaint().setFakeBoldText(true);
-        customHeadView.setHeadRightTxtShow(true, R.string.zone_edit_bright);
         if (zoneDetailBean==null) return;
         customHeadView.setHeadCenterTxtShow(true,zoneDetailBean.title);
         setBrightSpots(zoneDetailBean.bright_spot);
@@ -68,7 +67,10 @@ public class LightSpotDetailActivity extends BaseActivity {
 
     private void setBrightSpots(List<String> brightSpot) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.bottomMargin = getResources().getDimensionPixelSize(R.dimen.dp10);
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp195));
+        int size = getResources().getDimensionPixelSize(R.dimen.dp10);
+        params.bottomMargin = size;
+        imageParams.bottomMargin = size;
         for (String str : brightSpot) {
             if (!str.contains(Constants.SEPERATOR)) continue;
             String[] split = str.split(Constants.SEPERATOR);
@@ -83,7 +85,7 @@ public class LightSpotDetailActivity extends BaseActivity {
             } else if (TextUtils.equals(split[0], Constants.IMAGE_TYPE)) {
                 ImageView imageView = new ImageView(activity);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setLayoutParams(params);
+                imageView.setLayoutParams(imageParams);
                 GlideUtils.displayImageFadein(split[1], imageView);
                 llContainer.addView(imageView);
             }

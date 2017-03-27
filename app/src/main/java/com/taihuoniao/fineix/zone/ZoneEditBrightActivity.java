@@ -1,28 +1,42 @@
 package com.taihuoniao.fineix.zone;
 
 import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore.Images.ImageColumns;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.DataImageView;
 import com.taihuoniao.fineix.view.RichTextEditor;
+import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.bean.BrightItemBean;
+import com.taihuoniao.fineix.zone.bean.LightSpotImageBean;
+import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 import com.taihuoniao.fineix.zone.db.ZoneBrightSqliteOpenHelper;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,18 +48,67 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
  * 编辑亮点
  */
 public class ZoneEditBrightActivity extends BaseActivity {
+    @Bind(R.id.custom_head)
+    CustomHeadView customHead;
     @Bind(R.id.richEditor)
     RichTextEditor richEditor;
-    ZoneBrightSqliteOpenHelper sqliteOpenHelper;
+    private ZoneBrightSqliteOpenHelper sqliteOpenHelper;
     private File mCurrentPhotoFile;
+    private ZoneDetailBean zoneDetailBean;
+    private List<RichTextEditor.EditData> editList;
+    RichTextEditor.ImageQueue<DataImageView> imageQueue;
+    private WaittingDialog dialog;
     public ZoneEditBrightActivity() {
         super(R.layout.activity_zone_edit_bright);
     }
 
     @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(TAG)){
+            zoneDetailBean = intent.getParcelableExtra(TAG);
+        }
+    }
+
+    @Override
     protected void initView() {
+        customHead.setHeadCenterTxtShow(true,R.string.zone_edit_spot);
+        customHead.setHeadRightTxtShow(true, R.string.zone_public_bright);
+        dialog = new WaittingDialog(activity);
+        editList=new ArrayList<>();
         sqliteOpenHelper = new ZoneBrightSqliteOpenHelper(this);
-        List<BrightItemBean> list = sqliteOpenHelper.query();
+        if (null==zoneDetailBean.bright_spot) {
+            ToastUtils.showError(R.string.data_err);
+            return;
+        }
+        if (zoneDetailBean.bright_spot.size()>0){
+            LogUtil.e(TAG,"亮点存在");
+            List<BrightItemBean> list=new ArrayList<>();
+            BrightItemBean brightItem;
+            for (String item:zoneDetailBean.bright_spot){
+                brightItem=new BrightItemBean();
+                if (!item.contains(Constants.SEPERATOR)) continue;
+                String[] split = item.split(Constants.SEPERATOR);
+                if (TextUtils.equals(split[0], Constants.TEXT_TYPE)) {
+                    brightItem.content=split[1];
+                } else if (TextUtils.equals(split[0], Constants.IMAGE_TYPE)) {
+                    brightItem.img = split[1];
+                }
+                list.add(brightItem);
+            }
+            traverseAndInsertImage(list);
+        }else {
+            LogUtil.e(TAG,"尝试从数据库读取草稿");
+            List<BrightItemBean> list = sqliteOpenHelper.query();
+            traverseAndInsertImage(list);
+        }
+    }
+
+    /**
+     * 遍历并插入图片
+     * @param list
+     */
+    private void traverseAndInsertImage(List<BrightItemBean> list) {
         int size = list.size();
         for (int i = 0; i < size; i++) {
             BrightItemBean item = list.get(i);
@@ -58,22 +121,12 @@ public class ZoneEditBrightActivity extends BaseActivity {
         }
     }
 
+
     private void insertImageAtIndex(int index, String imgPath) {
         richEditor.insertImageAtIndex(index, imgPath);
     }
 
-    /**
-     * 负责处理编辑数据提交等事宜，请自行实现
-     */
-    protected void dealEditData(List<RichTextEditor.EditData> editList) {
-        for (RichTextEditor.EditData itemData : editList) {
-            if (!TextUtils.isEmpty(itemData.inputStr)) {
-                Log.d("RichEditor", "commit inputStr=" + itemData.inputStr);
-            } else if (!TextUtils.isEmpty(itemData.imagePath)) {
-                Log.d("RichEditor", "commit imgePath=" + itemData.imagePath);
-            }
-        }
-    }
+
 
     protected void openCamera() {
         mCurrentPhotoFile = ImageUtils.getDefaultFile();
@@ -91,7 +144,8 @@ public class ZoneEditBrightActivity extends BaseActivity {
     @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
     private void getRequestYes(List<String> grantedPermissions) {
         if (grantedPermissions.contains("android.permission.READ_EXTERNAL_STORAGE")) {
-            ImageUtils.getImageFromAlbum(activity, 10);
+            int count = richEditor.getImageViewCount();
+            ImageUtils.getImageFromAlbum(activity,remainImageCount(count));
         } else if (grantedPermissions.contains("android.permission.CAMERA")) {
             mCurrentPhotoFile = ImageUtils.getDefaultFile();
             if (null==mCurrentPhotoFile) return;
@@ -126,41 +180,15 @@ public class ZoneEditBrightActivity extends BaseActivity {
         richEditor.insertImage(imagePath);
     }
 
-    /**
-     * 根据Uri获取图片文件的绝对路径
-     */
-    public String getRealFilePath(final Uri uri) {
-        if (null == uri) {
-            return null;
-        }
-        final String scheme = uri.getScheme();
-        String data = null;
-        if (scheme == null) {
-            data = uri.getPath();
-        } else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
-            data = uri.getPath();
-        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
-            Cursor cursor = getContentResolver().query(uri,
-                    new String[]{ImageColumns.DATA}, null, null, null);
-            if (null != cursor) {
-                if (cursor.moveToFirst()) {
-                    int index = cursor.getColumnIndex(ImageColumns.DATA);
-                    if (index > -1) {
-                        data = cursor.getString(index);
-                    }
-                }
-                cursor.close();
-            }
-        }
-        return data;
-    }
-
-    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.btn})
+    @OnClick({R.id.button1,R.id.tv_head_right})
     void onClick(View view) {
+        int count;
         switch (view.getId()) {
             case R.id.button1:// 打开系统相册
+                count=remainImageCount(richEditor.getImageViewCount());
+                if (count==0) return;
                 if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    ImageUtils.getImageFromAlbum(activity, 10);
+                    ImageUtils.getImageFromAlbum(activity,count);
                 } else {
                     // 申请权限。
                     AndPermission.with(this)
@@ -169,22 +197,24 @@ public class ZoneEditBrightActivity extends BaseActivity {
                             .send();
                 }
                 break;
-            case R.id.button2:// 打开相机
-                if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
-                    openCamera();
-                } else {
-                    // 申请权限。
-                    AndPermission.with(this)
-                            .requestCode(Constants.REQUEST_PERMISSION_CODE)
-                            .permission(Manifest.permission.CAMERA)
-                            .send();
-                }
-
-                break;
-            case R.id.button3: //发布
-                List<RichTextEditor.EditData> publishList = richEditor.buildEditData();
-                // 下面的代码可以上传、或者保存，请自行实现
-                dealEditData(publishList);
+//            case R.id.button2:// 打开相机
+//                count=remainImageCount(richEditor.getImageViewCount());
+//                if (count==0) return;
+//                if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
+//                    openCamera();
+//                } else {
+//                    // 申请权限。
+//                    AndPermission.with(this)
+//                            .requestCode(Constants.REQUEST_PERMISSION_CODE)
+//                            .permission(Manifest.permission.CAMERA)
+//                            .send();
+//                }
+//
+//                break;
+            case R.id.tv_head_right: //发布
+                editList.clear();
+                editList.addAll(richEditor.buildEditData());
+                upload();
                 break;
             case R.id.btn: //保存草稿
                 sqliteOpenHelper.resetTable();
@@ -202,6 +232,21 @@ public class ZoneEditBrightActivity extends BaseActivity {
         }
     }
 
+
+
+    /**
+     * 还可以上传的图片数量
+     * @param count
+     * @return
+     */
+    private int remainImageCount(int count) {
+        if (count== Constants.LIGHT_SPOT_IMAGE_COUNT){
+            ToastUtils.showInfo(R.string.lightspot_count_limit);
+            return 0;
+        }
+        return Constants.LIGHT_SPOT_IMAGE_COUNT-count;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -211,16 +256,106 @@ public class ZoneEditBrightActivity extends BaseActivity {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     if (null==mSelected) return;
                     for (Uri uri : mSelected) {
-                        insertBitmap(getRealFilePath(uri));
+                        insertBitmap(ImageUtils.getRealFilePath(uri));
                     }
+                    prepareDataAndUploadImage();
                     break;
                 case Constants.REQUEST_CODE_CAPTURE_CAMERA:
                     if (null == mCurrentPhotoFile) return;
                     insertBitmap(mCurrentPhotoFile.getAbsolutePath());
+                    prepareDataAndUploadImage();
                     break;
                 default:
                     break;
             }
         }
     }
+
+    /**
+     * 准备要上传的图片
+     */
+    private void prepareDataAndUploadImage() {
+        imageQueue=richEditor.getImageQueue();
+        if (null==imageQueue) return;
+        uploadImages(imageQueue.remove());
+
+    }
+
+    //上传图片
+    private void uploadImages(final DataImageView imageView) {
+        if (null==imageView) return;
+        if (null==imageView.getBitmap()) return;
+        HashMap<String,String> params=new HashMap<>();
+        params.put("id",zoneDetailBean._id);
+        params.put("tmp", Util.saveBitmap2Base64Str(imageView.getBitmap()));
+        params.put("type","2");
+        HttpRequest.post(params, URL.ZONE_ADD_COVER, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                HttpResponse<LightSpotImageBean> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<LightSpotImageBean>>() {
+                });
+                LogUtil.e("还有"+imageQueue.size()+"张图片待上传");
+                if (response.isSuccess()){
+                    imageView.setAbsolutePath(response.getData().filepath.huge);
+                    imageView.isUpload = true;
+                }
+                uploadImages(imageQueue.remove());
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showError(R.string.network_err);
+            }
+        });
+    }
+
+    //上传亮点
+    private void upload() {
+        if (!richEditor.isAllImageUploaded()){
+            ToastUtils.showInfo(R.string.uploading_image_waiting);
+            return;
+        }
+        List<String> strings=new ArrayList<>();
+        StringBuilder builder;
+        for (RichTextEditor.EditData item:editList){
+            builder = new StringBuilder();
+            if(!TextUtils.isEmpty(item.inputStr)){
+                builder.append(Constants.TEXT_TYPE).append(Constants.SEPERATOR).append(item.inputStr);
+                strings.add(builder.toString());
+            }else if(!TextUtils.isEmpty(item.imagePath)){
+                builder.append(Constants.IMAGE_TYPE).append(Constants.SEPERATOR).append(item.imagePath);
+                strings.add(builder.toString());
+            }
+        }
+        String s = JsonUtil.list2Json(strings);
+
+        if (TextUtils.isEmpty(s)) return;
+        HashMap<String,String> params=new HashMap<>();
+        params.put("id",zoneDetailBean._id);
+        params.put("bright_spot",s); //["[text]:!天气不错", "[img]:!http://img_url"]
+        HttpRequest.post(params, URL.SCENE_SCENE_SAVE_URL, new GlobalDataCallBack() {
+            @Override
+            public void onStart() {
+                if (null!=dialog &&!dialog.isShowing()&& !activity.isFinishing()) dialog.show();
+            }
+
+            @Override
+            public void onSuccess(String json) {
+                if (null!=dialog &&dialog.isShowing()&& !activity.isFinishing()) dialog.dismiss();
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                if (response.isSuccess()){
+                    ToastUtils.showSuccess(response.getMessage());
+                    return;
+                }
+                ToastUtils.showError(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(String error) {
+                if (null!=dialog &&dialog.isShowing()&& !activity.isFinishing()) dialog.dismiss();
+                ToastUtils.showError(R.string.network_err);
+            }
+        });
+    }
+
 }
