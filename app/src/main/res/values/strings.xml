@@ -166,7 +166,7 @@
     <string name="l_album_name_screen_shot">屏幕截图</string>
     <string name="l_confirm_dialog_title">提示</string>
     <string name="l_confirm_dialog_message">您确定要放弃本次选择的图片吗?</string>
-    <string name="fiu_redbag">Fiu红包</string>
+    <string name="fiu_redbag">D3IN红包</string>
     <string name="redbag_code">红包码：xxxxx</string>
     <string name="less_money">最低使用限额：99元</string>
     <string name="money">¥</string>

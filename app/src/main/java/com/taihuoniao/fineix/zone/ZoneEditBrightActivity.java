@@ -2,10 +2,8 @@ package com.taihuoniao.fineix.zone;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -82,7 +80,6 @@ public class ZoneEditBrightActivity extends BaseActivity {
             return;
         }
         if (zoneDetailBean.bright_spot.size()>0){
-            LogUtil.e(TAG,"亮点存在");
             List<BrightItemBean> list=new ArrayList<>();
             BrightItemBean brightItem;
             for (String item:zoneDetailBean.bright_spot){

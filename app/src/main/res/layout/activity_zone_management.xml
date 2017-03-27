@@ -1,76 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_f8f8f8"
+    android:orientation="vertical"
     >
-    <LinearLayout
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.taihuoniao.fineix.view.CustomHeadView
-            android:id="@+id/custom_head"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.taihuoniao.fineix.view.CustomItemLayout
-            android:id="@+id/item_zone_base_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.taihuoniao.fineix.view.CustomItemLayout
-            android:id="@+id/item_zone_brief"
+        android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_f8f8f8"
+        android:scrollbars="none"
+        >
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10" />
+            android:orientation="vertical">
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_zone_base_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <com.taihuoniao.fineix.view.CustomItemLayout
-            android:id="@+id/item_light_spot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_zone_brief"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10" />
 
-        <com.taihuoniao.fineix.view.CustomItemLayout
-            android:id="@+id/item_zone_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10" />
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_light_spot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <com.taihuoniao.fineix.view.CustomItemLayout
-            android:id="@+id/item_zone_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_zone_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10" />
 
-        <com.taihuoniao.fineix.view.CustomItemLayout
-            android:id="@+id/item_zone_business"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_zone_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <com.taihuoniao.fineix.view.CustomItemLayout
-            android:id="@+id/item_zone_auth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10"
-            android:visibility="gone"
-            />
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_zone_business"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tv_pic"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp45"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp15"
-            android:text="@string/item_zone_pic" />
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_zone_auth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:paddingLeft="@dimen/dp15"
-            android:paddingRight="@dimen/dp15" />
+            <TextView
+                android:id="@+id/tv_pic"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp45"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp15"
+                android:text="@string/item_zone_pic" />
 
-    </LinearLayout>
-</ScrollView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingLeft="@dimen/dp15"
+                android:paddingRight="@dimen/dp15" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
