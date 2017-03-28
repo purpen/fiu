@@ -15,12 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.ActiveTagsBean;
@@ -31,12 +30,12 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.scene.fragments.AddEnvirFragment;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -307,19 +306,11 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler=HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-//                dialog.dismiss();
-                CategoryListBean categoryListBean = new CategoryListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryListBean>() {
-                    }.getType();
-                    categoryListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<CategoryListBean> categoryListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CategoryListBean>>() {});
                 if (categoryListBean.isSuccess()) {
                     fragmentList.clear();
                     titleList.clear();
-                    for (CategoryListBean.CategoryListItem categoryListItem : categoryListBean.getData().getRows()) {
+                    for (CategoryListBean.RowsEntity categoryListItem : categoryListBean.getData().getRows()) {
                         fragmentList.add(AddEnvirFragment.newInstance(categoryListItem.get_id()));
                         titleList.add(categoryListItem.getTitle());
                     }
@@ -350,12 +341,9 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         Call httpHandler = HttpRequest.post(params, URL.SCENE_SIGHT_STICK_ACTIVE_TAGS, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ActiveTagsBean>() {
-                    }.getType();
-                    activeTagsBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
+                HttpResponse<ActiveTagsBean> activeTagsBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ActiveTagsBean>>(){});
+                if (activeTagsBeanHttpResponse.isSuccess()) {
+                    activeTagsBean = activeTagsBeanHttpResponse.getData();
                 }
             }
 

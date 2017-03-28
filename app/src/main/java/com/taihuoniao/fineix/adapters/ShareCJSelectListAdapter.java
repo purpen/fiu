@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class ShareCJSelectListAdapter extends BaseAdapter {
     private Context context;
-    private List<SearchBean.Data.SearchItem> list;
+    private List<SearchBean.SearchItem> list;
 
-    public ShareCJSelectListAdapter(Context context, List<SearchBean.Data.SearchItem> list) {
+    public ShareCJSelectListAdapter(Context context, List<SearchBean.SearchItem> list) {
         this.context = context;
         this.list = list;
     }

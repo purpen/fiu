@@ -8,8 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
@@ -21,6 +19,7 @@ import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.tab3.Tools;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -39,7 +38,6 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +58,7 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
 
     // 相关情境
     private ListView mListView;
-    private List<SceneList.DataBean.RowsBean> sceneList;
+    private List<SceneListBean2.RowsEntity> sceneList;
     private IndexQJListAdapter indexQJListAdapter;
 
     // 情境详情
@@ -72,8 +70,8 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
 
     //可能喜欢的产品
     private AddProductGridAdapter indexAdapter002;//主题列表适配器
-    private List<ProductBean.ProductListItem> productList;
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<ProductBean.RowsEntity> productList;
+    private List<SearchBean.SearchItem> searchList;
 
     // 情境ID
     private String situationId;
@@ -160,8 +158,8 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
                 pullRefreshView.lastSavedFirstVisibleItem = -1;
             }
             List<SceneListBean2.RowsEntity> rows = bean.getRows();
-            List<SceneList.DataBean.RowsBean> rowsBeen = Tools.newListConvertOldList(rows);
-            sceneList.addAll(rowsBeen);
+//            List<SceneList.DataBean.RowsBean> rowsBeen = Tools.newListConvertOldList(rows);
+            sceneList.addAll(rows);
             new android.os.Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -199,7 +197,7 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
         mListView.setOnScrollListener(this);
 
         sceneList = new ArrayList<>();
-        List<IndexUserListBean.DataBean.UsersBean> userList = new ArrayList<>();
+        ArrayList<User> userList = new ArrayList<>();
         indexQJListAdapter = new IndexQJListAdapter(activity, sceneList, userList);
         mListView.setAdapter(indexQJListAdapter);
     }
@@ -342,16 +340,7 @@ public class QJDetailActivity2 extends BaseActivity implements PullToRefreshBase
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-
+                HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                 if (productBean.isSuccess()) {
                     searchList.clear();
                     if (currentPage == 1) {

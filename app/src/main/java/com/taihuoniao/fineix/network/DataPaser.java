@@ -4,32 +4,24 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.CartDoOrderBonus;
 import com.taihuoniao.fineix.beans.CartOrderContentItem;
-import com.taihuoniao.fineix.beans.CheckRedBagUsable;
 import com.taihuoniao.fineix.beans.DictBean;
-import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
-import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.ShopCart;
 import com.taihuoniao.fineix.beans.ShopCartItem;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.beans.TryDetailsUserBean;
-import com.taihuoniao.fineix.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +34,7 @@ import okhttp3.Call;
  */
 public class DataPaser {
 
-    /**
+  /*  *//**
      * 公共 搜索列表
      * @param q q
      * @param t t
@@ -50,7 +42,7 @@ public class DataPaser {
      * @param evt evt
      * @param sort sort
      * @param handler handler
-     */
+     *//*
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
         HashMap<String, String> params = ClientDiscoverAPI.getsearchRequestParams(q, t, null, page, "8", evt, sort);
         HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
@@ -75,7 +67,7 @@ public class DataPaser {
             }
         });
     }
-
+*/
     public static List<TryCommentsBean> parserTryDetailsCommentsList(String jsonString) {
         List<TryCommentsBean> list = new ArrayList<>();
         try {
@@ -136,13 +128,16 @@ public class DataPaser {
         return list;
     }
 
-    /**
+/*
+    */
+/**
      * 找回密码的解析
      * @param handler handler
      * @param phone phone
      * @param password password
      * @param code code
-     */
+     *//*
+
     public static void findPasswordParser(final Handler handler, String phone, String password, String code) {
         HashMap<String, String> params = ClientDiscoverAPI.getfindPasswordNetRequestParams(phone, password, code);
         HttpRequest.post(params, URL.AUTH_FIND_PWD, new GlobalDataCallBack(){
@@ -171,13 +166,14 @@ public class DataPaser {
             }
         });
     }
+*/
 
-    /**
+   /* *//**
      * 验证红包是否可用接口
      * @param rid rid
      * @param code code
      * @param handler handler
-     */
+     *//*
     public static void checkRedbagUsableParser(String rid, String code, final Handler handler) {
         HashMap<String, String> params = ClientDiscoverAPI.getcheckRedBagUsableNetRequestParams(rid, code);
         HttpRequest.post(params,  URL.SHOPPING_USE_BONUS, new GlobalDataCallBack(){
@@ -209,7 +205,7 @@ public class DataPaser {
                 handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
             }
         });
-    }
+    }*/
 
 
     /**

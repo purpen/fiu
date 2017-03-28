@@ -16,12 +16,11 @@ import com.baidu.mapapi.SDKInitializer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.personal.AllianceRequstDeal;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.FileCameraUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -63,7 +62,7 @@ public class MainApplication extends Application {
     public static Bitmap blurBitmap = null;//模糊的图片
     public static String subjectId = null;//活动id
     public static String zoneId = null; //地盘id
-    public static List<SceneList.DataBean.RowsBean> sceneList;//情景小图跳转大图列表 情景
+    public static List<SceneListBean2.RowsEntity> sceneList;//情景小图跳转大图列表 情景
     public static List<String> picList;//跳转PictureActivity
     private PushAgent mPushAgent;
     private SharedPreferences tempSharedPreference;//检查本地存储是否设置推送的开关
@@ -163,7 +162,7 @@ public class MainApplication extends Application {
                 return false;
             }
         } else {
-            NetBean netBean = JsonUtil.fromJson(json, NetBean.class);
+            HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
             if (TextUtils.equals(ConstantCfg.STATUS_NEED_LOGIN, netBean.getStatus())) {//需要登录
                 SPUtil.remove(DataConstants.LOGIN_INFO);
                 AllianceRequstDeal.removeAllianceValue();

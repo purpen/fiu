@@ -18,8 +18,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
@@ -28,12 +26,13 @@ import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.IndexUserListBean;
+import com.taihuoniao.fineix.beans.InterestUserData;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubjectListBean;
+import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.common.bean.BannerBean;
@@ -53,8 +52,10 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -96,16 +97,16 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private IndexQJListAdapter indexQJListAdapter;//情景列表适配器
 
 
-    private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
-    private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表的用户列表数据
+    private List<SceneListBean2.RowsEntity> sceneList;//情景列表数据
+    private ArrayList<User> userList;//插入情景列表的用户列表数据
     private int currentPage = 1;//网络请求页码
 
-    private List<SubjectListBean.DataBean.RowsBean> subjectList003;//主题列表数据
+    private List<SubjectListBean.RowsEntity> subjectList003;//主题列表数据
 
     private IndexAdapter001 indexAdapter001;//新手
     private AddProductGridAdapter indexAdapter002;//主题列表适配器
-    private List<ProductBean.ProductListItem> productList;
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<ProductBean.RowsEntity> productList;
+    private List<SearchBean.SearchItem> searchList;
 
     private ProductAlbumAdapter indexAdapter003;//主题列表适配器
     private IndexAdapter005 indexAdapter005;//D3IN
@@ -296,17 +297,10 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         Call httpHandler = HttpRequest.post(re, URL.USER_FIND_USER, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                IndexUserListBean indexUserListBean = new IndexUserListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<IndexUserListBean>() {
-                    }.getType();
-                    indexUserListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<InterestUserData> indexUserListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<InterestUserData>>() {});
                 if (indexUserListBean.isSuccess()) {
                     userList.clear();
-                    userList.addAll(indexUserListBean.getData().getUsers());
+                    userList.addAll(indexUserListBean.getData().users);
                     if (sneceComplete == 1) {
                         new android.os.Handler().postDelayed(new Runnable() {
                             @Override
@@ -346,14 +340,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         Call httpHandler = HttpRequest.post(requestParams, URL.SCENE_SUBJECT_INDEX_SUJECT_STICK, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                SubjectListBean subjectListBean = new SubjectListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SubjectListBean>() {
-                    }.getType();
-                    subjectListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
 //                    subjectList.clear();
 //                    subjectList.addAll(subjectListBean.getData().getRows());
@@ -376,15 +363,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-//                WriteJsonToSD.writeToSD("json", json);
-                SceneList sceneL = new SceneList();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneList>() {
-                    }.getType();
-                    sceneL = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneListBean2> sceneL = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneListBean2>>() {});
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
@@ -464,7 +443,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 if (count == -1) {
                     return;
                 }
-                sceneList.get(indexQJListAdapter.getPos()).setComment_count(count);
+                sceneList.get(indexQJListAdapter.getPos()).setComment_count(TypeConversionUtils.IntConvertString(count));
                 indexQJListAdapter.notifyDataSetChanged();
                 break;
         }
@@ -613,16 +592,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-
+                HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                 if (productBean.isSuccess()) {
                     searchList.clear();
                     if (currentPage == 1) {
@@ -647,14 +617,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
             @Override
             public void onSuccess(String json) {
-                SubjectListBean subjectListBean = new SubjectListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SubjectListBean>() {
-                    }.getType();
-                    subjectListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
                     subjectList003.clear();
                     subjectList003.addAll(subjectListBean.getData().getRows());
@@ -678,8 +641,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
             @Override
             public void onSuccess(String json) {
-                com.taihuoniao.fineix.home.beans.CategoryListBean categoryListBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<com.taihuoniao.fineix.home.beans.CategoryListBean>>() {
-                });
+                HttpResponse<CategoryListBean> categoryListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CategoryListBean>>() {});
                 if (categoryListBean != null) {
 //                    indexAdapter004.setRowsEntities(categoryListBean.getRows());
                 }

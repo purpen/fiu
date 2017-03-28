@@ -22,9 +22,9 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/23.
  */
 public class WellGoodsProductCategoryAdapter extends BaseAdapter {
-    private List<CategoryListBean.CategoryListItem> list;
+    private List<CategoryListBean.RowsEntity> list;
 
-    public WellGoodsProductCategoryAdapter(List<CategoryListBean.CategoryListItem> list) {
+    public WellGoodsProductCategoryAdapter(List<CategoryListBean.RowsEntity> list) {
         this.list = list;
     }
 

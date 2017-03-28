@@ -17,8 +17,8 @@ import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UsableRedPacketAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.CheckRedBagUsableBean;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.CheckRedBagUsable;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.RedPacketData;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -79,13 +79,13 @@ public class UsableRedPacketActivity extends BaseActivity {
                 case DataConstants.PARSER_CHECK_REDBAG_USABLE:
                     mDialog.dismiss();
                     if (msg.obj != null) {
-                        if (msg.obj instanceof CheckRedBagUsable) {
-                            CheckRedBagUsable checkRedBagUsable = (CheckRedBagUsable) msg.obj;
-                            if ("1".equals(checkRedBagUsable.getUseful())) {
+                        if (msg.obj instanceof HttpResponse) {
+                            HttpResponse<CheckRedBagUsableBean>  checkRedBagUsableBean = ( HttpResponse<CheckRedBagUsableBean> ) msg.obj;
+                            if ("1".equals(checkRedBagUsableBean.getData().getUseful())) {
                                 //红包可用
                                 Intent intent = new Intent();
-                                intent.putExtra("code", checkRedBagUsable.getCode());//红包码
-                                intent.putExtra("money", checkRedBagUsable.getCoin_money());//红包金额
+                                intent.putExtra("code", checkRedBagUsableBean.getData().getCode());//红包码
+                                intent.putExtra("money", checkRedBagUsableBean.getData().getCoin_money());//红包金额
                                 setResult(DataConstants.RESULTCODE_REDBAG, intent);
                                 finish();
                             }
@@ -178,7 +178,7 @@ public class UsableRedPacketActivity extends BaseActivity {
                 if (mRid != null) {
                     mDialog.show();
 //                                            验证红包是否可用
-                    DataPaser.checkRedbagUsableParser(mRid, redPacketItem.code, mHandler);
+                    checkRedbagUsableParser(mRid, redPacketItem.code, mHandler);
                 }
             }
         });
@@ -313,5 +313,33 @@ public class UsableRedPacketActivity extends BaseActivity {
         } else {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 验证红包是否可用接口
+     * @param rid rid
+     * @param code code
+     * @param handler handler
+     */
+    private void checkRedbagUsableParser(String rid, String code, final Handler handler) {
+        HashMap<String, String> params = ClientDiscoverAPI.getcheckRedBagUsableNetRequestParams(rid, code);
+        HttpRequest.post(params,  URL.SHOPPING_USE_BONUS, new GlobalDataCallBack(){
+            @Override
+            public void onSuccess(String json) {
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_CHECK_REDBAG_USABLE;
+                HttpResponse<CheckRedBagUsableBean> checkRedBagUsableBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CheckRedBagUsableBean>>(){});
+                if (checkRedBagUsableBeanHttpResponse.isError()) {
+                    ToastUtils.showInfo(checkRedBagUsableBeanHttpResponse.getMessage());
+                }
+                msg.obj = checkRedBagUsableBeanHttpResponse;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
     }
 }

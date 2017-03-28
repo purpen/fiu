@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UserCommentsAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CommentsBean;
@@ -84,7 +86,7 @@ public class UserCommentsActivity extends BaseActivity {
             }
         });
     }
-    private CommentsBean commentsBean = new CommentsBean();
+    private HttpResponse<CommentsBean> commentsBean = new HttpResponse<>();
     @Override
     protected void requestNet() {
         int curPage = 1;
@@ -105,9 +107,8 @@ public class UserCommentsActivity extends BaseActivity {
                 }, DataConstants.DIALOG_DELAY);
                 if (TextUtils.isEmpty(json)) return;
                 LogUtil.e(TAG, json);
-                commentsBean = JsonUtil.fromJson(json, CommentsBean.class);
-                if (commentsBean.isSuccess()) {
-                    if (commentsBean.getData() == null) return;
+                commentsBean = JsonUtil.json2Bean(json,new TypeToken<HttpResponse<CommentsBean>>(){});
+                if (commentsBean.isSuccess() && commentsBean.getData() != null) {
                     list = commentsBean.getData().getRows();
                     refreshUI();
                 } else {

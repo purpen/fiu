@@ -74,7 +74,7 @@ public class ShareGoodsDialogActivity extends BaseActivity implements PlatformAc
     @Override
     protected void requestNet() {
         //1代表产品
-        HttpRequest.post(ClientDiscoverAPI.getH5ShareParams(buyGoodDetailsBean.getData().get_id(),"1",""), URL.SHARE_H5_URL, new GlobalDataCallBack() {
+        HttpRequest.post(ClientDiscoverAPI.getH5ShareParams(buyGoodDetailsBean.get_id(),"1",""), URL.SHARE_H5_URL, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse<ShareH5Url> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ShareH5Url>>() {
@@ -133,10 +133,10 @@ public class ShareGoodsDialogActivity extends BaseActivity implements PlatformAc
                     case 0: //微信
                         params = new Platform.ShareParams();
                         params.setShareType(Platform.SHARE_WEBPAGE);
-                        params.setTitle(buyGoodDetailsBean.getData().getTitle());
-                        params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                        params.setTitle(buyGoodDetailsBean.getTitle());
+                        params.setText(buyGoodDetailsBean.getShare_desc());
                         params.setUrl(shareH5Url.url);
-                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                        params.setImageUrl(buyGoodDetailsBean.getCover_url());
                         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                         wechat.setPlatformActionListener(ShareGoodsDialogActivity.this);
                         wechat.share(params);
@@ -144,28 +144,28 @@ public class ShareGoodsDialogActivity extends BaseActivity implements PlatformAc
                     case 1: //微信朋友圈
                         params = new Platform.ShareParams();
                         params.setShareType(Platform.SHARE_WEBPAGE);
-                        params.setTitle(buyGoodDetailsBean.getData().getTitle());
-                        params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                        params.setTitle(buyGoodDetailsBean.getTitle());
+                        params.setText(buyGoodDetailsBean.getShare_desc());
                         params.setUrl(shareH5Url.url);
-                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                        params.setImageUrl(buyGoodDetailsBean.getCover_url());
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                         wechatMoments.setPlatformActionListener(ShareGoodsDialogActivity.this);
                         wechatMoments.share(params);
                         break;
                     case 2: //新浪微博
                         params = new Platform.ShareParams();
-                        params.setText(buyGoodDetailsBean.getData().getTitle()+shareH5Url.url);
-                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                        params.setText(buyGoodDetailsBean.getTitle()+shareH5Url.url);
+                        params.setImageUrl(buyGoodDetailsBean.getCover_url());
                         Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                         weibo.setPlatformActionListener(ShareGoodsDialogActivity.this); // 设置分享事件回调
                         weibo.share(params);
                         break;
                     case 3: //QQ
                         params = new Platform.ShareParams();
-                        params.setTitle(buyGoodDetailsBean.getData().getTitle());
+                        params.setTitle(buyGoodDetailsBean.getTitle());
                         params.setTitleUrl(shareH5Url.url);
-                        params.setText(buyGoodDetailsBean.getData().getShare_desc());
-                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                        params.setText(buyGoodDetailsBean.getShare_desc());
+                        params.setImageUrl(buyGoodDetailsBean.getCover_url());
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
                         qq.setPlatformActionListener(ShareGoodsDialogActivity.this);
                         qq.share(params);

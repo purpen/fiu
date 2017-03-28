@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 
 import java.util.List;
 
@@ -20,10 +21,10 @@ import butterknife.ButterKnife;
  */
 public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapter.VH> {
 
-    private List<SubjectListBean.DataBean.RowsBean> list;
+    private List<SubjectListBean.RowsEntity> list;
     private EditRecyclerAdapter.ItemClick itemClick;
 
-    public IndexSubjectAdapter(EditRecyclerAdapter.ItemClick itemClick, List<SubjectListBean.DataBean.RowsBean> list) {
+    public IndexSubjectAdapter(EditRecyclerAdapter.ItemClick itemClick, List<SubjectListBean.RowsEntity> list) {
         this.itemClick = itemClick;
         this.list = list;
     }
@@ -45,7 +46,7 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
 //        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         GlideUtils.displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         holder.title.setText(list.get(position).getTitle());
-        switch (list.get(position).getType()) {
+        switch (TypeConversionUtils.StringConvertInt(list.get(position).getType())) {
             case 2:
                 holder.label.setImageResource(R.mipmap.subject_huodong);
                 holder.person.setText(list.get(position).getAttend_count() + "人参加");

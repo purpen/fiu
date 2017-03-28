@@ -19,9 +19,9 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/17.
  */
 public class SearchBrandAdapter extends BaseAdapter {
-    private List<SearchBean.Data.SearchItem> brandList;
+    private List<SearchBean.SearchItem> brandList;
 
-    public SearchBrandAdapter(List<SearchBean.Data.SearchItem> brandList) {
+    public SearchBrandAdapter(List<SearchBean.SearchItem> brandList) {
         this.brandList = brandList;
     }
 

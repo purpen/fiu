@@ -20,17 +20,15 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CommentsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -38,6 +36,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCommentsActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -45,7 +44,6 @@ import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -259,14 +257,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         delelteHandler = HttpRequest.post(params, URL.DELETE_COMMENT, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 popupWindow.dismiss();
                 if (netBean.isSuccess()) {
                     currentPage = 1;
@@ -293,14 +284,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         sendHandler = HttpRequest.post(params, URL.SEND_COMMENT, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
 //                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                 if (netBean.isSuccess()) {
                     editText.setHint("评论一下");
@@ -336,18 +320,10 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(params,URL.COMMENTS_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                CommentsBean netComments = new CommentsBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CommentsBean>() {
-                    }.getType();
-                    netComments = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<CommentsBean> netCommentsBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CommentsBean>>() {});
                 dialog.dismiss();
                 pullToRefreshLayout.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
-                CommentsBean netCommentsBean = netComments;
                 currentUserId = netCommentsBean.getCurrent_user_id();
                 if (netCommentsBean.isSuccess()) {
                     pullToRefreshLayout.setLoadingTime();

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/21.
  */
-public class QingJingListBean extends NetBean {
+public class QingJingListBean {
     private Data data;
 
     public Data getData() {

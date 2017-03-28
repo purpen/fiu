@@ -22,9 +22,9 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/26.
  */
 public class GoodListFragmentAdapter extends BaseAdapter {
-    private List<ProductBean.ProductListItem> list;
+    private List<ProductBean.RowsEntity> list;
 
-    public GoodListFragmentAdapter(List<ProductBean.ProductListItem> list) {
+    public GoodListFragmentAdapter(List<ProductBean.RowsEntity> list) {
         this.list = list;
     }
 

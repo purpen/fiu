@@ -25,10 +25,10 @@ import butterknife.ButterKnife;
  * Email: 895745843@qq.com
  */
 public class ProductListGridAdapter extends BaseAdapter {
-    private List<ProductBean.ProductListItem> list;
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<ProductBean.RowsEntity> list;
+    private List<SearchBean.SearchItem> searchList;
 
-    public ProductListGridAdapter(Context context, List<ProductBean.ProductListItem> list, List<SearchBean.Data.SearchItem> searchList) {
+    public ProductListGridAdapter(Context context, List<ProductBean.RowsEntity> list, List<SearchBean.SearchItem> searchList) {
         Context context1 = context;
         this.list = list;
         this.searchList = searchList;

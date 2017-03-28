@@ -10,29 +10,27 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.IsEditorBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ImageCrop.ClipZoomImageView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -309,15 +307,10 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                IsEditorBean isEditorBean = new IsEditorBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<IsEditorBean>() {
-                    }.getType();
-                    isEditorBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
+                HttpResponse<IsEditorBean> isEditorBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<IsEditorBean>>() {});
+                if (isEditorBeanHttpResponse.isSuccess()) {
+                    isEditor = (isEditorBeanHttpResponse.getData().getIs_editor() == 1);
                 }
-                isEditor = (isEditorBean.getData().getIs_editor() == 1);
             }
 
             @Override
@@ -336,13 +329,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>(){}.getType();
-                    netBean = gson.fromJson(json,type);
-                }catch (JsonSyntaxException e){
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if(netBean.isSuccess()){
                     isFine = !isFine;
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -367,13 +354,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>(){}.getType();
-                    netBean = gson.fromJson(json,type);
-                }catch (JsonSyntaxException e){
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if(netBean.isSuccess()){
                     isStick = !isStick;
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -398,13 +379,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>(){}.getType();
-                    netBean = gson.fromJson(json,type);
-                }catch (JsonSyntaxException e){
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if(netBean.isSuccess()){
                     isCheck = !isCheck;
                     ToastUtils.showSuccess(netBean.getMessage());

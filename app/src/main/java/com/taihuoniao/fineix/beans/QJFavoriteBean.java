@@ -1,24 +1,26 @@
 package com.taihuoniao.fineix.beans;
 
 /**
- * Created by taihuoniao on 2016/4/27.
+ * Created by Stephen on 2017/3/22 9:23
+ * Email: 895745843@qq.com
  */
-public class SceneLoveBean {
+
+public class QJFavoriteBean {
 
     /**
-     * love_count : 1
+     * favorite_count : null
      * current_user_id : 1136552
      */
 
-    private String love_count;
+    private String favorite_count;
     private String current_user_id;
 
-    public String getLove_count() {
-        return love_count;
+    public String getFavorite_count() {
+        return favorite_count;
     }
 
-    public void setLove_count(String love_count) {
-        this.love_count = love_count;
+    public void setFavorite_count(String favorite_count) {
+        this.favorite_count = favorite_count;
     }
 
     public String getCurrent_user_id() {

@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
@@ -32,7 +30,6 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,15 +50,15 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
     PullToRefreshListView pullRefreshView001;
 
     // 新鲜好货早知道
-    private List<FirstProductBean.DataBean.ItemsBean> firstProductList;
+    private List<FirstProductBean.ItemsEntity> firstProductList;
     private FirstProductAdapter firstProductAdapter;
 
     // 好货人气王
-    private List<FirstProductBean.DataBean.ItemsBean> secondProductList;
+    private List<FirstProductBean.ItemsEntity> secondProductList;
     private FirstProductAdapter secondProductAdapter;
 
     // 好货专题(推荐)
-    private List<SubjectListBean.DataBean.RowsBean> subjectList;
+    private List<SubjectListBean.RowsEntity> subjectList;
     private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;
 
     private int currentPage = 0;
@@ -169,14 +166,7 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
             @Override
             public void onSuccess(String json) {
                 pullRefreshView001.onRefreshComplete();
-                SubjectListBean subjectListBean = new SubjectListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SubjectListBean>() {
-                    }.getType();
-                    subjectListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
                     if (currentPage == 1) {
                         pullRefreshView001.lastTotalItem = -1;
@@ -203,14 +193,7 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
         Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                FirstProductBean firstProductBean = new FirstProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<FirstProductBean>() {
-                    }.getType();
-                    firstProductBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<FirstProductBean> firstProductBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FirstProductBean>>() { });
                 if (firstProductBean.isSuccess()) {
                     firstProductList.clear();
                     firstProductList.addAll(firstProductBean.getData().getItems());
@@ -242,13 +225,13 @@ public class WellGoodsFragment01 extends BaseFragment implements AbsListView.OnS
                     secondProductList.clear();
                     for(int i = 0; i < size; i++) {
                         Product3Bean.ItemsEntity itemsEntity = product3Bean.getItems().get(i);
-                        FirstProductBean.DataBean.ItemsBean bean = new FirstProductBean.DataBean.ItemsBean();
+                        FirstProductBean.ItemsEntity bean = new FirstProductBean.ItemsEntity();
                         bean.set_id(itemsEntity.get_id());
                         bean.setTitle(itemsEntity.getTitle());
                         bean.setBrand_cover_url(itemsEntity.getBrand_cover_url());
                         bean.setBrand_id(itemsEntity.getBrand_id());
                         bean.setCover_url(itemsEntity.getCover_url());
-                        bean.setSale_price(Double.valueOf(itemsEntity.getSale_price()));
+                        bean.setSale_price(itemsEntity.getSale_price());
                         secondProductList.add(bean);
                     }
                     secondProductAdapter.notifyDataSetChanged();

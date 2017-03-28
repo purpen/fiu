@@ -24,14 +24,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.search.core.PoiInfo;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CreateQJBean;
@@ -50,6 +49,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.EffectUtil;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -59,7 +59,6 @@ import com.taihuoniao.fineix.view.dialog.IDialogListener;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -449,14 +448,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             @Override
                             public void run() {
                                 dialog.dismiss();
-                                CreateQJBean createQJBean = new CreateQJBean();
-                                try {
-                                    Gson gson = new Gson();
-                                    Type type = new TypeToken<CreateQJBean>() {
-                                    }.getType();
-                                    createQJBean = gson.fromJson(json, type);
-                                } catch (JsonSyntaxException e) {
-                                }
+                                HttpResponse<CreateQJBean> createQJBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CreateQJBean>>() { });
                                 if (createQJBean.isSuccess()) {
                                     MainApplication.zoneId = null;
                                     MainApplication.cropBitmap = null;

@@ -19,10 +19,10 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/22.
  */
 public class FindRecyclerAdapter extends RecyclerView.Adapter<FindRecyclerAdapter.VH> {
-    private List<CategoryListBean.CategoryListItem> list;
+    private List<CategoryListBean.RowsEntity> list;
     private EditRecyclerAdapter.ItemClick itemClick;
 
-    public FindRecyclerAdapter(List<CategoryListBean.CategoryListItem> list, EditRecyclerAdapter.ItemClick itemClick) {
+    public FindRecyclerAdapter(List<CategoryListBean.RowsEntity> list, EditRecyclerAdapter.ItemClick itemClick) {
         this.list = list;
         this.itemClick = itemClick;
     }

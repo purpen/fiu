@@ -4,22 +4,19 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -105,14 +102,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         reportHandler = HttpRequest.post(params, URL.REPORT, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
                     reportLinear.setVisibility(View.GONE);
@@ -135,24 +125,4 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
             reportHandler.cancel();
         super.onDestroy();
     }
-    //    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.REPORT:
-//                    dialog.dismiss();
-//                    NetBean netBean = (NetBean) msg.obj;
-//                    if (netBean.isSuccess()) {
-//                        reportLinear.setVisibility(View.GONE);
-//                        successTv.setVisibility(View.VISIBLE);
-//                        titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), ReportActivity.this);
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    break;
-//            }
-//        }
-//    };
-
 }

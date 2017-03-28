@@ -30,16 +30,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
+import com.taihuoniao.fineix.beans.QJFavoriteBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
+import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
@@ -52,6 +52,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.qjdetails.QJDetailActivity2;
 import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -59,9 +60,11 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.LabelView;
@@ -71,6 +74,7 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -83,8 +87,8 @@ import butterknife.ButterKnife;
 public class IndexQJListAdapter extends BaseAdapter {
     private boolean isNoUser;
     private Activity activity;
-    private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
-    private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表
+    private List<SceneListBean2.RowsEntity> sceneList;//情景列表数据
+    private ArrayList<User> userList;//插入情景列表
 
     private WaittingDialog dialog;
     private int pos;
@@ -97,7 +101,7 @@ public class IndexQJListAdapter extends BaseAdapter {
     private TextView jubaoTv;
     private TextView cancelTv;
 
-    public IndexQJListAdapter(Activity activity, List<SceneList.DataBean.RowsBean> sceneList, List<IndexUserListBean.DataBean.UsersBean> userList) {
+    public IndexQJListAdapter(Activity activity, List<SceneListBean2.RowsEntity> sceneList, ArrayList<User> userList) {
         this.activity = activity;
         this.sceneList = sceneList;
         this.userList = userList;
@@ -159,7 +163,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             bianjiTv.setVisibility(View.GONE);
             jubaoTv.setText("举报");
         }
-        if (sceneList.get(position).getIs_favorite() == 1) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_favorite()) == 1) {
             shoucangTv.setText("取消收藏");
         } else {
             shoucangTv.setText("收藏");
@@ -182,7 +186,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                     activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                if (sceneList.get(position).getIs_favorite() == 1) {
+                if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_favorite()) == 1) {
                     if (!dialog.isShowing()) {
                         dialog.show();
                     }
@@ -277,8 +281,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
 //        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
-        List<SceneList.DataBean.RowsBean.ProductBean> productBeanList = sceneList.get(position).getProduct();
-        if (productBeanList != null && compareble(productBeanList, (List<SceneList.DataBean.RowsBean.ProductBean>) holder.labelContainer.getTag(R.id.label_container))) {
+        List<SceneListBean2.RowsEntity.ProductEntity> productBeanList = sceneList.get(position).getProduct();
+        if (productBeanList != null && compareble(productBeanList, (List<SceneListBean2.RowsEntity.ProductEntity>) holder.labelContainer.getTag(R.id.label_container))) {
             holder.labelContainer.setTag(R.id.label_container, productBeanList);
         } else {
             stopAnimate(holder); //停止商品动画 移除所有标签
@@ -303,7 +307,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             public void onClick(View v) {
 //                跳转到地图界面，查看附近的情境
                 String address = sceneList.get(position).getAddress();
-                LatLng ll = new LatLng(sceneList.get(position).getLocation().getCoordinates().get(1), sceneList.get(position).getLocation().getCoordinates().get(0));
+                LatLng ll = new LatLng(TypeConversionUtils.StringConvertDouble(sceneList.get(position).getLocation().getCoordinates().get(1)), TypeConversionUtils.StringConvertDouble(sceneList.get(position).getLocation().getCoordinates().get(0)));
                 Intent intent2 = new Intent(activity, MapNearByCJActivity.class);
                 intent2.putExtra("address", address);
                 intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
@@ -320,7 +324,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                         //过滤自己
                         return;
                     }
-                    if (sceneList.get(position).getUser_info().getIs_follow() == 0) {
+                    if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_follow()) == 0) {
                         if (!dialog.isShowing()) {
                             dialog.show();
                         }
@@ -341,7 +345,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
-                    if (sceneList.get(position).getIs_love() == 1) {
+                    if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_love()) == 1) {
                         holder.loveRelative.setEnabled(false);
                         cancelLoveQJ(position, sceneList.get(position).get_id(), holder);
                     } else {
@@ -478,18 +482,18 @@ public class IndexQJListAdapter extends BaseAdapter {
      * @param holder
      */
     private void addGoodsTag(int position, final ViewGroup parent, ViewHolder holder) {
-        for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
+        for (final SceneListBean2.RowsEntity.ProductEntity productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(activity);
-            if (TextUtils.isEmpty(productBean.price)||TextUtils.equals("0",productBean.price)){
+            if (TextUtils.isEmpty(productBean.getPrice())||TextUtils.equals("0",productBean.getPrice())){
                 labelView.price.setVisibility(View.GONE);
             }else {
-                labelView.price.setText("¥"+productBean.price);
+                labelView.price.setText("¥"+productBean.getPrice());
             }
             labelView.nameTv.setText(productBean.getTitle());
 
             labelView.setLayoutParams(layoutParams);
-            if (productBean.getLoc() == 2) {
+            if (TypeConversionUtils.StringConvertInt(productBean.getLoc()) == 2) {
 //                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
                 labelView.llTag.setBackgroundResource(R.drawable.label_left);
                 RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
@@ -499,7 +503,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             labelView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (productBean.getLoc() == 2) { //左边
+                    if (TypeConversionUtils.StringConvertInt(productBean.getLoc()) == 2) { //左边
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
@@ -548,7 +552,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             holder.userRecycler.setVisibility(View.GONE);
         }
 
-        if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_expert()) == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
         } else {
             holder.vImg.setVisibility(View.GONE);
@@ -569,7 +573,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             holder.attentionBtn.setVisibility(View.GONE);
         } else {
             holder.attentionBtn.setVisibility(View.GONE);
-            if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
+            if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_follow()) == 1) {
 //                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.attentionBtn.setText("已关注");
@@ -595,7 +599,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         });
         holder.viewCount.setText(sceneList.get(position).getView_count());
         holder.loveCount.setText(sceneList.get(position).getLove_count());
-        if (sceneList.get(position).getIs_love() == 1) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getIs_love()) == 1) {
             holder.loveImg.setImageResource(R.mipmap.index_has_love);
         } else {
             holder.loveImg.setImageResource(R.mipmap.index_love);
@@ -616,7 +620,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             }
         });
         holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
-        if (sceneList.get(position).getComment_count() > 0) {
+        if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getComment_count()) > 0) {
             holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
             holder.moreComment.setVisibility(View.GONE);
         } else {
@@ -695,7 +699,7 @@ public class IndexQJListAdapter extends BaseAdapter {
 
 
     //取消关注弹窗
-    private void showFocusFansConfirmView(final SceneList.DataBean.RowsBean item, String tips, final ViewHolder holder) {
+    private void showFocusFansConfirmView(final SceneListBean2.RowsEntity item, String tips, final ViewHolder holder) {
         View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
         RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
@@ -734,20 +738,13 @@ public class IndexQJListAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    sceneList.get(position).setIs_favorite(0);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
+                    sceneList.get(position).setIs_favorite(TypeConversionUtils.IntConvertString(0));
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -765,20 +762,13 @@ public class IndexQJListAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    sceneList.get(position).setIs_favorite(1);
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
+                    sceneList.get(position).setIs_favorite(TypeConversionUtils.IntConvertString(1));
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -796,14 +786,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -829,18 +812,11 @@ public class IndexQJListAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    sceneList.get(position).setIs_love(0);
+                    sceneList.get(position).setIs_love(TypeConversionUtils.IntConvertString(0));
                     sceneList.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
@@ -864,18 +840,11 @@ public class IndexQJListAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
-                    sceneList.get(position).setIs_love(1);
+                    sceneList.get(position).setIs_love(TypeConversionUtils.IntConvertString(1));
                     sceneList.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
@@ -898,22 +867,15 @@ public class IndexQJListAdapter extends BaseAdapter {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                     holder.attentionBtn.setText("");
                     holder.attentionBtn.setPadding(0, 0, 0, 0);
                     holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+                    for (SceneListBean2.RowsEntity rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
-                            rowsBean.getUser_info().setIs_follow(1);
+                            rowsBean.getUser_info().setIs_follow(TypeConversionUtils.IntConvertString(1));
                         }
                     }
                 } else {
@@ -930,28 +892,21 @@ public class IndexQJListAdapter extends BaseAdapter {
     }
 
     //取消关注
-    private void cancelFollow(final SceneList.DataBean.RowsBean.UserInfoBean userInfoBean, final ViewHolder holder) {
+    private void cancelFollow(final SceneListBean2.RowsEntity.UserInfoEntity userInfoBean, final ViewHolder holder) {
         HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(userInfoBean.getUser_id());
         HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
                     holder.attentionBtn.setText("");
                     holder.attentionBtn.setPadding(0, 0, 0, 0);
                     holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+                    for (SceneListBean2.RowsEntity rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(userInfoBean.getUser_id())) {
-                            rowsBean.getUser_info().setIs_follow(0);
+                            rowsBean.getUser_info().setIs_follow(TypeConversionUtils.IntConvertString(0));
                         }
                     }
                     return;
@@ -971,10 +926,10 @@ public class IndexQJListAdapter extends BaseAdapter {
     class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
         private Activity activity;
         private IndexQJListAdapter indexQJListAdapter;
-        private List<IndexUserListBean.DataBean.UsersBean> userList;
+        private ArrayList<User> userList;
         private WaittingDialog dialog;
 
-        public UserAdapter(Activity activity, IndexQJListAdapter indexQJListAdapter, List<IndexUserListBean.DataBean.UsersBean> userList) {
+        public UserAdapter(Activity activity, IndexQJListAdapter indexQJListAdapter, ArrayList<User> userList) {
             this.activity = activity;
             this.indexQJListAdapter = indexQJListAdapter;
             this.userList = userList;
@@ -993,13 +948,13 @@ public class IndexQJListAdapter extends BaseAdapter {
 //            ImageLoader.getInstance().displayImage(userList.get(position).getMedium_avatar_url(), holder.headImg);
 //            Glide.with(activity).load(userList.get(position).getMedium_avatar_url()).into(holder.headImg);
 
-            GlideUtils.displayImage(userList.get(position).getMedium_avatar_url(), holder.headImg);
-            holder.name.setText(userList.get(position).getNickname());
-            if (userList.get(position).getIdentify().getIs_expert() == 1) {
-                holder.label.setText(userList.get(position).getExpert_label());
-                holder.info.setText(userList.get(position).getExpert_info());
+            GlideUtils.displayImage(userList.get(position).medium_avatar_url, holder.headImg);
+            holder.name.setText(userList.get(position).nickname);
+            if (userList.get(position).identify.is_expert == 1) {
+                holder.label.setText(userList.get(position).expert_label);
+                holder.info.setText(userList.get(position).expert_info);
             } else {
-                holder.label.setText(userList.get(position).getLabel());
+                holder.label.setText(userList.get(position).label);
             }
             if (TextUtils.isEmpty(holder.label.getText())) {
                 holder.label.setVisibility(View.INVISIBLE);
@@ -1011,7 +966,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             } else {
                 holder.info.setVisibility(View.VISIBLE);
             }
-            if (userList.get(position).getIs_follow() == 1) {
+            if (userList.get(position).is_follow == 1) {
                 holder.followBtn.setBackgroundResource(R.drawable.corner_yellow);
                 holder.followBtn.setTextColor(activity.getResources().getColor(R.color.white));
                 holder.followBtn.setText("已关注");
@@ -1024,11 +979,11 @@ public class IndexQJListAdapter extends BaseAdapter {
                 holder.followBtn.setText("+关注");
                 holder.followBtn.setPadding(0, 0, 0, 0);
             }
-            holder.headImg.setTag(userList.get(position).get_id());
+            holder.headImg.setTag(TypeConversionUtils.LongConvertString(userList.get(position)._id));
             holder.headImg.setOnClickListener(this);
-            holder.delete.setTag(userList.get(position).get_id());
+            holder.delete.setTag(TypeConversionUtils.LongConvertString(userList.get(position)._id));
             holder.delete.setOnClickListener(this);
-            holder.followBtn.setTag(userList.get(position).get_id());
+            holder.followBtn.setTag(TypeConversionUtils.LongConvertString(userList.get(position)._id));
             holder.followBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1036,7 +991,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                         int k = -1;
                         String t = (String) v.getTag();
                         for (int j = 0; j < userList.size(); j++) {
-                            if (userList.get(j).get_id().equals(t)) {
+                            if (TypeConversionUtils.LongConvertString(userList.get(j)._id).equals(t)) {
                                 k = j;
                                 break;
                             }
@@ -1045,17 +1000,17 @@ public class IndexQJListAdapter extends BaseAdapter {
                             return;
                         }
                         //已经登录
-                        if (LoginInfo.getUserId() == Long.parseLong(userList.get(k).get_id())) {
+                        if (LoginInfo.getUserId() == userList.get(k)._id) {
                             //过滤自己
                             return;
                         }
-                        if (userList.get(k).getIs_follow() == 1) {
+                        if (userList.get(k).is_follow == 1) {
                             showFocusFansConfirmView(userList.get(holder.getAdapterPosition()), holder);
                         } else {
                             if (!dialog.isShowing()) {
                                 dialog.show();
                             }
-                            fllow(k, userList.get(k).get_id(), holder);
+                            fllow(k, TypeConversionUtils.LongConvertString(userList.get(k)._id), holder);
                         }
                         return;
                     }
@@ -1078,7 +1033,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                     int i = -1;
                     String tag = (String) v.getTag();
                     for (int j = 0; j < userList.size(); j++) {
-                        if (userList.get(j).get_id().equals(tag)) {
+                        if (TypeConversionUtils.LongConvertString(userList.get(j)._id).equals(tag)) {
                             i = j;
                             break;
                         }
@@ -1099,7 +1054,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
 
         //取消关注弹窗
-        private void showFocusFansConfirmView(final IndexUserListBean.DataBean.UsersBean item, final VH holder) {
+        private void showFocusFansConfirmView(final User item, final VH holder) {
             View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
             RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
             TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
@@ -1107,9 +1062,9 @@ public class IndexQJListAdapter extends BaseAdapter {
             TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
 //            ImageLoader.getInstance().displayImage(item.getMedium_avatar_url(), riv);
 //            Glide.with(activity).load(item.getMedium_avatar_url()).into(riv);
-            GlideUtils.displayImage(item.getMedium_avatar_url(), riv);
+            GlideUtils.displayImage(item.medium_avatar_url, riv);
 
-            tv_take_photo.setText(String.format("取消关注" + " %s ?", item.getNickname()));
+            tv_take_photo.setText(String.format("取消关注" + " %s ?", item.nickname));
             tv_album.setText("取消关注");
             tv_album.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1138,21 +1093,14 @@ public class IndexQJListAdapter extends BaseAdapter {
                 @Override
                 public void onSuccess(String json) {
                     dialog.dismiss();
-                    NetBean netBean = new NetBean();
-                    try {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<NetBean>() {
-                        }.getType();
-                        netBean = gson.fromJson(json, type);
-                    } catch (JsonSyntaxException e) {
-                    }
+                    HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                     if (netBean.isSuccess()) {
                         holder.followBtn.setBackgroundResource(R.drawable.corner_yellow);
                         holder.followBtn.setTextColor(activity.getResources().getColor(R.color.white));
                         holder.followBtn.setText("已关注");
                         holder.followBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
                         holder.followBtn.setPadding(DensityUtils.dp2px(activity, 15), 0, DensityUtils.dp2px(activity, 15), 0);
-                        userList.get(position).setIs_follow(1);
+                        userList.get(position).is_follow = 1;
                     } else {
                         ToastUtils.showError(netBean.getMessage());
                     }
@@ -1167,27 +1115,20 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
 
         //取消关注
-        private void cancelFollow(final IndexUserListBean.DataBean.UsersBean usersBean, final VH holder) {
-            HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(usersBean.get_id());
+        private void cancelFollow(final User usersBean, final VH holder) {
+            HashMap<String, String> params = ClientDiscoverAPI.getcancelFocusOperateRequestParams(TypeConversionUtils.LongConvertString(usersBean._id));
             HttpRequest.post(params, URL.CANCEL_FOCUS_URL, new GlobalDataCallBack() {
                 @Override
                 public void onSuccess(String json) {
                     dialog.dismiss();
-                    NetBean netBean = new NetBean();
-                    try {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<NetBean>() {
-                        }.getType();
-                        netBean = gson.fromJson(json, type);
-                    } catch (JsonSyntaxException e) {
-                    }
+                    HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                     if (netBean.isSuccess()) {
                         holder.followBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         holder.followBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                         holder.followBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
                         holder.followBtn.setText("+关注");
                         holder.followBtn.setPadding(0, 0, 0, 0);
-                        usersBean.setIs_follow(0);
+                        usersBean.is_follow = 0;
                         return;
                     }
                     ToastUtils.showError(netBean.getMessage());
@@ -1254,9 +1195,9 @@ public class IndexQJListAdapter extends BaseAdapter {
     }
 
     static class IndexCommentAdapter extends BaseAdapter {
-        private List<SceneList.DataBean.RowsBean.CommentsBean> commentList;
+        private List<SceneListBean2.RowsEntity.CommentsEntity> commentList;
 
-        public IndexCommentAdapter(List<SceneList.DataBean.RowsBean.CommentsBean> commentList) {
+        public IndexCommentAdapter(List<SceneListBean2.RowsEntity.CommentsEntity> commentList) {
             this.commentList = commentList;
         }
 
@@ -1315,7 +1256,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
     }
 
-    private boolean compareble(List<SceneList.DataBean.RowsBean.ProductBean> list1, List<SceneList.DataBean.RowsBean.ProductBean> list2) {
+    private boolean compareble(List<SceneListBean2.RowsEntity.ProductEntity> list1, List<SceneListBean2.RowsEntity.ProductEntity> list2) {
         return list1.equals(list2);
     }
 }

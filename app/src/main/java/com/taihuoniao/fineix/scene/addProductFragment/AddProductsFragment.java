@@ -11,12 +11,11 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
@@ -28,12 +27,12 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.scene.AddProductActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,11 +52,11 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     //当前页码
     private int currentPage = 1;
     //网络请求返回数据商品列表
-    private List<ProductBean.ProductListItem> productList;
+    private List<ProductBean.RowsEntity> productList;
     private AddProductGridAdapter addProductGridAdapter;
     private String q = "";//搜索关键字
     private boolean search = false;//判断是不是搜索
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<SearchBean.SearchItem> searchList;
     private WaittingDialog dialog;
 
 
@@ -88,14 +87,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 dialog.dismiss();
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
-                SearchBean searchBean = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    searchBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SearchBean> searchBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SearchBean>>() { });
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
                 if (searchBean.isSuccess()) {
@@ -153,7 +145,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 });
                 addNet(httpHandler);
             } else {
-                HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9");
+                HashMap<String, String> requestParams = ClientDiscoverAPI.getgetProductListRequestParams(null, null, categoryBean.getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9");
                 Call httpHandler = HttpRequest.post(requestParams,URL.URLSTRING_PRODUCTSLIST,new GlobalDataCallBack(){
                     @Override
                     public void onSuccess(String json) {
@@ -177,16 +169,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void getProductList(String result) {
-        ProductBean productBean = new ProductBean();
-        try {
-            Gson gson = new Gson();
-            Type type = new TypeToken<ProductBean>() {
-            }.getType();
-            productBean = gson.fromJson(result, type);
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-
+        HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(result, new TypeToken<HttpResponse<ProductBean>>() {});
         if (productBean.isSuccess()) {
             searchList.clear();
             if (currentPage == 1) {
@@ -305,14 +288,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                BuyGoodDetailsBean netGood = new BuyGoodDetailsBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<BuyGoodDetailsBean>() {
-                    }.getType();
-                    netGood = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<BuyGoodDetailsBean> netGood = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<BuyGoodDetailsBean>>() { });
                 if (netGood.isSuccess()) {
                     Intent intent = new Intent();
                     intent.putExtra("product", netGood);

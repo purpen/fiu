@@ -108,7 +108,7 @@ public class SalePromotionFragment extends MyBaseFragment {
     @Override
     protected void loadData() {
         HashMap<String, String> params = ClientDiscoverAPI.getChoosenSubjectRequestParams(String.valueOf(curPage), PAGE_TYPE, FINE, SORT);
-        HttpRequest.post(params, URL.CHOOSEN_SUBJECT_URL, new GlobalDataCallBack(){
+        HttpRequest.post(params, URL.SCENE_SUBJECT_GETLIST, new GlobalDataCallBack(){
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {

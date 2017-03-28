@@ -32,14 +32,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
+import com.taihuoniao.fineix.beans.QJFavoriteBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -61,6 +60,7 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -74,7 +74,6 @@ import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -730,20 +729,13 @@ public class QJDetailsTopAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FAVORITE_AJAX_CANCEL_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
                     sceneList.get(position).setIs_favorite(0);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -761,20 +753,13 @@ public class QJDetailsTopAdapter extends BaseAdapter {
         HttpRequest.post(params, URL.FAVORITE_AJAX_FAVORITE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
                 dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
+                if (qjFavoriteBeanHttpResponse.isSuccess()) {
+                    ToastUtils.showSuccess(qjFavoriteBeanHttpResponse.getMessage());
                     sceneList.get(position).setIs_favorite(1);
                 } else {
-                    ToastUtils.showError(netBean.getMessage());
+                    ToastUtils.showError(qjFavoriteBeanHttpResponse.getMessage());
                 }
             }
 
@@ -792,14 +777,7 @@ public class QJDetailsTopAdapter extends BaseAdapter {
         HttpRequest.post(requestParams, URL.DELETE_SCENE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess(netBean.getMessage());
@@ -825,14 +803,7 @@ public class QJDetailsTopAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
@@ -860,14 +831,7 @@ public class QJDetailsTopAdapter extends BaseAdapter {
             public void onSuccess(String json) {
                 holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneLoveBean> sceneLoveBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneLoveBean>>() {});
                 if (sceneLoveBean.isSuccess()) {
                     holder.loveImg.setImageResource(R.mipmap.index_has_love);
                     holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
@@ -894,14 +858,7 @@ public class QJDetailsTopAdapter extends BaseAdapter {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                     holder.attentionBtn.setText("");
@@ -932,14 +889,7 @@ public class QJDetailsTopAdapter extends BaseAdapter {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
                     holder.attentionBtn.setText("");
@@ -1134,14 +1084,7 @@ public class QJDetailsTopAdapter extends BaseAdapter {
                 @Override
                 public void onSuccess(String json) {
                     dialog.dismiss();
-                    NetBean netBean = new NetBean();
-                    try {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<NetBean>() {
-                        }.getType();
-                        netBean = gson.fromJson(json, type);
-                    } catch (JsonSyntaxException e) {
-                    }
+                    HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                     if (netBean.isSuccess()) {
                         holder.followBtn.setBackgroundResource(R.drawable.corner_yellow);
                         holder.followBtn.setTextColor(activity.getResources().getColor(R.color.white));
@@ -1169,14 +1112,7 @@ public class QJDetailsTopAdapter extends BaseAdapter {
                 @Override
                 public void onSuccess(String json) {
                     dialog.dismiss();
-                    NetBean netBean = new NetBean();
-                    try {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<NetBean>() {
-                        }.getType();
-                        netBean = gson.fromJson(json, type);
-                    } catch (JsonSyntaxException e) {
-                    }
+                    HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                     if (netBean.isSuccess()) {
                         holder.followBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         holder.followBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);

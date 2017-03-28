@@ -13,8 +13,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.taihuoniao.fineix.R;
@@ -23,6 +21,7 @@ import com.taihuoniao.fineix.adapters.ShopCartAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartDoOrder;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.ShopCart;
@@ -36,6 +35,7 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ConfirmOrderActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
@@ -43,7 +43,6 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
-import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -366,8 +365,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     /********************************* 猜你喜欢 **********************************************/
     private AddProductGridAdapter indexAdapter002;//主题列表适配器
-    private List<ProductBean.ProductListItem> productList;
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<ProductBean.RowsEntity> productList;
+    private List<SearchBean.SearchItem> searchList;
     private int currentPage;
 
     private View recommented(){
@@ -393,16 +392,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-
+                HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                 if (productBean.isSuccess()) {
                     searchList.clear();
                     if (currentPage == 1) {

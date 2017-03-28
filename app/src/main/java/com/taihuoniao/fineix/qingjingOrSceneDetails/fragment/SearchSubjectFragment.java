@@ -9,11 +9,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchSubjectAdapter;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.SearchBean;
@@ -23,12 +22,12 @@ import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +51,7 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
     private ListView listView;
     private WaittingDialog dialog;
     private int page = 1;
-    private List<SearchBean.Data.SearchItem> searchList;
+    private List<SearchBean.SearchItem> searchList;
     private SearchSubjectAdapter searchSubjectAdapter;
 
     public static SearchSubjectFragment newInstance(String q, boolean isContent) {
@@ -158,21 +157,10 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
         Call httpHandler = HttpRequest.post(params, URL.SEARCH, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                SearchBean searchBean = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    searchBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SearchBean> netSearch = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SearchBean>>() { });
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
-                if (searchBean == null) {
-                    return;
-                }
-                SearchBean netSearch = searchBean;
                 if (netSearch.isSuccess()) {
                     pullRefreshView.setLoadingTime();
                     if (page == 1) {

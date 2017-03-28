@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EvaluateAdapter;
@@ -15,7 +13,6 @@ import com.taihuoniao.fineix.base.Base2Activity;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
@@ -104,14 +101,8 @@ public class PublishEvaluateActivity extends Base2Activity {
                          HttpRequest.post(params,  URL.PRODUCT_AJAX_COMMENT, new GlobalDataCallBack(){
                             @Override
                             public void onSuccess(String json) {
-                                Gson gson = new Gson();
-                                NetBean netBean = new NetBean();
-                                try {
-                                    Type type = new TypeToken<NetBean>() {
-                                    }.getType();
-                                    netBean = gson.fromJson(json, type);
-                                } catch (JsonSyntaxException e) {
-                                }
+
+                                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                                 dialog.dismiss();
 //                                Toast.makeText(PublishEvaluateActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                 if (netBean.isSuccess()) {
@@ -153,60 +144,6 @@ public class PublishEvaluateActivity extends Base2Activity {
                 }
                 shoppingDetailBean = response.getData();
                 mListProducts = shoppingDetailBean.getItems();
-
-////                Log.e(">>>", ">>>OOO>>>" + json);
-//                List<OrderDetails> ordersList = new ArrayList<>();
-//                try {
-//                    JSONObject obj = new JSONObject(json);
-//                    JSONObject orderObj = obj.getJSONObject("data");
-//                    OrderDetails details = new OrderDetails();
-//                    details.setRid(orderObj.optString("rid"));
-//                    details.setExpress_company(orderObj.optString("express_company"));
-//                    details.setExpress_no(orderObj.optString("express_no"));
-//                    details.setCreated_at(orderObj.optString("created_at"));
-//                    details.setFreight(orderObj.optString("freight"));
-//                    details.setItems_count(orderObj.optString("items_count"));
-//                    details.setPay_money(orderObj.optString("pay_money"));
-//                    details.setPayment_method(orderObj.optString("payment_method"));
-//                    details.setTotal_money(orderObj.optString("total_money"));
-//                    details.setStatus(orderObj.optString("status"));
-//                    JSONObject arr = orderObj.getJSONObject("express_info");
-//                    List<OrderDetailsAddress> addressList = new ArrayList<>();
-//                    OrderDetailsAddress address = new OrderDetailsAddress();
-//                    address.setAddress(arr.optString("address"));
-//                    address.setName(arr.optString("name"));
-//                    address.setCity(arr.optString("city"));
-//                    address.setPhone(arr.optString("phone"));
-//                    address.setProvince(arr.optString("province"));
-//                    addressList.add(address);
-//
-//                    details.setAddresses(addressList);
-//                    JSONArray productsArrays = orderObj.getJSONArray("mListProducts");
-//                    List<OrderDetailsProducts> productsList = new ArrayList<>();
-//                    for (int j = 0; j < productsArrays.length(); j++) {
-//                        JSONObject productsArr = productsArrays.getJSONObject(j);
-//                        OrderDetailsProducts products = new OrderDetailsProducts();
-//                        products.setName(productsArr.optString("name"));
-//                        products.setCover_url(productsArr.optString("cover_url"));
-//                        products.setPrice(productsArr.optString("price"));
-//                        products.setProduct_id(productsArr.optString("product_id"));
-//                        products.setQuantity(productsArr.optString("quantity"));
-//                        products.setSale_price(productsArr.optDouble("sale_price"));
-//                        products.setSku(productsArr.optString("sku"));
-//                        products.setSku_name(productsArr.optString("sku_name"));
-//                        productsList.add(products);
-//                    }
-//                    details.setProducts(productsList);
-//                    ordersList.add(details);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                mList.clear();
-//                mList.addAll(ordersList);
-//                mListProducts.clear();
-//                mListProducts.addAll(mList.get(0).getProducts());
-
-
                 mAdapter.notifyDataSetChanged();
             }
 

@@ -11,17 +11,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.NetBean;
-import com.taihuoniao.fineix.beans.UserInfo;
+import com.taihuoniao.fineix.beans.UserInfoBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -29,6 +27,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.QJFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -115,14 +114,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                UserInfo userInfo = new UserInfo();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<UserInfo>() {
-                    }.getType();
-                    userInfo = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<UserInfoBean> userInfo = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<UserInfoBean>>() { });
                 if (userInfo.isSuccess()) {
                     if (userInfo.getData().getInterest_scene_cate().contains(id)) {
                         isSubs = 2;
@@ -185,14 +177,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     isSubs = 1;
                     subsBtn.setBackgroundResource(R.mipmap.subs_btn);
@@ -218,14 +203,7 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     isSubs = 2;
                     subsBtn.setBackgroundResource(R.mipmap.has_subs_bbtn);

@@ -15,14 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BrandProductAdapter;
 import com.taihuoniao.fineix.adapters.BrandQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
@@ -32,12 +31,12 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,9 +68,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private int qjLastSavedFirstVisibleItem = -1;
     private int productLastTotal = -1;
     private int productLastFirst = -1;
-    private List<ProductBean.ProductListItem> productList;//商品列表
+    private List<ProductBean.RowsEntity> productList;//商品列表
     private BrandProductAdapter brandProductAdapter;//品牌下的产品列表
-    private List<ProductAndSceneListBean.ProductAndSceneItem> qjList;//情景列表
+    private List<ProductAndSceneListBean.RowsEntity> qjList;//情景列表
     private BrandQJAdapter brandQJAdapter;//品牌下的情景列表
     private Call productHandler;
     private Call qjHandler;
@@ -137,14 +136,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             public void onSuccess(String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductAndSceneListBean>() {
-                    }.getType();
-                    productAndSceneListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<ProductAndSceneListBean> productAndSceneListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductAndSceneListBean>>() {});
                 if (productAndSceneListBean.isSuccess()) {
                     if (qjPage == 1) {
                         qjList.clear();
@@ -179,15 +171,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             public void onSuccess(String json) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
+                HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                 if (productBean.isSuccess()) {
                     if (productPage == 1) {
                         productList.clear();
@@ -222,14 +206,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         HttpRequest.post(requestParams, URL.BRAND_DETAIL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                BrandDetailBean brandDetailBean = new BrandDetailBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<BrandDetailBean>() {
-                    }.getType();
-                    brandDetailBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<BrandDetailBean> brandDetailBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<BrandDetailBean>>() {});
                 if (brandDetailBean.isSuccess()) {
                     titleName.setText(brandDetailBean.getData().getTitle());
                     ImageLoader.getInstance().displayImage(brandDetailBean.getData().getCover_url(), holder.titleImg);

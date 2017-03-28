@@ -5,23 +5,22 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.QJCateogryAdapter;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +42,7 @@ public class QJFragment extends SearchFragment {
     private int pos;//判断位置 0，精选 1，最新
     private int page = 1;
     private String id;//情景分类id
-    private List<SceneList.DataBean.RowsBean> sceneList;
+    private List<SceneListBean2.RowsEntity> sceneList;
     private QJCateogryAdapter qjCateogryAdapter;
 
     public static QJFragment newInstance(int position, String id) {
@@ -123,14 +122,7 @@ public class QJFragment extends SearchFragment {
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                SceneList sceneL = new SceneList();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneList>() {
-                    }.getType();
-                    sceneL = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SceneListBean2> sceneL = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneListBean2>>() {});
                 if (sceneL.isSuccess()) {
                     pullRefreshView.setLoadingTime();
                     if (page == 1) {

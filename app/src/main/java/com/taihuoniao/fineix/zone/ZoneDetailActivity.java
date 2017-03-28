@@ -29,6 +29,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.QJFavoriteBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -241,8 +242,8 @@ public class ZoneDetailActivity extends BaseActivity {
                             @Override
                             public void onSuccess(String json) {
                                 v.setEnabled(true);
-                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                                if (response.isSuccess()) {
+                                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
+                                if (qjFavoriteBeanHttpResponse.isSuccess()) {
                                     zoneDetailBean.is_favorite = 1;
                                     ibtnShoucang.setImageResource(R.mipmap.shoucang_yes);
                                 } else {
@@ -267,8 +268,8 @@ public class ZoneDetailActivity extends BaseActivity {
                             @Override
                             public void onSuccess(String json) {
                                 v.setEnabled(true);
-                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                                if (response.isSuccess()) {
+                                HttpResponse<QJFavoriteBean> qjFavoriteBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<QJFavoriteBean>>() {});
+                                if (qjFavoriteBeanHttpResponse.isSuccess()) {
                                     zoneDetailBean.is_favorite = 0;
                                     ibtnShoucang.setImageResource(R.mipmap.shoucang_white);
                                 } else {

@@ -10,8 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SelectAddressListViewAdapter;
@@ -20,7 +18,6 @@ import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
@@ -33,7 +30,6 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -176,15 +172,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         HttpRequest.post(params, URL.URLSTRING_DELETE_ADDRESS, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
+                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                 if (netBean.isSuccess()) {
                     ToastUtils.showSuccess("删除成功");
                     currentPage = 1;

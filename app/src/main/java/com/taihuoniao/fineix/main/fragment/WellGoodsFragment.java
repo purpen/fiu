@@ -21,8 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
@@ -31,6 +29,7 @@ import com.taihuoniao.fineix.adapters.WellGoodsProductCategoryAdapter;
 import com.taihuoniao.fineix.adapters.WellGoodsRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalCallBack;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -54,6 +53,7 @@ import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomGridViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -62,7 +62,6 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,13 +101,13 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     private CustomGridViewForScrollView gridView;//商品分类
     private RecyclerView productRecycler;
     private WaittingDialog dialog;
-    private List<CategoryListBean.CategoryListItem> categoryList;//产品分类数据
+    private List<CategoryListBean.RowsEntity> categoryList;//产品分类数据
     private WellGoodsProductCategoryAdapter wellGoodsProductCategoryAdapter;//产品分类大图适配器
     private WellGoodsRecyclerAdapter wellGoodsRecyclerAdapter;//产品分类小图适配器
-    private List<FirstProductBean.DataBean.ItemsBean> firstProductList;//最新好货推荐数据
+    private List<FirstProductBean.ItemsEntity> firstProductList;//最新好货推荐数据
     private FirstProductAdapter firstProductAdapter;//最新好货推荐适配器
     private int currentPage = 1;//产品列表页码
-    private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
+    private List<SubjectListBean.RowsEntity> subjectList;//好货页面专题及产品列表
     private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
 
     @Override
@@ -219,15 +218,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
        Call httpHandler=  HttpRequest.post(URL.CART_NUMBER, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                CartBean cartBean = new CartBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CartBean>() {
-                    }.getType();
-                    cartBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                CartBean netCartBean = cartBean;
+                HttpResponse<CartBean> netCartBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CartBean>>(){});
                 if (netCartBean.isSuccess()) {
                     if (netCartBean.getData().getCount() > 0) {
                         cartNumber.setVisibility(View.VISIBLE);
@@ -256,14 +247,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 dialog.dismiss();
 //                progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
-                SubjectListBean subjectListBean = new SubjectListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SubjectListBean>() {
-                    }.getType();
-                    subjectListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
                     if (currentPage == 1) {
                         pullRefreshView.lastTotalItem = -1;
@@ -292,14 +276,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
        Call httpHandler =  HttpRequest.post(requestParams, URL.PRODUCCT_INDEX_NEW, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                FirstProductBean firstProductBean = new FirstProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<FirstProductBean>() {
-                    }.getType();
-                    firstProductBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<FirstProductBean> firstProductBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FirstProductBean>>() { });
                 if (firstProductBean.isSuccess()) {
                     firstProductList.clear();
                     firstProductList.addAll(firstProductBean.getData().getItems());
@@ -321,14 +298,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         Call  httpHandler  = HttpRequest.post(params, URL.CATEGORY_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                CategoryListBean categoryListBean = new CategoryListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryListBean>() {
-                    }.getType();
-                    categoryListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<CategoryListBean> categoryListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CategoryListBean>>() {});
                 if (categoryListBean.isSuccess()) {
                     gridView.setVisibility(View.GONE);
                     categoryList.clear();
@@ -555,8 +525,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         mWellGoodsCategoryAdapter = new WellGoodsCategoryAdapter(getActivity(), new GlobalCallBack() {
             @Override
             public void callBack(Object object) {
-                if (object instanceof CategoryListBean.CategoryListItem) {
-                    CategoryListBean.CategoryListItem rowsEntity = (CategoryListBean.CategoryListItem) object;
+                if (object instanceof CategoryListBean.RowsEntity) {
+                    CategoryListBean.RowsEntity rowsEntity = (CategoryListBean.RowsEntity) object;
                     Toast.makeText(activity, rowsEntity.getTitle(), Toast.LENGTH_SHORT).show();
 //                    GoToNextUtils.goToIntent(getActivity(), Integer.valueOf(rowsEntity.type), rowsEntity.web_url);
                 }

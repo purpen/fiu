@@ -10,14 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.NetBean;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
 import com.taihuoniao.fineix.main.App;
@@ -29,12 +26,12 @@ import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
 import com.taihuoniao.fineix.user.ShopOrderListActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -191,15 +188,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             @Override
                             public void onSuccess(String json) {
                                 mdialog.dismiss();
-                                NetBean netBean = new NetBean();
-                                try {
-                                    Gson gson = new Gson();
-                                    Type type = new TypeToken<NetBean>() {
-                                    }.getType();
-                                    netBean = gson.fromJson(json, type);
-                                } catch (JsonSyntaxException e) {
-//                                    Log.e("<<<提醒发货", "数据解析异常");
-                                }
+                                HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (netBean.isSuccess()) {
                                     ToastUtils.showSuccess("提醒发货成功!");
                                 } else {

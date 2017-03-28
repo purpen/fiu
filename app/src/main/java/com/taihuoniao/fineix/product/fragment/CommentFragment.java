@@ -7,15 +7,17 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
+import com.taihuoniao.fineix.beans.CommentsBean;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -41,7 +43,7 @@ public class CommentFragment extends SearchFragment {
     ProgressBar progressBar;
     private int page = 1;
     private GoodsDetailsCommentListsAdapter commentListsAdapter;
-    private List<TryCommentsBean> commentsList;
+    private List<CommentsBean.CommentItem> commentsList;
 
     public static CommentFragment newInstance(String id) {
 
@@ -94,14 +96,15 @@ public class CommentFragment extends SearchFragment {
        Call httpHandler =  HttpRequest.post(params, URL.COMMENTS_LIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(json);
+                HttpResponse<CommentsBean> netCommentsBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CommentsBean>>() {});
+//                List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(json);
                 progressBar.setVisibility(View.GONE);
                 if (page == 1) {
                     commentsList.clear();
                     pullRefreshView.lastSavedFirstVisibleItem = -1;
                     pullRefreshView.lastTotalItem = -1;
                 }
-                commentsList.addAll(list);
+                commentsList.addAll(netCommentsBean.getData().getRows());
                 commentListsAdapter.notifyDataSetChanged();
                 if (commentsList.size() > 0) {
                     emptyView.setVisibility(View.GONE);

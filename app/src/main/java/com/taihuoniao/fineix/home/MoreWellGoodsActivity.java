@@ -3,24 +3,23 @@ package com.taihuoniao.fineix.home;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +41,7 @@ public class MoreWellGoodsActivity extends BaseActivity {
     PullToRefreshListView pullToRefreshListViewWellGoodsMore;
     private ListView mListView;
 
-    private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
+    private List<SubjectListBean.RowsEntity> subjectList;//好货页面专题及产品列表
     private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
     private int currentPage = 1;
 
@@ -76,14 +75,7 @@ public class MoreWellGoodsActivity extends BaseActivity {
             @Override
             public void onSuccess(String json) {
                 pullToRefreshListViewWellGoodsMore.onRefreshComplete();
-                SubjectListBean subjectListBean = new SubjectListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SubjectListBean>() {
-                    }.getType();
-                    subjectListBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
+                HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
                     if (currentPage == 1) {
                         pullToRefreshListViewWellGoodsMore.lastTotalItem = -1;

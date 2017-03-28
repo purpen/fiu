@@ -3,20 +3,21 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Intent;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindQJSceneListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -37,7 +38,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
     //上个界面传递过来的数据
     private int pos;//显示的位置
     private int page;//当前页码
-    private List<SceneList.DataBean.RowsBean> sceneList;
+    private List<SceneListBean2.RowsEntity> sceneList;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.pull_refresh_view)
@@ -113,15 +114,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
             public void onSuccess(String json) {
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
-                SceneList sceneL = new SceneList();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneList>() {
-                    }.getType();
-                    sceneL = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-
+                HttpResponse<SceneListBean2> sceneL = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SceneListBean2>>() {});
                 if (sceneL.isSuccess()) {
                     sceneList.addAll(sceneL.getData().getRows());
                     if (findQJSceneListAdapter != null) {
@@ -154,7 +147,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
                 if (count == -1) {
                     return;
                 }
-                sceneList.get(findQJSceneListAdapter.getPos()).setComment_count(count);
+                sceneList.get(findQJSceneListAdapter.getPos()).setComment_count(TypeConversionUtils.IntConvertString(count));
                 findQJSceneListAdapter.notifyDataSetChanged();
                 break;
         }

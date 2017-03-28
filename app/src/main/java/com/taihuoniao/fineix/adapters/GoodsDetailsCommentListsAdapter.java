@@ -12,8 +12,10 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 
 import java.util.List;
 
@@ -22,12 +24,12 @@ import java.util.List;
  */
 public class GoodsDetailsCommentListsAdapter extends BaseAdapter {
     private Context context;
-    private List<TryCommentsBean> commentsList;
+    private List<CommentsBean.CommentItem> commentsList;
     private ImageLoader imageLoader;
     private DisplayImageOptions optionsAvater = null;
     private boolean tag = false;//判断是商品详情界面还是商品评论界面的标识 false为商品详情界面 true为商品评论列表界面
 
-    public GoodsDetailsCommentListsAdapter(Context context, List<TryCommentsBean> commentsList, boolean tag) {
+    public GoodsDetailsCommentListsAdapter(Context context, List<CommentsBean.CommentItem> commentsList, boolean tag) {
         this.context = context;
         this.commentsList = commentsList;
         this.tag = tag;

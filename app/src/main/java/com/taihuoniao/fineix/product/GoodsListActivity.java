@@ -5,16 +5,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CartBean;
-import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -22,12 +20,12 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.fragment.GoodListFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +73,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initList() {
-        List<CategoryLabelListBean.CategoryTagItem> categoryList = new ArrayList<>();
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
     }
@@ -125,15 +122,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         cartHandler = HttpRequest.post( URL.CART_NUMBER, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                CartBean cartBean = new CartBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CartBean>() {
-                    }.getType();
-                    cartBean = gson.fromJson(json, type);
-                } catch (JsonSyntaxException e) {
-                }
-                CartBean netCartBean = cartBean;
+                HttpResponse<CartBean> netCartBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<CartBean>>(){});
                 if (netCartBean.isSuccess()) {
                     titleLayout.setCartNum(netCartBean.getData().getCount());
                     return;
