@@ -38,6 +38,7 @@ import com.taihuoniao.fineix.map.MapAddressDetailActivity;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
@@ -106,6 +107,7 @@ public class ZoneMapSelectAddressActivity extends BaseActivity implements View.O
                     .permission(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
                     .send();
         }
+        WindowUtils.chenjin(this);
     }
 
     private void displayCurrentLocation() {

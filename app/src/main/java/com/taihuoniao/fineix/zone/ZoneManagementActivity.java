@@ -28,6 +28,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -94,6 +95,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     protected void initView() {
         dialog = new WaittingDialog(activity);
         customHeadView.setHeadCenterTxtShow(true, R.string.title_zone_manage);
+        WindowUtils.chenjin(this);
         itemZoneBaseInfo.setTVStyle(0, R.string.zone_base_info, R.color.color_666);
         itemZoneBrief.setTVStyle(0, R.string.zone_brief, R.color.color_666);
         itemLightSpot.setTVStyle(0, R.string.zone_light_spot, R.color.color_666);

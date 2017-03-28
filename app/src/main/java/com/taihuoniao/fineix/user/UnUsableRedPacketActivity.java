@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -172,6 +173,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "过期红包");
+        WindowUtils.chenjin(this);
         lv = pull_lv.getRefreshableView();
         mDialog = new WaittingDialog(this);
         mRid = getIntent().getStringExtra("rid");

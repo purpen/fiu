@@ -13,6 +13,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
@@ -59,6 +60,7 @@ public class LightSpotDetailActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        WindowUtils.chenjin(activity);
         highLight.getPaint().setFakeBoldText(true);
         if (zoneDetailBean==null) return;
         customHeadView.setHeadCenterTxtShow(true,zoneDetailBean.title);

@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.adapter.ZoneClassifyAdapter;
@@ -61,6 +62,7 @@ public class ZoneClassifyActivity extends BaseActivity {
         dialog = new WaittingDialog(activity);
         customHead.setHeadCenterTxtShow(true, R.string.title_zone_classify);
         customHead.setHeadRightTxtShow(true, R.string.save);
+        WindowUtils.chenjin(this);
         list = new ArrayList<>();
         adapter = new ZoneClassifyAdapter(activity, list);
         recyclerView.setHasFixedSize(true);

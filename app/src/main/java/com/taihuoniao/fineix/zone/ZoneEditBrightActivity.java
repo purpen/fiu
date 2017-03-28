@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.DataImageView;
 import com.taihuoniao.fineix.view.RichTextEditor;
@@ -70,6 +71,7 @@ public class ZoneEditBrightActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        WindowUtils.chenjin(this);
         customHead.setHeadCenterTxtShow(true,R.string.zone_edit_spot);
         customHead.setHeadRightTxtShow(true, R.string.zone_public_bright);
         dialog = new WaittingDialog(activity);
