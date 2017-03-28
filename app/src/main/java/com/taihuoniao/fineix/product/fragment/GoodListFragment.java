@@ -147,7 +147,9 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
                     @Override
                     public void onFailure(String error) {
                         dialog.dismiss();
-                        pullRefreshView.onRefreshComplete();
+                        if (pullRefreshView != null) {
+                            pullRefreshView.onRefreshComplete();
+                        }
                         progressBar.setVisibility(View.GONE);
                         ToastUtils.showError(R.string.net_fail);
                     }

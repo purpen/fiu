@@ -90,9 +90,11 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
-                intent.putExtra("id", productList.get(position).get_id());
-                parent.getContext().startActivity(intent);
+                if (position < productList.size() - 1) {
+                    Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
+                    intent.putExtra("id", productList.get(position).get_id());
+                    parent.getContext().startActivity(intent);
+                }
             }
         });
 
@@ -168,7 +170,9 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
 
             @Override
             public void onSuccess(String json) {
-                pullToRefreshGridView.onRefreshComplete();
+                if (pullToRefreshGridView != null) {
+                    pullToRefreshGridView.onRefreshComplete();
+                }
                 HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 String total_rows = subjectListBean.getData().getTotal_rows();
                 if (subjectListBean.isSuccess() &&  !TextUtils.isEmpty(total_rows) && Integer.valueOf(total_rows) > 0) {
@@ -201,7 +205,9 @@ public class WellGoodsFragment04 extends BaseFragment implements AbsListView.OnS
         HttpRequest.post(requestParams, URL.URLSTRING_PRODUCTSLIST, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                pullToRefreshGridView.onRefreshComplete();
+                if (pullToRefreshGridView != null) {
+                    pullToRefreshGridView.onRefreshComplete();
+                }
                 HttpResponse<ProductBean> productBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ProductBean>>() {});
                 if (productBean.isSuccess()) {
                     if (currentPage == 1) {

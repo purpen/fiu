@@ -204,8 +204,10 @@ public class FocusUserFragment extends MyBaseFragment {
                     }
                 }, 200);
                 StringBuilder builder = new StringBuilder();
-                for (User user : users) {
-                    if (user.is_love == 1) builder.append(user._id).append(",");
+                if (users != null) {
+                    for (User user : users) {
+                        if (user.is_love == 1) builder.append(user._id).append(",");
+                    }
                 }
                 if (TextUtils.isEmpty(builder)) return;
                 LogUtil.e(TAG, builder.deleteCharAt(builder.length() - 1).toString());

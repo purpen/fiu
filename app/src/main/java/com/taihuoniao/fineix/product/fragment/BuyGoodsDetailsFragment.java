@@ -201,7 +201,6 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
 
             @Override
             public void onFailure(String error) {
-                progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
             }
         });
