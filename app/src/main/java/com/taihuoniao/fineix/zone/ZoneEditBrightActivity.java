@@ -142,14 +142,18 @@ public class ZoneEditBrightActivity extends BaseActivity {
     // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
     @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
     private void getRequestYes(List<String> grantedPermissions) {
-        if (grantedPermissions.contains("android.permission.READ_EXTERNAL_STORAGE")) {
-            int count = richEditor.getImageViewCount();
-            ImageUtils.getImageFromAlbum(activity,remainImageCount(count));
-        } else if (grantedPermissions.contains("android.permission.CAMERA")) {
-            mCurrentPhotoFile = ImageUtils.getDefaultFile();
-            if (null==mCurrentPhotoFile) return;
-            ImageUtils.getImageFromCamera(activity, ImageUtils.getUriForFile(mCurrentPhotoFile));
+        for (String item : grantedPermissions){
+            if (item.contains("android.permission.READ_EXTERNAL_STORAGE")) {
+                int count = richEditor.getImageViewCount();
+                ImageUtils.getImageFromAlbum(activity,remainImageCount(count));
+            }
+            if(item.contains("android.permission.CAMERA")) {
+                mCurrentPhotoFile = ImageUtils.getDefaultFile();
+                if (null==mCurrentPhotoFile) return;
+                ImageUtils.getImageFromCamera(activity, ImageUtils.getUriForFile(mCurrentPhotoFile));
+            }
         }
+
     }
 
     // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
@@ -186,13 +190,13 @@ public class ZoneEditBrightActivity extends BaseActivity {
             case R.id.button1:// 打开系统相册
                 count=remainImageCount(richEditor.getImageViewCount());
                 if (count==0) return;
-                if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                if (AndPermission.hasPermission(activity,Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     ImageUtils.getImageFromAlbum(activity,count);
                 } else {
                     // 申请权限。
                     AndPermission.with(this)
                             .requestCode(Constants.REQUEST_PERMISSION_CODE)
-                            .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            .permission(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE)
                             .send();
                 }
                 break;
