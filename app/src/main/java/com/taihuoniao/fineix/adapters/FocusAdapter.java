@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +9,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -46,19 +42,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 
     public FocusAdapter(List<FocusFansItem> list, Activity activity, long userId) {
         super(list, activity);
-        ImageLoader imageLoader = ImageLoader.getInstance();
         this.userId = userId;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_focus_head)
-                .showImageForEmptyUri(R.mipmap.default_focus_head)
-                .showImageOnFail(R.mipmap.default_focus_head)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .delayBeforeLoading(0)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
     }
 
     @Override
@@ -76,7 +60,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 
         if (item != null) {
             if (item.follows != null) {
-//                imageLoader.displayImage(item.follows.avatar_url, holder.riv);
                 GlideUtils.displayImage(item.follows.avatar_url, holder.riv);
 
                 if (item.follows.is_expert == 1) {
@@ -126,7 +109,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     @Override
                     public void onSuccess(String json) {
                         view.setEnabled(true);
-                        if (TextUtils.isEmpty(json)) return;
                         HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                         if (response.isSuccess()) {
                             item.focus_flag = false;
@@ -155,7 +137,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-//        ImageLoader.getInstance().displayImage(item.follows.avatar_url, riv, options);
         GlideUtils.displayImage(item.follows.avatar_url, riv);
         tv_take_photo.setText(String.format(tips + " %s ?", item.follows.nickname));
         tv_album.setText(tips);
@@ -184,7 +165,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             @Override
                             public void onSuccess(String json) {
                                 view.setEnabled(true);
-                                if (TextUtils.isEmpty(json)) return;
                                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
                                     item.focus_flag = false;
@@ -207,7 +187,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             public void onSuccess(String json) {
                                 view.setEnabled(true);
                                 myPopupWindow.dismiss();
-                                if (TextUtils.isEmpty(json)) return;
                                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
 //                                    list.remove(item);
@@ -277,7 +256,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 @Override
                 public void onSuccess(String json) {
                     view.setEnabled(true);
-                    if (TextUtils.isEmpty(json)) return;
                     HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                     if (response.isSuccess()) {
                         item.follows.is_love = LOVE;
@@ -300,7 +278,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 public void onSuccess(String json) {
                     view.setEnabled(true);
                     myPopupWindow.dismiss();
-                    if (TextUtils.isEmpty(json)) return;
                     HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                     if (response.isSuccess()) {
                         item.follows.is_love = NOT_LOVE;

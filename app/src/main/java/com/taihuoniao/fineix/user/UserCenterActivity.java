@@ -231,9 +231,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(String json) {
                 if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(json)) {
-                    return;
-                }
 
                 try {
                     user = JsonUtil.fromJson(json, new TypeToken<HttpResponse<User>>() {

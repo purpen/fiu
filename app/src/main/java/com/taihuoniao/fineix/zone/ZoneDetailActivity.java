@@ -305,23 +305,6 @@ public class ZoneDetailActivity extends BaseActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-//        if (scrollableView != null) {
-//            scrollableView.stop();
-//        }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        if (scrollableView != null) {
-//            scrollableView.start();
-//        }
-    }
-
-    @Override
     protected void requestNet() {
         HashMap param = ClientDiscoverAPI.getZoneDetailParams(sZoneId,"0");
         HttpRequest.post(param, URL.ZONE_DETAIL, new GlobalDataCallBack() {

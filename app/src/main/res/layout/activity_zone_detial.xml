@@ -1,33 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
-        <LinearLayout
+        <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll">
-            <include layout="@layout/zone_detail_head_layout" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dp45">
+
+                <com.taihuoniao.fineix.view.ScrollableView
+                    android:id="@+id/scrollableView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp200" />
+
+                <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                    android:id="@+id/zone_logo"
+                    android:layout_width="@dimen/dp75"
+                    android:layout_height="@dimen/dp75"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:src="@mipmap/default_load"
+                    app:riv_border_color="@color/color_ccc"
+                    app:riv_border_width="@dimen/dp05"
+                    app:riv_corner_radius="@dimen/dp75" />
+
+                <TextView
+                    android:id="@+id/shop_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    android:textColor="@color/color_222"
+                    android:textSize="@dimen/sp17" />
+
+                <TextView
+                    android:id="@+id/sub_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    android:textColor="@color/color_666"
+                    android:textSize="@dimen/sp12" />
+
+                <com.zhy.view.flowlayout.TagFlowLayout
+                    android:id="@+id/id_flowLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/dp15"
+                    zhy:max_select="-1" />
+
+                <TextView
+                    android:id="@+id/shop_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp13"
+                    android:ellipsize="end"
+                    android:lineSpacingMultiplier="1.3"
+                    android:textColor="@color/color_666"
+                    android:textSize="@dimen/sp13" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp05"
+                    android:layout_margin="@dimen/dp15"
+                    android:background="@color/color_eee" />
+
+                <TextView
+                    android:id="@+id/high_light"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/high_light"
+                    android:textColor="@color/color_666"
+                    android:textSize="@dimen/sp14" />
+
+                <LinearLayout
+                    android:id="@+id/ll_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:layout_marginRight="@dimen/dp15"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/look_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="@dimen/dp5"
+                        android:text="@string/look_more"
+                        android:textColor="@color/color_222"
+                        android:textSize="@dimen/sp13" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/arrow_right" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp45"
+                android:minHeight="?attr/actionBarSize"
+                app:contentInsetEnd="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black">
+
+                    <ImageButton
+                        android:id="@+id/head_goback"
+                        android:layout_width="@dimen/dp45"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:src="@mipmap/back_white" />
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp17" />
+
+                    <ImageButton
+                        android:id="@+id/ibtn_shoucang"
+                        android:layout_width="@dimen/dp45"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/ibtn_share"
+                        android:background="@null"
+                        android:src="@mipmap/shoucang_white" />
+
+                    <ImageButton
+                        android:id="@+id/ibtn_share"
+                        android:layout_width="@dimen/dp45"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:background="@null"
+                        android:src="@mipmap/head_share_white" />
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp44"
-            android:layout_gravity="bottom"
             android:background="@android:color/white"
             app:tabIndicatorColor="@color/yellow_bd8913"
             app:tabIndicatorHeight="@dimen/dp2"
-            app:tabSelectedTextColor="@color/yellow_bd8913" />
+            app:tabSelectedTextColor="@color/yellow_bd8913"
+            />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
@@ -35,5 +191,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 </android.support.design.widget.CoordinatorLayout>
