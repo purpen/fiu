@@ -367,8 +367,10 @@ public class MaskedEditText extends AppCompatEditText implements View.OnTouchLis
                             filteredStringBuilder.append(deleteChar);
                             skipSymbolAfterDeletion(dstart);
                         } else {
-                            filteredStringBuilder.append(mask.charAt(dstart));
-                            skipSymbolAfterDeletion(dstart);
+                            if (dstart < mask.length() - 1) {
+                                filteredStringBuilder.append(mask.charAt(dstart));
+                                skipSymbolAfterDeletion(dstart);
+                            }
                         }
                     }
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -57,6 +58,7 @@ public class ArticalDetailActivity extends BaseActivity {
     private static final String INFO_TYPE_JXZT = "14";  //精选主题
     private static final String INFO_TYPE_PP = "15";  //品牌
     private static final String INFO_TYPE_SEARCH = "20";
+    private static final String INFO_TYPE_RED_PACKAGE = "16";
     public static final int REQUEST_COMMENT = 100;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
@@ -148,12 +150,19 @@ public class ArticalDetailActivity extends BaseActivity {
                     Uri uri = Uri.parse(infoId);
                     intent = new Intent(Intent.ACTION_VIEW, uri);
                     activity.startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_RED_PACKAGE, infoType)) {
+                    if (LoginInfo.isUserLogin()) {
+                        intent = new Intent(activity, UsableRedPacketActivity.class);
+                        activity.startActivity(intent);
+                        activity.finish();
+                    } else {
+                        activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                    }
                 }
                 return true;
             }
             return super.shouldOverrideUrlLoading(view, url);
         }
-
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {

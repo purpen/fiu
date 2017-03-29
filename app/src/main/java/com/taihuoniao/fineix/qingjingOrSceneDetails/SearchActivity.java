@@ -76,7 +76,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void initView() {
         q = getIntent().getStringExtra("q");
-        t = getIntent().getIntExtra("t", 9);
+        t = getIntent().getIntExtra("t", 7);
         if (!TextUtils.isEmpty(q)) {
             editText.setText(q);
             isContent = false;
@@ -130,11 +130,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     protected void initList() {
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
+
+        //添加tab 7
+        titleList.add("产品");
+        searchProductFragment = SearchProductFragment.newInstance(q, isContent);
+        fragmentList.add(searchProductFragment);
+
         if (!getIntent().hasExtra(WellGoodsFragment.class.getSimpleName())) {
-            //添加tab 9
-            titleList.add("情境");
-            searchQJFragment = SearchQJFragment.newInstance(q, isContent);
-            fragmentList.add(searchQJFragment);
+
             //添加tab 14
             titleList.add("用户");
             searchUserFragment = SearchUserFragment.newInstance(q, isContent);
@@ -143,10 +146,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 return;
             }
         }
-        //添加tab 7
-        titleList.add("产品");
-        searchProductFragment = SearchProductFragment.newInstance(q, isContent);
-        fragmentList.add(searchProductFragment);
+
         //添加tab 13
         titleList.add("品牌");
         searchBrandFragment = SearchBrandFragment.newInstance(q, isContent);
@@ -158,6 +158,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         titleList.add("主题");
         searchSubjectFragment = SearchSubjectFragment.newInstance(q, isContent);
         fragmentList.add(searchSubjectFragment);
+
+        if (!getIntent().hasExtra(WellGoodsFragment.class.getSimpleName())) {
+            //添加tab 9
+            titleList.add("情境");
+            searchQJFragment = SearchQJFragment.newInstance(q, isContent);
+            fragmentList.add(searchQJFragment);
+        }
     }
 
     @Override
@@ -189,8 +196,11 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             case 14:
                 viewPager.setCurrentItem(fragmentList.indexOf(searchUserFragment), false);
                 break;
-            case 3:
+            case 7:
                 viewPager.setCurrentItem(fragmentList.indexOf(searchProductFragment), false);
+                break;
+            case 9:
+                viewPager.setCurrentItem(fragmentList.indexOf(searchQJFragment), false);
                 break;
             case 13:
                 viewPager.setCurrentItem(fragmentList.indexOf(searchBrandFragment), false);
@@ -199,7 +209,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 viewPager.setCurrentItem(fragmentList.indexOf(searchSubjectFragment), false);
                 break;
             default:
-                viewPager.setCurrentItem(fragmentList.indexOf(searchQJFragment), false);
+                viewPager.setCurrentItem(fragmentList.indexOf(searchProductFragment), false);
                 break;
         }
     }

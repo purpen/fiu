@@ -61,6 +61,14 @@ public class SalePromotionDetailAdapter extends CommonBaseAdapter<SubjectData.Pr
                 activity.startActivity(intent);
             }
         });
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+                intent.putExtra("id", item._id);
+                activity.startActivity(intent);
+            }
+        });
         return convertView;
     }
 
