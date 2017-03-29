@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +8,12 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -38,7 +34,6 @@ import butterknife.ButterKnife;
  *         created at 2016/4/22 19:00
  */
 public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements View.OnClickListener {
-    private ImageLoader imageLoader;
     private static final int TYPE1 = 1; //单向关注
     private static final int TYPE2 = 2; //互向关注
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
@@ -48,21 +43,8 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     private MyPopupWindow myPopupWindow;
     public FansAdapter(List<FocusFansItem> list, Activity activity, long userId, boolean flag, int fansCount) {
         super(list, activity);
-        this.imageLoader = ImageLoader.getInstance();
         this.userId = userId;
-        boolean flag1 = flag;
         this.fansCount = fansCount;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_focus_head)
-                .showImageForEmptyUri(R.mipmap.default_focus_head)
-                .showImageOnFail(R.mipmap.default_focus_head)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .delayBeforeLoading(0)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
     }
 
     @Override
@@ -80,7 +62,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 
         if (item != null) {
             if (item.follows != null) {
-//                imageLoader.displayImage(item.follows.avatar_url, holder.riv, options);
                 GlideUtils.displayImage(item.follows.avatar_url, holder.riv);
                 if (item.follows.is_expert == 1) {
                     holder.riv_auth.setVisibility(View.VISIBLE);

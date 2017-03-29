@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.zone;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,12 +13,14 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * 亮点详情
@@ -43,8 +46,21 @@ public class LightSpotDetailActivity extends BaseActivity {
 
     }
 
+    @OnClick({R.id.tv_head_right})
+    void OnClick(View view){
+        switch (view.getId()){
+            case R.id.tv_head_right:
+                Intent intent = new Intent(activity,ZoneEditBrightActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     protected void initView() {
+        WindowUtils.chenjin(activity);
         highLight.getPaint().setFakeBoldText(true);
         if (zoneDetailBean==null) return;
         customHeadView.setHeadCenterTxtShow(true,zoneDetailBean.title);
@@ -53,7 +69,10 @@ public class LightSpotDetailActivity extends BaseActivity {
 
     private void setBrightSpots(List<String> brightSpot) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.bottomMargin = getResources().getDimensionPixelSize(R.dimen.dp10);
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp195));
+        int size = getResources().getDimensionPixelSize(R.dimen.dp10);
+        params.bottomMargin = size;
+        imageParams.bottomMargin = size;
         for (String str : brightSpot) {
             if (!str.contains(Constants.SEPERATOR)) continue;
             String[] split = str.split(Constants.SEPERATOR);
@@ -68,7 +87,7 @@ public class LightSpotDetailActivity extends BaseActivity {
             } else if (TextUtils.equals(split[0], Constants.IMAGE_TYPE)) {
                 ImageView imageView = new ImageView(activity);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setLayoutParams(params);
+                imageView.setLayoutParams(imageParams);
                 GlideUtils.displayImageFadein(split[1], imageView);
                 llContainer.addView(imageView);
             }

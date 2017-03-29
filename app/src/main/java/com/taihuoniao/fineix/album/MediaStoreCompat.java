@@ -21,6 +21,8 @@ import android.os.Handler;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Images.Thumbnails;
 
+import com.taihuoniao.fineix.utils.ImageUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -62,13 +64,15 @@ public class MediaStoreCompat {
         if(!hasCameraFeature(this.mContext)) {
             return null;
         } else {
-            File toSave = this.getOutputFileUri();
+            File toSave = ImageUtils.getDefaultFile();
+//            File toSave = this.getOutputFileUri();
             if(toSave == null) {
                 return null;
             } else {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 intent.addCategory("android.intent.category.DEFAULT");
-                intent.putExtra("output", Uri.fromFile(toSave));
+//                intent.putExtra("output", Uri.fromFile(toSave));
+                intent.putExtra("output",ImageUtils.getUriForFile(toSave));
                 intent.putExtra("android.intent.extra.videoQuality", 1);
                 activity.startActivityForResult(intent, requestCode);
                 return toSave.toString();

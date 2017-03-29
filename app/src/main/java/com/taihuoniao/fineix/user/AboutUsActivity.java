@@ -11,6 +11,7 @@ import android.webkit.WebViewClient;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
@@ -19,7 +20,6 @@ import butterknife.Bind;
 public class AboutUsActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-//    private WaittingDialog dialog;
     private String url;
     private String title;
     private WebView webView;
@@ -42,42 +42,13 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,title);
-//        dialog = new WaittingDialog(this);
+        WindowUtils.chenjin(this);
         webView = (WebView) findViewById(R.id.webView_about);
         webView.setWebViewClient(new MyWebViewClient(activity));
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
         webSettings.setAppCacheEnabled(true);
-
-        // 为了让javascript中的alert()执行，必须设置以下语句
-//        mWebAbout.setWebChromeClient(new WebChromeClient() {
-//            @Override
-//            public boolean onJsAlert(WebView view, String url, String message,
-//                                     final JsResult result) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(
-//                        activity);
-//                builder.setIcon(R.mipmap.ic_launcher);
-//                builder.setTitle("提示：");
-//                builder.setMessage(message);
-//                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        result.cancel();
-//                    }
-//                });
-//                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        result.confirm();
-//                    }
-//                });
-//                builder.show();
-//                return true;
-//            }
-//        });
-//        "http://m.taihuoniao.com/app/api/view/about"
         webView.loadUrl(url);
     }
 

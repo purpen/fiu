@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -9,19 +8,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.FocusFansData;
 import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -40,12 +40,12 @@ public class FansActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.lv)
-    ListView lv;
+    PullToRefreshListView lv;
     @Bind(R.id.tv_tips)
     TextView tv_tips;
     @Bind(R.id.ll_tips)
     LinearLayout ll_tips;
-    private static final String PAGE_SIZE = "9999";  //分页大小
+    private static final String PAGE_SIZE = "15";  //分页大小
     public static final String FANS_TYPE = "2";  //粉丝列表
     private ArrayList<FocusFansItem> list;
     private FansAdapter adapter;
@@ -54,7 +54,8 @@ public class FansActivity extends BaseActivity {
     private WaittingDialog dialog;
     private boolean flag;//判断是不是从消息页面跳转过来的
     private int fansCount;//新添加的粉丝数量
-
+    private int curPage = 1;
+    private boolean isFirstLoad = true;
     public FansActivity() {
         super(R.layout.activity_focus_fans);
     }
@@ -73,19 +74,21 @@ public class FansActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        if (LoginInfo.getUserId() == userId) {
-            requestNet();
-        }
-        super.onResume();
-    }
+//    @Override
+//    protected void onResume() {
+//        if (LoginInfo.getUserId() == userId) {
+//            requestNet();
+//        }
+//        super.onResume();
+//    }
 
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "粉丝");
         dialog = new WaittingDialog(this);
         WindowUtils.chenjin(this);
+        list= new ArrayList<>();
+        lv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 
     @Override
@@ -93,36 +96,58 @@ public class FansActivity extends BaseActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                FocusFansItem focusFansItem = list.get(i);
+                if (i<1) return;
+                FocusFansItem focusFansItem = list.get(i-1);
                 if (focusFansItem.follows == null) return;
                 Intent intent = new Intent(activity, UserCenterActivity.class);
                 intent.putExtra(USER_ID_EXTRA, focusFansItem.follows.user_id);
                 startActivity(intent);
             }
         });
+
+        lv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                list.clear();
+                curPage=1;
+                requestNet();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+
+            }
+        });
+
+        lv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                requestNet();
+            }
+        });
     }
 
     @Override
     protected void requestNet() {
-        if (!activity.isFinishing() && dialog != null) dialog.show();
-        int curPage = 1;
         HashMap<String, String> params = ClientDiscoverAPI.getFocusFansListRequestParams(userId + "", String.valueOf(curPage), PAGE_SIZE, FANS_TYPE,
                 flag ? "1" : null);
         HttpRequest.post(params, URL.FOCUS_FAVORITE_URL, new GlobalDataCallBack(){
-                    @Override
+            @Override
+            public void onStart() {
+                if (isFirstLoad&&!activity.isFinishing() && dialog != null) dialog.show();
+            }
+
+            @Override
                     public void onSuccess(String json) {
+                        isFirstLoad =false;
+                        lv.onRefreshComplete();
                         if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-                        if (TextUtils.isEmpty(json)) return;
-
-                        LogUtil.e(TAG, json);
-                        FocusFansData data = JsonUtil.fromJson(json, new TypeToken<HttpResponse<FocusFansData>>() {
+                        HttpResponse<FocusFansData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<FocusFansData>>() {
                         });
-
-                        if (data == null) {
-                            return;
+                        if (response.isSuccess()){
+                            list.addAll(response.getData().rows);
+                            curPage++;
                         }
-
-                        list = data.rows;
                         refreshUI();
                     }
 
@@ -136,10 +161,6 @@ public class FansActivity extends BaseActivity {
 
     @Override
     protected void refreshUI() {
-
-        if (list == null) {
-            return;
-        }
         if (list.size() == 0) {
             ll_tips.setVisibility(View.VISIBLE);
             if (LoginInfo.getUserId() == userId) {

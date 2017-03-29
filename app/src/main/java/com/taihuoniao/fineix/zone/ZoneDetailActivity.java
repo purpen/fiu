@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -43,6 +42,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
@@ -117,14 +117,9 @@ public class ZoneDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     protected void initView() {
         highLight.getPaint().setFakeBoldText(true);
+        WindowUtils.chenjin(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width;
@@ -306,23 +301,6 @@ public class ZoneDetailActivity extends BaseActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (scrollableView != null) {
-            scrollableView.stop();
-        }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (scrollableView != null) {
-            scrollableView.start();
-        }
-    }
-
-    @Override
     protected void requestNet() {
         HashMap param = ClientDiscoverAPI.getZoneDetailParams(sZoneId,"0");
         HttpRequest.post(param, URL.ZONE_DETAIL, new GlobalDataCallBack() {
@@ -408,11 +386,10 @@ public class ZoneDetailActivity extends BaseActivity {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(activity, zoneDetailBean.covers);
         scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
-        scrollableView.setAutoScrollDurationFactor(8);
-        scrollableView.setInterval(4000);
-//        scrollableView.showIndicators();
+//        scrollableView.setAutoScrollDurationFactor(8);
+//        scrollableView.setInterval(4000);
         scrollableView.showIndicatorRight();
-        scrollableView.start();
+//        scrollableView.start();
         setBrightSpots(zoneDetailBean.bright_spot);
         GlideUtils.displayImageFadein(zoneDetailBean.avatar_url, zoneLogo);
         shopName.setText(zoneDetailBean.title);
@@ -448,7 +425,10 @@ public class ZoneDetailActivity extends BaseActivity {
 
     private void setBrightSpots(List<String> brightSpot) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.bottomMargin = getResources().getDimensionPixelSize(R.dimen.dp10);
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp195));
+        int size = getResources().getDimensionPixelSize(R.dimen.dp10);
+        params.bottomMargin = size;
+        imageParams.bottomMargin = size;
         int i=0;
         for (String str : brightSpot) {
             if (!str.contains(Constants.SEPERATOR)) continue;
@@ -465,7 +445,7 @@ public class ZoneDetailActivity extends BaseActivity {
             } else if (TextUtils.equals(split[0], Constants.IMAGE_TYPE)) {
                 ImageView imageView = new ImageView(activity);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setLayoutParams(params);
+                imageView.setLayoutParams(imageParams);
                 GlideUtils.displayImageFadein(split[1], imageView);
                 llContainer.addView(imageView);
             }

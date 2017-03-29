@@ -58,6 +58,8 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
         holder.gvStick.setVisibility(View.GONE);
         holder.gvCategory.setVisibility(View.GONE);
         holder.view.setVisibility(View.GONE);
+        holder.gvStick.setVisibility(View.GONE);
+        holder.gvCategory.setVisibility(View.GONE);
         switch (position) {
             case 0: //分类
                 holder.tvTitle.setText(titles.get(position + 1).indexName);

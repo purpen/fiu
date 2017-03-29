@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.GlideUtils;
-import com.taihuoniao.fineix.view.dialog.WaittingDialog;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.zone.ZoneEditCoverDialogActivity;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
@@ -33,9 +33,6 @@ public class ZoneBrowserCoverFragment extends DialogFragment {
     public static final int REQUEST_COVER_DIALOG = 100;
     @Bind(R.id.viewPager)
     ViewPager viewPager;
-//    @Bind(R.id.tv_delete)
-//    TextView tvDelete;
-    private WaittingDialog dialog;
     private ZoneDetailBean zoneDetailBean;
     private SimplePagerAdapter adapter;
     private OnFragmentInteractionListener mListener;
@@ -49,7 +46,6 @@ public class ZoneBrowserCoverFragment extends DialogFragment {
         if (getArguments() != null) {
             zoneDetailBean = getArguments().getParcelable(ZoneBrowserCoverFragment.class.getSimpleName());
         }
-        dialog = new WaittingDialog(getActivity());
     }
 
     public static ZoneBrowserCoverFragment newInstance(ZoneDetailBean zoneDetailBean) {
@@ -65,29 +61,14 @@ public class ZoneBrowserCoverFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_zone_browser_cover, container, false);
         ButterKnife.bind(this, v);
+        WindowUtils.chenjin(getActivity());
         adapter = new SimplePagerAdapter(zoneDetailBean.n_covers);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(zoneDetailBean.clickPosition);
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                tvDelete.setText("删除第"+(position+1)+"张图");
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
         return v;
     }
 
-    @OnClick({R.id.ibtn_menu,R.id.ibtn_close/*,R.id.tv_delete*/})
+    @OnClick({R.id.ibtn_menu,R.id.ibtn_close})
     void click(final View v){
         switch (v.getId()){
             case R.id.ibtn_menu:
@@ -99,44 +80,6 @@ public class ZoneBrowserCoverFragment extends DialogFragment {
             case R.id.ibtn_close:
                 dismiss();
                 break;
-//            case R.id.tv_delete:
-//                if (zoneDetailBean==null||zoneDetailBean.n_covers==null || zoneDetailBean.n_covers.size()==0) return;
-//                final int currentItem = viewPager.getCurrentItem();
-//                HashMap<String, String> params = new HashMap<>();
-//                params.put("id",zoneDetailBean.n_covers.get(currentItem).id);
-//                HttpRequest.post(params,URL.ZONE_COVER_DELETE, new GlobalDataCallBack() {
-//                    @Override
-//                    public void onStart() {
-//                        v.setEnabled(false);
-//                       if (null!=dialog) dialog.show();
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(String json) {
-//                        v.setEnabled(true);
-//                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-//                        if (null!=dialog) dialog.dismiss();
-//                        if (response.isSuccess()) {
-//                            zoneDetailBean.n_covers.remove(currentItem);
-//                            adapter.notifyDataSetChanged();
-//                            if (null!=mListener){
-//                                mListener.onFragmentInteraction(currentItem);
-//                            }
-//                            ToastUtils.showSuccess(response.getMessage());
-//                            return;
-//                        }
-//                        ToastUtils.showError(response.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onFailure(String error) {
-//                        v.setEnabled(true);
-//                        if (null!=dialog) dialog.dismiss();
-//                        ToastUtils.showError(R.string.network_err);
-//                    }
-//                });
-
-//                break;
             default:
                 break;
         }

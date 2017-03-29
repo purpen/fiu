@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
 
@@ -50,6 +51,7 @@ public class ZoneEditBriefActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        WindowUtils.chenjin(this);
         customHead.setHeadCenterTxtShow(true,R.string.title_zone_brief);
         customHead.setHeadRightTxtShow(true, R.string.save);
         if (!TextUtils.isEmpty(zoneDetailBean.des)){

@@ -527,6 +527,8 @@
         <activity android:name=".zone.ZoneEditAddressActivity" />
         <activity android:name=".zone.ZoneMapSelectAddressActivity" />
         <activity android:name=".zone.ZoneEditTagActivity" />
+        <activity android:name=".zone.ZoneEditBrightActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.taihuoniao.fineix.fileProvider"

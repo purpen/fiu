@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
@@ -76,6 +77,7 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void initView() {
+        WindowUtils.chenjin(activity);
         customHead.setHeadCenterTxtShow(true, R.string.title_zone_info);
         itemZoneAvatar.setTVStyle(0, R.string.zone_avatar, R.color.color_666);
         itemZoneAvatar.setUserAvatar(null);

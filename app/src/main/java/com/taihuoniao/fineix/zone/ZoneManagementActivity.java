@@ -28,6 +28,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -53,10 +54,6 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
  * 地盘管理
  */
 public class ZoneManagementActivity extends BaseActivity implements View.OnClickListener {
-//    private static final int REQUEST_MODIFY_BRIEF = 101;
-//    private static final int REQUEST_MODIFY_PHONE = 102;
-//    private static final int REQUEST_BUSINESS_TIME = 103;
-
     @Bind(R.id.custom_head)
     CustomHeadView customHeadView;
     @Bind(R.id.item_zone_base_info)
@@ -98,6 +95,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     protected void initView() {
         dialog = new WaittingDialog(activity);
         customHeadView.setHeadCenterTxtShow(true, R.string.title_zone_manage);
+        WindowUtils.chenjin(this);
         itemZoneBaseInfo.setTVStyle(0, R.string.zone_base_info, R.color.color_666);
         itemZoneBrief.setTVStyle(0, R.string.zone_brief, R.color.color_666);
         itemLightSpot.setTVStyle(0, R.string.zone_light_spot, R.color.color_666);
@@ -121,6 +119,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void installListener() {
+        itemLightSpot.setOnClickListener(this);
         adapter.setOnItemClickListener(new ZoneEditCoversAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
@@ -163,6 +162,11 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.item_light_spot:
+                Intent intent = new Intent(activity,ZoneEditBrightActivity.class);
+                intent.putExtra(ZoneEditBrightActivity.class.getSimpleName(),zoneDetailBean);
+                startActivity(intent);
+                break;
             case R.id.tv_take_photo:
                 PopupWindowUtil.dismiss();
                 if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {

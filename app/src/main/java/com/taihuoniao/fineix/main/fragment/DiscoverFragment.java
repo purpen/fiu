@@ -23,11 +23,13 @@ import com.taihuoniao.fineix.beans.DiscoverIndexBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.home.GoToNextUtils;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
 
@@ -79,19 +81,11 @@ public class DiscoverFragment extends BaseFragment {
         }
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
     @Override
     protected View initView() {
         dialog = new WaittingDialog(activity);
         View view = View.inflate(activity, R.layout.fragment_discover, null);
+
         return view;
     }
 
@@ -113,6 +107,9 @@ public class DiscoverFragment extends BaseFragment {
 
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            relative.setPadding(0, App.getStatusBarHeight(), 0, 0);
+        }
         indexList = new ArrayList<>();
         String[] array = getResources().getStringArray(R.array.discover_index);
         for (int i = 0; i < array.length; i++) {
@@ -132,9 +129,7 @@ public class DiscoverFragment extends BaseFragment {
         textView = ButterKnife.findById(headView, R.id.tv);
         textView.setText(array[0]);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            relative.setPadding(0, getStatusBarHeight(), 0, 0);
-        }
+
         lvContent.addHeaderView(headView);
     }
 

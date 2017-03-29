@@ -1,6 +1,10 @@
 package com.taihuoniao.fineix.utils;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,11 +17,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.taihuoniao.fineix.BuildConfig;
+import com.taihuoniao.fineix.album.ImageLoaderEngine;
+import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.main.MainApplication;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +45,7 @@ import java.util.Locale;
  */
 public class ImageUtils {
     public static double[] location = null;//图片经纬度
+    private static final File PHOTO_DIR = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
 
     //保存图片文件
     public static String saveToFile(String fileFolderStr, boolean isDir, Bitmap croppedImage) throws IOException {
@@ -282,5 +295,136 @@ public class ImageUtils {
         return bitmap;
     }
 
+    //计算图片缩放比例
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
+    }
 
+    // 根据路径获得图片并压缩，返回bitmap用于显示
+    public static Bitmap getSmallBitmap(String filePath) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        options.inSampleSize = calculateInSampleSize(options, 480, 800);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+    /**
+     * bitmap转字节数组
+     *
+     * @param bitmap
+     * @return
+     */
+    public static byte[] bitmap2ByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        return baos.toByteArray();
+    }
+
+    /**
+     * 从相机获得图
+     *
+     * @param activity
+     * @param uri
+     */
+    public static void getImageFromCamera(Activity activity, Uri uri) {
+        if (uri == null) return;
+        String state = Environment.getExternalStorageState();
+        if (!state.equals(Environment.MEDIA_MOUNTED)) {
+            ToastUtils.showInfo("请插入SD卡");
+            return;
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        uri = FileCameraUtil.getUriForFile();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        activity.startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_CAMERA);
+    }
+
+    /**
+     * 从相册获得图片
+     *
+     * @param activity
+     * @param count
+     */
+    public static void getImageFromAlbum(Activity activity, int count) {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            Picker.from(activity)
+                    .count(count)
+                    .enableCamera(true)
+                    .setEngine(new ImageLoaderEngine())
+                    .forResult(Constants.REQUEST_CODE_PICK_IMAGE);
+        } else {
+            ToastUtils.showError("未检测到SD卡");
+        }
+    }
+
+    public static Uri getUriForFile(File file) {
+        if (null == file) file = getDefaultFile();
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(MainApplication.getContext(), BuildConfig.APPLICATION_ID + ".fileProvider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
+    }
+
+    public static File getDefaultFile() {
+        File file;
+        if (!PHOTO_DIR.exists()) {
+            LogUtil.e("openCamera() failed");
+            return null;
+        }
+        file = new File(PHOTO_DIR, getPhotoFileName());
+        if (file.exists()) {
+            file.delete();
+        }
+        return file;
+    }
+
+    public static String getPhotoFileName() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "'IMG'_yyyy_MM_dd_HH_mm_ss");
+        return dateFormat.format(date) + ".jpg";
+    }
+
+    /**
+     * 根据Uri获取图片文件的绝对路径
+     */
+    public static String getRealFilePath(final Uri uri) {
+        if (null == uri) {
+            return null;
+        }
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = MainApplication.getContext().getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
+    }
 }
