@@ -72,7 +72,8 @@ public class RichTextEditor extends ScrollView {
         imageQueue = new ImageQueue<>();
         setupLayoutTransitions();
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
+                LayoutParams.MATCH_PARENT);
+
         addView(allLayout, layoutParams);
 
         // 2. 初始化键盘退格监听

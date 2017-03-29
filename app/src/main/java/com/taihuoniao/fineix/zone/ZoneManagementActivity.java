@@ -346,9 +346,13 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
                 break;
             }
         }
-
-        itemZoneBrief.setTvArrowLeftStyle(true,zoneDetailBean.des,R.color.color_333);
+        if (TextUtils.isEmpty(zoneDetailBean.des)){
+            itemZoneBrief.setTvArrowLeftStyle(true,"未设置",R.color.blue);
+        }else {
+            itemZoneBrief.setTvArrowLeftStyle(true,zoneDetailBean.des,R.color.color_333);
+        }
         itemZoneAddress.setTvArrowLeftStyle(true, zoneDetailBean.address, R.color.color_333);
+        
         itemZonePhone.setTvArrowLeftStyle(true, zoneDetailBean.extra.tel, R.color.color_333);
         itemZoneBusiness.setTvArrowLeftStyle(true, zoneDetailBean.extra.shop_hours, R.color.color_333);
     }
