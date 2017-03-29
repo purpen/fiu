@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -95,6 +96,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     protected void initView() {
         dialog = new WaittingDialog(activity);
         customHeadView.setHeadCenterTxtShow(true, R.string.title_zone_manage);
+        customHeadView.setHeadRightTxtShow(true,R.string.zone_preview);
         WindowUtils.chenjin(this);
         itemZoneBaseInfo.setTVStyle(0, R.string.zone_base_info, R.color.color_666);
         itemZoneBrief.setTVStyle(0, R.string.zone_brief, R.color.color_666);
@@ -119,6 +121,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void installListener() {
+        customHeadView.getHeadRightTV().setOnClickListener(this);
         itemLightSpot.setOnClickListener(this);
         adapter.setOnItemClickListener(new ZoneEditCoversAdapter.OnItemClickListener() {
             @Override
@@ -161,9 +164,15 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
+            case R.id.tv_head_right:
+                intent = new Intent(activity,ZoneDetailActivity.class);
+                intent.putExtra("id",zoneDetailBean._id);
+                startActivity(intent);
+                break;
             case R.id.item_light_spot:
-                Intent intent = new Intent(activity,ZoneEditBrightActivity.class);
+                intent = new Intent(activity,ZoneEditBrightActivity.class);
                 intent.putExtra(ZoneEditBrightActivity.class.getSimpleName(),zoneDetailBean);
                 startActivity(intent);
                 break;
@@ -328,6 +337,17 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         } else {
             adapter.notifyDataSetChanged();
         }
+
+        for (String str:zoneDetailBean.bright_spot){
+            if (!str.contains(Constants.SEPERATOR)) continue;
+            String[] split = str.split(Constants.SEPERATOR);
+            if (TextUtils.equals(split[0], Constants.TEXT_TYPE)) {
+                itemLightSpot.setTvArrowLeftStyle(true,split[1],R.color.color_333);
+                break;
+            }
+        }
+
+        itemZoneBrief.setTvArrowLeftStyle(true,zoneDetailBean.des,R.color.color_333);
         itemZoneAddress.setTvArrowLeftStyle(true, zoneDetailBean.address, R.color.color_333);
         itemZonePhone.setTvArrowLeftStyle(true, zoneDetailBean.extra.tel, R.color.color_333);
         itemZoneBusiness.setTvArrowLeftStyle(true, zoneDetailBean.extra.shop_hours, R.color.color_333);
