@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +26,13 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCompleteData;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -41,11 +42,15 @@ import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.io.File;
 import java.util.HashMap;
@@ -54,6 +59,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
 
 /**
  * @author lilin
@@ -171,7 +179,6 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
                     @Override
                     public void onSuccess(String json) {
-                        if (TextUtils.isEmpty(json)) return;
                         HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
                         });
                         if (response.isSuccess()) {
@@ -182,10 +189,12 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                                 SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                                 AllianceRequstDeal.requestAllianceIdentify(null);
                             }
-                            if (activity instanceof CompleteUserInfoActivity) {
-                                ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();
-                                if (null != viewPager) viewPager.setCurrentItem(1);
-                            }
+//                            if (activity instanceof CompleteUserInfoActivity) {
+//                                ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();
+//                                if (null != viewPager) viewPager.setCurrentItem(1);
+//                            }
+                            updateUserIdentity();
+
                             return;
                         }
                         ToastUtils.showError(response.getMessage());
@@ -202,6 +211,30 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "上传头像"));
                 break;
         }
+    }
+
+    private void updateUserIdentity() {
+        String type = "1";//设置非首次登录
+        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
+        HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
+            @Override
+            public void onSuccess(String json) {
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                if (response.isSuccess()) {
+                    startActivity(new Intent(activity, MainActivity.class));
+                    activity.finish();
+                    return;
+                }
+                LogUtil.e("改为非首次登录失败", json + "===" + response.getMessage());
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showError(R.string.network_err);
+                startActivity(new Intent(activity, MainActivity.class));
+                activity.finish();
+            }
+        });
     }
 
     private View initPopView(int layout, String title) {
@@ -222,11 +255,27 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
             switch (v.getId()) {
                 case R.id.tv_take_photo:
                     PopupWindowUtil.dismiss();
-                    getImageFromCamera();
+                    if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
+                        getImageFromCamera();
+                    } else {
+                        // 申请权限。
+                        AndPermission.with(getActivity())
+                                .requestCode(REQUEST_PERMISSION_CODE)
+                                .permission(Manifest.permission.CAMERA)
+                                .send();
+                    }
                     break;
                 case R.id.tv_album:
                     PopupWindowUtil.dismiss();
-                    getImageFromAlbum();
+                    if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        getImageFromAlbum();
+                    } else {
+                        // 申请权限。
+                        AndPermission.with(getActivity())
+                                .requestCode(REQUEST_PERMISSION_CODE)
+                                .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                .send();
+                    }
                     break;
                 case R.id.tv_cancel:
                 default:
@@ -255,6 +304,36 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 .setEngine(new ImageLoaderEngine())
                 .forResult(REQUEST_CODE_PICK_IMAGE);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
+    private void getRequestYes(List<String> grantedPermissions) {
+        for (String item : grantedPermissions){
+            if (item.contains("android.permission.READ_EXTERNAL_STORAGE")) {
+                getImageFromAlbum();
+            }
+            if(item.contains("android.permission.CAMERA")) {
+                getImageFromCamera();
+            }
+        }
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(Constants.REQUEST_PERMISSION_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+        }
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -289,7 +368,6 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
         intent.putExtra(ImageCropActivity.class.getName(), CompleteUserInfoActivity.class.getSimpleName());
         startActivity(intent);
     }
-
     @Override
     public void onDestroy() {
         if (bitmap != null) bitmap.recycle();
