@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.FileCameraUtil;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -63,14 +64,10 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     CustomItemLayout itemZoneBrief;
     @Bind(R.id.item_light_spot)
     CustomItemLayout itemLightSpot;
-    @Bind(R.id.item_zone_address)
-    CustomItemLayout itemZoneAddress;
-    @Bind(R.id.item_zone_phone)
-    CustomItemLayout itemZonePhone;
+
     @Bind(R.id.item_zone_auth)
     CustomItemLayout itemZoneAuth;
-    @Bind(R.id.item_zone_business)
-    CustomItemLayout itemZoneBusiness;
+
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
     private String zoneId = "";
@@ -99,11 +96,10 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         customHeadView.setHeadRightTxtShow(true,R.string.zone_preview);
         WindowUtils.chenjin(this);
         itemZoneBaseInfo.setTVStyle(0, R.string.zone_base_info, R.color.color_666);
+        itemZoneBaseInfo.setUserAvatar(null);
         itemZoneBrief.setTVStyle(0, R.string.zone_brief, R.color.color_666);
         itemLightSpot.setTVStyle(0, R.string.zone_light_spot, R.color.color_666);
-        itemZoneAddress.setTVStyle(0, R.string.zone_address, R.color.color_666);
-        itemZonePhone.setTVStyle(0, R.string.zone_phone, R.color.color_666);
-        itemZoneBusiness.setTVStyle(0, R.string.zone_business_times, R.color.color_666);
+
         itemZoneAuth.setTVStyle(0, R.string.zone_auth, R.color.color_666);
         list = new ArrayList<>();
         adapter = new ZoneEditCoversAdapter(activity, list);
@@ -126,10 +122,10 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         adapter.setOnItemClickListener(new ZoneEditCoversAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
-                if (position == list.size() - 1) {
+                if (position == 0) {
                     PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "上传地盘封面"));
                 } else {
-                    zoneDetailBean.clickPosition = position;
+                    zoneDetailBean.clickPosition = position-1;
                     ZoneBrowserCoverFragment fragment = ZoneBrowserCoverFragment.newInstance(zoneDetailBean);
                     fragment.show(getSupportFragmentManager(), ZoneBrowserCoverFragment.class.getSimpleName());
                     fragment.setOnFragmentInteractionListener(new ZoneBrowserCoverFragment.OnFragmentInteractionListener() {
@@ -331,7 +327,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         if (null != zoneDetailBean.n_covers) {
             list.addAll(zoneDetailBean.n_covers);
         }
-        list.add(new ZoneDetailBean.NcoverBean());
+        list.add(0,new ZoneDetailBean.NcoverBean());
         if (adapter == null) {
             adapter = new ZoneEditCoversAdapter(activity, list);
         } else {
@@ -351,13 +347,13 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         }else {
             itemZoneBrief.setTvArrowLeftStyle(true,zoneDetailBean.des,R.color.color_333);
         }
-        itemZoneAddress.setTvArrowLeftStyle(true, zoneDetailBean.address, R.color.color_333);
-        
-        itemZonePhone.setTvArrowLeftStyle(true, zoneDetailBean.extra.tel, R.color.color_333);
-        itemZoneBusiness.setTvArrowLeftStyle(true, zoneDetailBean.extra.shop_hours, R.color.color_333);
+
+        GlideUtils.displayImage(zoneDetailBean.avatar_url, itemZoneBaseInfo.getAvatarIV());
+
+
     }
 
-    @OnClick({R.id.item_zone_base_info, R.id.item_zone_brief, R.id.item_zone_address, R.id.item_zone_phone, R.id.item_zone_business, R.id.item_zone_auth})
+    @OnClick({R.id.item_zone_base_info, R.id.item_zone_brief, R.id.item_zone_auth})
     void performClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -371,22 +367,6 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
                 intent.putExtra(ZoneEditBriefActivity.class.getSimpleName(), zoneDetailBean);
                 startActivity(intent);
                 break;
-            case R.id.item_zone_address://地盘地址
-                intent = new Intent(activity, ZoneEditAddressActivity.class);
-                intent.putExtra(ZoneEditAddressActivity.class.getSimpleName(), zoneDetailBean);
-                startActivity(intent);
-                break;
-            case R.id.item_zone_phone://地盘电话
-                intent = new Intent(activity, ZoneEditPhoneActivity.class);
-                intent.putExtra(ZoneEditPhoneActivity.class.getSimpleName(), zoneDetailBean);
-                startActivity(intent);
-                break;
-            case R.id.item_zone_business://营业时间
-                intent = new Intent(activity, ZoneEditTimeActivity.class);
-                intent.putExtra(ZoneEditTimeActivity.class.getSimpleName(), zoneDetailBean);
-                startActivity(intent);
-                break;
-
             case R.id.item_zone_auth: //地盘认证
 
                 break;

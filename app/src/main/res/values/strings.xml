@@ -495,7 +495,7 @@
     <string name="title_business_times">修改地盘营业时间</string>
     <string name="title_zone_select_address">选择地盘地址</string>
     <string name="title_modify_address">修改地盘地址</string>
-    <string name="zone_base_info">基本信息</string>
+    <string name="zone_base_info">地盘基本信息</string>
     <string name="zone_public_bright">发布</string>
     <string name="zone_edit_spot">编辑特色</string>
     <string name="title_zone_classify">地盘分类</string>

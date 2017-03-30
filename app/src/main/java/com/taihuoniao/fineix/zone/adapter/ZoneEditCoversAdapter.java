@@ -76,32 +76,9 @@ public class ZoneEditCoversAdapter extends RecyclerView.Adapter<ZoneEditCoversAd
                 }
             });
         }
-//        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                HashMap<String, String> param = new HashMap<>();
-//                param.put("id", item.id);
-//                HttpRequest.post(param, URL.ZONE_COVER_DELETE, new GlobalDataCallBack() {
-//                    @Override
-//                    public void onSuccess(String json) {
-//                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-//                        if (response.isSuccess()) {
-//                            list.remove(position);
-//                            notifyDataSetChanged();
-//                            return;
-//                        }
-//                        ToastUtils.showError(response.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onFailure(String error) {
-//                        ToastUtils.showError(R.string.network_err);
-//                    }
-//                });
-//            }
-//        });
+
         holder.iv.setLayoutParams(params);
-        if (position == list.size() - 1) {
+        if (position == 0) {
             holder.iv.setImageResource(R.mipmap.zone_upload_banner);
         } else {
             GlideUtils.displayImageNoFading(item.url, holder.iv);
