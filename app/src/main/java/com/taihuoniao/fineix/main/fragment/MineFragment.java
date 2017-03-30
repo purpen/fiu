@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
+import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
@@ -408,7 +409,7 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(intent);
                 break;
             case R.id.btn:
-
+                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
                 break;
             default:
                 break;

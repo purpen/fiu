@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,12 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.album.ImageLoaderEngine;
-import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -41,6 +34,8 @@ import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
+import com.taihuoniao.fineix.utils.GlideUtils;
+import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -61,7 +56,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
-import static com.taihuoniao.fineix.utils.Constants.REQUEST_PERMISSION_CODE;
 
 /**
  * @author lilin
@@ -76,12 +70,9 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     EditText etNickname;
     @Bind(R.id.rg)
     RadioGroup rg;
-    private static final int REQUEST_CODE_PICK_IMAGE = 100;
-    private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
-    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
+    private File mCurrentPhotoFile;
     private String gender = Constants.MALE;
     private Bitmap bitmap;
-    private DisplayImageOptions options;
 
     public static CompleteAvatarNickNameFragment newInstance(UserCompleteData data) {
         CompleteAvatarNickNameFragment fragment = new CompleteAvatarNickNameFragment();
@@ -97,16 +88,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
             UserCompleteData data = savedInstanceState.getParcelable("data");
         }
         super.onCreate(savedInstanceState);
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .cacheInMemory(false)
-                .cacheOnDisk(false)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
+
     }
 
     @Override
@@ -120,7 +102,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-        ImageLoader.getInstance().displayImage(LoginInfo.getHeadPicUrl(), riv, options);
+        GlideUtils.displayImage(LoginInfo.getHeadPicUrl(), riv);
         String nickName = LoginInfo.getNickName();
         if (!TextUtils.isEmpty(nickName)) {
             etNickname.setText(nickName);
@@ -256,11 +238,13 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 case R.id.tv_take_photo:
                     PopupWindowUtil.dismiss();
                     if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
-                        getImageFromCamera();
+                        mCurrentPhotoFile = ImageUtils.getDefaultFile();
+                        if (null==mCurrentPhotoFile) return;
+                        ImageUtils.getImageFromCamera(activity, ImageUtils.getUriForFile(mCurrentPhotoFile));
                     } else {
                         // 申请权限。
                         AndPermission.with(getActivity())
-                                .requestCode(REQUEST_PERMISSION_CODE)
+                                .requestCode(Constants.REQUEST_PERMISSION_CODE)
                                 .permission(Manifest.permission.CAMERA)
                                 .send();
                     }
@@ -268,11 +252,11 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 case R.id.tv_album:
                     PopupWindowUtil.dismiss();
                     if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        getImageFromAlbum();
+                        ImageUtils.getImageFromAlbum(activity,1);
                     } else {
                         // 申请权限。
                         AndPermission.with(getActivity())
-                                .requestCode(REQUEST_PERMISSION_CODE)
+                                .requestCode(Constants.REQUEST_PERMISSION_CODE)
                                 .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
                                 .send();
                     }
@@ -285,25 +269,6 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
         }
     };
 
-    protected void getImageFromCamera() {
-        String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
-        } else {
-            ToastUtils.showError("未检测到SD卡");
-        }
-    }
-
-    protected void getImageFromAlbum() {
-        Picker.from(this)
-                .count(1)
-                .enableCamera(false)
-                .singleChoice()
-                .setEngine(new ImageLoaderEngine())
-                .forResult(REQUEST_CODE_PICK_IMAGE);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -316,10 +281,12 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     private void getRequestYes(List<String> grantedPermissions) {
         for (String item : grantedPermissions){
             if (item.contains("android.permission.READ_EXTERNAL_STORAGE")) {
-                getImageFromAlbum();
+                ImageUtils.getImageFromAlbum(activity,1);
             }
             if(item.contains("android.permission.CAMERA")) {
-                getImageFromCamera();
+                mCurrentPhotoFile = ImageUtils.getDefaultFile();
+                if (null==mCurrentPhotoFile) return;
+                ImageUtils.getImageFromCamera(activity, ImageUtils.getUriForFile(mCurrentPhotoFile));
             }
         }
     }
@@ -340,16 +307,15 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_CODE_PICK_IMAGE:
+                case Constants.REQUEST_CODE_PICK_IMAGE:
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     if (mSelected == null) return;
                     if (mSelected.size() == 0) return;
                     toCropActivity(mSelected.get(0));
                     break;
-                case REQUEST_CODE_CAPTURE_CAMERA:
-                    if (imageUri != null) {
-                        toCropActivity(imageUri);
-                    }
+                case Constants.REQUEST_CODE_CAPTURE_CAMERA:
+                    if (null==mCurrentPhotoFile) return;
+                    toCropActivity(ImageUtils.getUriForFile(mCurrentPhotoFile));
                     break;
             }
         }
