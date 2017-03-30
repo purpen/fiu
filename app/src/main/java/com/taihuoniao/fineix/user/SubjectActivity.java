@@ -54,6 +54,7 @@ public class SubjectActivity extends BaseActivity {
     private static final String INFO_TYPE_JXZT = "14";  //精选主题
     private static final String INFO_TYPE_PP = "15";  //品牌
     private static final String INFO_TYPE_SEARCH = "20";
+    private static final String INFO_TYPE_RED_PACKAGE = "16";
     public static final int REQUEST_COMMENT = 100;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
@@ -144,6 +145,14 @@ public class SubjectActivity extends BaseActivity {
                     Uri uri = Uri.parse(url);
                     intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_RED_PACKAGE, infoType)) {
+                    if (LoginInfo.isUserLogin()) {
+                        intent = new Intent(SubjectActivity.this, UsableRedPacketActivity.class);
+                        startActivity(intent);
+                        SubjectActivity.this.finish();
+                    } else {
+                        activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                    }
                 }
                 return true;
             }
