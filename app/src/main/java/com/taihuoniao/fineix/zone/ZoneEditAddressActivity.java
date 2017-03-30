@@ -86,6 +86,10 @@ public class ZoneEditAddressActivity extends BaseActivity {
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     Util.makeToast(response.getMessage());
+                    zoneDetailBean.address = address;
+                    Intent intent = new Intent();
+                    intent.putExtra(TAG,zoneDetailBean);
+                    setResult(RESULT_OK,intent);
                     finish();
                     return;
                 }
