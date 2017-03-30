@@ -24,11 +24,12 @@
             android:layout_height="@dimen/dp45"
             android:paddingLeft="@dimen/dp16"
             android:hint="请输入地盘电话"
+            android:digits="0123456789-"
             android:textColorHint="@color/color_999"
             android:textSize="@dimen/sp14"
             android:textColor="@color/color_333"
             android:maxLines="1"
-            android:maxLength="30"
+            android:maxLength="26"
             android:background="@android:color/white"
             />
         <ImageButton
@@ -45,7 +46,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="长度为3~15个字符"
+        android:text="可以为座机号和手机号"
         android:layout_marginTop="@dimen/dp10"
         android:layout_marginLeft="@dimen/dp16"
         android:textSize="@dimen/sp12"
