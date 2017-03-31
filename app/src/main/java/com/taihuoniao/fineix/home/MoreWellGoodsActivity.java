@@ -41,8 +41,8 @@ public class MoreWellGoodsActivity extends BaseActivity {
     PullToRefreshListView pullToRefreshListViewWellGoodsMore;
     private ListView mListView;
 
-    private List<SubjectListBean.RowsEntity> subjectList;//好货页面专题及产品列表
-    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
+    private List<SubjectListBean.RowsEntity> subjectList;
+    private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;
     private int currentPage = 1;
 
     public MoreWellGoodsActivity() {

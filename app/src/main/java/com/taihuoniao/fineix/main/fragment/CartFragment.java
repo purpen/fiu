@@ -67,25 +67,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     private View mRootView;
     private LinearLayout mRelativeLayoutEmptyShopCart;
     private RelativeLayout mRelativeLayoutProductLists;
-
-
     private RelativeLayout mRelativeLayoutSettlement;
     private ListViewForScrollView mListViewForScrollViewProductList;
     private WaittingDialog mDialog = null;
     private CheckBox mAllCheck; //底部的全选框
     private TextView mAllPrice; //底部的总价
     private Button mDeleteCalculate; //底部删除和结算相切换的按钮
-
-
-
-
-
-
-
-
-
-
-    Map<String, Object> map;
     private List<ShopCart> mList = new ArrayList<>();
     private List<Map<String, Object>> totalList = new ArrayList<>();
     private List<Map<String, Object>> list_delete = new ArrayList<>();
@@ -104,7 +91,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             super.handleMessage(msg);
             switch (msg.what) {
                 case DataConstants.PARSER_SHOP_CART_NUMBER:
-//                    method001(msg);
                     break;
                 case DataConstants.PARSER_SHOP_CART:
                     method002(msg);
@@ -115,7 +101,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             }
         }
     };
-
 
     @Override
     protected void requestNet() {
@@ -128,8 +113,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         return mRootView;
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -139,10 +122,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     protected void initView1(View headerView) {
         df = new DecimalFormat("######0.00");
-
-
         mListViewForScrollViewProductList = (ListViewForScrollView) headerView.findViewById(R.id.pull_lv);
-
         mDeleteCalculate = (Button) headerView.findViewById(R.id.bt_delete_calculate_shopcart_item);
         mDeleteCalculate.setOnClickListener(this);
         mAllCheck = (CheckBox) headerView.findViewById(R.id.checkbox_choice_all_shopcart_item);
@@ -153,9 +133,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         mStroll.setOnClickListener(this);
         mRelativeLayoutProductLists = (RelativeLayout)headerView. findViewById(R.id.relative_full_shopcart);
         mRelativeLayoutSettlement = (RelativeLayout)headerView. findViewById(R.id.linear_delete_count_shopcart);
-
         adapter = new ShopCartAdapter(totalList, getActivity(), change);
-
         mListViewForScrollViewProductList.setAdapter(adapter);
         adapter.setOnTwoClickedListener(new ShopCartAdapter.OnTwoClickedListener() {
             @Override
@@ -168,7 +146,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         customHead.setHeadRightTxtShow(true,R.string.edit);
         customHead.setHeadGoBackShow(false);
         mListViewForScrollViewProductList.setOnItemClickListener(new IonItemClickLister());
-//        mListViewForScrollViewProductList.setOnRefreshListener(new IpullToRefreshListener2());
     }
 
     @Override
@@ -187,6 +164,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             final ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
+
                             // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
                             viewHolder.mCheckBox.toggle();
                             mAllCheck.setChecked(false);
@@ -244,6 +222,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
+
                             // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
                             viewHolder.mCheckBox.toggle();
                             mAllCheck.setChecked(false);
@@ -367,22 +346,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     private AddProductGridAdapter indexAdapter002;//主题列表适配器
     private List<ProductBean.RowsEntity> productList;
     private List<SearchBean.SearchItem> searchList;
-    private int currentPage;
-
-    private View recommented(){
-        View headerView = View.inflate(getActivity(), R.layout.header_index, null);
-//        View headerView = View.inflate(getActivity(), R.layout.layout_shopcart_container01, null);
-//        initView1(headerView);
-//        initView2(headerView);
-
-//        TextView textView = new TextView(getActivity());
-//        textView.setText("测试");
-//        textView.setTextSize(30);
-//        textView.setTextColor(Color.parseColor("#ff000f"));
-//        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
-//        textView.setLayoutParams(layoutParams);
-        return headerView;
-    }
+    private int currentPage = 0;
 
     /**
      * 新品
@@ -399,7 +363,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                         productList.clear();
                     }
                     productList.addAll(productBean.getData().getRows());
-                    //刷新数据
                     indexAdapter002.notifyDataSetChanged();
                 }
             }
@@ -409,12 +372,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         });
     }
 
-
-    void method003(Message msg) {
+    private void method003(Message msg) {
         if (msg.obj != null) {
             if (msg.obj instanceof List) {
                 doOrderList.clear();
                 doOrderList.addAll((List<CartDoOrder>) msg.obj);
+
                 //用户以前加入购物车的商品现在已经下架了，购物车中还显示，这时点确认订单，就给他提示，让他删掉已经下架的商品，否则不能往下走
                 if ("false".equals(doOrderList.get(0).getSuccess())) {
                     if (mDialog.isShowing()) {
@@ -436,7 +399,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     }
 
     void method002(Message msg) {
-//        if (mListViewForScrollViewProductList!=null) mListViewForScrollViewProductList.onRefreshComplete();
         if (msg.obj != null) {
             if (msg.obj instanceof List) {
                 totalList.clear();
@@ -444,7 +406,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                 mList.addAll((List<ShopCart>) msg.obj);
                 for (int i = 0; i < mList.size(); i++) {
                     for (int j = 0; j < mList.get(i).getShopCartItemList().size(); j++) {
-                        map = new HashMap<>();
+                        Map<String, Object> map = new HashMap<>();
                         map.put("keyImage", mList.get(i).getShopCartItemList().get(j).getCover());
                         map.put("keyTitle", mList.get(i).getShopCartItemList().get(j).getTitle());
                         map.put("keyPrice", mList.get(i).getShopCartItemList().get(j).getTotal_price());
@@ -456,8 +418,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                         map.put("isFirstJD",mList.get(i).getShopCartItemList().get(j).isFirstJD);
                         map.put("storage_id",mList.get(i).getShopCartItemList().get(j).getStorage_id());
                         map.put("referral_code",mList.get(i).getShopCartItemList().get(j).getReferral_code());
-                        // 一开始，把所有的checkbox状态设为未勾选
-                        map.put("status", false);
+                        map.put("status", false); // 一开始，把所有的checkbox状态设为未勾选
                         totalList.add(map);
                     }
                 }
@@ -473,9 +434,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     adapter.notifyDataSetChanged();
                     mRelativeLayoutSettlement.setVisibility(View.VISIBLE);
                     mRelativeLayoutEmptyShopCart.setVisibility(View.GONE);
-//                                title.setContinueTvVisible(true);
                 } else {
-//                                title.setContinueTvVisible(false);
                     mRelativeLayoutEmptyShopCart.setVisibility(View.VISIBLE);
                     mRelativeLayoutProductLists.setVisibility(View.GONE);
                     mRelativeLayoutSettlement.setVisibility(View.GONE);
@@ -487,29 +446,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         }
     }
 
-    void method001(Message msg) {
-        if (msg.obj != null) {
-            if (msg.obj instanceof ShopCartNumber) {
-                ShopCartNumber numberCart;
-                numberCart = (ShopCartNumber) msg.obj;
-                if (numberCart.isSuccess() && numberCart.getCount() > 0) {
-                    customHead.setHeadCenterTxtShow(true, "购物车(" + numberCart.getCount() + ")");
-                } else {
-                    customHead.setHeadCenterTxtShow(true, "购物车(" + numberCart.getCount() + ")");
-//                                title.setContinueTvVisible(false);
-                }
-            }
-        }
-    }
-
     class IonItemClickLister implements AdapterView.OnItemClickListener{
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
             final ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
-            // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
-            viewHolder.mCheckBox.toggle();
+            viewHolder.mCheckBox.toggle(); // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
             mAllCheck.setChecked(false);
             if (position==0){
                 return;
@@ -528,19 +470,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
             if (count == totalList.size()) {
                 mAllCheck.setChecked(true);
             }
-        }
-    }
-
-    class IpullToRefreshListener2 implements PullToRefreshBase.OnRefreshListener2<ListView>{
-
-        @Override
-        public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-            DataPaser.shopCartParser(mHandler);
-        }
-
-        @Override
-        public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-
         }
     }
 

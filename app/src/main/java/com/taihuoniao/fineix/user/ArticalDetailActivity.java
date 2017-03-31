@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -24,6 +23,7 @@ import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.beans.SubjectData;
+import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
@@ -127,7 +127,7 @@ public class ArticalDetailActivity extends BaseActivity {
                     intent.putExtra("id", infoId);
                     activity.startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
-                    jump2ThemeDetail(activity, infoId,false);
+                    GoToNextUtils.jump2ThemeDetail(activity, infoId, false);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
                     intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", infoId);
@@ -189,138 +189,6 @@ public class ArticalDetailActivity extends BaseActivity {
             super.onReceivedError(view, errorCode, description, failingUrl);
             if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
-    }
-
-
-//    private WebViewClient webViewClient = new WebViewClient() {
-//        @Override
-//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//            if (url.contains("infoType") && url.contains("infoId")) {
-//                Intent intent;
-//                url = url.substring(url.indexOf("?") + 1, url.length());
-//                String[] args = url.split("&");
-//                String infoType = args[0].split("=")[1];
-//                String infoId = args[1].split("=")[1];
-//                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
-//                if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
-//                    LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
-//                    return true;
-//                }
-//                if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
-//                    intent = new Intent(activity, UserCenterActivity.class);
-//                    intent.putExtra(FocusActivity.USER_ID_EXTRA, infoId);
-//                    startActivity(intent);
-//                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情境详情
-//                    intent = new Intent(activity, QJDetailActivity.class);
-//                    intent.putExtra("id", infoId);
-//                    startActivity(intent);
-//                } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
-//                    jump2ThemeDetail(infoId);
-//                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
-//                    intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-//                    intent.putExtra("id", infoId);
-//                    startActivity(intent);
-//                } else if (TextUtils.equals(INFO_TYPE_PP, infoType)) {//品牌详情
-//                    intent = new Intent(activity, BrandDetailActivity.class);
-//                    intent.putExtra("id", infoId);
-//                    startActivity(intent);
-//                } else if (TextUtils.equals(INFO_TYPE_SEARCH, infoType)) { //搜索界面
-//                    if (url.contains("infoTag")) {
-//                        String infoTag = args[2].split("=")[1];
-//                        if (!TextUtils.isEmpty(infoTag)) {
-//                            intent = new Intent(activity, SearchActivity.class);
-//                            intent.putExtra("q", infoTag);
-//                            intent.putExtra("t", Integer.parseInt(infoId));
-//                            startActivity(intent);
-//                        }
-//                    }
-//                } else if (TextUtils.equals(INFO_TYPE_URL, infoType)) { //用浏览器打开
-//                    Uri uri = Uri.parse(infoId);
-//                    intent = new Intent(Intent.ACTION_VIEW, uri);
-//                    startActivity(intent);
-//                }
-//                return true;
-//            }
-//            return super.shouldOverrideUrlLoading(view, url);
-//        }
-//
-//        @Override
-//        public void onPageFinished(WebView view, String url) {
-//            view.getSettings().setJavaScriptEnabled(true);
-//            super.onPageFinished(view, url);
-//            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-//        }
-//
-//        @Override
-//        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//            if (!activity.isFinishing() && dialog != null) dialog.show();
-//            view.getSettings().setJavaScriptEnabled(true);
-//            super.onPageStarted(view, url, favicon);
-//        }
-//
-//        @Override
-//        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-//            super.onReceivedError(view, errorCode, description, failingUrl);
-//            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-//        }
-//    };
-
-    public static void jump2ThemeDetail(final Context activity, final String id, final boolean hasFlag) {
-        if (TextUtils.isEmpty(id)) return;
-        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
-        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-            @Override
-            public void onSuccess(String json) {
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
-                });
-
-                if (response.isSuccess()) {
-                    SubjectData data = response.getData();
-                    Intent intent;
-                    switch (data.type) {
-                        case 1: //文章详情
-                            intent = new Intent(activity, ArticalDetailActivity.class);
-                            intent.putExtra(ArticalDetailActivity.class.getSimpleName(), id);
-                            if(hasFlag){
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                            activity.startActivity(intent);
-                            break;
-                        case 2: //活动详情
-                            intent = new Intent(activity, ActivityDetailActivity.class);
-                            intent.putExtra(ActivityDetailActivity.class.getSimpleName(), id);
-                            if(hasFlag){
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                            activity.startActivity(intent);
-                            break;
-                        case 3: //新品
-                            intent = new Intent(activity, NewProductDetailActivity.class);
-                            intent.putExtra(NewProductDetailActivity.class.getSimpleName(), id);
-                            if(hasFlag){
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                            activity.startActivity(intent);
-                            break;
-                        case 4: //促销
-                            intent = new Intent(activity, SalePromotionDetailActivity.class);
-                            intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), id);
-                            if(hasFlag){
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                            activity.startActivity(intent);
-                            break;
-                    }
-                    return;
-                }
-                ToastUtils.showError(response.getMessage());
-            }
-
-            @Override
-            public void onFailure(String error) {
-                ToastUtils.showError(R.string.network_err);
-            }
-        });
     }
 
     @OnClick({R.id.ibtn_share, R.id.ibtn_comment})

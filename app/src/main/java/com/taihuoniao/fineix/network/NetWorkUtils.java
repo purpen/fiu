@@ -38,10 +38,12 @@ import java.util.HashMap;
  */
 
 public class NetWorkUtils {
-    public static final int INSTALL_APK = 10001;
-    public static final int UPDATE_APK  = 10002;
+    private static final int INSTALL_APK = 10001;
+    private static final int UPDATE_APK  = 10002;
 
     private Context mContext;
+    private String downloadUrl;
+    private String versionName;
 
     public NetWorkUtils(Context context) {
         this.mContext = context;
@@ -62,7 +64,6 @@ public class NetWorkUtils {
                     }
                     break;
                 case UPDATE_APK:
-//                    installApk();
                     break;
                 case INSTALL_APK:
                     hintUpdate(versionName);
@@ -71,7 +72,6 @@ public class NetWorkUtils {
             return false;
         }
     });
-    private File apkFile;
 
     private void hintUpdate(String versionName) {
         String title = App.getString(R.string.hint_dialog_new_version_title);
@@ -100,20 +100,20 @@ public class NetWorkUtils {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() +  "/downLoad";
         File folder = new File(path);
         if (!folder.isFile()) {
-            folder.mkdir();//If there is no folder it will be created.
+            folder.mkdir();
         }
         String fileName = "fiu_" + System.currentTimeMillis() + ".apk";
-        apkFile = new File(path, fileName);
-        new DownLoadTask(mContext,apkFile, mHandler, showProgressDialog).execute(downloadUrl + "?timestamp=" + System.currentTimeMillis());
+        File apkFile = new File(path, fileName);
+        new DownLoadTask(mContext, apkFile, mHandler, showProgressDialog).execute(downloadUrl + "?timestamp=" + System.currentTimeMillis());
     }
 
-    public static void installApk(File apkFile, Context context) {
+    static void installApk(File apkFile, Context context) {
         try {
             if (!apkFile.exists()) {
                 return;
             }
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //判断是否是AndroidN以及更高的版本
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
@@ -148,8 +148,7 @@ public class NetWorkUtils {
             @Override
             public void onSuccess(String json) {
                 try {
-                    UpdateInfoBean updateVersionInfo = JsonUtil.fromJson(json, new TypeToken<HttpResponse<UpdateInfoBean>>() {
-                    });
+                    UpdateInfoBean updateVersionInfo = JsonUtil.fromJson(json, new TypeToken<HttpResponse<UpdateInfoBean>>() {});
                     if (getAppVersionName(mContext).equals(updateVersionInfo.getVersion())) {
                         ToastUtils.showInfo("您当前已经是最新版本");
                     } else {
@@ -158,6 +157,7 @@ public class NetWorkUtils {
                         mHandler.sendEmptyMessage(INSTALL_APK);
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -168,9 +168,6 @@ public class NetWorkUtils {
         });
     }
 
-    private String downloadUrl;
-    private String versionName;
-
     public void checkVersionInfo() {
         String appVersionName = getAppVersionName(mContext);
         HashMap<String, String> params = ClientDiscoverAPI.getcheckVersionInfoRequestParams(appVersionName);
@@ -178,13 +175,13 @@ public class NetWorkUtils {
             @Override
             public void onSuccess(String json) {
                 try {
-                    CheckVersionBean
-                            checkVersionBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<CheckVersionBean>>() {});
+                    CheckVersionBean checkVersionBean = JsonUtil.fromJson(json, new TypeToken<HttpResponse<CheckVersionBean>>() {});
                     if (checkVersionBean != null) {
                         downloadUrl = checkVersionBean.getDownload();
                         mHandler.sendEmptyMessage(checkVersionBean.getCode());
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -197,7 +194,7 @@ public class NetWorkUtils {
 
     /**
      * make true current connect service is wifi
-     * @param mContext
+     * @param mContext context`
      * @return
      */
     private static boolean isWifi(Context mContext) {

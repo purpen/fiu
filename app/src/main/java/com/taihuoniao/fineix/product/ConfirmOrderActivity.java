@@ -142,8 +142,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         cartBean = (CartDoOrder) getIntent().getSerializableExtra("cartBean");
         if (nowBuyBean == null && cartBean == null) {
             ToastUtils.showError("数据异常，请重试");
-//            dialog.showErrorWithStatus("数据异常，请重试");
-//            Toast.makeText(ConfirmOrderActivity.this, "数据异常，请重试", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -189,7 +187,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
             if (cartBean.getBonus().size() > 0) {
                 redBagTv.setText("选择红包");
             }
-
             try {
                 freight = cartBean.getDictBeen().get(0).getFreight();
                 transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(freight) ? "0" : freight));
@@ -211,16 +208,9 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         addressRelative.setFocusable(true);
         addressRelative.setFocusableInTouchMode(true);
         addressRelative.requestFocus();
-//        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//            @Override
-//            public void onCancel(DialogInterface dialog) {
-//                cancelNet();
-//            }
-//        });
     }
 
     private void initView() {
-//        StatusBarChange.initWindow(ConfirmOrderActivity.this);
         mDialog = new CustomDialogForPay(this);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_confirmorder_title);
         addressRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_addrelative);
@@ -230,7 +220,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         addressDetailsTv = (TextView) findViewById(R.id.activity_confirmorder_fulladdress);
         phoneTv = (TextView) findViewById(R.id.activity_confirmorder_phone);
         productsListView = (ListViewForScrollView) findViewById(R.id.activity_confirmorder_productlist);
-        RelativeLayout transferRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_transferrelative);
         transferTv = (TextView) findViewById(R.id.activity_confirmorder_transfertv);
         timeRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_timerelative);
         timeTv = (TextView) findViewById(R.id.activity_confirmorder_timetv);
@@ -272,15 +261,12 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 startActivityForResult(intent2, DataConstants.REQUESTCODE_REDBAG);
                 break;
             case R.id.activity_confirmorder_paybtn:
-//                startActivity(new Intent(ConfirmOrderActivity.this, PayWayActivity.class));
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
                 if (addressListItem == null && addressDefaultBean == null) {
                     dialog.dismiss();
                     ToastUtils.showError("请选择收货地址!");
-//                    dialog.showErrorWithStatus("请选择收货地址!");
-//                    Toast.makeText(ConfirmOrderActivity.this, "请选择收货地址...", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (nowBuyBean != null)
@@ -311,11 +297,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                     e.printStackTrace();
                 }
                 dialog.dismiss();
-                //                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
                 if (nowConfirmBean.isSuccess()) {
-//                    ToastUtils.showSuccess(nowConfirmBean.getMessage());
-//                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
-//                        netConfirmBean.getRid();     //订单rid
                     Intent intent;
                     switch (nowConfirmBean.status) {
                         case 1:// 等待付款
@@ -327,10 +309,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                             finish();
                             break;
                         case 10: //10.等待发货(0元，跳过支付流程)
-//                            intent = new Intent(ConfirmOrderActivity.this, PayDetailsActivity.class);
-//                            intent.putExtra("rid",nowConfirmBean.getRid());
-//                            startActivity(intent);
-//                            finish();
                             delayToPayDetail(nowConfirmBean);
                             break;
                         default:
@@ -340,7 +318,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 } else {
                     ToastUtils.showError(nowConfirmBean.getMessage());
                 }
-
             }
 
             @Override
@@ -459,7 +436,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
         phoneTv.setText(address.phone);
     }
 
-
     private void cancelNet() {
         if(addressHandler!=null)
             addressHandler.cancel();
@@ -482,11 +458,6 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                         transferTv.setText(String.format(" ¥ %s", TextUtils.isEmpty(newfreight) ? "0" : newfreight));
                         sumPrice = sumPrice - Double.parseDouble(freight) + Double.parseDouble(newfreight);
                         payPriceTv.setText(String.format("¥ %s", sumPrice));
-//                        try {
-//
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
                     }
                 }
             }

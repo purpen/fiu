@@ -106,6 +106,5 @@ public class QJSubjectDetailActivity extends BaseActivity {
                 ToastUtils.showError(R.string.network_err);
             }
         });
-
     }
 }

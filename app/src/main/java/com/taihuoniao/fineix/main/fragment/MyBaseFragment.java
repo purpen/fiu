@@ -41,48 +41,42 @@ public abstract class MyBaseFragment<T> extends Base2Fragment {
         this.layoutId=layoutId;
     }
 
-    protected void initParams() {
-
-    }
+    protected void initParams() {}
 
     protected void loadData() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (view ==null)
+        if (view == null) {
             view = inflater.inflate(layoutId, null);
+        }
         ButterKnife.bind(this, view);
         initViews();
         return view;
     }
+
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(TAG);
     }
+
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(TAG);
     }
+
     protected abstract void initViews();
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         installListener();
     }
 
-    protected void installListener() {
+    protected void installListener() {}
 
-    }
+    protected void refreshUIAfterNet(){ }
 
-    protected void refreshUIAfterNet(){
+    protected void refreshUIAfterNet(ArrayList<T> list) { }
 
-    }
-
-    protected void refreshUIAfterNet(ArrayList<T> list) {
-
-    }
-
-    protected void refreshUIAfterNet(List<T> list, List<T> list1, List<T> list2, List<T> list3){
-
-    }
-
+    protected void refreshUIAfterNet(List<T> list, List<T> list1, List<T> list2, List<T> list3){}
 }

@@ -53,14 +53,10 @@ public class DiscoverFragment extends BaseFragment {
     @Bind(R.id.lv_content)
     ListView lvContent;
     private WaittingDialog dialog;
-    private String mParam1;
-    private String mParam2;
     private List<DiscoverIndexBean> indexList;
-    private OnFragmentInteractionListener mListener;
     private View headView;
 
     public DiscoverFragment() {
-        // Required empty public constructor
     }
 
     public static DiscoverFragment newInstance(String param1, String param2) {
@@ -75,18 +71,12 @@ public class DiscoverFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     protected View initView() {
         dialog = new WaittingDialog(activity);
-        View view = View.inflate(activity, R.layout.fragment_discover, null);
-
-        return view;
+        return View.inflate(activity, R.layout.fragment_discover, null);
     }
 
     @OnClick({R.id.title_left,R.id.title_right})
@@ -115,11 +105,7 @@ public class DiscoverFragment extends BaseFragment {
         for (int i = 0; i < array.length; i++) {
             DiscoverIndexBean indexBean = new DiscoverIndexBean();
             indexBean.indexName = array[i];
-            if (i == 0) {
-                indexBean.isSelected = true;
-            } else {
-                indexBean.isSelected = false;
-            }
+            indexBean.isSelected = i == 0;
             indexList.add(indexBean);
         }
         discoverIndexAdapter = new DiscoverIndexAdapter(indexList, activity);
@@ -128,11 +114,8 @@ public class DiscoverFragment extends BaseFragment {
         headView = View.inflate(activity, R.layout.item_discover_recommend, null);
         textView = ButterKnife.findById(headView, R.id.tv);
         textView.setText(array[0]);
-
-
         lvContent.addHeaderView(headView);
     }
-
 
     @Override
     protected void installListener() {
@@ -156,8 +139,6 @@ public class DiscoverFragment extends BaseFragment {
 
             }
         });
-
-
     }
 
     private void selectedOne(int index) {
@@ -207,9 +188,5 @@ public class DiscoverFragment extends BaseFragment {
         });
         DiscoverContentAdapter discoverContentAdapter = new DiscoverContentAdapter(activity, discoverBean,indexList);
         lvContent.setAdapter(discoverContentAdapter);
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

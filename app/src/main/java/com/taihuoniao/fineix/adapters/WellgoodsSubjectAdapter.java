@@ -80,35 +80,8 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
                                                  @Override
                                                  public void onClick(View v) {
                                                      GoToNextUtils.goNext(activity, TypeConversionUtils.StringConvertInt(list.get(position).getType()), list.get(position).get_id());
-//                                                     Intent intent = new Intent();
-//                                                     switch (list.get(position).getType()) {
-//                                                         case 1: //文章详情
-//                                                             intent = new Intent(activity, ArticalDetailActivity.class);
-//                                                             intent.putExtra(ArticalDetailActivity.class.getSimpleName(), list.get(position).get_id());
-////                                                             activity.startActivity(intent);
-//                                                             break;
-//                                                         case 2: //活动详情
-//                                                             intent = new Intent(activity, ActivityDetailActivity.class);
-//                                                             intent.putExtra(ActivityDetailActivity.class.getSimpleName(), list.get(position).get_id());
-////                                                             activity.startActivity(intent);
-//                                                             break;
-//                                                         case 4: //新品
-//                                                             intent = new Intent(activity, NewProductDetailActivity.class);
-//                                                             intent.putExtra(NewProductDetailActivity.class.getSimpleName(), list.get(position).get_id());
-////                                                             activity.startActivity(intent);
-//                                                             break;
-//                                                         case 3: //促销
-//                                                         case 5://好货
-//                                                             intent = new Intent(activity, SalePromotionDetailActivity.class);
-//                                                             intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), list.get(position).get_id());
-////                                                             activity.startActivity(intent);
-//                                                             break;
-//                                                     }
-//                                                     activity.startActivity(intent);
                                                  }
-
                                              }
-
         );
         holder.recyclerView.setAdapter(new RecyclerAdapter(activity, list.get(position).getProducts(), new EditRecyclerAdapter.ItemClick() {
             @Override
@@ -120,27 +93,10 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
         }
 
         ));
-//        holder.recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//            @Override
-//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-//                if (parent.getChildAdapterPosition(view) == 0) {
-//                    outRect.left = DensityUtils.dp2px(parent.getContext(), 15);
-//                    outRect.top = DensityUtils.dp2px(parent.getContext(), 10);
-//                } else if (parent.getChildAdapterPosition(view) == list.get(position).getProducts().size() - 1) {
-//                    outRect.left = DensityUtils.dp2px(activity, 10);
-//                    outRect.top = DensityUtils.dp2px(activity, 10);
-//                    outRect.right = DensityUtils.dp2px(activity, 15);
-//                } else {
-//                    outRect.top = DensityUtils.dp2px(activity, 10);
-//                    outRect.left = DensityUtils.dp2px(activity, 10);
-//                }
-//            }
-//        });
         return convertView;
     }
 
     static class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.VH> {
-
         private Activity activity;
         private List<SubjectListBean.RowsEntity.ProductsEntity> list;
         private EditRecyclerAdapter.ItemClick itemClick;
@@ -153,9 +109,7 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
 
         @Override
         public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = View.inflate(activity, R.layout.item_wellgoods_product, null);
-            VH holder = new VH(view);
-            return holder;
+            return new VH(View.inflate(activity, R.layout.item_wellgoods_product, null));
         }
 
         @Override

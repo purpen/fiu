@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.beans.SubjectListBean;
+import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
@@ -48,27 +49,16 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_wellgoods_subject, null);
-        return new VH(inflate);
+        return new VH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_wellgoods_subject, null));
     }
 
     @Override
     public void onBindViewHolder(final VH holder, int position) {
         int adapterPosition = holder.getAdapterPosition();
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int adapterPosition = holder.getAdapterPosition();
-                Toast.makeText(App.getContext(), "Click " + adapterPosition + "", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.subjectImg.getLayoutParams();
         layoutParams.width = MainApplication.getContext().getScreenWidth();
         layoutParams.height = layoutParams.width * 422 / 750;
         holder.subjectImg.setLayoutParams(layoutParams);
-
         RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) holder.recyclerView.getLayoutParams();
         layoutParams2.width = MainApplication.getContext().getScreenWidth();
         holder.recyclerView.setLayoutParams(layoutParams2);
@@ -77,7 +67,6 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
         } else {
             holder.container.setPadding(0, 0, 0, 0);
         }
-
         SubjectListBean.RowsEntity rowsBean = mRowsBeens.get(adapterPosition);
         if (rowsBean == null) {
             return;
@@ -110,7 +99,6 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
 
     class VH extends RecyclerView.ViewHolder {
         private RelativeLayout container;
-        private RelativeLayout relative;
         private ImageView subjectImg;
         private TextView subjectName;
         private TextView subjectName2;
@@ -118,9 +106,7 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
 
         public VH(View itemView) {
             super(itemView);
-
             container = (RelativeLayout) itemView.findViewById(R.id.container);
-            relative = (RelativeLayout) itemView.findViewById(R.id.relative);
             subjectImg = (ImageView) itemView.findViewById(R.id.subject_img);
             subjectName = (TextView) itemView.findViewById(R.id.subject_name);
             subjectName2 = (TextView) itemView.findViewById(R.id.subject_name2);
@@ -129,7 +115,6 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
     }
 
     static class RecyclerAdapter extends RecyclerView.Adapter<ProductAlbumAdapter.RecyclerAdapter.VH> {
-
         private Activity activity;
         private List<SubjectListBean.RowsEntity.ProductsEntity> list;
         private EditRecyclerAdapter.ItemClick itemClick;
@@ -197,26 +182,6 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
     }
 
     private void clickBigImage(int position){
-        Intent intent = new Intent();
-        switch (TypeConversionUtils.StringConvertInt(mRowsBeens.get(position).getType())) {
-            case 1: //文章详情
-                intent = new Intent(mContext, ArticalDetailActivity.class);
-                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), mRowsBeens.get(position).get_id());
-                break;
-            case 2: //活动详情
-                intent = new Intent(mContext, ActivityDetailActivity.class);
-                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), mRowsBeens.get(position).get_id());
-                break;
-            case 4: //新品
-                intent = new Intent(mContext, NewProductDetailActivity.class);
-                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), mRowsBeens.get(position).get_id());
-                break;
-            case 3: //促销
-            case 5://好货
-                intent = new Intent(mContext, SalePromotionDetailActivity.class);
-                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), mRowsBeens.get(position).get_id());
-                break;
-        }
-        mContext.startActivity(intent);
+        GoToNextUtils.goNext(mContext, TypeConversionUtils.StringConvertInt(mRowsBeens.get(position).getType()), mRowsBeens.get(position).get_id());
     }
 }

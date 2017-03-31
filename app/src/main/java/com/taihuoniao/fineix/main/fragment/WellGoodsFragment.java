@@ -94,8 +94,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     PullToRefreshListView pullRefreshView;
     @Bind(R.id.to_top_img)
     RoundedImageView toTopImg;
-//    @Bind(R.id.progress_bar)
-//    ProgressBar progressBar;
 
     private ListView listView;
     private CustomGridViewForScrollView gridView;//商品分类
@@ -114,12 +112,9 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
         ButterKnife.bind(this, view);
-
         listView = pullRefreshView.getRefreshableView();
         pullRefreshView.animLayout();
-
         listView.addHeaderView(getHeaderView());
-
         dialog = new WaittingDialog(getActivity());
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadWellGoods);
         getActivity().registerReceiver(wellGoodsReceiver, intentFilter);
@@ -130,8 +125,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     protected void initList() {
         int goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + App.getStatusBarHeight() / 2,
-                    recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
+            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + App.getStatusBarHeight() / 2, recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
             titleRelative.setPadding(0, App.getStatusBarHeight(), 0, 0);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) goneRelative.getLayoutParams();
             layoutParams.height = (int) (getResources().getDimension(R.dimen.gone_height) + App.getStatusBarHeight());
@@ -141,9 +135,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         goneRelative.setTranslationY(goneTranslation);
         titleLeft.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
-//        titleRight.setOnClickListener(this);
         titleRight.setVisibility(View.INVISIBLE);
-
         toTopImg.setOnClickListener(this);
         setupBlurView();
         categoryList = new ArrayList<>();
@@ -245,7 +237,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-//                progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
                 HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
@@ -263,7 +254,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             public void onFailure(String error) {
                 pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
-//                progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
             }
         });
@@ -369,9 +359,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
-//                progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                //产品列表
                 subjectList();
             }
         }
@@ -528,12 +516,10 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 if (object instanceof CategoryListBean.RowsEntity) {
                     CategoryListBean.RowsEntity rowsEntity = (CategoryListBean.RowsEntity) object;
                     Toast.makeText(activity, rowsEntity.getTitle(), Toast.LENGTH_SHORT).show();
-//                    GoToNextUtils.goToIntent(getActivity(), Integer.valueOf(rowsEntity.type), rowsEntity.web_url);
                 }
             }
         });
         recyclerView001.setAdapter(mWellGoodsCategoryAdapter);
-
         return headerView;
     }
 }

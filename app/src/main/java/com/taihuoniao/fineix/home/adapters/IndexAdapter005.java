@@ -35,8 +35,7 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.item_index_subject005, null);
-        return new VH(view);
+        return new VH(mLayoutInflater.inflate(R.layout.item_index_subject005, null));
     }
 
     @Override
@@ -45,7 +44,7 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
             @Override
             public void onClick(View v) {
                 if (itemClickListener != null) {
-                    itemClickListener.onItemClick(v,position);
+                    itemClickListener.onItemClick(v,holder.getAdapterPosition());
                 }
             }
         });
@@ -77,17 +76,13 @@ public class IndexAdapter005 extends RecyclerView.Adapter<IndexAdapter005.VH> {
                 default:
                     break;
             }
-
         }
-
     }
 
     @Override
     public int getItemCount() {
         return rowsEntities == null ? 0 : rowsEntities.size();
     }
-
-
 
     class VH extends RecyclerView.ViewHolder {
         private ImageView imageViewPicture;

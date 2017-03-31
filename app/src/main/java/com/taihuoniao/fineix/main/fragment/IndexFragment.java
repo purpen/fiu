@@ -79,6 +79,7 @@ import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
 /**
+ * 首页精选
  * Created by taihuoniao on 2016/8/9.
  */
 public class IndexFragment extends BaseFragment<BannerBean> implements View.OnClickListener, PullToRefreshBase.OnRefreshListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick {

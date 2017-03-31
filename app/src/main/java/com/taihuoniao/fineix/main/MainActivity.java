@@ -73,6 +73,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ArrayList<Fragment> fragments;
     private Fragment showFragment;
     public String which = IndexFragment.class.getSimpleName();
+    private Boolean isExit = false;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -216,7 +217,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.icon_mine_pressed, R.mipmap.icon_mine_normal);
     }
 
-
     private void initTabItem(ImageView imageView, TextView tv, Class clazz, int selId, int unselId) {
         TabItem tabItem = new TabItem();
         tabItem.imageView = imageView;
@@ -240,15 +240,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     removeMineFragment(CartFragment.class);
                     startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }
-
-
-                // : 2017/2/14 发布情境
-                /*if (LoginInfo.isUserLogin()) {
-                    startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
-                } else {
-                    MainApplication.which_activity = 0;
-                    startActivity(new Intent(activity, OptRegisterLoginActivity.class));
-                }*/
                 break;
             case R.id.ll_nav0://情
                 switchFragmentandImg(IndexFragment.class);
@@ -258,7 +249,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav3:  //品
-//                Log.e("<<<", "点击切换");
                 switchFragmentandImg(WellGoodsNewFragment.class);
                 onWindowFocusChanged(true);
                 break;
@@ -266,12 +256,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (getVisibleFragment() instanceof MineFragment) return;
                 if (LoginInfo.isUserLogin()) {
                     switchFragmentandImg(MineFragment.class);
-//                    onWindowFocusChanged(true);
                 } else {
                     MainApplication.which_activity = 0;
                     which = MineFragment.class.getSimpleName();
-
-                    // : 2017/1/18 移除MineFragment
                     removeMineFragment(MineFragment.class);
                     startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }
@@ -289,7 +276,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-
     /**
      * 切换fragment
      *
@@ -297,7 +283,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
-        LogUtil.e(TAG, "<<<<<<<<" + clazz.getSimpleName());
         Fragment fragment = fm.findFragmentByTag(clazz.getSimpleName());
         if (fragment == null) {
             fragment = (Fragment) clazz.newInstance();
@@ -307,7 +292,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         addFragment2List(fragment);
         showFragment = fragment;
-        LogUtil.e(TAG, fragments.size() + "<<<<<<");
     }
 
     private void resetUI() {
@@ -345,7 +329,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onSaveInstanceState(outState);
     }
 
-
     public Fragment getVisibleFragment() {
         List<Fragment> fragments = fm.getFragments();
         for (Fragment fragment : fragments) {
@@ -361,100 +344,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
     }
 
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//        if (hasFocus) {
-//            final SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//            if (showFragment instanceof IndexFragment) {
-//
-//                //判断是不是第一次进入情界面
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
-//                if (isFirstIn) {
-//                    firstRelative.setVisibility(View.VISIBLE);
-//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                    firstLeftImg.setImageResource(R.mipmap.first_in_index);
-//                    firstLeftImg.setVisibility(View.VISIBLE);
-//                    firstRelative.setTag(1);
-//                    firstRelative.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            if ((int) (v.getTag()) == 1) {
-//                                firstLeftImg.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                                firstRightImg.setImageResource(R.mipmap.first_in_index2);
-//                                firstRightImg.setVisibility(View.VISIBLE);
-//                                firstRelative.setTag(6);
-//                            } else if ((int) (v.getTag()) == 6) {
-//                                firstRelative.setVisibility(View.GONE);
-//                                firstRightImg.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.nothing);
-//                            }
-//                        }
-//                    });
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_QING, false);
-//                    editor.apply();
-//                }
-//            } else if (showFragment instanceof DiscoverFragment) {
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
-//                if (isFirstIn) {
-//                    firstRelative.setVisibility(View.VISIBLE);
-//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                    firstLeftImg.setImageResource(R.mipmap.first_in_find);
-//                    firstLeftImg.setVisibility(View.VISIBLE);
-//                    firstRelative.setTag(1);
-//                    firstRelative.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            if ((int) (v.getTag()) == 1) {
-//                                firstLeftImg.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                                firstRightImg.setImageResource(R.mipmap.first_in_find2);
-//                                firstRightImg.setVisibility(View.VISIBLE);
-//                                firstRelative.setTag(6);
-//                            } else if ((int) (v.getTag()) == 6) {
-//                                firstRelative.setVisibility(View.GONE);
-//                                firstRightImg.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.nothing);
-//                            }
-//                        }
-//                    });
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
-//                    editor.apply();
-//                }
-//            } else if (showFragment instanceof WellGoodsNewFragment) {
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
-//                if (isFirstIn) {
-//                    firstRelative.setVisibility(View.VISIBLE);
-//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                    firstLeftImg.setImageResource(R.mipmap.first_in_wellgood);
-//                    firstLeftImg.setVisibility(View.VISIBLE);
-//                    firstRelative.setTag(1);
-//                    firstRelative.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            if ((int) (v.getTag()) == 1) {
-//                                firstLeftImg.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                                firstRightImg.setImageResource(R.mipmap.first_in_wellgood2);
-//                                firstRightImg.setVisibility(View.VISIBLE);
-//                                firstRelative.setTag(6);
-//                            } else if ((int) (v.getTag()) == 6) {
-//                                firstRelative.setVisibility(View.GONE);
-//                                firstRightImg.setVisibility(View.GONE);
-//                                firstRelative.setBackgroundResource(R.color.nothing);
-//                            }
-//                        }
-//                    });
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
-//                    editor.apply();
-//                }
-//            }
-//        }
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -476,20 +365,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return false;
     }
 
-    private Boolean isExit = false;
-
     private void exitBy2Click() {
         Timer tExit;
         if (!isExit) {
-            isExit = true; // 准备退出
+            isExit = true;
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             tExit = new Timer();
             tExit.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    isExit = false; // 取消退出
+                    isExit = false;
                 }
-            }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+            }, 2000);
 
         } else {
             finish();

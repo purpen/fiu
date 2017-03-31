@@ -3,9 +3,9 @@ package com.taihuoniao.fineix.utils;
 import android.content.Context;
 import android.content.Intent;
 
+import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
-import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 
@@ -27,7 +27,7 @@ public class PushUtils {
                 context.startActivity(intent);
                 break;
             case "2":
-                ArticalDetailActivity.jump2ThemeDetail(context, target_id, true);
+                GoToNextUtils.jump2ThemeDetail(context, target_id, true);
                 break;
             case "11":
                 intent.setClass(context, QJDetailActivity.class);

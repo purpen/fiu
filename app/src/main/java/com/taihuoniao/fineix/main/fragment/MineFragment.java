@@ -177,7 +177,6 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void initParams() {
-//        dialog = new WaittingDialog(activity);
     }
 
     @Override
@@ -199,8 +198,6 @@ public class MineFragment extends MyBaseFragment {
                         user = response.getData();
                         refreshUIAfterNet();
                     }
-
-
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     ToastUtils.showError(R.string.network_err);
@@ -274,47 +271,38 @@ public class MineFragment extends MyBaseFragment {
                     default:
                         break;
                 }
-
             }
             adapter.notifyDataSetChanged();
         }
-
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             GlideUtils.displayImage(user.medium_avatar_url, riv);
         }
         GlideUtils.displayImage(user.head_pic_url, iv_bg);
-
         if (user.identify.is_expert == 1) {
             riv_auth.setVisibility(View.VISIBLE);
         } else {
             riv_auth.setVisibility(View.GONE);
         }
-
         if (TextUtils.isEmpty(user.summary)) {
             tv_real.setText(String.format(" | %s", "还没有个性签名！"));
         } else {
             tv_real.setText(String.format(" | %s", user.summary));
         }
-
         if (!TextUtils.isEmpty(user.expert_label)) {
             iv_label.setText(String.format("%s |", user.expert_label));
         } else {
             iv_label.setVisibility(View.GONE);
         }
-
         if (!TextUtils.isEmpty(user.expert_info)) {
             tv_auth.setText(user.expert_info);
         } else {
             tv_auth.setVisibility(View.GONE);
         }
-
-
         if (!TextUtils.isEmpty(user.label)) {
             tv_label.setText(String.format(" %s", user.label));
         } else {
             tv_label.setVisibility(View.GONE);
         }
-
         if (TextUtils.isEmpty(user.nickname)) {
             tv_nick.setVisibility(View.GONE);
         } else {
@@ -408,7 +396,6 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(intent);
                 break;
             case R.id.btn:
-
                 break;
             default:
                 break;
@@ -472,7 +459,6 @@ public class MineFragment extends MyBaseFragment {
                                     .send();
 
                         }
-
                         break;
 //                    case 8: //退款/售后
 //                        startActivity(new Intent(activity, ChargeBackAndServiceActivity.class));

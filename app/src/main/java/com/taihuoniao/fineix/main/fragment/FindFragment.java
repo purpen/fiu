@@ -158,8 +158,6 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
             }
         });
     }

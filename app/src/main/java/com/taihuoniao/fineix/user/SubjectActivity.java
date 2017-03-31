@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.beans.SupportData;
+import com.taihuoniao.fineix.home.GoToNextUtils;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -120,7 +121,7 @@ public class SubjectActivity extends BaseActivity {
                     intent.putExtra("id", infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
-                    jump2ThemeDetail(infoId);
+                    GoToNextUtils.jump2ThemeDetail(activity, infoId, false);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
                     intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", infoId);
@@ -185,52 +186,6 @@ public class SubjectActivity extends BaseActivity {
             if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
     };
-
-    private void jump2ThemeDetail(final String id) {
-        if (TextUtils.isEmpty(id)) return;
-        HashMap<String, String> params = ClientDiscoverAPI.getgetSubjectDataRequestParams(id);
-        HttpRequest.post(params,                                    URL.SCENE_SUBJECT_VIEW, new GlobalDataCallBack(){
-            @Override
-            public void onSuccess(String json) {
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectData>>() {
-                });
-
-                if (response.isSuccess()) {
-                    SubjectData data = response.getData();
-                    Intent intent;
-                    switch (data.type) {
-                        case 1: //文章详情
-                            intent = new Intent(activity, ArticalDetailActivity.class);
-                            intent.putExtra(ArticalDetailActivity.class.getSimpleName(), id);
-                            activity.startActivity(intent);
-                            break;
-                        case 2: //活动详情
-                            intent = new Intent(activity, ActivityDetailActivity.class);
-                            intent.putExtra(ActivityDetailActivity.class.getSimpleName(), id);
-                            activity.startActivity(intent);
-                            break;
-                        case 3: //新品
-                            intent = new Intent(activity, NewProductDetailActivity.class);
-                            intent.putExtra(NewProductDetailActivity.class.getSimpleName(), id);
-                            activity.startActivity(intent);
-                            break;
-                        case 4: //促销
-                            intent = new Intent(activity, SalePromotionDetailActivity.class);
-                            intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), id);
-                            activity.startActivity(intent);
-                            break;
-                    }
-                    return;
-                }
-                ToastUtils.showError(response.getMessage());
-            }
-
-            @Override
-            public void onFailure(String error) {
-                ToastUtils.showError(R.string.network_err);
-            }
-        });
-    }
 
     @OnClick({R.id.ibtn_favorite, R.id.ibtn_share, R.id.ibtn_comment})
     void onClick(View v) {

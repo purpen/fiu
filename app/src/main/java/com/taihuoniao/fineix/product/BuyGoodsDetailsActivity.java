@@ -292,12 +292,10 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         productsTitle = (TextView) popup_view.findViewById(R.id.dialog_cart_producttitle);
         priceTv = (TextView) popup_view.findViewById(R.id.dialog_cart_price);
         quantity = (TextView) popup_view.findViewById(R.id.dialog_cart_skusnumber);
-//        Button toBuyBtn = (Button) popup_view.findViewById(R.id.dialog_cart_buybtn);
         scrollLinear = (LinearLayout) popup_view.findViewById(R.id.dialog_cart_scrolllinear);
         TextView reduceTv = (TextView) popup_view.findViewById(R.id.dialog_cart_reduce);
         numberTv = (TextView) popup_view.findViewById(R.id.dialog_cart_number);
         TextView addTv = (TextView) popup_view.findViewById(R.id.dialog_cart_add);
-//        Button toCartBtn = (Button) popup_view.findViewById(R.id.dialog_cart_tocartbtn);
         Button confirmBtn = (Button) popup_view.findViewById(R.id.dialog_confirm_btn);
         popupWindow = new PopupWindow(popup_view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
@@ -306,7 +304,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         reduceTv.setOnClickListener(this);
         addTv.setOnClickListener(this);
         confirmBtn.setOnClickListener(this);
-
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -316,15 +313,12 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 getWindow().setAttributes(params);
             }
         });
-        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this,
-                R.color.white));
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.white));
         popupWindow.setTouchInterceptor(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
             }
         });
     }

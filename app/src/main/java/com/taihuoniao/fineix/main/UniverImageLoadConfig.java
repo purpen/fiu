@@ -17,15 +17,11 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
  * Created by zsx on 2015/6/30.
  */
 public class UniverImageLoadConfig {
-    private static final long discCacheLimitTime = 3600 * 24 * 30L;//sd缓存的时间限制
 
     public static void initUniverImageLoder(Context context, int default_2) {
         if (ImageLoader.getInstance().isInited()) {
             return;
         }
-//        File cacheDir = new File(FileUtil.URL_DATA_CACHE, Environment.getExternalStorageDirectory().getAbsolutePath() + "/qingniwan/ImageCache");
-      /*  File cacheDir = StorageUtils.getOwnCacheDirectory(
-                InviteApplication.getAppInstance()(), "UniversalImageLoader/Cache");*/
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)// 设置下载的图片是否缓存在SD卡中

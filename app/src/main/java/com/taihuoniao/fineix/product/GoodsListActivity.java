@@ -36,18 +36,19 @@ import okhttp3.Call;
  * Created by taihuoniao on 2016/5/3.
  */
 public class GoodsListActivity extends BaseActivity implements View.OnClickListener {
-    //上个界面传递过来的产品分类id和name
-    private String id;
-    private String name;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
+
     public WaittingDialog dialog;
     private List<SearchFragment> fragmentList;
     private List<String> titleList;
+    private Call cartHandler;
+    private String id; //上个界面传递过来的产品分类id和name
+    private String name;
 
     @Override
     protected void getIntentData() {
@@ -79,16 +80,11 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void requestNet() {
-//        if (!dialog.isShowing()) {
-//            dialog.show();
-//        }
-
         fragmentList.add(GoodListFragment.newInstance(id, null));
         titleList.add("");
         tabLayout.setVisibility(View.GONE);
         SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
         viewPager.setAdapter(searchViewPagerAdapter);
-//        categoryList();
     }
 
     @Override
@@ -110,8 +106,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         super.onResume();
             cartNumber();
     }
-
-    private Call cartHandler;
 
     //获取购物车数量
     public void cartNumber() {

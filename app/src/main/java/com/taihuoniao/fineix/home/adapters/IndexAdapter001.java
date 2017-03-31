@@ -58,7 +58,6 @@ public class IndexAdapter001 extends RecyclerView.Adapter<IndexAdapter001.VH> {
             holder.textViewTitle.setText(rowsEntity.title);
             holder.textViewDescription.setText(rowsEntity.sub_title);
         }
-
     }
 
     @Override

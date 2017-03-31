@@ -81,26 +81,17 @@ public class MainApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());
         MobclickAgent.setDebugMode(false);
         instance = this;
-
-        //初始化universal_image_load
-//        initImageLoader();
         UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_load);
         FileCameraUtil.init();
         JsonUtil.init();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
-//        try {
-//            LeakCanary.install(this);
-//        } catch (Exception e) {
-//        }
         initPush();
     }
-
 
     public int getScreenHeight() {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());
         }
-//        Log.e("<<<", "屏幕高度=" + this.displayMetrics.heightPixels);
         return this.displayMetrics.heightPixels;
     }
 
@@ -108,7 +99,6 @@ public class MainApplication extends Application {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());
         }
-//        Log.e("<<<", "屏幕宽度=" + this.displayMetrics.widthPixels);
         return this.displayMetrics.widthPixels;
     }
 
@@ -116,7 +106,6 @@ public class MainApplication extends Application {
         this.displayMetrics = DisplayMetrics;
     }
 
-    //获取应用的data/data/....File目录
     public String getFilesDirPath() {
         return getFilesDir().getAbsolutePath();
     }
@@ -127,8 +116,7 @@ public class MainApplication extends Application {
     }
 
     public boolean isSD() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment
-                .getExternalStorageState())) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment .getExternalStorageState())) {
             File file = getExternalCacheDir();
             if (file != null && file.canWrite()) {
                 return true;
@@ -149,7 +137,6 @@ public class MainApplication extends Application {
         }
         return getCacheDir();
     }
-
 
     public static boolean isloginValid(String json, Class clazz) {
         if (TextUtils.isEmpty(json)) return false;
@@ -225,7 +212,6 @@ public class MainApplication extends Application {
                 String target_id = msg.extra.get(DataConstants.TARGET_ID);
                 PushUtils.switchActivity(type, target_id, MainApplication.this);
             }
-//            Toast.makeText(context, "自定义行为=" + msg.custom + ",自定义参数=" + msg.extra.toString(), Toast.LENGTH_LONG).show();
         }
     };
 
