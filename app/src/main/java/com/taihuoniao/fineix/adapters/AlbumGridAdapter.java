@@ -8,11 +8,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -22,21 +22,10 @@ import java.util.List;
 public class AlbumGridAdapter extends BaseAdapter {
     private Context context;
     private List<PhotoItem> photoList;
-//    private DisplayImageOptions options;
-//    private BitmapUtils bitmapUtils;
 
     public AlbumGridAdapter(Context context, List<PhotoItem> photoList) {
         this.context = context;
         this.photoList = photoList;
-//        bitmapUtils = new BitmapUtils(context);
-//        options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_background_750_1334)
-//                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-//                .showImageOnFail(R.mipmap.default_background_750_1334)
-//                .cacheOnDisk(true)
-//                .cacheInMemory(true)
-//                .considerExifParams(true)
-//                .build();
     }
 
     @Override
@@ -75,10 +64,9 @@ public class AlbumGridAdapter extends BaseAdapter {
         } else {
             hold.tv.setBackgroundResource(R.color.nothing);
         }
-        if (hold.img.getTag() == null || !hold.img.getTag().equals(photoList.get(position).getImageUri())) {
-            ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
-//            GlideUtils.displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
-            hold.img.setTag(photoList.get(position).getImageUri());
+        if (hold.img.getTag(R.id.glide_image_tag) == null || !hold.img.getTag(R.id.glide_image_tag).equals(photoList.get(position).getImageUri())) {
+            GlideUtils.displayImage(photoList.get(position).getImageUri(), hold.img);
+            hold.img.setTag(R.id.glide_image_tag, photoList.get(position).getImageUri());
         }
         return convertView;
     }

@@ -16,22 +16,10 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
     protected final String TAG = getClass().getSimpleName();
     protected List<T> list;
     protected Activity activity;
-    protected DisplayImageOptions options;
 
     public CommonBaseAdapter(List<T> list, Activity activity) {
         this.list = list;
         this.activity = activity;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .delayBeforeLoading(0)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
     }
 
     @Override

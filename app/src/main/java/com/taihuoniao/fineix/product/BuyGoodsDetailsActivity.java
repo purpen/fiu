@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -422,7 +421,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     }
                     //初始化popwindow数据
                     priceTv.setText("¥ " + buyGoodDetailsBean.getSale_price());
-                    ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getCover_url(), productsImg);
+                    GlideUtils.displayImage(buyGoodDetailsBean.getCover_url(), productsImg);
                     productsTitle.setText(buyGoodDetailsBean.getTitle());
                     maxNumber = buyGoodDetailsBean.getInventory();
                     quantity.setText(maxNumber + "");

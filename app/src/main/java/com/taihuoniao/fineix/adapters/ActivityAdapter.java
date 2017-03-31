@@ -41,7 +41,6 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
         GlideUtils.displayImage(item.cover_url, holder.imageView);
         if (TextUtils.equals("2", item.evt)) {
             holder.ivFinish.setVisibility(View.VISIBLE);

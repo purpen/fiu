@@ -651,8 +651,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-//            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
-//            Glide.with(holder.headImg.getContext()).load(commentList.get(position).getUser_avatar_url()).into(holder.headImg);
             GlideUtils.displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
             SpannableStringBuilder spannableString = new SpannableStringBuilder(commentList.get(position).getUser_nickname() + ": " + commentList.get(position).getContent());
             ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(parent.getResources().getColor(R.color.black));

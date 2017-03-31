@@ -94,11 +94,6 @@ public class SystemSettingsActivity extends BaseActivity {
         item_share.setTVStyle(0, "分享给好友", R.color.color_333);
         itemCheckUpdate.setTVStyle(0, "检查更新", R.color.color_333);
         setCacheSize();
-//        LogUtil.e("getCacheDir",getCacheDir().getAbsolutePath());
-//        LogUtil.e("getCacheDirLen",getCacheDir().length()+"");
-//        LogUtil.e("getExternalCacheDir",getExternalCacheDir().getAbsolutePath());
-//        LogUtil.e("getExternalCacheDirLen",getExternalCacheDir().length()+"");
-//        LogUtil.e("ImageLoaderCache",ImageLoader.getInstance().getDiskCache().getDirectory().getAbsolutePath());
         WindowUtils.chenjin(this);
         mPushAgent = PushAgent.getInstance(this);
     }

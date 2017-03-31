@@ -79,12 +79,10 @@ public class ProductListGridAdapter extends BaseAdapter {
         }
 
         if (list.size() != 0) {
-//            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.productImg);
             GlideUtils.displayImage(list.get(position).getCover_url(), holder.productImg);
             holder.name.setText(list.get(position).getTitle());
             holder.price.setText("¥" + list.get(position).getSale_price());
         } else if (searchList.size() != 0) {
-//            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.productImg);
             GlideUtils.displayImage(searchList.get(position).getCover_url(), holder.productImg);
             holder.name.setText(searchList.get(position).getTitle());
             holder.price.setText("¥" + searchList.get(position).getSale_price());

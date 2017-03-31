@@ -10,8 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -27,6 +25,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BannerActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -40,7 +39,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     private final String TAG = getClass().getSimpleName();
     private Activity activity;
     private List<T> list;
-    protected DisplayImageOptions options;
     private int size;
     private boolean isInfiniteLoop;
     private String code;
@@ -55,15 +53,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         this.list = list;
         this.size = (list == null ? 0 : list.size());
         isInfiniteLoop = false;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
         if (activity instanceof UserGuideActivity) {
             dialog = new WaittingDialog(activity);
         }
@@ -95,26 +84,25 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             holder = new ViewHolder();
             view = holder.imageView = new ImageView(activity);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            view.setTag(holder);
+            view.setTag(R.id.glide_image_tag, holder);
         } else {
-            holder = (ViewHolder) view.getTag();
+            holder = (ViewHolder) view.getTag(R.id.glide_image_tag);
         }
         final T content = list.get(getPosition(position));
 
         if (content instanceof BannerBean.RowsBean) {
-            ImageLoader.getInstance().displayImage(((BannerBean.RowsBean) content).cover_url, holder.imageView, options);
+            GlideUtils.displayImage(((BannerBean.RowsBean) content).cover_url, holder.imageView);
         }
 
         if (content instanceof Integer) {
             holder.imageView.setImageResource((Integer) content);
-//            ImageLoader.getInstance().displayImage("drawable://"+(Integer) content,holder.imageView,options);
         }
 
         if (content instanceof String) {
             if (TextUtils.isEmpty((String) content)) {
                 ToastUtils.showError("图片链接为空");
             } else {
-                ImageLoader.getInstance().displayImage((String) content, holder.imageView, options);
+                GlideUtils.displayImage((String) content, holder.imageView);
             }
         }
 

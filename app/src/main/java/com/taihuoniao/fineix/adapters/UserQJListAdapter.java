@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
@@ -25,10 +24,8 @@ import butterknife.ButterKnife;
  * created at 2016/5/16 15:44
  */
 public class UserQJListAdapter extends CommonBaseAdapter<QingJingListBean.QingJingItem>{
-    private ImageLoader imageLoader;
     public UserQJListAdapter(List<QingJingListBean.QingJingItem> list, Activity activity){
         super(list,activity);
-        this.imageLoader= ImageLoader.getInstance();
     }
 
     @Override
@@ -61,8 +58,7 @@ public class UserQJListAdapter extends CommonBaseAdapter<QingJingListBean.QingJi
             holder.tv_title_right.setText(right_qj.getTitle());
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
-
-        imageLoader.displayImage(left_qj.getCover_url(),holder.iv_cover_left,options);
+        GlideUtils.displayImage(left_qj.getCover_url(),holder.iv_cover_left);
         holder.tv_title_left.setText(left_qj.getTitle());
         holder.tv_desc_left.setText(left_qj.getAddress());
         holder.rl_left.setOnClickListener(new View.OnClickListener() {

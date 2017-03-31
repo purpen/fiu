@@ -19,7 +19,6 @@
  import android.widget.TextView;
 
  import com.google.gson.reflect.TypeToken;
- import com.nostra13.universalimageloader.core.ImageLoader;
  import com.taihuoniao.fineix.R;
  import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
  import com.taihuoniao.fineix.adapters.ParticipateQJListAdapter;
@@ -35,6 +34,7 @@
  import com.taihuoniao.fineix.network.DataConstants;
  import com.taihuoniao.fineix.network.URL;
  import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+ import com.taihuoniao.fineix.utils.GlideUtils;
  import com.taihuoniao.fineix.utils.JsonUtil;
  import com.taihuoniao.fineix.utils.LogUtil;
  import com.taihuoniao.fineix.utils.ToastUtils;
@@ -276,7 +276,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void refreshUI() {
         if (detailData == null) return;
-        ImageLoader.getInstance().displayImage(detailData.banner_url, imageView);
+        GlideUtils.displayImage(detailData.banner_url, imageView);
         tvDesc.setText(detailData.short_title);
         if (detailData.evt == 2) {
             rlRule.setVisibility(View.VISIBLE);

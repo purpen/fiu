@@ -38,7 +38,6 @@ public class FocusInterestAdapter extends CommonBaseAdapter<User> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(item.medium_avatar_url, holder.riv);
         GlideUtils.displayImage(item.medium_avatar_url, holder.riv);
         if (item.identify.is_expert == 1) {
             holder.v.setVisibility(View.VISIBLE);

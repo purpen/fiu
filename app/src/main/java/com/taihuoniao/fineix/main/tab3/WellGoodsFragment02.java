@@ -47,7 +47,7 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
     private List<SceneListBean2.RowsEntity> sceneList;
     private IndexQJListAdapter indexQJListAdapter;
 
-    private int currentPage;
+    private int currentPage = 1;
 
     @Override
     protected void requestNet() {
@@ -98,7 +98,7 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
      * 相关情境
      */
     private void requestData002(){
-        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(1 + "", 10 + "", null, null, 1 + "", null, null, null);
+        HashMap<String, String> re = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 10 + "", null, null, 1 + "", null, null, null);
         re.put("is_product", "1");
         HttpRequest.post(re, URL.SCENE_LIST, new GlobalDataCallBack(){
             @Override
@@ -130,10 +130,6 @@ public class WellGoodsFragment02 extends BaseFragment implements PullToRefreshBa
                 }
             }, 200);
         }
-    }
-
-    public View getHeaderView() {
-        return null;
     }
 
     @Override

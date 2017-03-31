@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -10,6 +11,11 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.animation.ViewAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -24,6 +30,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -55,7 +62,6 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
     private TextView tuijianTv;
     private TextView pingbiTv;
 
-
     public QJPictureActivity() {
         super(R.layout.activity_qj_picture);
     }
@@ -85,27 +91,8 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
                 return true;
             }
         });
-        ImageLoader.getInstance().displayImage(imgStr, clipImg, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
 
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                bitmap = loadedImage;
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
+        loadBitmapFromUrl();
         initPopupWindow();
     }
 
@@ -250,27 +237,7 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
     //保存图片到本地
     private void savePicture() {
         if (bitmap == null) {
-            ImageLoader.getInstance().displayImage(imgStr, clipImg, new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    bitmap = loadedImage;
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
-                }
-            });
+            loadBitmapFromUrl();
             return;
         }
         new Thread() {
@@ -395,5 +362,15 @@ public class QJPictureActivity extends BaseActivity implements View.OnClickListe
             }
         });
         addNet(httpHandler);
+    }
+
+    private void loadBitmapFromUrl() {
+        GlideUtils.loadBitmap(imgStr, new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                bitmap = resource;
+                clipImg.setImageBitmap(bitmap);
+            }
+        });
     }
 }

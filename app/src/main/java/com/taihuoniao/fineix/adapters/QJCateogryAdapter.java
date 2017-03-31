@@ -86,8 +86,6 @@ public class QJCateogryAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.qjBackgroundImg);
-//        ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.qjHeadImg);
         GlideUtils.displayImageFadein(list.get(position).getCover_url(), holder.qjBackgroundImg);
         GlideUtils.displayImage(list.get(position).getUser_info().getAvatar_url(), holder.qjHeadImg);
         if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_love()) == 1) {

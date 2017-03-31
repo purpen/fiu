@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
@@ -27,12 +26,10 @@ import butterknife.ButterKnife;
  *         created at 2016/5/16 15:44
  */
 public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
-    private ImageLoader imageLoader;
     private int i = Util.getScreenWidth() - 3 * activity.getResources().getDimensionPixelSize(R.dimen.dp16);
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i / 2, 1);
     public UserQJListAdapter1(List<SceneListBean> list, Activity activity) {
         super(list, activity);
-        this.imageLoader = ImageLoader.getInstance();
     }
 
     @Override

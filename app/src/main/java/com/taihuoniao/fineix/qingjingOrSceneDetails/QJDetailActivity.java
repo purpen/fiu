@@ -30,7 +30,6 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -53,6 +52,7 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
@@ -336,7 +336,7 @@ public class QJDetailActivity extends BaseActivity {
         layoutParams2.width = MainApplication.getContext().getScreenWidth();
         layoutParams2.height = layoutParams2.width;
         container.setLayoutParams(layoutParams2);
-        ImageLoader.getInstance().displayImage(qjDetailBean.getUser_info().getAvatar_url(), headImg);
+        GlideUtils.displayImage(qjDetailBean.getUser_info().getAvatar_url(), headImg);
         if (qjDetailBean.getUser_info().getIs_expert() == 1) {
             vImg.setVisibility(View.VISIBLE);
         } else {
@@ -371,7 +371,7 @@ public class QJDetailActivity extends BaseActivity {
                 attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
-        ImageLoader.getInstance().displayImage(qjDetailBean.getCover_url(), qjImg);
+        GlideUtils.displayImage(qjDetailBean.getCover_url(), qjImg);
         qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -745,7 +745,7 @@ public class QJDetailActivity extends BaseActivity {
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        ImageLoader.getInstance().displayImage(qjDetailBean.getUser_info().getAvatar_url(), riv);
+        GlideUtils.displayImage(qjDetailBean.getUser_info().getAvatar_url(), riv);
         tv_take_photo.setText(String.format("取消关注" + " %s ?", qjDetailBean.getUser_info().getNickname()));
         tv_album.setText("取消关注");
         tv_album.setOnClickListener(new View.OnClickListener() {
@@ -861,7 +861,7 @@ public class QJDetailActivity extends BaseActivity {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
+            GlideUtils.displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
             SpannableStringBuilder spannableString = new SpannableStringBuilder(commentList.get(position).getUser_nickname() + ": " + commentList.get(position).getContent());
             ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(parent.getResources().getColor(R.color.black));
             spannableString.setSpan(backgroundColorSpan, 0, commentList.get(position).getUser_nickname().length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

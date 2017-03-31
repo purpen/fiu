@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.BuildConfig;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 
 import java.io.ByteArrayOutputStream;
@@ -39,6 +40,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 
 /**
  * Created by taihuoniao on 2016/3/15.
@@ -259,7 +261,17 @@ public class ImageUtils {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            return ImageLoader.getInstance().loadImageSync(url);
+            try {
+                InputStream inputStream = null;
+                if (params[0].startsWith("http")
+                        || params[0].startsWith("https")) {
+                    inputStream = new URL(params[0]).openStream();
+                }
+                return BitmapFactory.decodeStream(inputStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override

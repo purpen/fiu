@@ -138,12 +138,10 @@ public class FindQJAdapter extends BaseAdapter {
                     cha = subjectList.size();
                 }
                 final int qjPosition = 2 * (position - cha);
-//                ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getCover_url(), holder.qjBackgroundImg1);
                 GlideUtils.displayImageFadein(sceneList.get(qjPosition).getCover_url(), holder.qjBackgroundImg1);
 
                 //设置情景标题
                 SceneTitleSetUtils.setTitle(holder.qjTitle1Tv1,holder.qjTitle1Tv2,sceneList.get(qjPosition).getTitle());
-//                ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getUser_info().getAvatar_url(), holder.qjHeadImg1);
                 GlideUtils.displayImage(sceneList.get(qjPosition).getUser_info().getAvatar_url(), holder.qjHeadImg1);
 
                 holder.qjName1.setText(sceneList.get(qjPosition).getUser_info().getNickname());
@@ -211,14 +209,11 @@ public class FindQJAdapter extends BaseAdapter {
                     holder.qjItem2.setVisibility(View.GONE);
                 } else {
                     holder.qjItem2.setVisibility(View.VISIBLE);
-//                    ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getCover_url(), holder.qjBackgroundImg2);
                     GlideUtils.displayImageFadein(sceneList.get(qjPosition + 1).getCover_url(), holder.qjBackgroundImg2);
 
                     //设置情景标题
                     SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1,holder.qjTitle2Tv2,sceneList.get(qjPosition+1).getTitle());
-//                    ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getUser_info().getAvatar_url(), holder.qjHeadImg2);
                     GlideUtils.displayImage(sceneList.get(qjPosition + 1).getUser_info().getAvatar_url(), holder.qjHeadImg2);
-
                     holder.qjName2.setText(sceneList.get(qjPosition + 1).getUser_info().getNickname());
                     if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition + 1).getIs_love()) == 1) {
                         holder.qjLove2.setImageResource(R.mipmap.find_has_love);
@@ -290,7 +285,6 @@ public class FindQJAdapter extends BaseAdapter {
                 layoutParams.height = layoutParams.width * 422 / 750;
                 holder.subjectContainer.setLayoutParams(layoutParams);
                 final int subjectPosition = (position + 1) / 6 - 1;
-//                ImageLoader.getInstance().displayImage(subjectList.get(subjectPosition).getCover_url(), holder.subjectImg);
                 GlideUtils.displayImage(subjectList.get(subjectPosition).getCover_url(), holder.subjectImg);
 
                 holder.subjectName.setText(subjectList.get(subjectPosition).getTitle());

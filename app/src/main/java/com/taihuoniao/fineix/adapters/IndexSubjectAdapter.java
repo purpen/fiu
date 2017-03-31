@@ -43,7 +43,6 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
                 itemClick.click(holder.getAdapterPosition());
             }
         });
-//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         GlideUtils.displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         holder.title.setText(list.get(position).getTitle());
         switch (TypeConversionUtils.StringConvertInt(list.get(position).getType())) {

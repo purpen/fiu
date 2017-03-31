@@ -79,7 +79,6 @@ public class BrandProductAdapter extends BaseAdapter {
         }
         if (rightPosition < list.size()) {
             holder.rightContainer.setVisibility(View.VISIBLE);
-//            ImageLoader.getInstance().displayImage(list.get(rightPosition).getCover_url(), holder.productImgRight);
             GlideUtils.displayImage(list.get(rightPosition).getCover_url(), holder.productImgRight);
             holder.nameRight.setText(list.get(rightPosition).getTitle());
             holder.priceRight.setText("¥" + list.get(rightPosition).getSale_price());

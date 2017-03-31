@@ -86,7 +86,6 @@ public class AllFiuerAdapter extends BaseAdapter {
                 holder.rankTv.setText(position + 1 + "");
                 break;
         }
-//        ImageLoader.getInstance().displayImage(fiuUserListBean.getData().getRows().get(position).getAvatar_url(), holder.headImg);
         GlideUtils.displayImage(fiuUserListBean.getData().getRows().get(position).getAvatar_url(), holder.headImg);
         holder.nameTv.setText(fiuUserListBean.getData().getRows().get(position).getNickname());
         holder.rank.setText("LV" + fiuUserListBean.getData().getRows().get(position).getRank_id());

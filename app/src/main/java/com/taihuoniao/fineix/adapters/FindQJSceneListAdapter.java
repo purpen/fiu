@@ -245,8 +245,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-//        ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
         GlideUtils.displayImageFadein(sceneList.get(position).getCover_url(), holder.qjImg);
         GlideUtils.displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
         holder.labelContainer.setVisibility(View.VISIBLE);
@@ -560,7 +558,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-//        ImageLoader.getInstance().displayImage(item.getUser_info().getAvatar_url(), riv);
         GlideUtils.displayImage(item.getUser_info().getAvatar_url(), riv);
         tv_take_photo.setText(String.format("取消关注" + " %s ?", item.getUser_info().getNickname()));
         tv_album.setText("取消关注");
@@ -890,8 +887,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-//            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
-//            Glide.with(holder.headImg.getContext()).load(commentList.get(position).getUser_avatar_url()).into(holder.headImg);
             GlideUtils.displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
             SpannableStringBuilder spannableString = new SpannableStringBuilder(commentList.get(position).getUser_nickname() + ": " + commentList.get(position).getContent());
             ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(parent.getResources().getColor(R.color.black));

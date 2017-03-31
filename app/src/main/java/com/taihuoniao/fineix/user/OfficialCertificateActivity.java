@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.beans.AuthData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -109,8 +109,8 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             et_contacts.setText(authData.contact);
             iv_id.setVisibility(View.VISIBLE);
             iv_card.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(authData.id_card_cover_url,iv_id,options);
-            ImageLoader.getInstance().displayImage(authData.business_card_cover_url,iv_card,options);
+            GlideUtils.displayImage(authData.id_card_cover_url,iv_id);
+            GlideUtils.displayImage(authData.business_card_cover_url,iv_card);
         }
         WindowUtils.chenjin(this);
     }

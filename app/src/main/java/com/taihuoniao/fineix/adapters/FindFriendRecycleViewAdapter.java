@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -39,22 +37,10 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
 
     private Activity activity;
     private ArrayList<FindFriendData.CJItem> list;
-    private DisplayImageOptions options;
-    private ImageLoader imageLoader;
 
     public FindFriendRecycleViewAdapter(Activity activity, ArrayList<FindFriendData.CJItem> list) {
         this.activity = activity;
         this.list = list;
-        imageLoader = ImageLoader.getInstance();
-//        options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_background_750_1334)
-//                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-//                .showImageOnFail(R.mipmap.default_background_750_1334)
-//                .cacheInMemory(true)
-//                .cacheOnDisk(true)
-//                .considerExifParams(true)
-//                .bitmapConfig(Bitmap.Config.RGB_565)
-//                .build();
     }
 
     @Override
@@ -84,7 +70,6 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         }
         RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(Util.getScreenWidth() / 3, ViewGroup.LayoutParams.MATCH_PARENT);
         holder.rl_box.setLayoutParams(params);
-//        imageLoader.displayImage(item.cover_url, holder.iv_cover);
         GlideUtils.displayImage(item.cover_url, holder.iv_cover);
 //        if (!TextUtils.isEmpty(item.title)) {
 //            holder.tv_title.setText(item.title);

@@ -14,11 +14,11 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.zxing.WriterException;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.utils.FileUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.QrCodeUtils;
@@ -96,7 +96,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         custom_head.setHeadCenterTxtShow(true, "二维码");
         custom_head.setRightImgBtnShow(true);
         if (!TextUtils.isEmpty(url)) {
-            ImageLoader.getInstance().displayImage(url, riv);
+            GlideUtils.displayImage(url, riv);
         }
 
         if (!TextUtils.isEmpty(nickName)) {

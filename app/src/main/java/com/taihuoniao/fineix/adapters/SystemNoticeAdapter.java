@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -23,10 +22,8 @@ import butterknife.ButterKnife;
  * created at 2016/5/4 19:24
  */
 public class SystemNoticeAdapter extends CommonBaseAdapter<SystemNoticeData.SystemNoticeItem>{
-    private ImageLoader imageLoader;
     public SystemNoticeAdapter(List list, Activity activity){
         super(list,activity);
-        this.imageLoader=ImageLoader.getInstance();
     }
 
     @Override

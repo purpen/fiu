@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodDetailsSceneListAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
@@ -29,6 +28,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
@@ -161,7 +161,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         }
         try {
             holder.brandName.setText(dataBean.getBrand().getTitle());
-            ImageLoader.getInstance().displayImage(dataBean.getBrand().getCover_url(), holder.brandImg);
+            GlideUtils.displayImage(dataBean.getBrand().getCover_url(), holder.brandImg);
             holder.brandContainer.setOnClickListener(this);
         } catch (Exception e) {
             holder.brandContainer.setVisibility(View.GONE);

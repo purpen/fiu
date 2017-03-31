@@ -18,7 +18,6 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -28,6 +27,7 @@ import com.taihuoniao.fineix.beans.QingJingData;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -216,14 +216,6 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
                     return true;
                 }
                 showInfoWindow(marker.getPosition(),item);
-//                LatLng ll = marker.getPosition();
-//                View view = Util.inflateView(activity, R.layout.info_window_layout, null);
-//                LogUtil.e("huge", item.cover_url);
-//                ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)),options);
-//                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
-//                ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
-//                InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50,infoWindowClickListener);
-//                mBDMap.showInfoWindow(mInfoWindow);
                 return true;
             }
         });
@@ -238,7 +230,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     private void showInfoWindow(LatLng ll,QingJingItem item){
         View view = Util.inflateView(R.layout.info_window_layout, null);
         LogUtil.e(TAG, item.cover_url);
-        ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)),options);
+        GlideUtils.displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)));
         ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
         ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
         InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50,infoWindowClickListener);

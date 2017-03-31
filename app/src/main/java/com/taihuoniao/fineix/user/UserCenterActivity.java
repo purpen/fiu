@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -22,9 +21,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.BuildConfig;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FansAdapter;
@@ -49,6 +45,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.FileCameraUtil;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -163,16 +160,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.user_center_bg)
-                .showImageForEmptyUri(R.mipmap.user_center_bg)
-                .showImageOnFail(R.mipmap.user_center_bg)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
         WindowUtils.showStatusBar(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             rl_head.setPadding(0, App.getStatusBarHeight(), 0, 0);
@@ -346,9 +333,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             tv_title.setText(user.nickname);
         }
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
-            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
+            GlideUtils.displayImage(user.medium_avatar_url, riv);
         }
-        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg, options);
+        GlideUtils.displayImage(user.head_pic_url, iv_bg);
         if (user.identify.is_expert == 1) {
             riv_auth.setVisibility(View.VISIBLE);
         } else {

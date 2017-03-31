@@ -57,7 +57,6 @@ public class FindQJCategoryAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_url(), holder.roundImg);
         GlideUtils.displayImage(list.get(position).getApp_cover_url(), holder.roundImg);
         holder.name.setText(list.get(position).getTitle());
         return convertView;

@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SalePromotionDetailAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -24,6 +23,7 @@ import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -235,7 +235,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
         } else {
             tv_during.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
         }
-        ImageLoader.getInstance().displayImage(data.banner_url, iv_banner);
+        GlideUtils.displayImage(data.banner_url, iv_banner);
         if (data.products == null) return;
         SalePromotionDetailAdapter adapter = new SalePromotionDetailAdapter(data.products, activity);
         lv.setAdapter(adapter);

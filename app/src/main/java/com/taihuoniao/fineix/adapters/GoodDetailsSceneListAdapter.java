@@ -93,11 +93,9 @@ public class GoodDetailsSceneListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final int qjPosition = 2 * position;
-//        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getCover_url(), holder.qjBackgroundImg1);
         GlideUtils.displayImage(sceneList.get(qjPosition).getSight().getCover_url(), holder.qjBackgroundImg1);
         //设置情景标题
         SceneTitleSetUtils.setTitle(holder.qjTitle1Tv1,holder.qjTitle1Tv2,sceneList.get(qjPosition).getSight().getTitle());
-//        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg1);
         GlideUtils.displayImage(sceneList.get(qjPosition).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg1);
         holder.qjName1.setText(sceneList.get(qjPosition).getSight().getUser_info().getNickname());
         if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition).getSight().getIs_love()) == 1) {
@@ -159,11 +157,9 @@ public class GoodDetailsSceneListAdapter extends BaseAdapter {
             holder.qjItem2.setVisibility(View.GONE);
         } else {
             holder.qjItem2.setVisibility(View.VISIBLE);
-//            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
             GlideUtils.displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
             //设置情景标题
             SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1,holder.qjTitle2Tv2,sceneList.get(qjPosition+1).getSight().getTitle());
-//            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
             GlideUtils.displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
             holder.qjName2.setText(sceneList.get(qjPosition + 1).getSight().getUser_info().getNickname());
             if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition + 1).getSight().getIs_love()) == 1) {

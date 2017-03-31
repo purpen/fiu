@@ -7,8 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CartOrderContentItem;
 import com.taihuoniao.fineix.beans.NowBuyBean;
@@ -23,22 +21,11 @@ public class ConfirmOrderProductsAdapter extends BaseAdapter {
     private List<NowBuyBean.OrderInfoBean.DictBean.ItemsBean> list;
     private Context context;
     private List<CartOrderContentItem> cartList;
-    //图片加载
-    private ImageLoader imageLoader;
-    private DisplayImageOptions options;
 
     public ConfirmOrderProductsAdapter(List<NowBuyBean.OrderInfoBean.DictBean.ItemsBean> list, Context context, List<CartOrderContentItem> cartList) {
         this.list = list;
         this.context = context;
         this.cartList = cartList;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .cacheInMemory(true)
-                .cacheOnDisk(true).considerExifParams(true)
-               .build();
-        imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -72,7 +59,6 @@ public class ConfirmOrderProductsAdapter extends BaseAdapter {
             hold = (ViewHolder) convertView.getTag();
         }
         if (list != null) {
-//            imageLoader.displayImage(list.get(position).getCover(), hold.img, options);
             GlideUtils.displayImage(list.get(position).getCover(), hold.img);
             hold.titleTv.setText(list.get(position).getTitle());
             if (list.get(position).getType().equals("1")) {
@@ -83,7 +69,7 @@ public class ConfirmOrderProductsAdapter extends BaseAdapter {
             hold.skuNumberTv.setText(list.get(position).getQuantity());
             hold.totalPriceTv.setText("¥ " + list.get(position).getSubtotal());
         } else if (cartList != null) {
-            imageLoader.displayImage(cartList.get(position).getCover(), hold.img, options);
+            GlideUtils.displayImage(cartList.get(position).getCover(), hold.img);
             hold.titleTv.setText(cartList.get(position).getTitle());
             if (cartList.get(position).getType().equals("1")) {
                 hold.skuNameTv.setText("默认");

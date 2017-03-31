@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -38,20 +37,10 @@ public class SalePromotionRecycleViewAdapter extends RecyclerView.Adapter<SalePr
 
     private Activity activity;
     private ArrayList<DataChooseSubject.ItemChoosenSubject.ProductBean> list;
-    private DisplayImageOptions options;
 
     public SalePromotionRecycleViewAdapter(Activity activity, ArrayList<DataChooseSubject.ItemChoosenSubject.ProductBean> list) {
         this.activity = activity;
         this.list = list;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
     }
 
     @Override
@@ -79,7 +68,6 @@ public class SalePromotionRecycleViewAdapter extends RecyclerView.Adapter<SalePr
                 }
             });
         }
-//        ImageLoader.getInstance().displayImage(item.banner_url, holder.imageView, options);
         GlideUtils.displayImage(item.banner_url, holder.imageView);
         holder.tvName.setText(item.title);
         holder.tvPrice.setText("￥" + item.sale_price);

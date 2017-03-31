@@ -58,9 +58,6 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(item.user.avatar_url, holder.headImg, options);
-//        ImageLoader.getInstance().displayImage(item.cover_url, holder.qjImg, options);
-
         GlideUtils.displayImage(item.user.avatar_url, holder.headImg);
         GlideUtils.displayImageFadein(item.cover_url, holder.qjImg);
         holder.publishTime.setText(item.created_at);

@@ -54,16 +54,6 @@ public class ImageCropActivity extends BaseActivity {
 
     public ImageCropActivity() {
         super(R.layout.activity_image_crop);
-//        options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_load)
-//                .showImageForEmptyUri(R.mipmap.default_load)
-//                .showImageOnFail(R.mipmap.default_load)
-//                .imageScaleType(ImageScaleType.EXACTLY)
-//                .cacheInMemory(false)
-//                .cacheOnDisk(false)
-//                .considerExifParams(true)
-//                .bitmapConfig(Bitmap.Config.RGB_565)
-//                .build();
     }
 
     public static void setOnClipCompleteListener(OnClipCompleteListener listener) {
@@ -87,8 +77,6 @@ public class ImageCropActivity extends BaseActivity {
     protected void initView() {
         if (uri == null) return;
         dialog = new WaittingDialog(this);
-//        String path = FileUtils.getRealFilePath(getApplicationContext(), uri);
-//        ImageLoader.getInstance().displayImage("file:///"+path,csiv,options);
         GlideUtils.displayImage(uri, csiv);
     }
 

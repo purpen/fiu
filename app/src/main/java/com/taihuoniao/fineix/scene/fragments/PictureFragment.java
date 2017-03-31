@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -33,6 +35,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.scene.PictureEditActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ImageCrop.ClipImageLayout;
@@ -278,28 +281,12 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
             photoItem = (PhotoItem) albumGridAdapter.getItem(position);
             Uri uri = photoItem.getImageUri().startsWith("file:") ? Uri.parse(photoItem
                     .getImageUri()) : Uri.parse("file://" + photoItem.getImageUri());
-            ImageLoader.getInstance().loadImage(uri.toString(), new ImageLoadingListener() {
+            GlideUtils.loadBitmap(uri.toString(), new SimpleTarget<Bitmap>() {
                 @Override
-                public void onLoadingStarted(String imageUri, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    clipImg.setImage(loadedImage);
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    clipImg.setImage(resource);
                 }
             });
-//            ImageLoader.getInstance().displayImage(uri.toString(), photoImg, options500_500);
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {

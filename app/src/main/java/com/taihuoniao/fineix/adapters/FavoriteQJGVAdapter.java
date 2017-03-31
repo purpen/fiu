@@ -50,10 +50,8 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(item.sight.cover_url, holder.imageView, options);
         GlideUtils.displayImage(item.sight.cover_url, holder.imageView);
         if (item.sight.user_info != null) {
-//            ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
             GlideUtils.displayImage(item.sight.user_info.avatar_url, holder.riv);
             holder.tvName.setText(item.sight.user_info.nickname);
         }

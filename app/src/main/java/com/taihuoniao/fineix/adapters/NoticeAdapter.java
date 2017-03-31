@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.NoticeBean;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -28,11 +27,9 @@ import butterknife.ButterKnife;
  *         created at 2016/5/4 19:24
  */
 public class NoticeAdapter extends CommonBaseAdapter<NoticeBean.RowsBean> {
-    private ImageLoader imageLoader;
 
     public NoticeAdapter(List list, Activity activity) {
         super(list, activity);
-        this.imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -64,9 +61,9 @@ public class NoticeAdapter extends CommonBaseAdapter<NoticeBean.RowsBean> {
         holder.tv_time.setText(item.getCreated_at());
         holder.iv.setVisibility(View.VISIBLE);
         if (item.getComment_target_obj() != null) {
-            imageLoader.displayImage(item.getComment_target_obj().getCover_url(), holder.iv);
+            GlideUtils.displayImage(item.getComment_target_obj().getCover_url(), holder.iv);
         } else {
-            imageLoader.displayImage(item.getTarget_obj().getCover_url(), holder.iv, options);
+            GlideUtils.displayImage(item.getTarget_obj().getCover_url(), holder.iv);
         }
         holder.riv.setOnClickListener(new View.OnClickListener() {
             @Override

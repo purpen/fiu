@@ -42,7 +42,6 @@ public class WellGoodsRecyclerAdapter extends RecyclerView.Adapter<WellGoodsRecy
                 itemClick.click(holder.getAdapterPosition());
             }
         });
-//        ImageLoader.getInstance().displayImage(list.get(position).getBack_url(), holder.roundImg);
         GlideUtils.displayImage(list.get(position).getBack_url(), holder.roundImg);
 
         holder.name.setText(list.get(position).getTitle());

@@ -266,8 +266,6 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-//        ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
         GlideUtils.displayImageFadein(sceneList.get(position).getCover_url(), holder.qjImg);
         GlideUtils.displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
         holder.labelContainer.setVisibility(View.VISIBLE);
@@ -705,11 +703,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-//        ImageLoader.getInstance().displayImage(item.getUser_info().getAvatar_url(), riv);
-//        Glide.with(activity).load(item.getUser_info().getAvatar_url()).into(riv);
-
         GlideUtils.displayImage(item.getUser_info().getAvatar_url(), riv);
-
         tv_take_photo.setText(String.format(tips + " %s ?", item.getUser_info().getNickname()));
         tv_album.setText(tips);
         tv_album.setOnClickListener(new View.OnClickListener() {
@@ -945,9 +939,6 @@ public class IndexQJListAdapter extends BaseAdapter {
 
         @Override
         public void onBindViewHolder(final VH holder, int position) {
-//            ImageLoader.getInstance().displayImage(userList.get(position).getMedium_avatar_url(), holder.headImg);
-//            Glide.with(activity).load(userList.get(position).getMedium_avatar_url()).into(holder.headImg);
-
             GlideUtils.displayImage(userList.get(position).medium_avatar_url, holder.headImg);
             holder.name.setText(userList.get(position).nickname);
             if (userList.get(position).identify.is_expert == 1) {
@@ -1060,8 +1051,6 @@ public class IndexQJListAdapter extends BaseAdapter {
             TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
             TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
             TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-//            ImageLoader.getInstance().displayImage(item.getMedium_avatar_url(), riv);
-//            Glide.with(activity).load(item.getMedium_avatar_url()).into(riv);
             GlideUtils.displayImage(item.medium_avatar_url, riv);
 
             tv_take_photo.setText(String.format("取消关注" + " %s ?", item.nickname));
@@ -1232,8 +1221,6 @@ public class IndexQJListAdapter extends BaseAdapter {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-//            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
-//            Glide.with(holder.headImg.getContext()).load(commentList.get(position).getUser_avatar_url()).into(holder.headImg);
             GlideUtils.displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
             SpannableStringBuilder spannableString = new SpannableStringBuilder(commentList.get(position).getUser_nickname() + ": " + commentList.get(position).getContent());
             ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(parent.getResources().getColor(R.color.black));

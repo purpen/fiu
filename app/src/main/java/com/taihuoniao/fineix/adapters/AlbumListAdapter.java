@@ -8,11 +8,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.AlbumBean;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -63,7 +62,7 @@ public class AlbumListAdapter extends BaseAdapter {
         }
         hold.name.setText(albumList.get(albumPaths.get(position)).getTitle());
         hold.number.setText(albumList.get(albumPaths.get(position)).getPhotos().size() + "");
-        ImageLoader.getInstance().displayImage("file://" + albumList.get(albumPaths.get(position)).getPhotos().get(0).getImageUri(), new ImageViewAware(hold.img));
+        GlideUtils.displayImage(albumList.get(albumPaths.get(position)).getPhotos().get(0).getImageUri(), hold.img);
         return convertView;
     }
 

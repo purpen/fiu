@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.MessageDetailData;
@@ -25,14 +24,12 @@ import butterknife.ButterKnife;
  * created at 2016/5/6 19:38
  */
 public class PrivateMessageItemAdapter extends CommonBaseAdapter<MessageDetailData.MessageItem>{
-    private ImageLoader imageLoader;
     private static final int MESSAGE_OTHERS=0;
     private static final int MESSAGE_ME=1;
     private User user;
     public PrivateMessageItemAdapter(List list, Activity activity,User user){
         super(list,activity);
         this.user=user;
-        this.imageLoader=ImageLoader.getInstance();
     }
 
     @Override

@@ -57,7 +57,6 @@ public class GoodListFragmentAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.productImg);
         GlideUtils.displayImage(list.get(position).getCover_url(), holder.productImg);
         holder.name.setText(list.get(position).getTitle());
         holder.price.setText("¥" + list.get(position).getSale_price());

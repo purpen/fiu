@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BrandProductAdapter;
 import com.taihuoniao.fineix.adapters.BrandQJAdapter;
@@ -31,6 +30,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -209,9 +209,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                 HttpResponse<BrandDetailBean> brandDetailBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<BrandDetailBean>>() {});
                 if (brandDetailBean.isSuccess()) {
                     titleName.setText(brandDetailBean.getData().getTitle());
-                    ImageLoader.getInstance().displayImage(brandDetailBean.getData().getCover_url(), holder.titleImg);
+                    GlideUtils.displayImage(brandDetailBean.getData().getCover_url(), holder.titleImg);
                     holder.des.setText(brandDetailBean.getData().getDes());
-                    ImageLoader.getInstance().displayImage(brandDetailBean.getData().getBanner_url(), holder.backgroundImg);
+                    GlideUtils.displayImage(brandDetailBean.getData().getBanner_url(), holder.backgroundImg);
                 } else {
                     ToastUtils.showError(brandDetailBean.getMessage());
                 }

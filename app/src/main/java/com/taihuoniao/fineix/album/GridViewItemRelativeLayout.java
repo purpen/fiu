@@ -105,18 +105,8 @@ public class GridViewItemRelativeLayout extends RelativeLayout {
     private void disPlay() {
         if (item.isCapture()) {
             mCollection.getEngine().displayCameraItem(imageView);
-//            ImageLoader.getInstance().displayImage("drawable://" +, imageView, optionsCameraImage);
         } else {
             mCollection.getEngine().displayImage(item.buildContentUri().toString(), imageView);
-//            if (AlbumHelper.getInstance(getContext()).getThumbnail().containsKey(item.getId())) {
-//                String thumbnailuri = AlbumHelper.getInstance(getContext()).getThumbnail().get(item.getId());
-//                File file = new File(thumbnailuri);
-//                thumbnailuri = file.exists() && file.isFile() ? "file://" + thumbnailuri : item.buildContentUri().toString();
-//                ImageLoader.getInstance().displayImage("file://" + thumbnailuri, imageView, optionsImage);
-//            } else {
-//                ImageLoader.getInstance().displayImage(item.buildContentUri().toString(), imageView, optionsImage);
-//            }
-//            ImageLoader.getInstance().displayImage(item.buildContentUri().toString(), imageView, optionsImage);
         }
     }
 }

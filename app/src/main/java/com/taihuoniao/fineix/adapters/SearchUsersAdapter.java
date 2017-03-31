@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
@@ -33,7 +32,6 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -174,7 +172,7 @@ public class SearchUsersAdapter extends BaseAdapter {
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        ImageLoader.getInstance().displayImage(item.getAvatar_url(), riv);
+        GlideUtils.displayImage(item.getAvatar_url(), riv);
         tv_take_photo.setText(String.format("取消关注" + " %s ?", item.getNickname()));
         tv_album.setText("取消关注");
         tv_album.setOnClickListener(new View.OnClickListener() {

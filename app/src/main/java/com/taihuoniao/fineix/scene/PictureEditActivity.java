@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
@@ -35,6 +36,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -53,6 +56,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
@@ -721,30 +725,30 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     addLabel(tag);
                     try {
                         String url = productListBean.getPng_asset().get(0).getUrl();
-                        ImageLoader.getInstance().loadImage(url, new ImageLoadingListener() {
+                        GlideUtils.loadBitmap(url, new SimpleTarget<Bitmap>() {
                             @Override
-                            public void onLoadingStarted(String imageUri, View view) {
+                            public void onLoadStarted(Drawable placeholder) {
                                 if (!dialog.isShowing()) {
                                     dialog.show();
                                 }
                             }
 
                             @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
                                 dialog.dismiss();
                                 ToastUtils.showError("图片加载失败");
                             }
 
                             @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            public void onLoadCleared(Drawable placeholder) {
                                 dialog.dismiss();
-                                EffectUtil.addStickerImage(imageViewTouch, PictureEditActivity.this, loadedImage);
+                                ToastUtils.showError("图片加载失败");
                             }
 
                             @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                                 dialog.dismiss();
-                                ToastUtils.showError("图片加载失败");
+                                EffectUtil.addStickerImage(imageViewTouch, PictureEditActivity.this, resource);
                             }
                         });
                     } catch (Exception e) {

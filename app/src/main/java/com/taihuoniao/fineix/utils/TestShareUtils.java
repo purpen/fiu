@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
@@ -34,7 +33,7 @@ public class TestShareUtils {
         selectStyle(position);
         View view = View.inflate(context, layout, null);
         final ViewHolder holder = new ViewHolder(view);
-        ImageLoader.getInstance().displayImage(sceneDetails.getCover_url(), holder.backgroundImg);
+        GlideUtils.displayImage(sceneDetails.getCover_url(), holder.backgroundImg);
         SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneDetails.getTitle());
         holder.userName.setText(sceneDetails.getUser_info().getNickname());
         CharSequence date = DateFormat.format("yyyy-MM-dd", sceneDetails.getCreated_on()* 1000L);

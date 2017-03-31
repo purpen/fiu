@@ -24,6 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.search.core.PoiInfo;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -49,6 +51,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.EffectUtil;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -217,28 +220,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             qjId = qjBean.get_id();
             titleLayout.setTitle(R.string.bianji_qingjing);
             titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.yellow_bd8913), this);
-            ImageLoader.getInstance().loadImage(qjBean.getCover_url(), new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String s, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String s, View view, FailReason failReason) {
-
-                }
-
-                @Override
-                public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                    MainApplication.editBitmap = bitmap;
-                    backgroundImg.setImageBitmap(bitmap);
-                }
-
-                @Override
-                public void onLoadingCancelled(String s, View view) {
-
-                }
-            });
+            loadBitmapFromUrl();
             //添加商品标签
             for (final SceneList.DataBean.RowsBean.ProductBean productBean : qjBean.getProduct()) {
                 final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -657,5 +639,15 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         overlayAlloc.copyTo(overlay);
         rs.destroy();
         return overlay;
+    }
+
+    private void loadBitmapFromUrl() {
+        GlideUtils.loadBitmap(qjBean.getCover_url(), new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                MainApplication.editBitmap = resource;
+                backgroundImg.setImageBitmap(MainApplication.editBitmap);
+            }
+        });
     }
 }

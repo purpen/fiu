@@ -36,7 +36,6 @@ public class NewProductAdapter extends CommonBaseAdapter<DataChooseSubject.ItemC
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
         GlideUtils.displayImage(item.cover_url, holder.imageView);
         holder.tvTitle.setText(item.title);
         holder.tvCount.setText(String.format("%s人浏览", item.view_count));

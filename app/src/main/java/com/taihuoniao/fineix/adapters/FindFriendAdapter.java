@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -41,10 +40,8 @@ import butterknife.ButterKnife;
  * created at 2016/5/8 17:45
  */
 public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
-    private ImageLoader imageLoader;
     public FindFriendAdapter(List list, Activity activity){
         super(list,activity);
-        this.imageLoader=ImageLoader.getInstance();
     }
 
     @Override
@@ -58,8 +55,6 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-
-//        imageLoader.displayImage(item.medium_avatar_url,holder.riv,options);
         GlideUtils.displayImage(item.medium_avatar_url,holder.riv);
         holder.tv_name.setText(item.nickname);
 

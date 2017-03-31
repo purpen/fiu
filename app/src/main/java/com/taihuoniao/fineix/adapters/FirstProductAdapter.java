@@ -45,8 +45,6 @@ public class FirstProductAdapter extends RecyclerView.Adapter<FirstProductAdapte
                 itemClick.click(holder.getAdapterPosition());
             }
         });
-//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
-//        ImageLoader.getInstance().displayImage(list.get(position).getBrand_cover_url(), holder.brandImg);
         GlideUtils.displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         GlideUtils.displayImage(list.get(position).getBrand_cover_url(), holder.brandImg);
 

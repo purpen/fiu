@@ -50,7 +50,6 @@ public class SearchBrandAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(brandList.get(position).getCover_url(),holder.brandImg);
         GlideUtils.displayImage(brandList.get(position).getCover_url(),holder.brandImg);
         holder.name.setText(brandList.get(position).getTitle());
         return convertView;

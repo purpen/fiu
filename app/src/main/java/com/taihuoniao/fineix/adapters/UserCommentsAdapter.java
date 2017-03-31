@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -25,10 +24,8 @@ import butterknife.ButterKnife;
  * created at 2016/5/4 19:24
  */
 public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentItem>{
-    private ImageLoader imageLoader;
     public UserCommentsAdapter(List list, Activity activity){
         super(list,activity);
-        this.imageLoader=ImageLoader.getInstance();
     }
 
     @Override
@@ -53,7 +50,7 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
         }else {
             holder.dot.setVisibility(View.GONE);
         }
-        imageLoader.displayImage(item.target_small_cover_url,holder.iv,options);
+        GlideUtils.displayImage(item.target_small_cover_url,holder.iv);
         holder.riv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

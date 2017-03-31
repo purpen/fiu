@@ -1,10 +1,16 @@
 package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
 
@@ -128,5 +134,9 @@ public class GlideUtils {
 
     public static <T> void displayImageNoFading(T T,ImageView imageView){
         Glide.with(getContext()).load(T).diskCacheStrategy(DiskCacheStrategy.SOURCE ).crossFade(0).placeholder(DEFAULT_IMAGEID).error(ERROR_IMAGEID).into(imageView);
+    }
+
+    public static <T> void loadBitmap(T T, SimpleTarget<Bitmap> simpleTarget) {
+        Glide.with(getContext()) .load(T).asBitmap() .dontAnimate() .into(simpleTarget);
     }
 }

@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
@@ -39,14 +38,12 @@ import butterknife.ButterKnife;
  */
 public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQJ.ItemParticipateQJ> {
     private static final String TYPE_QJ = "12";
-    private ImageLoader imageLoader;
     private int i = Util.getScreenWidth() - 3 * activity.getResources().getDimensionPixelSize(R.dimen.dp16);
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i / 2, 1);
     private LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(i / 2, activity.getResources().getDimensionPixelSize(R.dimen.dp32));
 
     public ParticipateQJListAdapter(List<DataParticipateQJ.ItemParticipateQJ> list, Activity activity) {
         super(list, activity);
-        this.imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -80,8 +77,6 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
             holder.rlRight.setLayoutParams(params);
             holder.rlRight.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
-//            imageLoader.displayImage(right_qj.cover_url, holder.ivCoverRight, options);
-//            imageLoader.displayImage(right_qj.user_info.avatar_url, holder.rivRight, options);
             GlideUtils.displayImageFadein(right_qj.cover_url, holder.ivCoverRight);
             GlideUtils.displayImageFadein(right_qj.user_info.avatar_url, holder.rivRight);
             if (right_qj.is_love == 1) {
@@ -116,8 +111,8 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
             holder.ibtn.setImageResource(R.mipmap.zan_normal);
         }
 
-        imageLoader.displayImage(left_qj.cover_url, holder.ivCoverLeft, options);
-        imageLoader.displayImage(left_qj.user_info.avatar_url, holder.riv, options);
+        GlideUtils.displayImage(left_qj.cover_url, holder.ivCoverLeft);
+        GlideUtils.displayImage(left_qj.user_info.avatar_url, holder.riv);
         if (!TextUtils.isEmpty(left_qj.title)) {
             holder.tvTitleLeft.setVisibility(View.VISIBLE);
             holder.tv_title_left1.setVisibility(View.VISIBLE);

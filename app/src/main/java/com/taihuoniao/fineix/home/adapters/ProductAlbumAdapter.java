@@ -154,9 +154,7 @@ public class ProductAlbumAdapter extends RecyclerView.Adapter<ProductAlbumAdapte
                     itemClick.click(holder.getAdapterPosition());
                 }
             });
-//            ImageLoader.getInstance().displayImage(list.get(position).getBanner_url(), holder.backgroundImg);
             GlideUtils.displayImage(list.get(position).getBanner_url(), holder.backgroundImg);
-
             holder.name.setText(list.get(position).getTitle());
             holder.price.setText("¥" + list.get(position).getSale_price());
         }

@@ -40,6 +40,7 @@ import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -73,7 +74,6 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private String gender = Constants.MALE;
     private Bitmap bitmap;
-    private DisplayImageOptions options;
 
     public static CompleteAvatarNickNameFragment newInstance(UserCompleteData data) {
         CompleteAvatarNickNameFragment fragment = new CompleteAvatarNickNameFragment();
@@ -89,16 +89,6 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
             UserCompleteData data = savedInstanceState.getParcelable("data");
         }
         super.onCreate(savedInstanceState);
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .cacheInMemory(false)
-                .cacheOnDisk(false)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
     }
 
     @Override
@@ -112,7 +102,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-        ImageLoader.getInstance().displayImage(LoginInfo.getHeadPicUrl(), riv, options);
+        GlideUtils.displayImage(LoginInfo.getHeadPicUrl(), riv);
         String nickName = LoginInfo.getNickName();
         if (!TextUtils.isEmpty(nickName)) {
             etNickname.setText(nickName);

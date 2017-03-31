@@ -7,8 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.utils.GlideUtils;
@@ -21,18 +19,10 @@ import java.util.List;
 public class CommentsListAdapter extends BaseAdapter {
     private Context context;
     private List<CommentsBean.CommentItem> list;
-    private DisplayImageOptions options;
 
     public CommentsListAdapter(Context context, List<CommentsBean.CommentItem> list) {
         this.context = context;
         this.list = list;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .cacheInMemory(true)
-                .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
     }
 
     @Override
@@ -66,7 +56,6 @@ public class CommentsListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(list.get(position).getUser().getSmall_avatar_url(), holder.headImg, options);
         GlideUtils.displayImage(list.get(position).getUser().getSmall_avatar_url(), holder.headImg);
         holder.name.setText(list.get(position).getUser().getNickname());
 

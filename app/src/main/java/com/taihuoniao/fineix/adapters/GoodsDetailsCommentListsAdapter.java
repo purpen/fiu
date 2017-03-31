@@ -8,14 +8,9 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
-import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.utils.GlideUtils;
-import com.taihuoniao.fineix.utils.TypeConversionUtils;
 
 import java.util.List;
 
@@ -25,22 +20,12 @@ import java.util.List;
 public class GoodsDetailsCommentListsAdapter extends BaseAdapter {
     private Context context;
     private List<CommentsBean.CommentItem> commentsList;
-    private ImageLoader imageLoader;
-    private DisplayImageOptions optionsAvater = null;
     private boolean tag = false;//判断是商品详情界面还是商品评论界面的标识 false为商品详情界面 true为商品评论列表界面
 
     public GoodsDetailsCommentListsAdapter(Context context, List<CommentsBean.CommentItem> commentsList, boolean tag) {
         this.context = context;
         this.commentsList = commentsList;
         this.tag = tag;
-        optionsAvater = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_load)
-                .showImageForEmptyUri(R.mipmap.default_load)
-                .showImageOnFail(R.mipmap.default_load)
-                .cacheInMemory(true)
-                .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
-        imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -78,7 +63,6 @@ public class GoodsDetailsCommentListsAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        imageLoader.displayImage(commentsList.get(position).getUser().getSmall_avatar_url(), holder.img, optionsAvater);
         GlideUtils.displayImage(commentsList.get(position).getUser().getSmall_avatar_url(), holder.img);
         holder.nameTv.setText(commentsList.get(position).getUser().getNickname());
         holder.timeTv.setText(commentsList.get(position).getCreated_at());

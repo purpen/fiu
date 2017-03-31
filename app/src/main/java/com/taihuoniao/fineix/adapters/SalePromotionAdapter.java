@@ -41,7 +41,6 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-//        ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
         GlideUtils.displayImage(item.cover_url, holder.imageView);
         if (!TextUtils.isEmpty(item.title)) {
             holder.tvTitle.setText(item.title);
