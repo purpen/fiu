@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +101,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             if (TextUtils.isEmpty((String) content)) {
                 ToastUtils.showError("图片链接为空");
             } else {
-                GlideUtils.displayImage((String) content, holder.imageView);
+                GlideUtils.displayImage(content, holder.imageView);
             }
         }
 

@@ -79,7 +79,6 @@ public class ZoneMapSelectAddressActivity extends BaseActivity implements View.O
     private LatLng latLng;
     private BitmapDescriptor bitmapDescripter;
     private WaittingDialog dialog;
-    private ZoneDetailBean zoneDetailBean;
     //当前位置的市和区
     private String city, district;
 
@@ -92,7 +91,7 @@ public class ZoneMapSelectAddressActivity extends BaseActivity implements View.O
     protected void getIntentData() {
         Intent intent = getIntent();
         if (intent!=null){
-            zoneDetailBean = intent.getParcelableExtra(TAG);
+            ZoneDetailBean zoneDetailBean = intent.getParcelableExtra(TAG);
         }
     }
 

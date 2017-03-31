@@ -13,8 +13,6 @@ import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.IndexUserListBean;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;

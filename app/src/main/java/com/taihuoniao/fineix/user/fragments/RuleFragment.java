@@ -25,7 +25,6 @@ public class RuleFragment extends MyBaseFragment {
     @Bind(R.id.btn)
     Button btn;
     private String string;
-    private String id;
     private int evt;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class RuleFragment extends MyBaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             string = bundle.getString("summary");
-            id = bundle.getString("id");
+            String id = bundle.getString("id");
             evt = bundle.getInt("evt");
         }
     }

@@ -61,7 +61,6 @@
         style="@style/RegisterAndLogin"
         android:layout_centerHorizontal="true"
         android:background="@drawable/shape_login_register"
-        android:onClick="onLogin"
         android:text="@string/bind"
         android:textColor="@color/color_af8323" />
 </LinearLayout>

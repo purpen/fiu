@@ -245,7 +245,7 @@ public class Util {
             Matrix matrix = new Matrix();
             float scale = getScaleSize(bitmap,maxSize);
             matrix.setScale(scale,scale);
-            bitmap=bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+            bitmap= Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
             ByteArrayOutputStream baos = new BufferedByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
             byte[] byteArr=baos.toByteArray();
@@ -371,10 +371,7 @@ public class Util {
 
     public static boolean isExternalStorageStateMounted() {
         String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        }
-        return false;
+        return state.equals(Environment.MEDIA_MOUNTED);
     }
 
 }

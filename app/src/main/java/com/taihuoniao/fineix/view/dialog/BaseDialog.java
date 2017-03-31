@@ -13,7 +13,6 @@ import com.taihuoniao.fineix.R;
 
 public class BaseDialog extends Dialog{
     protected Context mContext;
-    protected LinearLayout mRootLinearLayout;
 
     public BaseDialog(Context context) {
         this(context, 0);
@@ -22,16 +21,10 @@ public class BaseDialog extends Dialog{
     public BaseDialog(Context context, int theme) {
         super(context, R.style.AlertDialog);
         this.mContext = context;
-//        mRootLinearLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.dialog_base_layout, null, false);
         initView();
     }
 
     protected void initView(){
-//        this.setContentView(mRootLinearLayout);
-//        WindowManager.LayoutParams lp = getWindow().getAttributes();
-//        lp.gravity = Gravity.CENTER;
-//        lp.width = (int) (MainApplication.getContext().getScreenWidth() * 0.75); // 设置宽度
-//        getWindow().setAttributes(lp);
-//        this.setCanceledOnTouchOutside(false);
+
     }
 }

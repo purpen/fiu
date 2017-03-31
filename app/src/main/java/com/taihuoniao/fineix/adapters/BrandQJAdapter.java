@@ -36,7 +36,6 @@ import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 

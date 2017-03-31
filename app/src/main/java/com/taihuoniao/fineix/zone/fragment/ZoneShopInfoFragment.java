@@ -39,7 +39,6 @@ public class ZoneShopInfoFragment extends BaseFragment {
     TextView businessTime;
     @Bind(R.id.business_tel)
     TextView businessTel;
-    private String sZoneId;
     private ZoneDetailBean zoneDetailBean;
 
     public ZoneShopInfoFragment() {
@@ -58,7 +57,7 @@ public class ZoneShopInfoFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            sZoneId = getArguments().getString(ZONE_ID);
+            String sZoneId = getArguments().getString(ZONE_ID);
         }
     }
 

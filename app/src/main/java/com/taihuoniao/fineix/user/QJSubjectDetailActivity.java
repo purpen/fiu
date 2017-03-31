@@ -39,8 +39,6 @@ public class QJSubjectDetailActivity extends BaseActivity {
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
     private QJSubjectDetailAdapter adapter;
-    private TextView tvTitle;
-    private TextView tvSubtitle;
     private String id; //情境专题的id
     private WaittingDialog dialog;
 
@@ -62,8 +60,8 @@ public class QJSubjectDetailActivity extends BaseActivity {
         View view = View.inflate(this, R.layout.header_qj_subject_detail, null);
         ImageView imageView = ButterKnife.findById(view, R.id.iv_cover);
 //        GlideUtils.displayImageFadein(discoverBean.stick.cover_url, imageView);
-        tvTitle = ButterKnife.findById(view, R.id.tv_title);
-        tvSubtitle = ButterKnife.findById(view, R.id.tv_subtitle);
+        TextView tvTitle = ButterKnife.findById(view, R.id.tv_title);
+        TextView tvSubtitle = ButterKnife.findById(view, R.id.tv_subtitle);
 //        list = new ArrayList();
 //        adapter = new ZoneRelateSceneAdapter(activity,);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);

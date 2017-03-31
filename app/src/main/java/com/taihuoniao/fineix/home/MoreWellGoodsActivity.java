@@ -39,7 +39,6 @@ public class MoreWellGoodsActivity extends BaseActivity {
     CustomHeadView customHead;
     @Bind(R.id.pullToRefreshListView_wellGoods_more)
     PullToRefreshListView pullToRefreshListViewWellGoodsMore;
-    private ListView mListView;
 
     private List<SubjectListBean.RowsEntity> subjectList;
     private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;
@@ -98,7 +97,7 @@ public class MoreWellGoodsActivity extends BaseActivity {
 
     private void initListView() {
         pullToRefreshListViewWellGoodsMore.animLayout();
-        mListView = pullToRefreshListViewWellGoodsMore.getRefreshableView();
+        ListView mListView = pullToRefreshListViewWellGoodsMore.getRefreshableView();
         mListView.setSelector(R.color.nothing);
         mListView.setDividerHeight(0);
         subjectList = new ArrayList<>();

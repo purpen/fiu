@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 
 public class ZoneRelateProductsAdapter extends RecyclerView.Adapter<ZoneRelateProductsAdapter.ViewHolder> {
     private LinearLayout.LayoutParams params;
-    private int width;
     private Activity activity;
     private List<ZoneRelateProductsBean.RowsBean> list;
     private ZoneRelateSceneAdapter.OnItemClickListener mOnItemClickListener;
@@ -38,7 +37,7 @@ public class ZoneRelateProductsAdapter extends RecyclerView.Adapter<ZoneRelatePr
     public ZoneRelateProductsAdapter(Activity activity, List<ZoneRelateProductsBean.RowsBean> list) {
         this.activity = activity;
         this.list = list;
-        width= Util.getScreenWidth() - 3 * activity.getResources().getDimensionPixelSize(R.dimen.dp16);
+        int width = Util.getScreenWidth() - 3 * activity.getResources().getDimensionPixelSize(R.dimen.dp16);
         params= new LinearLayout.LayoutParams(width / 2, width / 2);
     }
 

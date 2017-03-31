@@ -102,11 +102,7 @@ public class ZoneClassifyActivity extends BaseActivity {
     @Override
     protected void refreshUI() {
         for (ZoneClassifyBean.RowsBean rowsBean:list){
-            if (TextUtils.equals(rowsBean._id,zoneDetailBean.category._id)){
-                rowsBean.isSelected =true;
-            }else {
-                rowsBean.isSelected = false;
-            }
+            rowsBean.isSelected = TextUtils.equals(rowsBean._id, zoneDetailBean.category._id);
         }
         if (adapter == null) {
             adapter = new ZoneClassifyAdapter(activity, list);

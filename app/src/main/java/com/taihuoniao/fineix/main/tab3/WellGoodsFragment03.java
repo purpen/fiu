@@ -48,8 +48,6 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
     @Bind(R.id.pull_refresh_view_001)
     PullToRefreshListView pullRefreshView001;
 
-    private ListView mListView;
-
     private List<SubjectListBean.RowsEntity> subjectList;//好货页面专题及产品列表
     private WellgoodsSubjectAdapter wellgoodsSubjectAdapter;//好货页面爪蹄及产品适配器
 
@@ -78,7 +76,7 @@ public class WellGoodsFragment03 extends BaseFragment implements AbsListView.OnS
 
     private void initListView() {
         pullRefreshView001.animLayout();
-        mListView = pullRefreshView001.getRefreshableView();
+        ListView mListView = pullRefreshView001.getRefreshableView();
         pullRefreshView001.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -23,11 +23,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.BuildConfig;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
-import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 
 import java.io.ByteArrayOutputStream;
