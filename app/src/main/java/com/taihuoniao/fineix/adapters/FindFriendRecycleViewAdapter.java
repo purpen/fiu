@@ -71,11 +71,6 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(Util.getScreenWidth() / 3, ViewGroup.LayoutParams.MATCH_PARENT);
         holder.rl_box.setLayoutParams(params);
         GlideUtils.displayImage(item.cover_url, holder.iv_cover);
-//        if (!TextUtils.isEmpty(item.title)) {
-//            holder.tv_title.setText(item.title);
-//            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
-//        }
-//        holder.tv_desc.setText(item.address);
     }
 
     @Override
@@ -89,10 +84,6 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         @Bind(R.id.iv_cover)
         ImageView iv_cover;
 
-        //        @Bind(R.id.tv_title)
-//        TextView tv_title;
-//        @Bind(R.id.tv_desc)
-//        TextView tv_desc;
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

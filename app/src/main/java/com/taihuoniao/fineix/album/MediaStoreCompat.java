@@ -1,7 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
 
 package com.taihuoniao.fineix.album;
 
@@ -65,13 +61,11 @@ public class MediaStoreCompat {
             return null;
         } else {
             File toSave = ImageUtils.getDefaultFile();
-//            File toSave = this.getOutputFileUri();
             if(toSave == null) {
                 return null;
             } else {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 intent.addCategory("android.intent.category.DEFAULT");
-//                intent.putExtra("output", Uri.fromFile(toSave));
                 intent.putExtra("output",ImageUtils.getUriForFile(toSave));
                 intent.putExtra("android.intent.extra.videoQuality", 1);
                 activity.startActivityForResult(intent, requestCode);

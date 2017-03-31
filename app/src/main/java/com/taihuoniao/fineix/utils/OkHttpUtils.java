@@ -36,7 +36,6 @@ public class OkHttpUtils {
 
     private static String formatParams(List<NameValuePair> params) {
         return URLEncodedUtils.format(params, CHARSET_NAME);
-//        return JsonUtil.list2Json(params);
     }
 
     public static Call post(String url, String json) {
@@ -48,11 +47,6 @@ public class OkHttpUtils {
         Call call = mOkHttpClient.newCall(request);
         try {
             Response response = call.execute();
-            if (response.isSuccessful()) {
-//            return response.body().string();
-            } else {
-                throw new IOException("Unexpected code " + response);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }

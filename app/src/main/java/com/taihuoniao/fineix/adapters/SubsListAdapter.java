@@ -143,15 +143,9 @@ public class SubsListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_love()) == 1) {
-//                    if (!dialog.isShowing()) {
-//                        dialog.show();
-//                    }
                     holder.qjLove.setEnabled(false);
                     cancelLoveQJ(position, list.get(position).get_id(), holder);
                 } else {
-//                    if (!dialog.isShowing()) {
-//                        dialog.show();
-//                    }
                     holder.qjLove.setEnabled(false);
                     loveQJ(position, list.get(position).get_id(), holder);
                 }

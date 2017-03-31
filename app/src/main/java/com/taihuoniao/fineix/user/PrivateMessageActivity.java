@@ -104,7 +104,6 @@ public class PrivateMessageActivity extends BaseActivity{
                 if (TextUtils.isEmpty(json)) return;
                 HttpResponse<MessageDetailData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<MessageDetailData>>() {
                 });
-
                 if (response.isSuccess()){
                     if (isSendMsg){
                         et.requestFocus();
@@ -225,5 +224,4 @@ public class PrivateMessageActivity extends BaseActivity{
         }
         return false;
     }
-
 }

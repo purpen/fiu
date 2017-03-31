@@ -45,10 +45,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
 
     private LayoutInflater inflater = null;
     private Context context;
-//    private AlertDialog.Builder alertDialog;
     private WaittingDialog mdialog;
 
-//    private BitmapUtils bitmapUtils_listview = null;
     private List<OrderEntity> list;
     private String optFragmentFlag;
 
@@ -57,18 +55,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
         this.list = list;
         this.optFragmentFlag = optFragmentFlag;
         this.context = context;
-//        alertDialog = new AlertDialog.Builder(context);
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
-//        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
-//                .configMemoryCacheEnabled(true)
-//                .configDefaultCacheExpiry(1024 * 1024 * 4)
-//                .configDefaultBitmapMaxSize(300, 300)
-//                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-//                .configThreadPoolSize(5)
-//                .configDefaultImageLoadAnimation(
-//                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
         mdialog = new WaittingDialog(context);
     }
 
@@ -94,7 +82,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
         mHolder.mTradeStatus.setText(list.get(position).getStatus_label());
         mHolder.mProductCounts.setText("共" + list.get(position).getItems_count() + "件好货");
         
-//        double p  = Double.parseDouble(list.get(position).getTotal_money())-Double.parseDouble(list.get(position).getPay_money());
         mHolder.mTotalMoney.setText("合计：¥" + list.get(position).getTotal_money()+" 优惠：¥"+ list.get(position).getDiscount_money());
         mHolder.mPayMoney.setText("实付：¥" + list.get(position).getPay_money());
         mHolder.mFreight.setText("");

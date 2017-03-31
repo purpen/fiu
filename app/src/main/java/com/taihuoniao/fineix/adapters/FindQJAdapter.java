@@ -183,15 +183,9 @@ public class FindQJAdapter extends BaseAdapter {
                         if (LoginInfo.isUserLogin()) {
                             //已经登录
                             if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition).getIs_love()) == 1) {
-//                                if (!dialog.isShowing()) {
-//                                    dialog.show();
-//                                }
                                 holder.qjLove1.setEnabled(false);
                                 cancelLoveQJ(qjPosition, sceneList.get(qjPosition).get_id(), holder, false);
                             } else {
-//                                if (!dialog.isShowing()) {
-//                                    dialog.show();
-//                                }
                                 holder.qjLove1.setEnabled(false);
                                 loveQJ(qjPosition, sceneList.get(qjPosition).get_id(), holder, false);
                             }
@@ -253,15 +247,9 @@ public class FindQJAdapter extends BaseAdapter {
                             if (LoginInfo.isUserLogin()) {
                                 //已经登录
                                 if (TypeConversionUtils.StringConvertInt(sceneList.get(qjPosition + 1).getIs_love()) == 1) {
-//                                    if (!dialog.isShowing()) {
-//                                        dialog.show();
-//                                    }
                                     holder.qjLove2.setEnabled(false);
                                     cancelLoveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).get_id(), holder, true);
                                 } else {
-//                                    if (!dialog.isShowing()) {
-//                                        dialog.show();
-//                                    }
                                     holder.qjLove2.setEnabled(false);
                                     loveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).get_id(), holder, true);
                                 }

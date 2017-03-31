@@ -272,7 +272,6 @@ public class IndexQJListAdapter extends BaseAdapter {
             holder.qjTitleTv.setText(sceneList.get(position).getTitle());
             holder.qjTitleTv.setVisibility(View.VISIBLE);
         }
-//        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
         List<SceneListBean2.RowsEntity.ProductEntity> productBeanList = sceneList.get(position).getProduct();
         if (productBeanList != null && compareble(productBeanList, (List<SceneListBean2.RowsEntity.ProductEntity>) holder.labelContainer.getTag(R.id.label_container))) {
@@ -374,17 +373,6 @@ public class IndexQJListAdapter extends BaseAdapter {
                 pos = position;
             }
         });
-//        holder.moreComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent3 = new Intent(activity, CommentListActivity.class);
-//                intent3.putExtra("target_id", sceneList.get(position).get_id());
-//                intent3.putExtra("type", 12 + "");
-//                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-//                activity.startActivityForResult(intent3, 1);
-//                pos = position;
-//            }
-//        });
         //跳转到分享页面
         holder.shareImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -422,48 +410,6 @@ public class IndexQJListAdapter extends BaseAdapter {
         });
 
         holder.idTagFlowLayout.setVisibility(View.GONE);
-//        SceneList.DataBean.RowsBean rowsBean = sceneList.get(position);
-//        List<String> tags = rowsBean.getTags();
-//        if (tags != null && tags.size() > 0) {
-//            holder.idTagFlowLayout.setVisibility(View.VISIBLE);
-//            holder.idTagFlowLayout.setAdapter(new TagAdapter<String>(tags) {
-//                @Override
-//                public View getView(FlowLayout parent, int position, String s) {
-//                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                    TextView textView = new TextView(activity);
-//                    params.setMargins(0, 0, activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0);
-//                    if (position == 0) {
-//                        textView.setText("# " + s);
-//                    } else {
-//                        textView.setText(s);
-//                    }
-//                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-//                    textView.setTextColor(activity.getResources().getColor(R.color.color_666));
-//                    textView.setLayoutParams(params);
-//                    return textView;
-//                }
-//            });
-//
-//            holder.idTagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-//                @Override
-//                public boolean onTagClick(View view, int position, FlowLayout parent) {
-//                    Intent intent = new Intent(activity, SearchActivity.class);
-//                    String s = ((TextView) view).getText().toString();
-//                    if (!TextUtils.isEmpty(s)) {
-//                        if (position == 0) {
-//                            intent.putExtra("q", s.substring(2));
-//                        } else {
-//                            intent.putExtra("q", s);
-//                        }
-//                        intent.putExtra("t", 9);
-//                        activity.startActivity(intent);
-//                    }
-//                    return true;
-//                }
-//            });
-//        }else {
-//            holder.idTagFlowLayout.setVisibility(View.GONE);
-//        }
         return convertView;
     }
 
@@ -487,7 +433,6 @@ public class IndexQJListAdapter extends BaseAdapter {
 
             labelView.setLayoutParams(layoutParams);
             if (TypeConversionUtils.StringConvertInt(productBean.getLoc()) == 2) {
-//                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
                 labelView.llTag.setBackgroundResource(R.drawable.label_left);
                 RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
@@ -502,7 +447,6 @@ public class IndexQJListAdapter extends BaseAdapter {
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
                         labelView.setLayoutParams(lp);
                     } else { //右边
-//                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
                         labelView.llTag.setBackgroundResource(R.drawable.label_right);
                         RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                         layoutParams1.leftMargin = (int) (labelView.llTag.getMeasuredWidth() - labelView.pointWidth/2 - labelView.labelMargin);
@@ -515,7 +459,6 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
             });
             holder.labelContainer.addView(labelView);
-//            Log.e("<<<", "开启动画" + holder.qjTitleTv.getText() + ",现在位置=" + position);
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -567,7 +510,6 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder.attentionBtn.setVisibility(View.GONE);
             if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_follow()) == 1) {
-//                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.attentionBtn.setText("已关注");
                 holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
@@ -656,8 +598,6 @@ public class IndexQJListAdapter extends BaseAdapter {
         ImageView qjImg;
         @Bind(R.id.qj_title_tv)
         TextView qjTitleTv;
-//        @Bind(R.id.qj_title_tv2)
-//        TextView qjTitleTv2;
         @Bind(R.id.label_container)
         RelativeLayout labelContainer;
         @Bind(R.id.view_count)

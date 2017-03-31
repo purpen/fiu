@@ -221,22 +221,6 @@ public class MapSearchAddressActivity extends BaseActivity implements View.OnCli
     @Override
     protected void installListener() {
         search_view.addTextChangedListener(tw);
-//        ll.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView absListView, int i) {
-//                if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
-//                    if (absListView.getLastVisiblePosition() == list.size()) {
-//                        LogUtil.e("pageNum==", pageNum + "");
-//                        loadAndshowPoiResult(et.getText().toString().trim(), latLng);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-//
-//            }
-//        });
         search_view.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {

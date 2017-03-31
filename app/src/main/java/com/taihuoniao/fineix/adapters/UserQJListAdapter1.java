@@ -61,10 +61,6 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             holder.rl_right.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
             GlideUtils.displayImage(right_qj.getCover_url(), holder.iv_cover_right);
-//            if (!TextUtils.isEmpty(left_qj.getTitle())) {
-//                holder.tv_title_right.setText(right_qj.getTitle());
-//                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
-//            }
             if (!TextUtils.isEmpty(right_qj.getTitle())) {
                 holder.tv_title_right.setVisibility(View.VISIBLE);
                 holder.tv_title_right1.setVisibility(View.VISIBLE);
@@ -105,10 +101,6 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             holder.tv_title_left.setVisibility(View.GONE);
             holder.tv_title_left1.setVisibility(View.GONE);
         }
-//        if (!TextUtils.isEmpty(left_qj.getTitle())) {
-//            holder.tv_title_left.setText(left_qj.getTitle());
-//            holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
-//        }
         holder.rl_left.setLayoutParams(params);
         holder.tv_desc_left.setText(left_qj.getAddress());
         holder.rl_left.setOnClickListener(new View.OnClickListener() {

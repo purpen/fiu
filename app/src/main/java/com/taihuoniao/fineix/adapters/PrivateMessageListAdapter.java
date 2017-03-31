@@ -40,7 +40,6 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
         GlideUtils.displayImage(item.users.from_user.big_avatar_url,holder.riv);
         holder.tv_name.setText(item.users.from_user.nickname);
         holder.tv_desc.setText(item.last_content.content);
-//        holder.tv_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.color_333));
         holder.tv_time.setText(item.last_time_at);
         if (item.is_read>0){

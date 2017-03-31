@@ -385,7 +385,6 @@ public class ClientDiscoverAPI {
     @NonNull
     public static HashMap<String, String> getbindPhoneNetRequestParams(String oid, String union_id, String access_token, String account, String password, String type) {
         HashMap<String, String> params = new HashMap<>();
-////        params.put("uuid", uuid);
         params.put("account", account);
         params.put("password", password);
         params.put("oid", oid);
@@ -478,9 +477,7 @@ public class ClientDiscoverAPI {
         HashMap<String, String> params = new HashMap<>();
         params.put("page", page);
         params.put("size", size);
-//        params.addBodyParameter("user_id", LoginInfo.getInstance().getId()+"");
         params.put("user_id", userId);//924808
-//        LogUtil.e("userId",LoginInfo.getInstance().getId()+"");
         params.put("find_type", find_type);
         params.put("clean_remind", clean_remind);
         return params;

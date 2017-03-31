@@ -145,7 +145,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         tv_cancel.setOnClickListener(this);
         myPopupWindow = new MyPopupWindow(activity,view);
         myPopupWindow.show();
-//        PopupWindowUtil.show(activity, view);
     }
 
     @Override
@@ -189,7 +188,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                                 myPopupWindow.dismiss();
                                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                                 if (response.isSuccess()) {
-//                                    list.remove(item);
                                     item.focus_flag = true;  //变为可关注
                                     notifyDataSetChanged();
                                     ToastUtils.showSuccess("已取消关注");

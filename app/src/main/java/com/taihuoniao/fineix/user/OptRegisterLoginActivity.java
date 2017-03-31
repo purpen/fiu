@@ -88,7 +88,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements PlatformAc
         plat.showUser(null);
     }
 
-
     @Override
     public void finish() {
         instance = null;
@@ -154,7 +153,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements PlatformAc
         }
     }
 
-
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
         // 这个方法中不能放对话框、吐丝这些耗时的操作，否则会直接跳到onError()中执行
@@ -195,10 +193,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements PlatformAc
         if (TextUtils.isEmpty(loginType)) return;
         HashMap<String, String> params =ClientDiscoverAPI. getthirdLoginNetRequestParams(userId, token, loginType);
         HttpRequest.post(params, URL.AUTH_THIRD_SIGN, new GlobalDataCallBack(){
-            @Override
-            public void onStart() {
-//                if (!activity.isFinishing() && mDialog != null) mDialog.show();
-            }
 
             @Override
             public void onSuccess(String json) {
@@ -261,7 +255,6 @@ public class OptRegisterLoginActivity extends BaseActivity implements PlatformAc
     void loginSuccess(ThirdLogin thirdLogin) {
         if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
             updateUserIdentity();
-//                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
             startActivity(new Intent(activity, CompleteUserInfoActivity.class));
             if (ToRegisterActivity.instance != null) {
                 ToRegisterActivity.instance.finish();

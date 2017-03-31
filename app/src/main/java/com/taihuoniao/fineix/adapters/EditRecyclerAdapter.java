@@ -16,7 +16,6 @@ import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
  * Created by taihuoniao on 2016/3/21.
  */
 public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapter.VH> {
-    //    private Uri imageUri;
     private Context context;
     private GPUImageFilterTools.FilterList filterList;
     private GPUImageFilterTools.OnGpuImageFilterChosenListener listener;
@@ -24,7 +23,6 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
     private ItemClick itemClick;
 
     public EditRecyclerAdapter(Context context, GPUImageFilterTools.OnGpuImageFilterChosenListener listener,ItemClick itemClick) {
-//        this.imageUri = imageUri;
         this.context = context;
         this.filterList = GPUImageFilterTools.getList();
         this.listener = listener;
@@ -55,15 +53,6 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
                 }
             }
         });
-//        holder.imageView.setImage(imageUri);
-//        final GPUImageFilter filter = GPUImageFilterTools.createFilterForType(context, filterList.filters.get(position));
-//        final GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
-//        holder.imageView.setFilter(filter);
-//        if (filterAdjuster.canAdjust()) {
-//            filterAdjuster.adjust(50);
-//        }
-//        holder.imageView.requestRender();
-
         switch (filterList.getName(position)) {
             case "原图":
                 holder.imageView.setImageResource(R.mipmap.yuantu);

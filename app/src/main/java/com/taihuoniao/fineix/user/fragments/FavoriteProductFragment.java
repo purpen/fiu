@@ -56,8 +56,7 @@ public class FavoriteProductFragment extends MyBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.setFragmentLayout(R.layout.fragment_favorite_product);
         super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, view);
@@ -124,10 +123,7 @@ public class FavoriteProductFragment extends MyBaseFragment {
             public void onSuccess(String json) {
                 if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(json)) return;
-
-                HttpResponse<DataProductCollect> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataProductCollect>>() {
-                });
-
+                HttpResponse<DataProductCollect> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<DataProductCollect>>() { });
                 if (response.isSuccess()) {
                     pullGv.onRefreshComplete();
                     ArrayList<ItemProductCollect> list = response.getData().rows;

@@ -91,7 +91,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         item_contacts.setTitle("连接通讯录");
         item_contacts.setSubTitle("关注你认识的好友");
         lv = pull_lv.getRefreshableView();
-//        lv.setDividerHeight(getResources().getDimensionPixelSize(R.dimen.dp05));
         pull_lv.getRefreshableView().addHeaderView(view);
         pull_lv.getRefreshableView().setHeaderDividersEnabled(false);
         pull_lv.setPullToRefreshEnabled(false);
@@ -100,13 +99,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
 
     @Override
     protected void installListener() {
-        pull_lv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-            @Override
-            public void onLastItemVisible() {
-//                isLoadMore = true;
-//                requestNet();
-            }
-        });
         item_wx.setOnClickListener(this);
         item_sina.setOnClickListener(this);
         item_contacts.setOnClickListener(this);
@@ -151,25 +143,9 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     protected void refreshUI(List<FindFriendData.User> list) {
         if (list == null) return;
         if (list.size() == 0) {
-//            boolean isLoadMore = false;
-//            if (isLoadMore) {
-//                Util.makeToast("没有更多数据哦！");
-//            } else {
-//                Util.makeToast("暂无数据！");
-//            }
             return;
         }
-
         curPage++;
-
-//        Iterator<FindFriendData.User> iterator = list.iterator();
-//        while (iterator.hasNext()){
-//            FindFriendData.User user = iterator.next();
-//            if (user.is_love==FansAdapter.LOVE){
-//                iterator.remove();
-//            }
-//        }
-
         if (adapter == null) {
             mList.addAll(list);
             adapter = new FindFriendAdapter(mList, activity);
@@ -178,7 +154,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             mList.addAll(list);
             adapter.notifyDataSetChanged();
         }
-
         if (pull_lv != null)
             pull_lv.onRefreshComplete();
     }

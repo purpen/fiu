@@ -8,7 +8,6 @@ import android.content.Context;
  */
 public class DensityUtils {
     private DensityUtils() {
-        /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
@@ -26,8 +25,6 @@ public class DensityUtils {
         }
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpVal * scale + 0.5f);
-//        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-//                dpVal, context.getResources().getDisplayMetrics());
     }
 
 

@@ -72,22 +72,6 @@ public class NaviToZoneActivity extends BaseActivity<SceneListBean> {
                             .direction(100).latitude(zoneDetailBean.location.myLocation.latitude)
                             .longitude(zoneDetailBean.location.myLocation.longitude).build();
                     mBDMap.setMyLocationData(locData);
-//        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
-//            @Override
-//            public void onReceiveLocation(BDLocation bdLocation) {
-//                if (isFirstLoc) {
-//                    isFirstLoc = false;
-//                    LatLng latLng = new LatLng(bdLocation.getLatitude(),
-//                            bdLocation.getLongitude());
-//                    MyLocationData locData = new MyLocationData.Builder()
-//                            .accuracy(bdLocation.getRadius())
-//                            // 此处设置开发者获取到的方向信息，顺时针0-360
-//                            .direction(100).latitude(bdLocation.getLatitude())
-//                            .longitude(bdLocation.getLongitude()).build();
-//                    mBDMap.setMyLocationData(locData);
-//                }
-//            }
-//        });
     }
 
     private void move2ZoneLocation() {

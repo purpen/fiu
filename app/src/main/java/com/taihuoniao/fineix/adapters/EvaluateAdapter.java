@@ -34,7 +34,6 @@ public class EvaluateAdapter extends THNBaseAdapter {
     }
 
     public void setOnTwoClickedListener(OnTwoClickedListener listener) {
-        // 如果监听到了的话，这一句就使得顶上全局变量listener不再为空了
         this.listener = listener;
     }
 

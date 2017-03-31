@@ -134,15 +134,9 @@ public class SearchQJAdapter extends BaseAdapter {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
                     if (list.get(position).getIs_love() == 1) {
-//                        if (!dialog.isShowing()) {
-//                            dialog.show();
-//                        }
                         holder.qjLove.setEnabled(false);
                         cancelLoveQJ(position, list.get(position).get_id(), holder);
                     } else {
-//                        if (!dialog.isShowing()) {
-//                            dialog.show();
-//                        }
                         holder.qjLove.setEnabled(false);
                         loveQJ(position, list.get(position).get_id(), holder);
                     }

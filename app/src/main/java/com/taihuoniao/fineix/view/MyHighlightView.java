@@ -17,12 +17,10 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.Point2D;
-import com.taihuoniao.fineix.utils.UIUtils;
 import com.taihuoniao.fineix.view.imageViewTouch.ImageViewTouch;
 
 
 public class MyHighlightView implements EditableDrawable.OnSizeChange {
-
 
     public enum AlignModeV {
         Top, Bottom, Center
@@ -318,19 +316,19 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
 
         if (mScaleEnabled) {
             if ((Math.abs(rect.left - x) < HIT_TOLERANCE) && verticalCheck
-                    && UIUtils.checkBits(mResizeEdgeMode, GROW_LEFT_EDGE)) {
+                    && checkBits(mResizeEdgeMode, GROW_LEFT_EDGE)) {
                 retval |= GROW_LEFT_EDGE;
             }
             if ((Math.abs(rect.right - x) < HIT_TOLERANCE) && verticalCheck
-                    && UIUtils.checkBits(mResizeEdgeMode, GROW_RIGHT_EDGE)) {
+                    && checkBits(mResizeEdgeMode, GROW_RIGHT_EDGE)) {
                 retval |= GROW_RIGHT_EDGE;
             }
             if ((Math.abs(rect.top - y) < HIT_TOLERANCE) && horizCheck
-                    && UIUtils.checkBits(mResizeEdgeMode, GROW_TOP_EDGE)) {
+                    && checkBits(mResizeEdgeMode, GROW_TOP_EDGE)) {
                 retval |= GROW_TOP_EDGE;
             }
             if ((Math.abs(rect.bottom - y) < HIT_TOLERANCE) && horizCheck
-                    && UIUtils.checkBits(mResizeEdgeMode, GROW_BOTTOM_EDGE)) {
+                    && checkBits(mResizeEdgeMode, GROW_BOTTOM_EDGE)) {
                 retval |= GROW_BOTTOM_EDGE;
             }
         }
@@ -480,8 +478,8 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
             xDelta = dx * (mCropRect.width() / mDrawRect.width());
             yDelta = dy * (mCropRect.height() / mDrawRect.height());
 
-            boolean is_left = UIUtils.checkBits(edge, GROW_LEFT_EDGE);
-            boolean is_top = UIUtils.checkBits(edge, GROW_TOP_EDGE);
+            boolean is_left = checkBits(edge, GROW_LEFT_EDGE);
+            boolean is_top = checkBits(edge, GROW_TOP_EDGE);
 
             float delta;
 
@@ -698,5 +696,10 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
                 }
             }
         }
+    }
+
+
+    private boolean checkBits(int status, int checkBit) {
+        return (status & checkBit) == checkBit;
     }
 }

@@ -120,7 +120,6 @@ public class MessageActivity extends BaseActivity {
                 if (TextUtils.isEmpty(json)) {
                     return;
                 }
-
                 try {
                     HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
                     });
@@ -131,7 +130,6 @@ public class MessageActivity extends BaseActivity {
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     ToastUtils.showError("对不起，数据异常");
-//                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
             }
 
@@ -139,7 +137,6 @@ public class MessageActivity extends BaseActivity {
             public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }

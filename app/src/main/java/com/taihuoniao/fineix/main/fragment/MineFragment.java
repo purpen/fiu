@@ -419,7 +419,6 @@ public class MineFragment extends MyBaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:  //订单
-//                        startActivity(new Intent(activity, ShopOrderListActivity.class));
                         startActivity(new Intent(activity, MessageActivity.class));
                         break;
                     case 1: //订阅情境

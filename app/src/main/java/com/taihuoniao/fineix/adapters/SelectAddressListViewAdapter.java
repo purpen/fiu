@@ -121,23 +121,6 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                 notifyDataSetChanged();
             }
         });
-//        hold.isSelectImg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (item.isSelected) {
-//                    item.isSelected=false;
-//                } else {
-//                    for (int i = 0; i < list.size(); i++) {
-//                        if (i == position) {
-//                            item.isSelected=true;
-//                        } else {
-//                            item.isSelected=false;
-//                        }
-//                    }
-//                }
-//                notifyDataSetChanged();
-//            }
-//        });
         hold.editImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,23 +129,6 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                 activity.startActivityForResult(intent, DataConstants.REQUESTCODE_EDITADDRESS);
             }
         });
-//        hold.linearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (item.isSelected) {
-//                    item.isSelected=false;
-//                } else {
-//                    for (int i = 0; i < list.size(); i++) {
-//                        if (i == position) {
-//                            item.isSelected=true;
-//                        } else {
-//                            item.isSelected=false;
-//                        }
-//                    }
-//                }
-//                notifyDataSetChanged();
-//            }
-//        });
 
         //实现item的侧滑删除
         hold.deleteTv.setOnClickListener(new View.OnClickListener() {
@@ -175,22 +141,6 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                         activity.deleteAddress(item._id);
                     }
                 });
-//                android.support.v7.app.AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-//                builder.setMessage(App.getString(R.string.hint_dialog_delete_address));
-//                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        activity.deleteAddress(item._id);
-//                    }
-//                });
-//                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                builder.create().show();
             }
         });
         // 设置监听事件

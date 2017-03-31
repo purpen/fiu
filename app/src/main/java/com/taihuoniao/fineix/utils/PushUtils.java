@@ -15,7 +15,6 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 
 public class PushUtils {
 
-
     //选择跳转界面
     public static void switchActivity(String type, String target_id, Context context) {
         Intent intent = new Intent();
@@ -44,6 +43,4 @@ public class PushUtils {
                 break;
         }
     }
-
-
 }

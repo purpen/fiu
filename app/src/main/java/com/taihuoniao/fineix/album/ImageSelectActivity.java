@@ -28,7 +28,6 @@ public class ImageSelectActivity extends FragmentActivity implements AlbumCollec
     public static final String EXTRA_RESULT_SELECTION = BundleUtils.buildKey(ImageSelectActivity.class, "EXTRA_RESULT_SELECTION");
     public static final String EXTRA_SELECTION_SPEC = BundleUtils.buildKey(ImageSelectActivity.class, "EXTRA_SELECTION_SPEC");
     public static final String EXTRA_RESUME_LIST = BundleUtils.buildKey(ImageSelectActivity.class, "EXTRA_RESUME_LIST");
-//    public static final String EXTRA_ENGINE = BundleUtils.buildKey(ImageSelectActivity.class, "EXTRA_ENGINE");
 
     public static final String STATE_CAPTURE_PHOTO_URI = BundleUtils.buildKey(ImageSelectActivity.class, "STATE_CAPTURE_PHOTO_URI");
 

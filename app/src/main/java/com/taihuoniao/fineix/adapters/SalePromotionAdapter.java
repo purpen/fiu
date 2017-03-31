@@ -70,31 +70,6 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
                 }
             }
         });
-//        LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-//        holder.recyclerView.setLayoutManager(manager);
-//        holder.recyclerView.setHasFixedSize(true);
-//        SalePromotionRecycleViewAdapter adapter = new SalePromotionRecycleViewAdapter(activity, item.products);
-//        adapter.setmOnItemClickLitener(new SalePromotionRecycleViewAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Intent intent = new Intent(activity, MyGoodsDetailsActivity.class);
-//                intent.putExtra("id", item._id);
-//                activity.startActivity(intent);
-//            }
-//
-//            @Override
-//            public void onItemLongClick(View view, int position) {
-//            }
-//        });
-//        holder.recyclerView.setAdapter(adapter);
-//        holder.rl.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(activity, SalePromotionDetailActivity.class);
-//                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), item._id);
-//                activity.startActivity(intent);
-//            }
-//        });
         return convertView;
     }
 
@@ -114,8 +89,6 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         View viewLine;
         @Bind(R.id.tv_during)
         TextView tvDuring;
-//        @Bind(R.id.recycler_view)
-//        RecyclerView recyclerView;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

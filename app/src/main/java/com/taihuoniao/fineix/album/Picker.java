@@ -162,7 +162,6 @@ public final class Picker {
         mSelectionSpec.setEngine(engine);
         Intent intent = new Intent(activity, ImageSelectActivity.class);
         intent.putExtra(ImageSelectActivity.EXTRA_SELECTION_SPEC, mSelectionSpec);
-//        intent.putExtra(ImageSelectActivity.EXTRA_ENGINE, (Serializable) engine);
         intent.putParcelableArrayListExtra(ImageSelectActivity.EXTRA_RESUME_LIST, (ArrayList<? extends android.os.Parcelable>) mResumeList);
 
         Fragment fragment = getFragment();

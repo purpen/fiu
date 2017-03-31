@@ -34,11 +34,8 @@ public class DiscoverFreindsCategoryAdapter extends CommonBaseAdapter<DiscoverBe
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-//        GlideUtils.displayImageNoFading(item.pic, holder.iv);
         holder.iv.setImageResource(item.pic);
         holder.tvTag.setText(item.nickname);
-
         return convertView;
     }
 

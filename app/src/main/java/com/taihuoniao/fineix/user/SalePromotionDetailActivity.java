@@ -77,7 +77,6 @@ public class SalePromotionDetailActivity extends BaseActivity {
         if (intent.hasExtra(TAG)) {
             id = intent.getStringExtra(TAG);
         }
-
         if (intent.hasExtra("title")) {
             title = intent.getStringExtra("title");
         }
@@ -99,7 +98,6 @@ public class SalePromotionDetailActivity extends BaseActivity {
         tvDesc = ButterKnife.findById(view, R.id.tv_desc);
         view_line = ButterKnife.findById(view, R.id.view_line);
         lv.addHeaderView(view);
-//        WindowUtils.chenjin(this);
     }
 
     @Override
@@ -118,8 +116,6 @@ public class SalePromotionDetailActivity extends BaseActivity {
                 }
             }
         });
-
-
     }
 
     @OnClick({R.id.ibtn_share, R.id.ibtn_comment})
@@ -184,7 +180,6 @@ public class SalePromotionDetailActivity extends BaseActivity {
             }
         }
     }
-
 
     @Override
     protected void requestNet() {

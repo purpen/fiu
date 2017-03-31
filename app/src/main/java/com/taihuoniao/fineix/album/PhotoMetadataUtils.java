@@ -104,18 +104,6 @@ public final class PhotoMetadataUtils {
         return uri.getPath();
     }
 
-//    public static UncapableCause isAcceptable(Context context, SelectionSpec spec, Uri uri) {
-//        if (!isSelectableType(context, spec, uri)) {
-//            return UncapableCause.FILE_TYPE;
-//        }
-//        if (!hasUnderAtMostQuality(context, spec, uri)) {
-//            return UncapableCause.OVER_COUNT;
-//        }
-//        if (!hasOverAtLeastQuality(context, spec, uri)) {
-//            return UncapableCause.UNDER_QUALITY;
-//        }
-//        return null;
-//    }
 
     public static boolean hasOverAtLeastQuality(Context context, SelectionSpec spec, Uri uri) {
         if (context == null) {

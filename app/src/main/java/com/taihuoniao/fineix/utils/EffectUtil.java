@@ -133,7 +133,6 @@ public class EffectUtil {
         return hv;
     }
 
-
     //----添加标签-----
     public static void addLabelEditable(View.OnClickListener deleteListener, MyImageViewTouch mImageView, RelativeLayout gpuRelative,
                                         LabelView label, int left, int top) {
@@ -153,19 +152,8 @@ public class EffectUtil {
     }
 
     public static double getStandDis(float realDis, float baseWidth) {
-//        float imageWidth = baseWidth <= 0 ? MainApplication.getContext().getScreenWidth() : baseWidth;
-//        //1280 按xhdpi设置
-//        float radio = 1280 / imageWidth;
-//        return (int) (radio * realDis);
-//        Log.e("<<<", "x,y = " + realDis / baseWidth);
         return realDis / baseWidth;
     }
-
-//    public static int getRealDis(float standardDis, float baseWidth) {
-//        float imageWidth = baseWidth <= 0 ? MainApplication.getContext().getScreenWidth() : baseWidth;
-//        float radio = imageWidth / 1242;
-//        return (int) (radio * standardDis);
-//    }
 
     /**
      * 使标签在Overlay上可以移动
@@ -190,7 +178,6 @@ public class EffectUtil {
             }
         });
     }
-
 
     //添加商品
     public static void applyOnSave(Canvas mCanvas, ImageViewTouch processImage) {

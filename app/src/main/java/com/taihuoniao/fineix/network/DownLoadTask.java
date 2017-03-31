@@ -115,7 +115,6 @@ public class DownLoadTask extends AsyncTask<String, Integer, File> {
             if (progressDialog != null && isShow) {
                 progressDialog.cancel();
             }
-//            mHandler.sendEmptyMessage(NetWorkUtils.UPDATE_APK);
             NetWorkUtils.installApk(file, mContext);
         } else {
             if(isShow){
@@ -151,7 +150,6 @@ public class DownLoadTask extends AsyncTask<String, Integer, File> {
             }
         } };
 
-        // Install the all-trusting trust manager
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());

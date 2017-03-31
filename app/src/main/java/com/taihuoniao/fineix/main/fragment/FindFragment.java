@@ -204,12 +204,6 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     private void setupBlurView() {
         final float radius = 16f;
-//
-//        final View decorView = getActivity().getWindow().getDecorView();
-//        //Activity's root View. Can also be root View of your layout
-//        final View rootView = decorView.findViewById(android.R.id.content);
-//        //set background, if your root layout doesn't have one
-//        final Drawable windowBackground = decorView.getBackground();
 
         blurView.setupWith(listView)
                 .windowBackground(listView.getBackground())

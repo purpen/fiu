@@ -28,17 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PublishEvaluateActivity extends Base2Activity {
-    private static final String TAG = "PublishEvaluateActivity";
 
     private EvaluateAdapter mAdapter;
     HashMap<Integer, String> mHashMapRatingBar = new HashMap<>();
     HashMap<Integer, String> mHashMap = new HashMap<>();
     private String mRid;
-    private String mEvaluateContent;
-    private String mRatingBarNum;
-    private View mView;
-    private LinearLayout mLinear;
-    private String mEditContent;
     private WaittingDialog dialog;
 
     private OrderDetailBean shoppingDetailBean;
@@ -48,7 +42,6 @@ public class PublishEvaluateActivity extends Base2Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        StatusBarChange.initWindow(this);
         setContentView(R.layout.activity_publish_evaluate);
         initData();
         initView();
@@ -79,8 +72,6 @@ public class PublishEvaluateActivity extends Base2Activity {
                 for (int j = 0; j < mHashMap.size(); j++) {
                     if (mHashMap.get(j) == null) {
                         ToastUtils.showError("评论内容不能为空!");
-//                        dialog.showErrorWithStatus("评论内容不能为空!");
-//                        Toast.makeText(PublishEvaluateActivity.this, "评价内容不能为空！", Toast.LENGTH_LONG).show();
                     } else {
                         if (!dialog.isShowing()) {
                             dialog.show();
@@ -103,14 +94,11 @@ public class PublishEvaluateActivity extends Base2Activity {
 
                                 HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
                                 dialog.dismiss();
-//                                Toast.makeText(PublishEvaluateActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                 if (netBean.isSuccess()) {
                                     ToastUtils.showSuccess(netBean.getMessage());
-//                                    dialog.showSuccessWithStatus(netBean.getMessage());
                                     onBackPressed();
                                 } else {
                                     ToastUtils.showError(netBean.getMessage());
-//                                    dialog.showErrorWithStatus(netBean.getMessage());
                                 }
                             }
 

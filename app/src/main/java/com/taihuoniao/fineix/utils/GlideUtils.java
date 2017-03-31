@@ -15,7 +15,6 @@ import com.taihuoniao.fineix.main.MainApplication;
  * Emial: 895745843@qq.com
  */
 public class GlideUtils {
-
     private static final Integer DEFAULT_IMAGEID = R.mipmap.default_load;
     private static final Integer ERROR_IMAGEID = R.mipmap.default_load;
     private static final int FADE_IN_DURATION = 300;

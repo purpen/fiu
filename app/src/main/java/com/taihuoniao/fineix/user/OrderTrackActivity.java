@@ -38,6 +38,8 @@ public class OrderTrackActivity extends BaseActivity {
     private WaittingDialog mDialog;
     private OrderTrackAdapter orderTrackAdapter;
     private String express_company;
+    private TextView textShipperCode;
+    private TextView textLogisticCode;
 
     public OrderTrackActivity() {
         super(R.layout.activity_order_track);
@@ -55,7 +57,6 @@ public class OrderTrackActivity extends BaseActivity {
         String express_caty = intent.getStringExtra("express_caty");
         express_company = intent.getStringExtra("express_company");
         requestOrderTrackInfo(rid, express_no, express_caty);
-
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -63,11 +64,9 @@ public class OrderTrackActivity extends BaseActivity {
         orderTrackAdapter = new OrderTrackAdapter(OrderTrackActivity.this);
         orderTrackAdapter.setHeaderView(linearLayout);
         recyclerView.setAdapter(orderTrackAdapter);
-
         textShipperCode = (TextView) linearLayout.findViewById(R.id.text_ShipperCode);
         textLogisticCode = (TextView) linearLayout.findViewById(R.id.text_LogisticCode);
     }
-
 
     private void requestOrderTrackInfo(String s1, String s2, String s3) {
         if (mDialog == null) {
@@ -81,18 +80,14 @@ public class OrderTrackActivity extends BaseActivity {
                 if (mDialog != null && mDialog.isShowing()) {
                     mDialog.dismiss();
                 }
-                HttpResponse<OrderTrackBean> orderTrackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderTrackBean>>() {
-                });
-
+                HttpResponse<OrderTrackBean> orderTrackBeanHttpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<OrderTrackBean>>() { });
                 if (orderTrackBeanHttpResponse.isError()) {
                     ToastUtils.showError(orderTrackBeanHttpResponse.getMessage());
                     return;
                 }
                 textShipperCode.setText(String.format(App.getString(R.string.text_order_track_shipperCode), express_company));
                 textLogisticCode.setText(String.format(App.getString(R.string.text_order_track_logisticCode), orderTrackBeanHttpResponse.getData().getLogisticCode()));
-
                 List<OrderTrackBean.TracesEntity> traces = orderTrackBeanHttpResponse.getData().getTraces();
-
                 if (traces != null) {
                     List<OrderTrackBean.TracesEntity> newTraces = new ArrayList<>();
                     for(int i = traces.size() - 1; i>= 0; i--) {
@@ -108,7 +103,4 @@ public class OrderTrackActivity extends BaseActivity {
             }
         });
     }
-
-    private TextView textShipperCode;
-    private TextView textLogisticCode;
 }

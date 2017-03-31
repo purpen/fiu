@@ -342,9 +342,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             public void onSuccess(String json) {
                 HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
-//                    subjectList.clear();
-//                    subjectList.addAll(subjectListBean.getData().getRows());
-//                    indexSubjectAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -368,7 +365,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 if (sceneL.isSuccess()) {
-//                    pullToRefreshLayout.setLoadingTime();
                     if (currentPage == 1) {
                         sceneList.clear();
                         pullRefreshView.lastTotalItem = -1;
@@ -396,7 +392,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 ToastUtils.showError("网络错误");
             }
         });
-//        addNet(httpHandler);
     }
 
 
@@ -473,7 +468,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         recyclerView001.setAdapter(indexAdapter001);
 
         GridViewForScrollView   recyclerView002 = (GridViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_002);
-//        subjectList002 = new ArrayList<>();
         productList = new ArrayList<>();
         searchList = new ArrayList<>();
         indexAdapter002 = new AddProductGridAdapter(getActivity(), productList, searchList);
@@ -493,18 +487,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         subjectList003 = new ArrayList<>();
         indexAdapter003 = new ProductAlbumAdapter(getActivity(), subjectList003);
         recyclerView003.setAdapter(indexAdapter003);
-
-//        RecyclerView recyclerView004 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_004);
-//        recyclerView004.setHasFixedSize(true);
-//        recyclerView004.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-//        indexAdapter004 = new IndexAdapter004(getActivity(), new GlobalCallBack() {
-//            @Override
-//            public void callBack(Object object) {
-//                Toast.makeText(activity, "点击了" + ((Integer) object), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        recyclerView004.setAdapter(indexAdapter004);
-
 
         //地盘
         RecyclerView recyclerView005 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_005);

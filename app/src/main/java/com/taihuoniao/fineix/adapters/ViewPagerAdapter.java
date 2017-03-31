@@ -59,7 +59,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
 
     @Override
     public int getCount() {
-        // Infinite loop
         if (size == 0) {
             return 0;
         }
@@ -219,7 +218,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-//                ToastUtils.showError(json);
                 if (TextUtils.isEmpty(json)) {
                     return;
                 }
