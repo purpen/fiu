@@ -66,10 +66,9 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
         } else {
             holder.locationTv.setText(item.city + item.address);
         }
-//        String prize_num = activity.getResources().getString(R.string.prize_num);
         if (item.flagHead){
             holder.tv_prize.setVisibility(View.VISIBLE);
-            holder.tv_prize.setText(item.prizeGrade);//String.format(prize_num,item.prizeGrade,item.prizeNum)
+            holder.tv_prize.setText(item.prizeGrade);
         }else {
             holder.tv_prize.setVisibility(View.GONE);
         }
@@ -79,9 +78,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
         }else {
             holder.container.setPadding(0,0,0,0);
         }
-
         holder.qjTitleTv.setText(item.title);
-//        holder.qjTitleTv2.setText(item.short_title);
         holder.userNameTv.setText(item.user.nickname);
         if (item.user.is_expert == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
@@ -171,7 +168,6 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                                     dataEntity.user.is_follow=1;
                                 }
                             }
-//                            item.user.is_follow = 1;
                             setFocusBtnStyle((Button) view, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
                             notifyDataSetChanged();
                             return;
@@ -199,7 +195,6 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
                                     dataEntity.user.is_follow = 0;
                                 }
                             }
-//                            item.user.is_follow = 0;
                             setFocusBtnStyle((Button) view, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white, android.R.color.white, R.drawable.shape_subscribe_theme);
                             notifyDataSetChanged();
                             return;

@@ -110,7 +110,6 @@ public class UserEditSignatureActivity extends BaseActivity{
         }
     }
 
-
     protected void submitData() {
         final String label=tv_tag.getText().toString().trim();
         final String summary=et_nickname.getText().toString().trim();

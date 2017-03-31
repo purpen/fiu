@@ -8,6 +8,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FragmentViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.RegisterInfo;
+import com.taihuoniao.fineix.user.fragments.SendCheckCodeFragment;
 import com.taihuoniao.fineix.user.fragments.SetPasswordFragment;
 import com.taihuoniao.fineix.user.fragments.SubmitCheckCodeFragment;
 import com.taihuoniao.fineix.view.CustomViewPager;

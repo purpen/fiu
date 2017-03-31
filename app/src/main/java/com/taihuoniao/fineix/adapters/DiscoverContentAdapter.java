@@ -42,7 +42,6 @@ public class DiscoverContentAdapter extends CommonBaseAdapter implements Platfor
         super(titles.subList(1, titles.size()), activity);
         this.discoverBean = discoverBean;
         this.titles = titles;
-
     }
 
     @Override

@@ -69,8 +69,4 @@ public class EditRecyclerAjustAdapter extends RecyclerView.Adapter<EditRecyclerA
     public interface ItemClick {
         void click(int postion, String filterName);
     }
-
-    public interface FilterClick {
-        void filterClick(int position);
-    }
 }

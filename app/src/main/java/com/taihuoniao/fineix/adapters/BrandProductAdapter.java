@@ -94,16 +94,7 @@ public class BrandProductAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-//                switch (list.get(leftPosition).getStage()) {
-//                    case 9:
-//                        Log.e("<<<", "可购买");
                 intent.setClass(activity, BuyGoodsDetailsActivity.class);
-//                        break;
-//                    default:
-//                        Log.e("<<<", "不可购买");
-//                        intent.setClass(activity, GoodsDetailActivity.class);
-//                        break;
-//                }
                 intent.putExtra("id", list.get(leftPosition).get_id());
                 activity.startActivity(intent);
             }
@@ -137,7 +128,6 @@ public class BrandProductAdapter extends BaseAdapter {
         TextView nameRight;
         @Bind(R.id.price_right)
         TextView priceRight;
-
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

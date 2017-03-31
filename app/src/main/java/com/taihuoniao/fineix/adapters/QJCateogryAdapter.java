@@ -56,7 +56,6 @@ public class QJCateogryAdapter extends BaseAdapter {
         dialog = new WaittingDialog(activity);
     }
 
-
     @Override
     public int getCount() {
         return list.size();
@@ -131,15 +130,9 @@ public class QJCateogryAdapter extends BaseAdapter {
                     return;
                 }
                 if (TypeConversionUtils.StringConvertInt(list.get(position).getIs_love()) == 1) {
-//                    if (!dialog.isShowing()) {
-//                        dialog.show();
-//                    }
                     holder.qjLove.setEnabled(false);
                     cancelLoveQJ(position, list.get(position).get_id(), holder);
                 } else {
-//                    if (!dialog.isShowing()) {
-//                        dialog.show();
-//                    }
                     holder.qjLove.setEnabled(false);
                     loveQJ(position, list.get(position).get_id(), holder);
                 }

@@ -113,7 +113,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     private WaittingDialog dialog;
     private Uri mUri;
-//    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
 
     @Bind(R.id.lv_cj)
     ListView lv_cj;
@@ -123,7 +122,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_tips;
     @Bind(R.id.btn_create)
     Button btnCreate;
-    private boolean isFirstLoad = true;
     private String flag;
     private View headView;
 
@@ -137,7 +135,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (intent.hasExtra(MineFragment.class.getSimpleName())) {
             which = intent.getIntExtra(MineFragment.class.getSimpleName(), MineFragment.REQUEST_CJ);
         }
-
         if (intent.hasExtra(FocusActivity.USER_ID_EXTRA)) {
             userId = intent.getLongExtra(FocusActivity.USER_ID_EXTRA, LoginInfo.getUserId());
         }
@@ -151,7 +148,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     }
 
     private void resetData() {
-        isFirstLoad = true;
         curPage = 1;
         mQJList.clear();
         mSceneList.clear();
@@ -441,7 +437,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
-                    isFirstLoad = false;
                     if (mSceneList.size() % 2 == 0) {
                         if (absListView.getLastVisiblePosition() == mSceneList.size() / 2) {
                             loadCJData();
@@ -483,26 +478,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
                     getImageFromCamera();
                 } else {
-                    // 申请权限。
-                    AndPermission.with(this)
-                            .requestCode(REQUEST_PERMISSION_CODE)
-                            .permission(Manifest.permission.CAMERA)
-                            .send();
+                    AndPermission.with(this) .requestCode(REQUEST_PERMISSION_CODE).permission(Manifest.permission.CAMERA) .send(); // 申请权限。
                 }
-
                 break;
             case R.id.tv_album:
                 PopupWindowUtil.dismiss();
                 if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     getImageFromAlbum();
                 } else {
-                    // 申请权限。
-                    AndPermission.with(this)
-                            .requestCode(REQUEST_PERMISSION_CODE)
-                            .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                            .send();
+                    AndPermission.with(this).requestCode(REQUEST_PERMISSION_CODE).permission(Manifest.permission.READ_EXTERNAL_STORAGE).send(); // 申请权限。
                 }
-
                 break;
             case R.id.tv_cancel:
                 PopupWindowUtil.dismiss();
@@ -644,16 +629,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             ToastUtils.showInfo("请插入SD卡");
             return;
         }
-
-//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-//            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         mUri = getUriForFile();
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
         startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
     }
-
 
     public Uri getUriForFile() {
         File path = new File(mFilePath);
@@ -700,6 +680,4 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         intent.putExtra(ImageCropActivity.class.getName(), flag);
         startActivity(intent);
     }
-
-
 }

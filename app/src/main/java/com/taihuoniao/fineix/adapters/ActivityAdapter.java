@@ -70,7 +70,6 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
         return convertView;
     }
 
-
     static class ViewHolder {
         @Bind(R.id.tv_during)
         TextView tvDuring;

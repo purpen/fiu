@@ -74,12 +74,6 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
             holder.tv_title1.setVisibility(View.GONE);
         }
         holder.ibtn.setVisibility(View.GONE);
-//        if (item.is_follow == 1) {
-//            holder.ibtn.setImageResource(R.mipmap.zaned);
-//        } else {
-//            holder.ibtn.setImageResource(R.mipmap.zan_normal);
-//        }
-//        setClickListener(holder.ibtn, item);
         return convertView;
     }
 

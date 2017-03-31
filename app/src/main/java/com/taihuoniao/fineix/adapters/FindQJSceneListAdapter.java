@@ -83,6 +83,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private List<SceneListBean2.RowsEntity> sceneList;//情景列表数据
     private WaittingDialog dialog;
     private int pos;
+
     //popupwindow下的控件
     private View popup_view;
     private PopupWindow popupWindow;
@@ -254,7 +255,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             holder.qjTitleTv.setText(sceneList.get(position).getTitle());
             holder.qjTitleTv.setVisibility(View.VISIBLE);
         }
-//        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
         List<SceneListBean2.RowsEntity.ProductEntity> productBeanList = sceneList.get(position).getProduct();
         if (productBeanList != null && compareble(productBeanList, (List<SceneListBean2.RowsEntity.ProductEntity>) holder.labelContainer.getTag(R.id.label_container))) {
@@ -356,17 +356,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 pos = position;
             }
         });
-//        holder.moreComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent3 = new Intent(activity, CommentListActivity.class);
-//                intent3.putExtra("target_id", sceneList.get(position).get_id());
-//                intent3.putExtra("type", 12 + "");
-//                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-//                activity.startActivityForResult(intent3, 1);
-//                pos = position;
-//            }
-//        });
         //跳转到分享页面
         holder.shareImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -792,8 +781,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ImageView qjImg;
         @Bind(R.id.qj_title_tv)
         TextView qjTitleTv;
-//        @Bind(R.id.qj_title_tv2)
-//        TextView qjTitleTv2;
         @Bind(R.id.label_container)
         RelativeLayout labelContainer;
         @Bind(R.id.view_count)
@@ -804,8 +791,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ImageView shareImg;
         @Bind(R.id.comment_img)
         ImageView commentImg;
-        //        @Bind(R.id.love_container)
-//        RelativeLayout loveRelative;
         @Bind(R.id.love_count)
         TextView loveCount;
         @Bind(R.id.love_img)

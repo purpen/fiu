@@ -86,5 +86,4 @@ public class AlbumGridAdapter extends BaseAdapter {
         private ImageView img;
         private TextView tv;
     }
-
 }

@@ -35,11 +35,8 @@ public class DiscoverQJRecommendAdapter extends CommonBaseAdapter<DiscoverBean.S
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         GlideUtils.displayImage(item.cover_url,holder.iv);
-
         holder.tvTag.setText(item.title);
-
         return convertView;
     }
 

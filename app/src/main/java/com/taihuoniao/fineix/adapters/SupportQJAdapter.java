@@ -113,7 +113,6 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 item.sight.is_love = 1;
-//                                ibtn.setImageResource(R.mipmap.zaned);
                                 SupportQJAdapter.this.notifyDataSetChanged();
                                 return;
                             }
@@ -142,7 +141,6 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                             if (response.isSuccess()) {
                                 item.sight.is_love = 0;
-//                                ibtn.setImageResource(R.mipmap.zan_normal);
                                 SupportQJAdapter.this.notifyDataSetChanged();
                                 return;
                             }

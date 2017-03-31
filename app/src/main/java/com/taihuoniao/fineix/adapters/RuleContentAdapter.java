@@ -25,8 +25,6 @@ public class RuleContentAdapter extends BaseAdapter {
 
     public RuleContentAdapter(ActivityPrizeData data, Activity activity) {
         this.data = data;
-        Activity activity1 = activity;
-        WaittingDialog dialog = new WaittingDialog(activity);
     }
 
     @Override

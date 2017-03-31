@@ -62,9 +62,6 @@ public class UsableRedPacketActivity extends BaseActivity {
     private String mRid;//订单号
     private WaittingDialog mDialog;
     private UsableRedPacketAdapter adapter;
-    private int mCurrentScrollState;
-    private boolean bIsMoved = false;
-    private boolean bIsDown = false;
     private int mDeltaY;
     private float mMotionY;
     public UsableRedPacketActivity() {
@@ -89,10 +86,6 @@ public class UsableRedPacketActivity extends BaseActivity {
                                 setResult(DataConstants.RESULTCODE_REDBAG, intent);
                                 finish();
                             }
-//                          else {
-//                                //红包不可用
-//                                ToastUtils.showError("这个红包不可用");
-//                            }
                         }
                     }
                     break;
@@ -168,16 +161,16 @@ public class UsableRedPacketActivity extends BaseActivity {
             }
         });
 
-
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 RedPacketData.RedPacketItem redPacketItem = (RedPacketData.RedPacketItem) lv.getAdapter().getItem(i);
+
                 //获取红包操作
                 if (mRid != null) {
                     mDialog.show();
-//                                            验证红包是否可用
+
+                    //验证红包是否可用
                     checkRedbagUsableParser(mRid, redPacketItem.code, mHandler);
                 }
             }
@@ -206,14 +199,11 @@ public class UsableRedPacketActivity extends BaseActivity {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         mDeltaY = (int) (y - mMotionY);
-                        bIsMoved = true;
                         //移动的时候，要移除掉显示bottomView的消息
                         //补齐action_down事件，因为有的时候，action_down 事件没有执行
                         action_down(y);
                         break;
                     case MotionEvent.ACTION_UP:
-                        bIsMoved = false;
-                        bIsDown = false;
                         //没有动作,则过1000ms后显示foot_view
                         mHandler.postDelayed(showBottomBarRunnable, 1000);
                         if (mDeltaY < 0) { //下滑隐藏
@@ -232,12 +222,10 @@ public class UsableRedPacketActivity extends BaseActivity {
 
     private void action_down(float y){
         mMotionY = y;
-        bIsDown = true;
         mHandler.removeCallbacks(showBottomBarRunnable);
     }
 
     private void showBottomViewOnBottom(int totalItemCount) {
-
         if(lv.getLastVisiblePosition() ==   totalItemCount -1){
             showBottomBar();
         }
@@ -248,7 +236,6 @@ public class UsableRedPacketActivity extends BaseActivity {
         public void run() {
             showBottomBar();
         }
-
     };
 
     public void showBottomBar() {

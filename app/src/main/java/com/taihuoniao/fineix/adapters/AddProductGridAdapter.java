@@ -96,5 +96,4 @@ public class AddProductGridAdapter extends BaseAdapter {
             ButterKnife.bind(this, view);
         }
     }
-
 }

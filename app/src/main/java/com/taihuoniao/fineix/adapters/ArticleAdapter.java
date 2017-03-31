@@ -42,7 +42,6 @@ public class ArticleAdapter extends CommonBaseAdapter<DataChooseSubject.ItemChoo
         return convertView;
     }
 
-
     static class ViewHolder {
         @Bind(R.id.imageView)
         ImageView imageView;

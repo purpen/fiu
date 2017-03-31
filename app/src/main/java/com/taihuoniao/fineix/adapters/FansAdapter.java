@@ -132,7 +132,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                         return;
                     }
                     ToastUtils.showError(response.getMessage());
-
                 }
 
                 @Override
@@ -163,10 +162,8 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         tv_album.setOnClickListener(this);
         tv_album.setTag(item);
         tv_cancel.setOnClickListener(this);
-
         myPopupWindow = new MyPopupWindow(activity,view);
         myPopupWindow.show();
-//        PopupWindowUtil.show(activity, view);
     }
 
     @Override
@@ -253,7 +250,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                         return;
                     }
                     ToastUtils.showError(response.getMessage());
-
                 }
 
                 @Override

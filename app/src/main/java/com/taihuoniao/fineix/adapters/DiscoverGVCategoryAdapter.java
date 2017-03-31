@@ -35,11 +35,8 @@ public class DiscoverGVCategoryAdapter extends CommonBaseAdapter<DiscoverBean.Pr
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         GlideUtils.displayImage(item.back_url, holder.iv);
-
         holder.tvTag.setText(item.title);
-
         return convertView;
     }
 

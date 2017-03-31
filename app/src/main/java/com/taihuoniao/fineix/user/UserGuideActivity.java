@@ -29,7 +29,7 @@ import butterknife.OnClick;
  * @author lilin
  *         created at 2016/4/18 16:10
  */
-public class UserGuideActivity extends BaseActivity {//implements EasyPermissions.PermissionCallbacks {
+public class UserGuideActivity extends BaseActivity {
     @Bind(R.id.scrollableView)
     ScrollableView scrollableView;
     @Bind(R.id.iv_welcome)
@@ -46,7 +46,6 @@ public class UserGuideActivity extends BaseActivity {//implements EasyPermission
     public static String fromPage;
     private int currentPosition;
     private MediaPlayer mediaPlayer;
-
     private boolean empty;
     private boolean taskRoot;
     private boolean readBool;
@@ -65,7 +64,6 @@ public class UserGuideActivity extends BaseActivity {//implements EasyPermission
                 finish();
             }
         }
-//        readPhoneStatus();
     }
 
     @Override
@@ -91,7 +89,6 @@ public class UserGuideActivity extends BaseActivity {//implements EasyPermission
                     iv_welcome.setVisibility(View.GONE);
                     if (empty) {
                         initGuide();
-//                        initVideoRes();
                     } else {
                         if (taskRoot) {
                             if (readBool) {
@@ -172,31 +169,10 @@ public class UserGuideActivity extends BaseActivity {//implements EasyPermission
         SPUtil.write(DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
     }
 
-//    private void submitActiveStatus() {
-//        HashMap<String, String> params = ClientDiscoverAPI.getactiveStatusRequestParams();
-//        HttpRequest.post(params, URL.GATEWAY_RECORD_FIU_USER_ACTIVE, new GlobalDataCallBack() {
-//            @Override
-//            public void onSuccess(String json) {
-//                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-//                ToastUtils.showInfo("提交渠道信息成功");
-//                if (!response.isSuccess()) {
-//                    LogUtil.e(TAG, "提交渠道失败信息:" + response.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-//                LogUtil.e(TAG, "网络异常,请确保网络畅通");
-//            }
-//        });
-//    }
-
-
     private void goMainPage() {
         startActivity(new Intent(activity, MainActivity.class));
         finish();
     }
-
 
     @Override
     protected void onResume() {
@@ -216,13 +192,11 @@ public class UserGuideActivity extends BaseActivity {//implements EasyPermission
         }
     }
 
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt("currentPosition", currentPosition);
         super.onSaveInstanceState(outState);
     }
-
 
     @OnClick({R.id.ibn_volume, R.id.btn_pass})
     public void onClick(View view) {

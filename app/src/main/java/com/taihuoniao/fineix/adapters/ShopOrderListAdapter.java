@@ -287,7 +287,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 });
                             }
                         });
-
                     }
                 });
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
@@ -391,7 +390,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             mCount.setText("× " + list.get(position).getOrderItem().get(i).getQuantity());
             mMoney.setText("¥" + list.get(position).getOrderItem().get(i).getSale_price());
             GlideUtils.displayImage(list.get(position).getOrderItem().get(i).getCover_url(), mImageView);
-//            bitmapUtils_listview.display(mImageView, list.get(position).getOrderItem().get(i).getCover_url());
             mHolder.mItem.addView(mView);
         }
         mHolder.mItem.setOnClickListener(new View.OnClickListener() {

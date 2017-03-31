@@ -72,9 +72,6 @@ public class UserCommentsActivity extends BaseActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(activity, SceneDetailActivity.class);
-//                intent.putExtra("id",list.get(i).target_id);
-//                startActivity(intent);
                 Intent intent = new Intent(activity, CommentListActivity.class);
                 intent.putExtra("target_id", list.get(i).target_id);
                 intent.putExtra("target_user_id", commentsBean.getCurrent_user_id());
@@ -113,7 +110,6 @@ public class UserCommentsActivity extends BaseActivity {
                     refreshUI();
                 } else {
                     ToastUtils.showError(commentsBean.getMessage());
-//                    dialog.showErrorWithStatus(commentsBean.getMessage());
                 }
             }
 
@@ -121,7 +117,6 @@ public class UserCommentsActivity extends BaseActivity {
             public void onFailure(String error) {
                 dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -130,14 +125,11 @@ public class UserCommentsActivity extends BaseActivity {
     protected void refreshUI() {
         if (list == null) return;
         if (list.size() == 0) {
-//            Util.makeToast("暂无评论");
             return;
         }
-
         for (int i = 0; i < unread_count; i++) {
             list.get(i).is_unread = true;
         }
-
         if (adapter == null) {
             adapter = new UserCommentsAdapter(list, activity);
             lv.setAdapter(adapter);

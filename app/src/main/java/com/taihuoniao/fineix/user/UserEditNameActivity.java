@@ -31,7 +31,6 @@ import butterknife.OnClick;
 public class UserEditNameActivity extends BaseActivity {
     @Bind(R.id.head_view)
     CustomHeadView head_view;
-    private HashMap hashMap;
     @Bind(R.id.et_nickname)
     EditText et_nickname;
     private User user;
@@ -76,7 +75,6 @@ public class UserEditNameActivity extends BaseActivity {
         }
     }
 
-
     protected void submitData() {
         final String nickName = et_nickname.getText().toString();
         EditUserInfoActivity.isSubmitAddress = false;
@@ -84,13 +82,10 @@ public class UserEditNameActivity extends BaseActivity {
         HttpRequest.post(params,  URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-
                 if (TextUtils.isEmpty(json)) {
                     return;
                 }
-
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-
                 if (response.isSuccess()) {
                     Util.makeToast(response.getMessage());
                     Intent intent = new Intent();
@@ -100,7 +95,6 @@ public class UserEditNameActivity extends BaseActivity {
                     finish();
                     return;
                 }
-
                 Util.makeToast(response.getMessage());
             }
 
