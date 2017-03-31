@@ -1,14 +1,9 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.taihuoniao.fineix.R;
 
 import java.util.List;
 

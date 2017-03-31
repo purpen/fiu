@@ -34,7 +34,6 @@ import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QJFavoriteBean;
-import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -68,7 +67,6 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -473,7 +471,6 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         } else {
             holder.attentionBtn.setVisibility(View.VISIBLE);
             if (TypeConversionUtils.StringConvertInt(sceneList.get(position).getUser_info().getIs_follow()) == 1) {
-//                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.attentionBtn.setText("已关注");
                 holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);

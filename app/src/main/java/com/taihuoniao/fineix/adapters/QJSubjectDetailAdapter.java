@@ -61,7 +61,6 @@ import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -87,8 +86,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onClick(View view);
     }
 
-    private ISortListener sortListener;
-
     private Activity activity;
     private List<QJSubjectDetailBean.SightsBean> list;
     private QJSubjectDetailBean data;
@@ -113,7 +110,7 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void setSortListener(ISortListener listener) {
-        this.sortListener = listener;
+        ISortListener sortListener = listener;
     }
 
     @Override
@@ -528,7 +525,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
             holder.labelContainer.addView(labelView);
-//            Log.e("<<<", "开启动画" + holder.qjTitleTv.getText() + ",现在位置=" + position);
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -602,13 +598,6 @@ public class QJSubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             }
         });
-//        holder.commentList.setAdapter(new QJSubjectDetailAdapter.IndexCommentAdapter(data.sights));
-//        if (data.comment_count > 0) {
-//            holder.moreComment.setText("查看所有" + data.comment_count + "条评论");
-//            holder.moreComment.setVisibility(View.GONE);
-//        } else {
-//            holder.moreComment.setVisibility(View.GONE);
-//        }
     }
 
     static class IndexCommentAdapter extends BaseAdapter {

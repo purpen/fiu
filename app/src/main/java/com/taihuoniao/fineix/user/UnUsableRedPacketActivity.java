@@ -21,7 +21,6 @@ import com.taihuoniao.fineix.beans.RedBagUntimeout;
 import com.taihuoniao.fineix.beans.RedPacketData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
