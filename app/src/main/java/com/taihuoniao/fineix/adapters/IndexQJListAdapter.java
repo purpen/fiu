@@ -1113,7 +1113,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         public void onClick(View widget) {
             Intent intent = new Intent(activity, SearchActivity.class);
             intent.putExtra("q", q);
-            intent.putExtra("t", 9);
+            intent.putExtra("t", 7);
             activity.startActivity(intent);
         }
     }

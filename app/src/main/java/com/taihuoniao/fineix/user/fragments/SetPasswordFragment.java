@@ -16,12 +16,12 @@ import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.common.GlobalCallBack;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.RegisterInfo;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -33,7 +33,6 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.ToLoginActivity;
 import com.taihuoniao.fineix.user.ToRegisterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
@@ -140,7 +139,6 @@ public class SetPasswordFragment extends MyBaseFragment {
 
             void loginSuccess(LoginInfo loginInfo) {
                 if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
-                    updateUserIdentity();
                     startActivity(new Intent(activity, CompleteUserInfoActivity.class));
                 } else {
                     startActivity(new Intent(activity, MainActivity.class));
@@ -165,26 +163,4 @@ public class SetPasswordFragment extends MyBaseFragment {
         });
     }
 
-    private void updateUserIdentity() {
-        String type = "1";//设置非首次登录
-        HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
-        HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
-            @Override
-            public void onSuccess(String json) {
-                if (TextUtils.isEmpty(json)) return;
-                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                if (response.isSuccess()) {
-                    LogUtil.e("updateUserIdentity", "成功改为非首次登录");
-                    return;
-                }
-                LogUtil.e("改为非首次登录失败", json + "===" + response.getMessage());
-            }
-
-            @Override
-            public void onFailure(String error) {
-                if (TextUtils.isEmpty(error)) return;
-                LogUtil.e("网络异常", "改为非首次登录失败");
-            }
-        });
-    }
 }

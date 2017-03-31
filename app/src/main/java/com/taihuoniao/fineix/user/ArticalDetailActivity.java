@@ -154,7 +154,6 @@ public class ArticalDetailActivity extends BaseActivity {
                     if (LoginInfo.isUserLogin()) {
                         intent = new Intent(activity, UsableRedPacketActivity.class);
                         activity.startActivity(intent);
-                        activity.finish();
                     } else {
                         activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     }

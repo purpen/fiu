@@ -8,8 +8,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 37
-        versionName "1.8.7"
+        versionCode 38
+        versionName "1.8.8"
         multiDexEnabled true
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
@@ -22,7 +22,7 @@ android {
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
             keyPassword 'taihuoniao798'
-            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
+//            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
         }
     }
     buildTypes {

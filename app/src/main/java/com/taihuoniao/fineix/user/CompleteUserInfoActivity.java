@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -28,7 +29,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     ImageButton ibtn_back;
     @Bind(R.id.viewPager)
     CustomViewPager viewPager;
-
+    private FragmentViewPagerAdapter adapter;
     public CompleteUserInfoActivity() {
         super(R.layout.activity_complete_user_info);
     }
@@ -39,7 +40,8 @@ public class CompleteUserInfoActivity extends BaseActivity {
         viewPager.setPagingEnabled(false);
         UserCompleteData data = new UserCompleteData();
         Fragment[] fragments = {CompleteAvatarNickNameFragment.newInstance(data), DecadeSelectFragment.newInstance(data), SubscribeThemeFragment.newInstance(data), FocusUserFragment.newInstance(data)};
-        viewPager.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments));
+        adapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments);
+        viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -84,4 +86,12 @@ public class CompleteUserInfoActivity extends BaseActivity {
                 break;
         }
     }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (null==adapter) return;
+        adapter.getItem(0).onActivityResult(requestCode, resultCode, data);
+    }
+
 }

@@ -48,6 +48,10 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
     private static final int REQUEST_MODIFY_SUBTITLE = 101;
     private static final int REQUEST_ZONE_CATEGORY = 102;
     private static final int REQUEST_ZONE_TAGS = 103;
+    private static final int REQUEST_ZONE_ADDRESS = 104;
+    private static final int REQUEST_ZONE_TEL = 108;
+    private static final int REQUEST_ZONE_BUSINESS = 109;
+
     @Bind(R.id.item_zone_avatar)
     CustomItemLayout itemZoneAvatar;
     @Bind(R.id.custom_head)
@@ -60,6 +64,12 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
     CustomItemLayout itemZoneCategory;
     @Bind(R.id.item_zone_tags)
     CustomItemLayout itemZoneTags;
+    @Bind(R.id.item_zone_address)
+    CustomItemLayout itemZoneAddress;
+    @Bind(R.id.item_zone_phone)
+    CustomItemLayout itemZonePhone;
+    @Bind(R.id.item_zone_business)
+    CustomItemLayout itemZoneBusiness;
     private ZoneDetailBean zoneDetailBean;
     private Uri mUri;
     private Bitmap bitmap;
@@ -85,11 +95,17 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
         itemSubTitle.setTVStyle(0, R.string.zone_subtitle, R.color.color_666);
         itemZoneCategory.setTVStyle(0, R.string.zone_category, R.color.color_666);
         itemZoneTags.setTVStyle(0, R.string.zone_tags, R.color.color_666);
+        itemZoneAddress.setTVStyle(0, R.string.zone_address, R.color.color_666);
+        itemZonePhone.setTVStyle(0, R.string.zone_phone, R.color.color_666);
+        itemZoneBusiness.setTVStyle(0, R.string.zone_business_times, R.color.color_666);
         if (zoneDetailBean != null) {
             GlideUtils.displayImage(zoneDetailBean.avatar_url, itemZoneAvatar.getAvatarIV());
             itemZoneCategory.setTvArrowLeftStyle(true, zoneDetailBean.category.title, R.color.color_333);
             itemSubTitle.setTvArrowLeftStyle(true, zoneDetailBean.sub_title, R.color.color_333);
             itemZoneTitle.setTvArrowLeftStyle(true, zoneDetailBean.title, R.color.color_333);
+            itemZoneAddress.setTvArrowLeftStyle(true, zoneDetailBean.address, R.color.color_333);
+            itemZonePhone.setTvArrowLeftStyle(true, zoneDetailBean.extra.tel, R.color.color_333);
+            itemZoneBusiness.setTvArrowLeftStyle(true, zoneDetailBean.extra.shop_hours, R.color.color_333);
         }
     }
 
@@ -194,7 +210,7 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
         startActivity(intent);
     }
 
-    @OnClick({R.id.item_zone_avatar, R.id.item_zone_title, R.id.item_sub_title, R.id.item_zone_category, R.id.item_zone_tags})
+    @OnClick({R.id.item_zone_avatar, R.id.item_zone_title, R.id.item_sub_title, R.id.item_zone_category, R.id.item_zone_tags, R.id.item_zone_address, R.id.item_zone_phone, R.id.item_zone_business})
     void performClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -224,6 +240,21 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
                 intent = new Intent(activity, ZoneEditTagActivity.class);
                 intent.putExtra(ZoneEditTagActivity.class.getSimpleName(), zoneDetailBean);
                 startActivityForResult(intent,REQUEST_ZONE_TAGS);
+                break;
+            case R.id.item_zone_address://地盘地址
+                intent = new Intent(activity, ZoneEditAddressActivity.class);
+                intent.putExtra(ZoneEditAddressActivity.class.getSimpleName(), zoneDetailBean);
+               startActivityForResult(intent,REQUEST_ZONE_ADDRESS);
+                break;
+            case R.id.item_zone_phone://地盘电话
+                intent = new Intent(activity, ZoneEditPhoneActivity.class);
+                intent.putExtra(ZoneEditPhoneActivity.class.getSimpleName(), zoneDetailBean);
+                startActivityForResult(intent,REQUEST_ZONE_TEL);
+                break;
+            case R.id.item_zone_business://营业时间
+                intent = new Intent(activity, ZoneEditTimeActivity.class);
+                intent.putExtra(ZoneEditTimeActivity.class.getSimpleName(), zoneDetailBean);
+                startActivityForResult(intent,REQUEST_ZONE_BUSINESS);
                 break;
             default:
 
@@ -279,6 +310,21 @@ public class ZoneBaseInfoActivity extends BaseActivity implements View.OnClickLi
                 break;
             case REQUEST_ZONE_TAGS:  //地盘标签
                 zoneDetailBean = data.getParcelableExtra(ZoneEditTagActivity.class.getSimpleName());
+                break;
+            case REQUEST_ZONE_ADDRESS:  //地盘地址
+                zoneDetailBean = data.getParcelableExtra(ZoneEditAddressActivity.class.getSimpleName());
+                if (zoneDetailBean == null) return;
+                itemZoneAddress.setTvArrowLeftStyle(true, zoneDetailBean.address, R.color.color_333);
+                break;
+            case REQUEST_ZONE_TEL:  //地盘电话
+                zoneDetailBean = data.getParcelableExtra(ZoneEditPhoneActivity.class.getSimpleName());
+                if (zoneDetailBean == null) return;
+                itemZonePhone.setTvArrowLeftStyle(true, zoneDetailBean.extra.tel, R.color.color_333);
+                break;
+            case REQUEST_ZONE_BUSINESS:  //地盘营业时间
+                zoneDetailBean = data.getParcelableExtra(ZoneEditTimeActivity.class.getSimpleName());
+                if (zoneDetailBean == null) return;
+                itemZoneBusiness.setTvArrowLeftStyle(true, zoneDetailBean.extra.shop_hours, R.color.color_333);
                 break;
             default:
                 break;

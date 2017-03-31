@@ -314,6 +314,10 @@ public class ZoneEditBrightActivity extends BaseActivity {
 
     //上传亮点
     private void upload() {
+        if (editList.size()==0) {
+            ToastUtils.showInfo(R.string.input_publish_content);
+            return;
+        }
         if (!richEditor.isAllImageUploaded()){
             ToastUtils.showInfo(R.string.uploading_image_waiting);
             return;
@@ -331,8 +335,6 @@ public class ZoneEditBrightActivity extends BaseActivity {
             }
         }
         String s = JsonUtil.list2Json(strings);
-
-        if (TextUtils.isEmpty(s)) return;
         HashMap<String,String> params=new HashMap<>();
         params.put("id",zoneDetailBean._id);
         params.put("bright_spot",s); //["[text]:!天气不错", "[img]:!http://img_url"]

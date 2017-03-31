@@ -348,7 +348,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
             case R.id.search_linear:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra(FindFragment.class.getSimpleName(), false);
-                intent.putExtra("t", 9);
+                intent.putExtra("t", 7);
                 startActivity(intent);
                 break;
         }

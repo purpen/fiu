@@ -85,7 +85,7 @@ public class DiscoverFragment extends BaseFragment {
                 break;
             case R.id.title_right:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("t", 9);
+                intent.putExtra("t", 7);
                 startActivity(intent);
                 break;
             default:

@@ -86,6 +86,10 @@ public class ZoneEditAddressActivity extends BaseActivity {
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     Util.makeToast(response.getMessage());
+                    zoneDetailBean.address = address;
+                    Intent intent = new Intent();
+                    intent.putExtra(TAG,zoneDetailBean);
+                    setResult(RESULT_OK,intent);
                     finish();
                     return;
                 }
@@ -107,7 +111,9 @@ public class ZoneEditAddressActivity extends BaseActivity {
             case REQUEST_ADDRESS_CODE:
                 PoiInfo poiInfo = data.getParcelableExtra(PoiInfo.class.getSimpleName());
                 if (poiInfo==null) return;
-                tvAddress.setText(poiInfo.address+poiInfo.name);
+                StringBuilder builder = new StringBuilder();
+                builder.append(poiInfo.city).append(poiInfo.address).append(poiInfo.name);
+                tvAddress.setText(builder);
                 break;
             default:
                 break;

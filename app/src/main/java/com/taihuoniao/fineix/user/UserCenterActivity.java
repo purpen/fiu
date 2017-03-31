@@ -584,10 +584,23 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，第一个参数是当前Acitivity/Fragment，回调方法写在当前Activity/Framgent。
+        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
     // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
     @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
     private void getRequestYes(List<String> grantedPermissions) {
-        getImageFromAlbum();
+        for (String item : grantedPermissions){
+            if (item.contains("android.permission.READ_EXTERNAL_STORAGE")) {
+                getImageFromAlbum();
+            }
+            if(item.contains("android.permission.CAMERA")) {
+                getImageFromCamera();
+            }
+        }
     }
 
     // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。

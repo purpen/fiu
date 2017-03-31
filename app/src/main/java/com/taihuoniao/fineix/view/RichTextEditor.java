@@ -2,9 +2,11 @@ package com.taihuoniao.fineix.view;
 
 import android.animation.LayoutTransition;
 import android.animation.LayoutTransition.TransitionListener;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -21,24 +23,28 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.taihuoniao.fineix.R.dimen.dp30;
 import static com.taihuoniao.fineix.R.dimen.dp5;
 import static com.taihuoniao.fineix.R.id.edit_imageView;
 
 /**
  * 亮点编辑器
  */
-public class RichTextEditor extends ScrollView implements View.OnClickListener{
+public class RichTextEditor extends ScrollView {
     private ImageQueue<DataImageView> imageQueue;
+    public float scale = 0.7f;
     public static final String TAG = "RichTextEditor";
-    public static final String HINT = "input here";
+    public static final String HINT = "添加文字或图片";
     private int viewTagIndex = 1; // 新生的view都会打一个tag，对每个view来说，这个tag是唯一的。
     private LinearLayout allLayout; // 这个是所有子view的容器，scrollView内部的唯一一个ViewGroup
     private LayoutInflater inflater;
@@ -47,7 +53,7 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
     private EditText lastFocusEdit; // 最近被聚焦的EditText
     private LayoutTransition mTransitioner; // 只在图片View添加或remove时，触发transition动画
     private int disappearingImageIndex = 0;
-
+    private int imageHeight;
     public RichTextEditor(Context context) {
         this(context, null);
     }
@@ -62,10 +68,12 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
         allLayout = new LinearLayout(context);
         allLayout.setOrientation(LinearLayout.VERTICAL);
         allLayout.setBackgroundColor(Color.WHITE);
+        imageHeight = getResources().getDimensionPixelSize(R.dimen.dp195);
         imageQueue = new ImageQueue<>();
         setupLayoutTransitions();
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
+                LayoutParams.MATCH_PARENT);
+
         addView(allLayout, layoutParams);
 
         // 2. 初始化键盘退格监听
@@ -94,32 +102,16 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
         initEditText();
     }
 
-    @Override
-    public void onClick(View v) {
-        RelativeLayout parentView = (RelativeLayout) v.getParent();
-        switch (v.getId()){
-            case R.id.image_close:
-                onImageCloseClick(parentView);
-                break;
-            case R.id.image_scale:
-                onImageScaleClick(parentView);
-                break;
-            default:
-                break;
-        }
-    }
-
     /**
      * 图片缩放动画
      * @param v
      */
     private void onImageScaleClick(final View v) {
-        int size = getResources().getDimensionPixelSize(R.dimen.dp195);
         LinearLayout.LayoutParams layoutParams;
-        if (v.getHeight()==size){
-            layoutParams = new LinearLayout.LayoutParams((int) (v.getWidth() * 0.5), (int) (v.getHeight() * 0.5));
+        if (v.getHeight()==imageHeight){
+            layoutParams = new LinearLayout.LayoutParams((int) (v.getWidth() * 0.7), (int) (imageHeight * 0.7));
         }else {
-            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,size);
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,imageHeight);
         }
         v.setLayoutParams(layoutParams);
     }
@@ -235,13 +227,37 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
         RelativeLayout layout = (RelativeLayout) inflater.inflate(
                 R.layout.edit_imageview_item, null);
         layout.setTag(viewTagIndex++);
+        BlurView blurView = (BlurView)layout.findViewById(R.id.blurView);
+        final Drawable windowBackground = ((Activity)getContext()).getWindow().getDecorView().getBackground();
+        blurView.setupWith(layout)
+                .windowBackground(windowBackground)
+                .blurRadius(25);
         View closeView = layout.findViewById(R.id.image_close);
         View imageScale = layout.findViewById(R.id.image_scale);
         closeView.setTag(layout.getTag());
-        closeView.setOnClickListener(this);
-        imageScale.setOnClickListener(this);
+        setClickListener(closeView,layout);
+        setClickListener(imageScale,layout);
         return layout;
     }
+
+    private void setClickListener(View v,final RelativeLayout layout) {
+        v.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.image_close:
+                        onImageCloseClick(layout);
+                        break;
+                    case R.id.image_scale:
+                        onImageScaleClick(layout);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
 
     /**
      * 根据绝对路径添加view
@@ -330,9 +346,9 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
         DataImageView imageView = (DataImageView) relativeLayout.findViewById(edit_imageView);
         GlideUtils.displayImageNoFading(imagePath, imageView);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.dp195));
-        imageView.setLayoutParams(lp);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                (int)((Util.getScreenWidth()-getResources().getDimensionPixelSize(dp30))*scale), (int)(imageHeight*scale));
+        relativeLayout.setLayoutParams(lp);
         imageView.setAbsolutePath(imagePath);
         imageView.isUpload = true;
         imageQueue.add(imageView);
@@ -353,7 +369,7 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
             LogUtil.e("addImageViewAtIndex参数bmp为空");
             return;
         }
-        final RelativeLayout relativeLayout = createImageLayout();
+        RelativeLayout relativeLayout = createImageLayout();
         DataImageView imageView = (DataImageView) relativeLayout
                 .findViewById(edit_imageView);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -361,11 +377,9 @@ public class RichTextEditor extends ScrollView implements View.OnClickListener{
         imageView.setBitmap(bmp);
         imageView.setAbsolutePath(imagePath);
         imageView.isUpload = false;
-        // 调整imageView的高度
-        int imageHeight = getResources().getDimensionPixelSize(R.dimen.dp195);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, imageHeight);
-        imageView.setLayoutParams(lp);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                (int)((Util.getScreenWidth()-getResources().getDimensionPixelSize(dp30))*scale), (int)(imageHeight*scale));
+        relativeLayout.setLayoutParams(lp);
         imageQueue.add(imageView);
         allLayout.addView(relativeLayout, index);
     }

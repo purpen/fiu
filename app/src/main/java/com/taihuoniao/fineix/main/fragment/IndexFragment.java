@@ -243,7 +243,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         switch (v.getId()) {
             case R.id.search_img:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("t", 9);
+                intent.putExtra("t", 7);
                 startActivity(intent);
                 break;
             case R.id.subs_img:

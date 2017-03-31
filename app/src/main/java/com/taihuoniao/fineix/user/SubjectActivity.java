@@ -150,7 +150,6 @@ public class SubjectActivity extends BaseActivity {
                     if (LoginInfo.isUserLogin()) {
                         intent = new Intent(SubjectActivity.this, UsableRedPacketActivity.class);
                         startActivity(intent);
-                        SubjectActivity.this.finish();
                     } else {
                         activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     }

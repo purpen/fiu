@@ -49,7 +49,7 @@
         android:layout_below="@+id/tv_known_more"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp45">
+        android:layout_marginTop="@dimen/dp40">
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:id="@+id/riv"
@@ -141,15 +141,13 @@
 
     <Button
         android:id="@+id/btn_next"
-        android:layout_width="@dimen/dp60"
-        android:layout_height="wrap_content"
-        android:drawableRight="@mipmap/more"
-        android:background="@null"
-        android:text="下一步"
+        android:layout_width="@dimen/dp65"
+        android:layout_height="@dimen/dp35"
+        android:background="@drawable/bg_corner_yellow_10dp"
+        android:text="@string/complete"
         android:textColor="@color/white"
         android:textSize="@dimen/sp14"
-        android:layout_marginBottom="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp16"
-        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp65"
         android:layout_alignParentBottom="true" />
 </RelativeLayout>
