@@ -102,7 +102,7 @@ public class NetWorkUtils {
         if (!folder.isFile()) {
             folder.mkdir();
         }
-        String fileName = "fiu_" + System.currentTimeMillis() + ".apk";
+        String fileName = "D3IN_" + System.currentTimeMillis() + ".apk";
         File apkFile = new File(path, fileName);
         new DownLoadTask(mContext, apkFile, mHandler, showProgressDialog).execute(downloadUrl + "?timestamp=" + System.currentTimeMillis());
     }
