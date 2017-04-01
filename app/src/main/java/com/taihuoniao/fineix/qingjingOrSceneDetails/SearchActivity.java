@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -107,20 +108,20 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
-        editText.setOnKeyListener(new View.OnKeyListener() {//输入完后按键盘上的搜索键【回车键改为了搜索键】
-
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (SearchActivity.this.getCurrentFocus() != null) {
-                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(SearchActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        editText.setOnEditorActionListener(
+                new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                            if (SearchActivity.this.getCurrentFocus() != null) {
+                                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(SearchActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                            }
+                            currentStr = editText.getText().toString();
+                            refreshData();  //开始搜索
+                        }
+                        return false;
                     }
-                    currentStr = editText.getText().toString();
-                    //开始搜索
-                    refreshData();
-                }
-                return false;
-            }
-        });
+                });
         WindowUtils.chenjin(this);
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadSearch);
         registerReceiver(searchReceiver, intentFilter);

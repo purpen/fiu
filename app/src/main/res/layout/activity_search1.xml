@@ -57,6 +57,8 @@
                 android:layout_toRightOf="@id/search"
                 android:background="@null"
                 android:hint="@string/search"
+                android:singleLine="true"
+                android:inputType="text"
                 android:imeOptions="actionSearch"
                 android:maxLines = "1"
                 android:textSize="13sp"/>
