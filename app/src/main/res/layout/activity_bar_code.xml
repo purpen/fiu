@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_bar_code"
             android:layout_centerHorizontal="true"
-            android:text="扫描二维码关注我的Fiu"
+            android:text="扫描二维码关注我的D3IN"
             android:textColor="@color/color_af8323"
             android:textSize="@dimen/sp14" />
     </RelativeLayout>

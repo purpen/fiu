@@ -20,7 +20,7 @@
     <string name="about_us">关于我们</string>
     <string name="feed_back">意见与反馈</string>
     <string name="partners">战略伙伴App</string>
-    <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“Fiu”更改</string>
+    <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“D3IN”更改</string>
     <string name="net_fail">网络错误</string>
     <string name="input_invite_code">请输入您的邀请码</string>
     <string name="prize_num">%1$s%2$s名</string>
@@ -134,13 +134,13 @@
     <string name="select_tag">请选择个性标签</string>
     <string name="select_address">请选择地址</string>
     <string name="input_signature">您还没有个性签名</string>
-    <string name="complete_user_info">选好了，开始Fiu之旅</string>
+    <string name="complete_user_info">选好了，开始D3IN之旅</string>
     <string name="first_in_qing_title">情境定位</string>
     <string name="first_in_qing_des">挪动图标，发现全世界的美事儿，给心思找个落脚点</string>
     <string name="first_in_jing_title">情境布局</string>
     <string name="first_in_jing_des">给自己设一个局，换一处风情、换一面质地、换各色朝朝暮暮</string>
-    <string name="first_in_fiu_title">Fiu是什么</string>
-    <string name="first_in_fiu_des">敢挑剔，敢为每一处细节用尽心力，在这里编辑影像，Fiu同寻常</string>
+    <string name="first_in_fiu_title">D3IN是什么</string>
+    <string name="first_in_fiu_des">敢挑剔，敢为每一处细节用尽心力，在这里编辑影像，D3IN同寻常</string>
     <string name="first_in_pin_title">品牌Mall</string>
     <string name="first_in_pin_des">你的欲望，予我追寻格调的动力；我的橱窗，给你智居的千方百计</string>
     <string name="first_in_wo_title">个人Profile（编辑我的主页）</string>
@@ -151,7 +151,7 @@
     <string name="select_tag_tip">选择一个标签或输入15字以内的描述</string>
     <string name="user_center_qj_tip">每个地盘都有故事，来都来了，讲讲你的故事吧</string>
     <string name="user_center_qj_tip1">你们好像在哪儿见过，来看看他的足迹吧</string>
-    <string name="user_center_cj_tip">你还没有发表过新情境哦，快来Fiu一下嘛</string>
+    <string name="user_center_cj_tip">你还没有发表过新情境哦，快来D3IN一下嘛</string>
     <string name="user_center_cj_tip1">关于TA的经历，你想知道的可能都在这里</string>
     <string name="focus_tips">偷偷告诉你：关注越多，推送越精准哦</string>
     <string name="focus_tips1">你一定是想关注我，才点进来的对吧</string>
@@ -208,7 +208,7 @@
     <string name="password">密码</string>
     <string name="bind">立即绑定</string>
     <string name="skip_bind">绑定已有帐号</string>
-    <string name="login_now">首次加入Fiu,立即登录</string>
+    <string name="login_now">首次加入D3IN,立即登录</string>
     <string name="send">发送</string>
     <string name="take_comment">评论一下</string>
     <string name="you_are_first_comment">你可是第一个看到它的人，快来评论一下吧</string>
@@ -225,7 +225,7 @@
     <string name="no_redbag">无可用红包</string>
     <string name="used_a_redbag">您使用了一张5元红包，下单后将不可恢复</string>
     <string name="remark">备注：</string>
-    <string name="input_more_twenty">想省事？向右看，Fiu语境有你要的文字</string>
+    <string name="input_more_twenty">想省事？向右看，D3IN语境有你要的文字</string>
     <string name="add_des">添加描述</string>
     <string name="add_address">添加地点</string>
     <string name="label">标签</string>
@@ -295,8 +295,8 @@
     <string name="defaul">默认</string>
     <string name="numbers">数量</string>
     <string name="number_1">1</string>
-    <string name="search_nothing">没找到？\n\n或许Fiu首页有你要查的东西</string>
-    <string name="hot_fiuer">热Fiuer</string>
+    <string name="search_nothing">没找到？\n\n或许D3IN首页有你要查的东西</string>
+    <string name="hot_fiuer">热D3IN</string>
     <string name="bigger_no_low_profile">[有Bigger不低调]</string>
     <string name="new_land">新Land</string>
     <string name="enclosure_is_earnings">[圈地盘有收益]</string>
@@ -304,7 +304,7 @@
     <string name="whoever_with_addiction">[谁用谁上瘾]</string>
     <string name="severe_brands">牛Brands</string>
     <string name="good_here">[尖货这里找]</string>
-    <string name="fiu_things">Fiu好货</string>
+    <string name="fiu_things">D3IN好货</string>
     <string name="more_goods_more_brands">[东西不少，牌子不小]</string>
     <string name="sights_of_scene">此地盘下的情境</string>
     <string name="create_sight">创建新的情境</string>
@@ -322,8 +322,8 @@
     <string name="up_to_look_more_detail" translatable="false">--上拉查看好货详情--</string>
     <string name="coment">评价</string>
     <string name="take_your_comment">写下您对商品的感受，对他人帮助很大</string>
-    <string name="fiu_des">Fiu | 创新产品情境式购物平台</string>
-    <string name="fiu_to_buy">有Fiu才购</string>
+    <string name="fiu_des">D3IN | 创新产品情境式购物平台</string>
+    <string name="fiu_to_buy">有D3IN才购</string>
     <string name="the_number">数量 *</string>
     <string name="the_money">价钱</string>
     <string name="check_for_detail">查看详情</string>
@@ -359,7 +359,7 @@
     <string name="add_envir">添加语境</string>
     <string name="search_envir">搜索语境</string>
     <string name="recommend_labels">推荐标签</string>
-    <string name="user_protocol">注册即表明同意 [ Fiu浮游&#8482;用户条款 ]</string>
+    <string name="user_protocol">注册即表明同意 [ D3IN&#8482;用户条款 ]</string>
     <string name="add_title">添加标题</string>
     <string name="say_your_thinking">说说现在的想法</string>
     <string name="go_to_buy">立即购买</string>

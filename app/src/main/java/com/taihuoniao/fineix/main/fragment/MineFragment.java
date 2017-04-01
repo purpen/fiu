@@ -384,7 +384,7 @@ public class MineFragment extends MyBaseFragment {
             case R.id.item_about_us:
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.SETTINGS_ABOUTUS);
-                intent.putExtra(AboutUsActivity.class.getName(), "关于Fiu");
+                intent.putExtra(AboutUsActivity.class.getName(), "关于D3IN");
                 startActivity(intent);
                 break;
             case R.id.item_feedback:
