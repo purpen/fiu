@@ -157,7 +157,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                     ToastUtils.showInfo("昵称不能为空");
                 }
                 HashMap<String, String> params = ClientDiscoverAPI.getupdateNickNameSexRequestParams(nickName, gender);
-                HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack(){
+                HttpRequest.post(params, URL.UPDATE_USERINFO_URL, new GlobalDataCallBack() {
                     @Override
                     public void onSuccess(String json) {
                         HttpResponse<User> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<User>>() {
@@ -197,7 +197,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
         HashMap<String, String> params = ClientDiscoverAPI.getupdateUserIdentifyRequestParams(type);
-        HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
+        HttpRequest.post(params, URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
@@ -238,7 +238,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                     PopupWindowUtil.dismiss();
                     if (AndPermission.hasPermission(activity, Manifest.permission.CAMERA)) {
                         mCurrentPhotoFile = ImageUtils.getDefaultFile();
-                        if (null==mCurrentPhotoFile) return;
+                        if (null == mCurrentPhotoFile) return;
                         ImageUtils.getImageFromCamera(activity, ImageUtils.getUriForFile(mCurrentPhotoFile));
                     } else {
                         // 申请权限。
@@ -251,7 +251,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                 case R.id.tv_album:
                     PopupWindowUtil.dismiss();
                     if (AndPermission.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        ImageUtils.getImageFromAlbum(activity,1);
+                        ImageUtils.getImageFromAlbum(activity, 1);
                     } else {
                         // 申请权限。
                         AndPermission.with(getActivity())
@@ -278,15 +278,13 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
     @PermissionYes(Constants.REQUEST_PERMISSION_CODE)
     private void getRequestYes(List<String> grantedPermissions) {
-        for (String item : grantedPermissions){
-            if (item.contains("android.permission.READ_EXTERNAL_STORAGE")) {
-                ImageUtils.getImageFromAlbum(activity,1);
-            }
-            if(item.contains("android.permission.CAMERA")) {
-                mCurrentPhotoFile = ImageUtils.getDefaultFile();
-                if (null==mCurrentPhotoFile) return;
-                ImageUtils.getImageFromCamera(activity, ImageUtils.getUriForFile(mCurrentPhotoFile));
-            }
+        if (grantedPermissions.contains("android.permission.READ_EXTERNAL_STORAGE")) {
+            ImageUtils.getImageFromAlbum(activity, 1);
+        }
+        if (grantedPermissions.contains("android.permission.CAMERA")) {
+            mCurrentPhotoFile = ImageUtils.getDefaultFile();
+            if (null == mCurrentPhotoFile) return;
+            ImageUtils.getImageFromCamera(activity, ImageUtils.getUriForFile(mCurrentPhotoFile));
         }
     }
 
@@ -313,7 +311,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                     toCropActivity(mSelected.get(0));
                     break;
                 case Constants.REQUEST_CODE_CAPTURE_CAMERA:
-                    if (null==mCurrentPhotoFile) return;
+                    if (null == mCurrentPhotoFile) return;
                     toCropActivity(ImageUtils.getUriForFile(mCurrentPhotoFile));
                     break;
             }
@@ -333,6 +331,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
         intent.putExtra(ImageCropActivity.class.getName(), CompleteUserInfoActivity.class.getSimpleName());
         startActivity(intent);
     }
+
     @Override
     public void onDestroy() {
         if (bitmap != null) bitmap.recycle();

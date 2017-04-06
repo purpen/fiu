@@ -313,25 +313,27 @@ public class Util {
         if (TextUtils.isEmpty(key)) {
             return defaultValue;
         }
-        String resultData = null;
+
         try {
             PackageManager packageManager = context.getPackageManager();
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             if (applicationInfo.metaData != null) {
                 if (applicationInfo.metaData.containsKey(key)) {
-                    resultData = applicationInfo.metaData.getInt(key) + "";
-                } else {
-                    resultData = null;
+                    defaultValue = applicationInfo.metaData.getInt(key)+"";
+                    LogUtil.e("key===="+key);
+                    LogUtil.e("defaultValue===="+defaultValue);
+                    return TextUtils.isEmpty(defaultValue) ? "10": defaultValue;
+                }else {
+                    return defaultValue;
                 }
+            }else {
+                return defaultValue;
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        if (TextUtils.isEmpty(resultData)) {
+        }finally {
             return defaultValue;
         }
-        return resultData;
     }
 
     public static String getEncodeStr(String string) throws UnsupportedEncodingException {
