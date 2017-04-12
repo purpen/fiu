@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
@@ -14,6 +16,7 @@ android {
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
+        buildConfigField "boolean", "LOG_DEBUG", "true"
     }
     signingConfigs {
         release {
@@ -22,7 +25,7 @@ android {
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
             keyPassword 'taihuoniao798'
-//            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
+            storeFile file('/Users/lilin/AndroidStudioProjects/fiu/app/fiu.jks')
         }
     }
     buildTypes {
@@ -33,6 +36,16 @@ android {
 //            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "D3IN_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
         }
     }
     sourceSets {
@@ -48,8 +61,27 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    // 友盟多渠道打包
+    productFlavors {
+
+        "10" {}//官网和应用宝
+
+        "13" {}//魅族
+
+        "14" {}//华为
+
+        "19" {}//小米
+
+        "29" {} //vivo
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
     }
 
 }

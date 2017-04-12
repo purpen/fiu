@@ -2,13 +2,16 @@ package com.taihuoniao.fineix.utils;
 
 import android.util.Log;
 
+import com.taihuoniao.fineix.BuildConfig;
+
+
 /**
  * @author lilin
  *         created at 2016/3/24 14:58
  */
 public class LogUtil {
     private static final String TAG = "com.taihuoniao.fineix";
-    private static final boolean DEV_MODE = true;
+    private static final boolean DEV_MODE = BuildConfig.LOG_DEBUG;
     private static final int LOG_MAXLENGTH  = 2000;
 
     public static void i(String tag, String msg) {
