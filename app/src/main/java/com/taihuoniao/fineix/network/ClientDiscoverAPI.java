@@ -1327,4 +1327,17 @@ public class ClientDiscoverAPI {
         params.put("id",id);
         return params;
     }
+
+    public static Map<String,String> getSceneBrandsList(int page) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("page",String.valueOf(page));
+        params.put("size","20");
+        params.put("mark","");
+        params.put("self_run","0");
+        params.put("sort","0");
+        params.put("stick","0");
+        params.put("from_to","1");
+        params.put("title","");
+        return params;
+    }
 }

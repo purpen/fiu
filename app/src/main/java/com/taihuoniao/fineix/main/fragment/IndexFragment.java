@@ -59,6 +59,8 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.StringFormatUtils;
+import com.taihuoniao.fineix.utils.StringUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
@@ -79,6 +81,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import okhttp3.Call;
 
+import static com.taihuoniao.fineix.beans.LoginInfo.getLoginInfo;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
@@ -201,13 +204,10 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 //        subjectList();
         getBanners();
 
-        if (isLogin && LoginInfo.getLoginInfo() != null && Long.valueOf(LoginInfo.getCreated_on()) < System.currentTimeMillis() - 86400 * 1000) {
-            linearLayout001.setVisibility(View.GONE);
-            recyclerView001.setVisibility(View.GONE);
-        } else {
+        linearLayout001.setVisibility(isHiddenRedPacketWelfareArea() ? View.GONE : View.VISIBLE);
+        recyclerView001.setVisibility(isHiddenRedPacketWelfareArea() ? View.GONE : View.VISIBLE);
+        if (!isHiddenRedPacketWelfareArea()) {
             getBanners2();
-            linearLayout001.setVisibility(View.VISIBLE);
-            recyclerView001.setVisibility(View.VISIBLE);
         }
         secondProduct();
         getLasteProduct();
@@ -742,5 +742,11 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             requestNet();
         }
         super.onHiddenChanged(hidden);
+    }
+
+    private boolean isHiddenRedPacketWelfareArea() {
+        String created_on = LoginInfo.getCreated_on();
+        long createTime = TypeConversionUtils.StringConvertLong(created_on);
+        return createTime != 0 && isLogin && LoginInfo.getLoginInfo() != null && createTime < System.currentTimeMillis() - 86400 * 1000;
     }
 }

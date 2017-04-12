@@ -100,9 +100,9 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
         wellGoodsAdapter = new WellGoodsAdapter(getFragmentManager(), mStringList, mBaseFragments);
         viewPagerWellGoodsList.setAdapter(wellGoodsAdapter);
         viewPagerWellGoodsList.addOnPageChangeListener(this);
-        tabLayoutWellGoodsCategory.setupWithViewPager(viewPagerWellGoodsList);
+        tabLayoutWellGoodsCategory.setupWithViewPager(viewPagerWellGoodsList, true);
         setTabLayoutIndicatorWidth();
-        viewPagerWellGoodsList.setOffscreenPageLimit(mBaseFragments.size());
+//        viewPagerWellGoodsList.setOffscreenPageLimit(mBaseFragments.size());
         viewPagerWellGoodsList.setCurrentItem(0, false);
     }
 
@@ -115,14 +115,13 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
         // 默认加载 推荐 情境
         mStringList.add("推荐");
-        mStringList.add("情境");
         mStringList.add("合集");
-//        mStringList.add("先锋智能");
-
+        mStringList.add("情境");
+        mStringList.add("品牌");
         mBaseFragments.add(new WellGoodsFragment01());
-        mBaseFragments.add(new WellGoodsFragment02());
         mBaseFragments.add(new WellGoodsFragment03());
-//        mBaseFragments.add(new WellGoodsFragment04());
+        mBaseFragments.add(new WellGoodsFragment02());
+        mBaseFragments.add(new WellGoodsFragment05());
     }
 
     @Override
@@ -186,6 +185,8 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
                     categoryListItems = categoryListBean.getData().getRows();
                     addExtraCategory(categoryListItems);
                     wellGoodsAdapter.notifyDataSetChanged();
+                    viewPagerWellGoodsList.setOffscreenPageLimit(mBaseFragments.size());
+                    wellGoodsAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -197,14 +198,14 @@ public class WellGoodsNewFragment extends BaseFragment implements ViewPager.OnPa
 
     private void addExtraCategory(List<CategoryListBean.RowsEntity> categoryListItems) {
         if (categoryListItems != null) {
-            for (int i = 0; i < categoryListItems.size(); i++) {
+            for (int i = 0, index = 2; i < categoryListItems.size(); i++, index++) {
                 CategoryListBean.RowsEntity categoryListItem = categoryListItems.get(i);
-                mStringList.add(categoryListItem.getTitle());
+                mStringList.add(index, categoryListItem.getTitle());
                 WellGoodsFragment04 fragment04 = new WellGoodsFragment04();
                 Bundle bundle = new Bundle();
                 bundle.putString("categoryId", categoryListItem.get_id());
                 fragment04.setArguments(bundle);
-                mBaseFragments.add(fragment04);
+                mBaseFragments.add(index, fragment04);
             }
         }
     }
