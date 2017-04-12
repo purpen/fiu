@@ -205,4 +205,6 @@ public class URL {
 
     //设置默认封面
     public static final String ZONE_SET_DEFAULT_COVER = BASE_URL + "/common/set_default_cover";
+
+    public static final String BRAND_SCENE_LIST = BASE_URL + "/scene_brands/getlist";  // 品牌列表
 }
