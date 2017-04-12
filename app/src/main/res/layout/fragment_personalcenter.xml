@@ -374,11 +374,19 @@
                 android:layout_height="@dimen/dp05"
                 android:background="@color/color_ddd" />
 
+
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_new_user_bonus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_partner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
+
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_about_us"

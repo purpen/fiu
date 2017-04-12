@@ -86,6 +86,10 @@ public class MineFragment extends MyBaseFragment {
     CustomItemLayout item_feedback;
     @Bind(R.id.item_partner)
     CustomItemLayout item_partner;
+
+    @Bind(R.id.item_new_user_bonus)
+    CustomItemLayout itemNewUserBonus;
+
     @Bind(R.id.rl)
     RelativeLayout rl;
     @Bind(R.id.ll_box)
@@ -251,6 +255,7 @@ public class MineFragment extends MyBaseFragment {
             gv.setAdapter(adapter);
         }
         item_partner.setTVStyle(0, R.string.company_dz, R.color.color_333);
+        itemNewUserBonus.setTVStyle(0,R.string.new_user_bonus,R.color.color_333);
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
     }
@@ -320,7 +325,7 @@ public class MineFragment extends MyBaseFragment {
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-    @OnClick({R.id.rl_zone, R.id.iv_plan, R.id.rl_bonus, R.id.tv_all_order, R.id.tv_wait_pay, R.id.tv_wait_send, R.id.tv_wait_receive, R.id.tv_wait_comment, R.id.tv_wait_shouhou, R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
+    @OnClick({R.id.rl_zone, R.id.iv_plan, R.id.rl_bonus, R.id.tv_all_order, R.id.tv_wait_pay, R.id.tv_wait_send, R.id.tv_wait_receive, R.id.tv_wait_comment, R.id.tv_wait_shouhou, R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_new_user_bonus,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
@@ -381,10 +386,16 @@ public class MineFragment extends MyBaseFragment {
             case R.id.iv_detail:
                 startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
+            case R.id.item_new_user_bonus:
+                intent = new Intent(activity, AboutUsActivity.class);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.SETTINGS_ABOUTUS);
+                intent.putExtra(AboutUsActivity.class.getName(), getString(R.string.new_user_bonus));
+                startActivity(intent);
+                break;
             case R.id.item_about_us:
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.SETTINGS_ABOUTUS);
-                intent.putExtra(AboutUsActivity.class.getName(), "关于Fiu");
+                intent.putExtra(AboutUsActivity.class.getName(), "关于D3IN");
                 startActivity(intent);
                 break;
             case R.id.item_feedback:

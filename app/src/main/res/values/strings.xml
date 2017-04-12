@@ -440,13 +440,13 @@
     <string name="shou_hou">退款售后</string>
 
     <string-array name="discover_index">
-        <item>为你推荐</item>
+        <item>推荐</item>
         <item>分类</item>
         <item>地盘</item>
         <item>情境</item>
         <item>品牌</item>
-        <item>好货合集</item>
-        <item>发现好友</item>
+        <item>专辑</item>
+        <item>好友</item>
     </string-array>
 
     <string-array name="order_status">
@@ -507,6 +507,7 @@
     <string name="uploading_image_waiting">上传亮点图片中，请稍后</string>
     <string name="input_publish_content">请输入要发布的内容</string>
     <string name="zone_preview">预览</string>
+    <string name="new_user_bonus">新人福利</string>
     <string-array name="zone_classifies">
         <item>体验店</item>
         <item>创意店</item>
