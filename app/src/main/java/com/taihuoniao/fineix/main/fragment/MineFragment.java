@@ -388,7 +388,7 @@ public class MineFragment extends MyBaseFragment {
                 break;
             case R.id.item_new_user_bonus:
                 intent = new Intent(activity, AboutUsActivity.class);
-                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.SETTINGS_ABOUTUS);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), URL.NEW_USER_BONUS);
                 intent.putExtra(AboutUsActivity.class.getName(), getString(R.string.new_user_bonus));
                 startActivity(intent);
                 break;

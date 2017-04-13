@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -11,6 +12,7 @@ import android.webkit.WebViewClient;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
@@ -23,6 +25,7 @@ public class AboutUsActivity extends BaseActivity {
     private String url;
     private String title;
     private WebView webView;
+
     public AboutUsActivity(){
         super(R.layout.activity_about_us);
     }
@@ -56,8 +59,23 @@ public class AboutUsActivity extends BaseActivity {
 
     static class MyWebViewClient extends WebViewClient{
         private WaittingDialog dialog;
+        private boolean isFirstLoad = true;
+        private Activity activity;
         public MyWebViewClient(Activity activity){
+            this.activity = activity;
             dialog=new WaittingDialog(activity);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (!isFirstLoad){
+                LogUtil.e(url.toString());
+                Intent intent = new Intent(activity, UsableRedPacketActivity.class);
+                activity.startActivity(intent);
+                return true;
+            }
+            isFirstLoad = false;
+            return super.shouldOverrideUrlLoading(view, url);
         }
 
         @Override
@@ -70,17 +88,23 @@ public class AboutUsActivity extends BaseActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             if (dialog != null) dialog.show();
+
         }
         @Override
         public void onPageFinished(WebView view, String url) {
+
             super.onPageFinished(view, url);
             if (dialog != null) dialog.dismiss();
         }
     }
     @Override
     protected void onDestroy() {
+        if (webView!=null){
+            ViewGroup parent = (ViewGroup) webView.getParent();
+            if (null!=parent) parent.removeView(webView);
+            webView.removeAllViews();
+            webView.destroy();
+        }
         super.onDestroy();
-        webView.removeAllViews();
-        webView.destroy();
     }
 }

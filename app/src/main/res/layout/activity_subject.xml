@@ -14,7 +14,9 @@
         android:layout_below="@+id/custom_head"
         android:layout_above="@+id/ll_operate"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        />
 
     <LinearLayout
         android:id="@+id/ll_operate"
