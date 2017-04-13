@@ -25,7 +25,9 @@ import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter2;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
+import com.taihuoniao.fineix.adapters.IndexSubjectAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
+import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter2;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
@@ -64,6 +66,7 @@ import com.taihuoniao.fineix.utils.StringUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
+import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -125,6 +128,9 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private LinearLayout linearLayout001;
     private RecyclerView recyclerView001;
 
+    private WellgoodsSubjectAdapter2 indexSubjectAdapter;
+    private List<SubjectListBean.RowsEntity> rowsEntities;
+
     private boolean isLogin;
 
     @Override
@@ -159,7 +165,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 422 / 750;
         scrollableView.setLayoutParams(lp);
-
 
         sceneList = new ArrayList<>();
         userList = new ArrayList<>();
@@ -201,7 +206,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         NetWorkUtils netWorkUtils = new NetWorkUtils(activity);
         netWorkUtils.checkVersionInfo();
         sceneNet();
-//        subjectList();
+        subjectList();
         getBanners();
 
         linearLayout001.setVisibility(isHiddenRedPacketWelfareArea() ? View.GONE : View.VISIBLE);
@@ -365,6 +370,11 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
             public void onSuccess(String json) {
                 HttpResponse<SubjectListBean> subjectListBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<SubjectListBean>>() {});
                 if (subjectListBean.isSuccess()) {
+                    if (rowsEntities != null) {
+                        rowsEntities.clear();
+                        rowsEntities.addAll(subjectListBean.getData().getRows());
+                        indexSubjectAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -378,7 +388,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     //获取情景列表
     private void sceneNet() {
         dialog.show();
-        HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 5 + "", null, null, 2 + "", null, null, null);
+        HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 20 + "", null, null, 2 + "", null, null, null);
         sceneListRequestParams.put("is_product", "1");
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
@@ -698,7 +708,12 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     }
 
     private View getFooterView(){
-        return View.inflate(getActivity(), R.layout.footerview_index_bottom, null);
+        View footerView = View.inflate(getActivity(), R.layout.footerview_index_bottom, null);
+        ListViewForScrollView recyclerView = (ListViewForScrollView) footerView.findViewById(R.id.recycler_view);
+        rowsEntities = new ArrayList<>();
+        indexSubjectAdapter = new WellgoodsSubjectAdapter2(getActivity(), rowsEntities);
+        recyclerView.setAdapter(indexSubjectAdapter);
+        return footerView;
     }
 
     /**

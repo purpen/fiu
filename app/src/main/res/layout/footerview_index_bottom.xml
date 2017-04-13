@@ -4,15 +4,31 @@
     android:layout_height="match_parent"
     android:background="#f8f8f8"
     android:gravity="center"
+    android:orientation="vertical"
     android:paddingTop="10dp">
 
-    <ImageView
+    <com.taihuoniao.fineix.view.ListViewForScrollView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:background="#ffffff"
-        android:paddingBottom="20dp"
-        android:scaleType="centerInside"
-        android:src="@mipmap/logo_mainpage_bottom" />
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f8f8f8"
+        android:gravity="center"
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/logo_mainpage_bottom" />
+
+    </LinearLayout>
 </LinearLayout>
