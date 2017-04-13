@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.taihuoniao.fineix.network.DataConstants;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by android on 2016/1/20.
  */
-public class LoginInfo implements Serializable {
+public class LoginInfo implements Serializable, Parcelable {
 
     private long _id;
     private int is_bonus;
@@ -34,6 +36,21 @@ public class LoginInfo implements Serializable {
     private static LoginInfo loginInfo;
     public Identify identify;
     public ArrayList<String> areas;
+    public String created_on;
+
+    public static String getCreated_on() {
+        if (isUserLogin()) {
+            String login_info = SPUtil.read(DataConstants.LOGIN_INFO);
+            loginInfo = JsonUtil.fromJson(login_info,LoginInfo.class);
+            return loginInfo.created_on;
+        }
+        return null;
+    }
+
+    public void setCreated_on(String created_on) {
+        this.created_on = created_on;
+    }
+
     public static class Identify implements Serializable{
         public int is_scene_subscribe;
     }
@@ -232,4 +249,68 @@ public class LoginInfo implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this._id);
+        dest.writeInt(this.is_bonus);
+        dest.writeString(this.message);
+        dest.writeString(this.account);
+        dest.writeString(this.nickname);
+        dest.writeString(this.true_nickname);
+        dest.writeString(this.realname);
+        dest.writeString(this.sex);
+        dest.writeString(this.medium_avatar_url);
+        dest.writeString(this.birthday);
+        dest.writeString(this.address);
+        dest.writeString(this.zip);
+        dest.writeString(this.im_qq);
+        dest.writeString(this.weixin);
+        dest.writeString(this.company);
+        dest.writeString(this.phone);
+        dest.writeInt(this.first_login);
+        dest.writeSerializable(this.identify);
+        dest.writeStringList(this.areas);
+        dest.writeString(this.created_on);
+    }
+
+    protected LoginInfo(Parcel in) {
+        this._id = in.readLong();
+        this.is_bonus = in.readInt();
+        this.message = in.readString();
+        this.account = in.readString();
+        this.nickname = in.readString();
+        this.true_nickname = in.readString();
+        this.realname = in.readString();
+        this.sex = in.readString();
+        this.medium_avatar_url = in.readString();
+        this.birthday = in.readString();
+        this.address = in.readString();
+        this.zip = in.readString();
+        this.im_qq = in.readString();
+        this.weixin = in.readString();
+        this.company = in.readString();
+        this.phone = in.readString();
+        this.first_login = in.readInt();
+        this.identify = (Identify) in.readSerializable();
+        this.areas = in.createStringArrayList();
+        this.created_on = in.readString();
+    }
+
+    public static final Parcelable.Creator<LoginInfo> CREATOR = new Parcelable.Creator<LoginInfo>() {
+        @Override
+        public LoginInfo createFromParcel(Parcel source) {
+            return new LoginInfo(source);
+        }
+
+        @Override
+        public LoginInfo[] newArray(int size) {
+            return new LoginInfo[size];
+        }
+    };
 }

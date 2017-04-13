@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -21,14 +22,17 @@ import android.widget.RelativeLayout;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
+import com.taihuoniao.fineix.adapters.AddProductGridAdapter2;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.FirstProductBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.InterestUserData;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubjectListBean;
@@ -45,6 +49,7 @@ import com.taihuoniao.fineix.interfaces.IRecycleViewItemClickListener;
 import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.ShopMarginDecoration;
+import com.taihuoniao.fineix.main.tab3.Product3Bean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetWorkUtils;
@@ -54,6 +59,8 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.StringFormatUtils;
+import com.taihuoniao.fineix.utils.StringUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
@@ -74,6 +81,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import okhttp3.Call;
 
+import static com.taihuoniao.fineix.beans.LoginInfo.getLoginInfo;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
@@ -111,8 +119,17 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private ProductAlbumAdapter indexAdapter003;//主题列表适配器
     private IndexAdapter005 indexAdapter005;//D3IN
 
+    // 好货人气王
+    private List<FirstProductBean.ItemsEntity> secondProductList6;
+    private AddProductGridAdapter2 indexAdapter006;//主题列表适配器
+    private LinearLayout linearLayout001;
+    private RecyclerView recyclerView001;
+
+    private boolean isLogin;
+
     @Override
     protected View initView() {
+        isLogin = LoginInfo.isUserLogin();
         View fragmentView = View.inflate(getActivity(), R.layout.fragment_index, null);
         dialog = new WaittingDialog(getActivity());
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadIndex);
@@ -186,17 +203,23 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
         sceneNet();
 //        subjectList();
         getBanners();
-        getBanners2();
+
+        linearLayout001.setVisibility(isHiddenRedPacketWelfareArea() ? View.GONE : View.VISIBLE);
+        recyclerView001.setVisibility(isHiddenRedPacketWelfareArea() ? View.GONE : View.VISIBLE);
+        if (!isHiddenRedPacketWelfareArea()) {
+            getBanners2();
+        }
+        secondProduct();
         getLasteProduct();
         subjectList3();
 //        getBanners4();
         getBanners5();
-        if (indexQJListAdapter.isNoUser()) {
-            userList.clear();
-            sneceComplete = 2;
-            return;
-        }
-        getUserList();
+//        if (indexQJListAdapter.isNoUser()) {
+//            userList.clear();
+//            sneceComplete = 2;
+//            return;
+//        }
+//        getUserList();
     }
 
     @Override
@@ -355,7 +378,7 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     //获取情景列表
     private void sceneNet() {
         dialog.show();
-        HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 20 + "", null, null, 2 + "", null, null, null);
+        HashMap<String, String> sceneListRequestParams = ClientDiscoverAPI.getSceneListRequestParams(currentPage + "", 5 + "", null, null, 2 + "", null, null, null);
         sceneListRequestParams.put("is_product", "1");
         HttpRequest.post(sceneListRequestParams,URL.SCENE_LIST, new GlobalDataCallBack() {
             @Override
@@ -452,7 +475,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     private View getHeaderView() {
         View headerView = View.inflate(getActivity(), R.layout.header_index, null);
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
-        RecyclerView recyclerView001 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_001);
+        linearLayout001 = (LinearLayout) headerView.findViewById(R.id.linearLayout_index_001);
+        recyclerView001 = (RecyclerView) headerView.findViewById(R.id.recyclerView_index_001);
         recyclerView001.setHasFixedSize(true);
         recyclerView001.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView001.addItemDecoration(new ShopMarginDecoration(activity, R.dimen.dp5));
@@ -478,6 +502,20 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 Intent intent = new Intent(parent.getContext(), BuyGoodsDetailsActivity.class);
                 intent.putExtra("id", productList.get(position).get_id());
                 parent.getContext().startActivity(intent);
+            }
+        });
+
+        // 好货人气王
+        GridViewForScrollView recyclerView006 = (GridViewForScrollView ) headerView.findViewById(R.id.recyclerView_index_006);
+        secondProductList6 = new ArrayList<>();
+        indexAdapter006 = new AddProductGridAdapter2(secondProductList6);
+        recyclerView006.setAdapter(indexAdapter002);
+        recyclerView006.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), BuyGoodsDetailsActivity.class);
+                intent.putExtra("id", secondProductList6.get(position).get_id());
+                getActivity().startActivity(intent);
             }
         });
 
@@ -661,5 +699,54 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     private View getFooterView(){
         return View.inflate(getActivity(), R.layout.footerview_index_bottom, null);
+    }
+
+    /**
+     * 好货最热推荐接口
+     */
+    private void secondProduct(){
+        HashMap<String, String> requestParams = ClientDiscoverAPI.getfirstProductsRequestParams();
+        requestParams.put("size", "8");
+        HttpRequest.post(requestParams, URL.PRODUCT_INDEX_HOT, new GlobalDataCallBack(){
+
+            @Override
+            public void onSuccess(String json) {
+                Product3Bean product3Bean = JsonUtil.fromJson(json,new TypeToken<HttpResponse<Product3Bean>>(){});
+                if (product3Bean != null && product3Bean.getItems() != null) {
+                    int size = product3Bean.getItems().size();
+                    secondProductList6.clear();
+                    for(int i = 0; i < size; i++) {
+                        Product3Bean.ItemsEntity itemsEntity = product3Bean.getItems().get(i);
+                        FirstProductBean.ItemsEntity bean = new FirstProductBean.ItemsEntity();
+                        bean.set_id(itemsEntity.get_id());
+                        bean.setTitle(itemsEntity.getTitle());
+                        bean.setBrand_cover_url(itemsEntity.getBrand_cover_url());
+                        bean.setBrand_id(itemsEntity.getBrand_id());
+                        bean.setCover_url(itemsEntity.getCover_url());
+                        bean.setSale_price(itemsEntity.getSale_price());
+                        secondProductList6.add(bean);
+                    }
+                    indexAdapter006.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) { }
+        });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (LoginInfo.isUserLogin() != isLogin) {
+            isLogin = LoginInfo.isUserLogin();
+            requestNet();
+        }
+        super.onHiddenChanged(hidden);
+    }
+
+    private boolean isHiddenRedPacketWelfareArea() {
+        String created_on = LoginInfo.getCreated_on();
+        long createTime = TypeConversionUtils.StringConvertLong(created_on);
+        return createTime != 0 && isLogin && LoginInfo.getLoginInfo() != null && createTime < System.currentTimeMillis() - 86400 * 1000;
     }
 }

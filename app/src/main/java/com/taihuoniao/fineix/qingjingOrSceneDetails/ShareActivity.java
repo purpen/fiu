@@ -281,7 +281,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Platform.ShareParams params;
-            String imgPath = MainApplication.getContext().getCacheDirPath() + File.separator + "fiu" + ".png";
+            String imgPath = MainApplication.getContext().getCacheDirPath() + File.separator + "D3IN" + ".png";
             if (!dialog.isShowing()) {
                 dialog.show();
             }

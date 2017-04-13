@@ -165,8 +165,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                             // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
                             viewHolder.mCheckBox.toggle();
                             mAllCheck.setChecked(false);
-                            if (position==0) return;
-                            totalList.get(position-1).put("status", viewHolder.mCheckBox.isChecked());
+//                            if (position==0) return;
+                            totalList.get(position/*-1*/).put("status", viewHolder.mCheckBox.isChecked());
                             int count = 0;
                             mPayMoneyAll = 0.0;//全局的
                             for (int i = 0; i < totalList.size(); i++) {
@@ -223,8 +223,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                             // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
                             viewHolder.mCheckBox.toggle();
                             mAllCheck.setChecked(false);
-                            if (position==0) return;
-                            totalList.get(position-1).put("status", viewHolder.mCheckBox.isChecked());
+//                            if (position==0) return;
+                            totalList.get(position/*-1*/).put("status", viewHolder.mCheckBox.isChecked());
                             int count = 0;
                             mPayMoneyAll = 0.0;//全局的
                             Double mPayMoneyAll = 0.0;//局部的

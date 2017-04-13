@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="现在分享Fiu，可获得成交订单5%佣金"
+        android:text="现在分享D3IN，可获得成交订单5%佣金"
         android:textColor="@color/color_666"
         android:textSize="@dimen/sp16"
         />
@@ -62,7 +62,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fiu合伙人招募计划"
+            android:text="D3IN合伙人招募计划"
             android:layout_marginBottom="@dimen/dp15"
             android:textColor="@color/yellow_bd8913"
             android:textSize="@dimen/sp16"
