@@ -35,7 +35,7 @@ public class WellgoodsSubjectAdapter2 extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list == null ? 0 : 2;
+        return list == null ? 0 : list.size();
     }
 
     @Override
