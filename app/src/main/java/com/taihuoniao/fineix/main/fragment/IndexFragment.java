@@ -372,7 +372,9 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 if (subjectListBean.isSuccess()) {
                     if (rowsEntities != null) {
                         rowsEntities.clear();
-                        rowsEntities.addAll(subjectListBean.getData().getRows());
+                        for(int i = 0; i < 2; i++) {
+                            rowsEntities.add(subjectListBean.getData().getRows().get(i));
+                        }
                         indexSubjectAdapter.notifyDataSetChanged();
                     }
                 }
