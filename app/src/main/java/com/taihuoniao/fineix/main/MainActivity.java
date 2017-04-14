@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Build;
@@ -26,19 +27,26 @@ import com.taihuoniao.fineix.main.fragment.CartFragment;
 import com.taihuoniao.fineix.main.fragment.DiscoverFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
-//import com.taihuoniao.fineix.main.fragment.WellGoodsNewFragment;
+import com.taihuoniao.fineix.main.tab3.WellGoodsNewFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.Bind;
-import com.taihuoniao.fineix.main.tab3.WellGoodsNewFragment;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.activity_main_container)RelativeLayout container;
@@ -96,6 +104,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onNewIntent(intent);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (Arrays.asList(permissions).contains("android.permission.CAMERA")){
+            AndPermission.onRequestPermissionsResult(getVisibleFragment(), REQUEST_PHONE_STATE_CODE, permissions, grantResults);
+        }else {
+            AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        }
+    }
+
+    @PermissionYes(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusYes(List<String> grantedPermissions) {
+        LogUtil.e(grantedPermissions.get(0));
+        if (grantedPermissions.contains(Manifest.permission.READ_PHONE_STATE)) {
+            which2Switch();
+        }
+
+        if (grantedPermissions.contains(Manifest.permission.CAMERA)) {
+            startActivity(new Intent(this, CaptureActivityZxing.class));
+        }
+
+    }
+
+    @PermissionNo(REQUEST_PHONE_STATE_CODE)
+    private void getPhoneStatusNo(List<String> deniedPermissions) {
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
+        } else {
+            activity.finish();
+        }
+    }
+
     private void which2Switch() {
         if (TextUtils.equals(IndexFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(IndexFragment.class);
@@ -131,7 +170,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (savedInstanceState != null) {
             recoverAllState(savedInstanceState);
         } else {
-            which2Switch();
+            if (AndPermission.hasPermission(activity, android.Manifest.permission.READ_PHONE_STATE)) {
+                which2Switch();
+            } else {
+                // 申请权限。
+                AndPermission.with(this)
+                        .requestCode(REQUEST_PHONE_STATE_CODE)
+                        .permission(android.Manifest.permission.READ_PHONE_STATE)
+                        .send();
+
+            }
+
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);

@@ -25,7 +25,6 @@ import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter2;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
-import com.taihuoniao.fineix.adapters.IndexSubjectAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter2;
 import com.taihuoniao.fineix.base.BaseFragment;
@@ -61,8 +60,6 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.StringFormatUtils;
-import com.taihuoniao.fineix.utils.StringUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
@@ -84,7 +81,6 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import okhttp3.Call;
 
-import static com.taihuoniao.fineix.beans.LoginInfo.getLoginInfo;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_CODE_SETTING;
 import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
@@ -100,7 +96,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
     @Bind(R.id.search_img)ImageView searchImg;
     @Bind(R.id.subs_img)ImageView subsImg;
 
-    private boolean isScan;
     private ScrollableView scrollableView; //顶部轮播图
     private WaittingDialog dialog;//网络请求对话框
 
@@ -185,16 +180,17 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     @Override
     protected void requestNet() {
-        if (AndPermission.hasPermission(activity, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.CAMERA)) {
-            requestData();
-        } else {
-            // 申请权限。
-            AndPermission.with(this)
-                    .requestCode(REQUEST_PHONE_STATE_CODE)
-                    .permission(android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.CAMERA)
-                    .send();
-
-        }
+//        if (AndPermission.hasPermission(activity, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.CAMERA)) {
+//            requestData();
+//        } else {
+//            // 申请权限。
+//            AndPermission.with(this)
+//                    .requestCode(REQUEST_PHONE_STATE_CODE)
+//                    .permission(android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.CAMERA)
+//                    .send();
+//
+//        }
+        requestData();
     }
 
     private void requestData() {
@@ -227,17 +223,9 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 //        getUserList();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
-
     @PermissionYes(REQUEST_PHONE_STATE_CODE)
     private void getPhoneStatusYes(List<String> grantedPermissions) {
-        if (grantedPermissions.contains(Manifest.permission.READ_PHONE_STATE)) {
-            requestData();
-        }
-        if (grantedPermissions.contains(Manifest.permission.CAMERA)&&isScan) {
+        if (grantedPermissions.contains(Manifest.permission.CAMERA)) {
             startActivity(new Intent(getActivity(), CaptureActivityZxing.class));
         }
 
@@ -245,12 +233,8 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
 
     @PermissionNo(REQUEST_PHONE_STATE_CODE)
     private void getPhoneStatusNo(List<String> deniedPermissions) {
-        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
-            // 第一种：用默认的提示语。
             AndPermission.defaultSettingDialog(this, REQUEST_CODE_SETTING).show();
-        } else {
-            activity.finish();
         }
     }
 
@@ -276,7 +260,6 @@ public class IndexFragment extends BaseFragment<BannerBean> implements View.OnCl
                 break;
             case R.id.subs_img:
                 // 扫码
-                isScan =true;
                 if (AndPermission.hasPermission(activity, android.Manifest.permission.CAMERA)) {
                     startActivity(new Intent(getActivity(), CaptureActivityZxing.class));
                 } else {
