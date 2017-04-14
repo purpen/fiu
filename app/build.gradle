@@ -10,8 +10,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 38
-        versionName "1.8.8"
+        versionCode 39
+        versionName "1.8.9"
         multiDexEnabled true
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
@@ -71,13 +71,13 @@ android {
 
         "10" {}//官网和应用宝
 
-        "13" {}//魅族
-
-        "14" {}//华为
-
-        "19" {}//小米
-
-        "29" {} //vivo
+//        "13" {}//魅族
+//
+//        "14" {}//华为
+//
+//        "19" {}//小米
+//
+//        "29" {} //vivo
     }
 
     productFlavors.all {
