@@ -107,7 +107,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (Arrays.asList(permissions).contains("android.permission.CAMERA")){
-            AndPermission.onRequestPermissionsResult(getVisibleFragment(), REQUEST_PHONE_STATE_CODE, permissions, grantResults);
+            Fragment visibleFragment = getVisibleFragment();
+            if (null == visibleFragment) return;
+            AndPermission.onRequestPermissionsResult(visibleFragment, REQUEST_PHONE_STATE_CODE, permissions, grantResults);
         }else {
             AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         }
@@ -379,7 +381,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public Fragment getVisibleFragment() {
-        List<Fragment> fragments = fm.getFragments();
+        if (null == fragments) return null;
         for (Fragment fragment : fragments) {
             if (fragment != null && fragment.isVisible())
                 return fragment;
