@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.network;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -27,9 +29,13 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.dialog.DefaultDialog;
 import com.taihuoniao.fineix.view.dialog.IDialogListenerConfirmBack;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivityZxing;
+import com.yanzhenjie.permission.AndPermission;
 
 import java.io.File;
 import java.util.HashMap;
+
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
 
 /**
  * Created by Stephen on 2016/12/6 15:05
@@ -81,7 +87,12 @@ public class NetWorkUtils {
         new DefaultDialog(mContext, title, App.getStringArray(R.array.text_dialog_button), new IDialogListenerConfirmBack() {
             @Override
             public void clickRight() {
-                downloadApkAndUpdate(true);
+                if (AndPermission.hasPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    downloadApkAndUpdate(true);
+                } else {
+                    AndPermission.with((Activity)mContext).requestCode(REQUEST_PHONE_STATE_CODE).permission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE).send();
+                }
+
             }
         });
     }
