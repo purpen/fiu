@@ -117,7 +117,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @PermissionYes(REQUEST_PHONE_STATE_CODE)
     private void getPhoneStatusYes(List<String> grantedPermissions) {
-        LogUtil.e(grantedPermissions.get(0));
         if (grantedPermissions.contains(Manifest.permission.READ_PHONE_STATE)) {
             which2Switch();
         }
@@ -182,7 +181,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         .send();
 
             }
-
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
@@ -318,6 +316,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void switchFragmentandImg(Class clazz) {
+        if (!AndPermission.hasPermission(activity, android.Manifest.permission.READ_PHONE_STATE)) return;
         resetUI();
         try {
             switchImgAndTxtStyle(clazz);

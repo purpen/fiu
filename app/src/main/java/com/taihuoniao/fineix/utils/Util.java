@@ -26,6 +26,7 @@ import com.mob.tools.network.BufferedByteArrayOutputStream;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ConstantCfg;
+import com.yanzhenjie.permission.AndPermission;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -352,6 +353,7 @@ public class Util {
     }
 
     public static final String getUUID(Context context) {
+        if (!AndPermission.hasPermission(context, android.Manifest.permission.READ_PHONE_STATE)) return null;
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         final String tmDevice, tmSerial, androidId;
         tmDevice = "" + tm.getDeviceId();

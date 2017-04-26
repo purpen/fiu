@@ -16,12 +16,12 @@ import android.widget.ImageButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.common.GlobalCallBack;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
+import com.taihuoniao.fineix.common.GlobalCallBack;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -42,7 +42,6 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MaskedEditText;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 
-
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -60,7 +59,7 @@ import cn.sharesdk.wechat.friends.Wechat;
  * @author lilin
  *         created at 2016/8/10 14:24
  */
-public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Callback, PlatformActionListener {
+public class SendCheckCodeFragment extends MyBaseFragment implements PlatformActionListener {
     @Bind(R.id.btn_wechat)
     ImageButton btnWechat;
     @Bind(R.id.btn_sina)
@@ -85,13 +84,11 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
                     if (btSendCode == null) return;
                     btSendCode.setEnabled(false);
                     btSendCode.setTextColor(getResources().getColor(R.color.color_af8323));
-//                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode_gray);
                     break;
                 case 2:
                     if (btSendCode == null) return;
@@ -102,7 +99,6 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                     if (btSendCode == null) return;
                     btSendCode.setEnabled(true);
                     btSendCode.setTextColor(getResources().getColor(R.color.color_af8323));
-//                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode);
                     btSendCode.setText("发送验证码");
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN_CANCEL:
@@ -162,7 +158,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                 if (mDialog != null) {
                     mDialog.show();
                 }
-                btnWechat.setEnabled(false);
+                setBtnIsEnable(false);
                 loginType = LOGIN_TYPE_WX;
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                 authorize(wechat);
@@ -171,7 +167,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                 if (mDialog != null) {
                     mDialog.show();
                 }
-                btnSina.setEnabled(false);
+                setBtnIsEnable(false);
                 loginType = LOGIN_TYPE_SINA;
                 //新浪微博，测试时，需要打包签名
                 Platform sina = ShareSDK.getPlatform(SinaWeibo.NAME);
@@ -181,7 +177,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                 if (mDialog != null) {
                     mDialog.show();
                 }
-                btnQq.setEnabled(false);
+                setBtnIsEnable(false);
                 loginType = LOGIN_TYPE_QQ;
                 Platform qq = ShareSDK.getPlatform(QQ.NAME);
                 authorize(qq);
@@ -273,28 +269,22 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         }/*, phone*/);
     }
 
-    //执行授权,获取用户信息
-    //文档：http://wiki.mob.com/Android_%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99
     private void authorize(Platform plat) {
-        if (plat == null) {
-            return;
-        }
-        if (plat.isValid()) {
-            plat.removeAccount();
+        if (plat == null) return;
+        if (plat.isAuthValid()) {
+            plat.removeAccount(true);
         }
         plat.setPlatformActionListener(this);
         //开启SSO授权
         plat.SSOSetting(false);
         plat.showUser(null);
+        LogUtil.e("authorize=="+Thread.currentThread().getName());
     }
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        // 这个方法中不能放对话框、吐丝这些耗时的操作，否则会直接跳到onError()中执行
-        //用户资源都保存到hashMap，通过打印hashMap数据看看有哪些数据是你想要的
         if (i == Platform.ACTION_USER_INFOR) {
-            PlatformDb platDB = platform.getDb();//获取数平台数据DB
-            //通过DB获取各种数据
+            PlatformDb platDB = platform.getDb();
             sex = platDB.getUserGender();
             if ("f".equals(sex)) {
                 sex = "2";//女
@@ -315,7 +305,12 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
             } else {
                 userId = platDB.getUserId();
             }
-            doThirdLogin();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    doThirdLogin();
+                }
+            });
         }
     }
 
@@ -333,10 +328,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
             @Override
             public void onSuccess(String json) {
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
-                btnQq.setEnabled(true);
-                btnSina.setEnabled(true);
-                btnWechat.setEnabled(true);
-                if (TextUtils.isEmpty(json)) return;
+                setBtnIsEnable(true);
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
                 if (response.isSuccess()) {
@@ -375,31 +367,10 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                 }
             }
 
-            void loginSuccess(ThirdLogin thirdLogin) {
-                if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
-                    updateUserIdentity();
-//                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
-                    startActivity(new Intent(activity, CompleteUserInfoActivity.class));
-                    if (ToRegisterActivity.instance != null) {
-                        ToRegisterActivity.instance.finish();
-                    }
-                    if (OptRegisterLoginActivity.instance != null) {
-                        OptRegisterLoginActivity.instance.finish();
-                    }
-                    if (ToLoginActivity.instance != null) {
-                        ToLoginActivity.instance.finish();
-                    }
-                    activity.finish();
-                } else {
-                    LoginCompleteUtils.goFrom(activity,null,thirdLogin);
-                }
-            }
 
             @Override
             public void onFailure(String error) {
-                btnQq.setEnabled(true);
-                btnSina.setEnabled(true);
-                btnWechat.setEnabled(true);
+                setBtnIsEnable(true);
                 if (mDialog != null) {
                     mDialog.dismiss();
                 }
@@ -407,6 +378,27 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
             }
         });
     }
+
+    private void loginSuccess(ThirdLogin thirdLogin) {
+        if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
+            updateUserIdentity();
+//          startActivity(new Intent(activity, OrderInterestQJActivity.class));
+            startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+            if (ToRegisterActivity.instance != null) {
+                ToRegisterActivity.instance.finish();
+            }
+            if (OptRegisterLoginActivity.instance != null) {
+                OptRegisterLoginActivity.instance.finish();
+            }
+            if (ToLoginActivity.instance != null) {
+                ToLoginActivity.instance.finish();
+            }
+            activity.finish();
+        } else {
+            LoginCompleteUtils.goFrom(activity,null,thirdLogin);
+        }
+    }
+
 
     private void updateUserIdentity() {
         String type = "1";//设置非首次登录
@@ -433,28 +425,27 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        btnQq.setEnabled(true);
-        btnSina.setEnabled(true);
-        btnWechat.setEnabled(true);
+        LogUtil.e("onError=="+Thread.currentThread().getName());
+        setBtnIsEnable(true);
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
         }
+        LogUtil.e(TAG,throwable.toString());
         throwable.printStackTrace();
     }
 
     @Override
     public void onCancel(Platform platform, int i) {
-        btnQq.setEnabled(true);
-        btnSina.setEnabled(true);
-        btnWechat.setEnabled(true);
+        setBtnIsEnable(true);
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);
         }
     }
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
+    private void setBtnIsEnable(boolean b){
+        btnQq.setEnabled(b);
+        btnSina.setEnabled(b);
+        btnWechat.setEnabled(b);
     }
 
 

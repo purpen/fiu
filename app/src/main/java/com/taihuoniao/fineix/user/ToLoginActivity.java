@@ -47,7 +47,7 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
-public class ToLoginActivity extends BaseActivity implements Handler.Callback, PlatformActionListener {
+public class ToLoginActivity extends BaseActivity implements PlatformActionListener {
     @Bind(R.id.btn_wechat)
     ImageButton btnWechat;
     @Bind(R.id.btn_sina)
@@ -181,7 +181,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                 if (mDialog != null) {
                     mDialog.show();
                 }
-                btnWechat.setEnabled(false);
+                setBtnIsEnable(false);
                 loginType = LOGIN_TYPE_WX;
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                 authorize(wechat);
@@ -190,7 +190,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                 if (mDialog != null) {
                     mDialog.show();
                 }
-                btnSina.setEnabled(false);
+                setBtnIsEnable(false);
                 loginType = LOGIN_TYPE_SINA;
                 //新浪微博，测试时，需要打包签名
                 Platform sina = ShareSDK.getPlatform(SinaWeibo.NAME);
@@ -200,7 +200,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                 if (mDialog != null) {
                     mDialog.show();
                 }
-                btnQq.setEnabled(false);
+                setBtnIsEnable(false);
                 loginType = LOGIN_TYPE_QQ;
                 Platform qq = ShareSDK.getPlatform(QQ.NAME);
                 authorize(qq);
@@ -209,14 +209,12 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
         }
     }
 
-    //执行授权,获取用户信息
-    //文档：http://wiki.mob.com/Android_%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99
     private void authorize(Platform plat) {
         if (plat == null) {
             return;
         }
-        if (plat.isValid()) {
-            plat.removeAccount();
+        if (plat.isAuthValid()) {
+            plat.removeAccount(true);
         }
         plat.setPlatformActionListener(this);
         //开启SSO授权
@@ -226,11 +224,8 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        // 这个方法中不能放对话框、吐丝这些耗时的操作，否则会直接跳到onError()中执行
-        //用户资源都保存到hashMap，通过打印hashMap数据看看有哪些数据是你想要的
         if (i == Platform.ACTION_USER_INFOR) {
-            PlatformDb platDB = platform.getDb();//获取数平台数据DB
-            //通过DB获取各种数据
+            PlatformDb platDB = platform.getDb();
             sex = platDB.getUserGender();
             if ("f".equals(sex)) {
                 sex = "2";//女
@@ -245,16 +240,19 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
             token = platDB.getToken();
             userId = null;
             if (TextUtils.equals(LOGIN_TYPE_QQ, loginType)) {
-                //QQ的ID得这样获取，这是MOB公司的错，不是字段写错了
                 userId = platform.getDb().get("weibo");
             } else if (TextUtils.equals(LOGIN_TYPE_WX, loginType)) {
-                //微信这个神坑，我已无力吐槽，干嘛要搞两个ID出来，泥马，后台说要传的是这个ID，字段没有错！用platDB.getUserId()不行！
                 userId = platform.getDb().get("unionid");
             } else {
-                //除QQ和微信两特例，其他的ID这样取就行了
                 userId = platDB.getUserId();
             }
-            doThirdLogin();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    doThirdLogin();
+                }
+            });
+
         }
     }
 
@@ -272,10 +270,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
             @Override
             public void onSuccess(String json) {
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
-                btnQq.setEnabled(true);
-                btnSina.setEnabled(true);
-                btnWechat.setEnabled(true);
-                if (TextUtils.isEmpty(json)) return;
+                setBtnIsEnable(true);
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
                 if (response.isSuccess()) {
@@ -335,9 +330,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
             @Override
             public void onFailure(String error) {
-                btnQq.setEnabled(true);
-                btnSina.setEnabled(true);
-                btnWechat.setEnabled(true);
+                setBtnIsEnable(true);
                 if (mDialog != null) {
                     mDialog.dismiss();
                 }
@@ -352,7 +345,6 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
         HttpRequest.post(params,  URL.UPDATE_USER_IDENTIFY, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
-                if (TextUtils.isEmpty(json)) return;
                 HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
                 if (response.isSuccess()) {
                     LogUtil.e("updateUserIdentity", "成功改为非首次登录");
@@ -371,9 +363,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        btnQq.setEnabled(true);
-        btnSina.setEnabled(true);
-        btnWechat.setEnabled(true);
+        setBtnIsEnable(true);
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
         }
@@ -382,18 +372,12 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
     @Override
     public void onCancel(Platform platform, int i) {
-        btnQq.setEnabled(true);
-        btnSina.setEnabled(true);
-        btnWechat.setEnabled(true);
+        setBtnIsEnable(true);
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);
         }
     }
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
-    }
 
 
     private void submitData(final View v) {
@@ -422,11 +406,8 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
             public void onSuccess(String json) {
                 v.setEnabled(true);
                 mDialog.dismiss();
-                if (TextUtils.isEmpty(json)) return;
                 HttpResponse<LoginInfo> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<LoginInfo>>() {
                 });
-//                ToastUtils.showError(json);
-                LogUtil.e("LOGIN_INFO", json);
                 if (response.isSuccess()) {//登录界面登录成功
                     MainApplication.hasUser = true;
                     final LoginInfo loginInfo = response.getData();
@@ -470,5 +451,11 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
             }
         });
 
+    }
+
+    private void setBtnIsEnable(boolean b){
+        btnQq.setEnabled(b);
+        btnSina.setEnabled(b);
+        btnWechat.setEnabled(b);
     }
 }

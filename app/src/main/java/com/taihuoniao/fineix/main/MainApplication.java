@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.taihuoniao.fineix.BuildConfig;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -79,7 +80,7 @@ public class MainApplication extends Application {
 
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
-        MobclickAgent.setDebugMode(false);
+        MobclickAgent.setDebugMode(BuildConfig.LOG_DEBUG);
         instance = this;
         UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_load);
         FileCameraUtil.init();
