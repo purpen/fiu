@@ -523,7 +523,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 HttpResponse<NowBuyBean> nowBuyBean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<NowBuyBean>>() {});
                 if (nowBuyBean.isSuccess()) {
                     Intent intent = new Intent(BuyGoodsDetailsActivity.this, ConfirmOrderActivity.class);
-                    intent.putExtra("NowBuyBean", nowBuyBean);
+                    intent.putExtra("NowBuyBean", nowBuyBean.getData());
                     startActivity(intent);
                 } else {
                     ToastUtils.showError(nowBuyBean.getMessage());
