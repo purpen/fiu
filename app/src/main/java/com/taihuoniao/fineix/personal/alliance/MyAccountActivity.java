@@ -53,6 +53,8 @@ public class MyAccountActivity extends BaseActivity {
     TextView textViewLink1;
     @Bind(R.id.textView_link2)
     TextView textViewLink2;
+    @Bind(R.id.linearLayout5)
+    LinearLayout linearLayout5;
 
     public MyAccountActivity() {
         super(R.layout.activity_alliance_my_account);
@@ -95,7 +97,7 @@ public class MyAccountActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.linearLayout1, R.id.linearLayout2, R.id.linearLayout3, R.id.linearLayout4, R.id.textView_link1, R.id.textView_link2})
+    @OnClick({R.id.linearLayout1, R.id.linearLayout2, R.id.linearLayout3, R.id.linearLayout4, R.id.textView_link1, R.id.textView_link2, R.id.linearLayout5})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.linearLayout1:
@@ -116,6 +118,9 @@ public class MyAccountActivity extends BaseActivity {
                 startActivity(new Intent(this, PrivacyPolicyActivity.class));
                 break;
             case R.id.textView_link2:
+                break;
+            case R.id.linearLayout5:
+                startActivity(new Intent(this, SubAccountManageActivity.class));
                 break;
         }
     }
