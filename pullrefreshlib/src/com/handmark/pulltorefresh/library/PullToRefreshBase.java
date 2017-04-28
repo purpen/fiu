@@ -37,7 +37,6 @@ import android.widget.LinearLayout;
 import com.handmark.pulltorefresh.library.internal.FlipLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.LoadingLayout;
 import com.handmark.pulltorefresh.library.internal.RotateLoadingLayout;
-import com.handmark.pulltorefresh.library.internal.Utils;
 import com.handmark.pulltorefresh.library.internal.ViewCompat;
 
 public abstract class PullToRefreshBase<T extends View> extends LinearLayout implements IPullToRefresh<T> {
@@ -1117,7 +1116,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				mRefreshableView.setBackgroundDrawable(background);
 			}
 		} else if (a.hasValue(R.styleable.PullToRefresh_ptrAdapterViewBackground)) {
-			Utils.warnDeprecation("ptrAdapterViewBackground", "ptrRefreshableViewBackground");
 			Drawable background = a.getDrawable(R.styleable.PullToRefresh_ptrAdapterViewBackground);
 			if (null != background) {
 				mRefreshableView.setBackgroundDrawable(background);
