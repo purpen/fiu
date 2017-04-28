@@ -53,6 +53,10 @@ public class MyAccountActivity extends BaseActivity {
     TextView textViewLink1;
     @Bind(R.id.textView_link2)
     TextView textViewLink2;
+    @Bind(R.id.linearLayout5)
+    LinearLayout linearLayout5;
+
+    private boolean isStorageManage;
 
     public MyAccountActivity() {
         super(R.layout.activity_alliance_my_account);
@@ -62,6 +66,8 @@ public class MyAccountActivity extends BaseActivity {
     protected void initView() {
         customHead.setHeadCenterTxtShow(true, "我的钱包");
         WindowUtils.chenjin(this);
+        isStorageManage = getIntent().getBooleanExtra("isStorageManage", false);
+        linearLayout5.setVisibility(isStorageManage ? View.VISIBLE : View.GONE);
     }
 
 
@@ -95,7 +101,7 @@ public class MyAccountActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.linearLayout1, R.id.linearLayout2, R.id.linearLayout3, R.id.linearLayout4, R.id.textView_link1, R.id.textView_link2})
+    @OnClick({R.id.linearLayout1, R.id.linearLayout2, R.id.linearLayout3, R.id.linearLayout4, R.id.textView_link1, R.id.textView_link2, R.id.linearLayout5})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.linearLayout1:
@@ -117,6 +123,9 @@ public class MyAccountActivity extends BaseActivity {
                 break;
             case R.id.textView_link2:
                 break;
+            case R.id.linearLayout5:
+                startActivity(new Intent(this, SubAccountManageActivity.class));
+                break;
         }
     }
 
@@ -126,9 +135,9 @@ public class MyAccountActivity extends BaseActivity {
         if (myAccountBean == null) {
             return;
         }
-        textView1.setText(StringFormatUtils.formatMoney(myAccountBean.getWait_cash_amount()));
-        textView2.setText(StringFormatUtils.formatMoney(myAccountBean.getTotal_balance_amount()));
-        textView3.setText(StringFormatUtils.formatMoney(myAccountBean.getTotal_cash_amount()));
+        textView1.setText(StringFormatUtils.convert2double(myAccountBean.getWait_cash_amount()));
+        textView2.setText(StringFormatUtils.convert2double(myAccountBean.getTotal_balance_amount()));
+        textView3.setText(StringFormatUtils.convert2double(myAccountBean.getTotal_cash_amount()));
         this.myAccountBean = myAccountBean;
     }
 }

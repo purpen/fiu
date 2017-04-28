@@ -82,5 +82,6 @@ public class User implements Serializable {
         public int is_scene_subscribe;
         public String alliance_id;
         public String storage_id;
+        public String is_storage_manage;
     }
 }

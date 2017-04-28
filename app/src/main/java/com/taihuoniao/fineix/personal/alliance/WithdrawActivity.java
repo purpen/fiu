@@ -96,7 +96,7 @@ public class WithdrawActivity extends BaseActivity {
     private void initUI() {
         balance = getIntent().getStringExtra("balance");
         if (!TextUtils.isEmpty(balance)) {
-            balance = StringFormatUtils.formatMoney(Double.valueOf(balance));
+            balance = StringFormatUtils.convert2double(Double.valueOf(balance));
         }
         textView2.setText(String.format("¥ %s", balance));
     }

@@ -475,6 +475,8 @@
         <activity android:name=".personal.alliance.AddWithdrawAccountInfo2Activity" />
         <activity android:name=".personal.alliance.BindWithdrawAccountActivity" />
         <activity android:name=".personal.alliance.WithdrawAllianceBankListActivity" />
+        <activity android:name=".personal.alliance.SubAccountManageActivity" />
+        <activity android:name=".personal.alliance.AddSubAcountActivity" />
 
         <activity
             android:name=".zone.ZoneDetailActivity"

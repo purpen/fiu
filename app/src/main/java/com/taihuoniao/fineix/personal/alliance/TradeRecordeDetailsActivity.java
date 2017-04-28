@@ -72,6 +72,11 @@ public class TradeRecordeDetailsActivity extends BaseActivity {
                 if (tradeRecordeBeanHttpResponse.isSuccess()) {
                     dealUI(tradeRecordeBeanHttpResponse);
                 }
+//                try {
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override

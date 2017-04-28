@@ -59,7 +59,7 @@ public class SettlementRecordeAdapter extends BaseAdapter {
         if (rowsEntity != null) {
             viewHolder.textView1.setText(rowsEntity.getCreated_at());
             viewHolder.textView2.setText(rowsEntity.getBalance_count());
-            viewHolder.textView3.setText(StringFormatUtils.formatMoney(rowsEntity.getAmount()));
+            viewHolder.textView3.setText(StringFormatUtils.convert2double(rowsEntity.getAmount()));
         }
         return convertView;
     }
