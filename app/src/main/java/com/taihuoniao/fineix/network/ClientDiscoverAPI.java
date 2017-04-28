@@ -1291,7 +1291,6 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-
     public static Map<String,String> getAllianceWithDraw01(String id,String alliance_id,String kind,String pay_type,String account,String bank_address ,String is_default,String username,String phone,String verify_code) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id",id);
@@ -1306,25 +1305,9 @@ public class ClientDiscoverAPI {
         params.put("verify_code",verify_code);
         return params;
     }
-    public static Map<String,String> getAllianceWithDraw02(String id) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id",id);
-        return params;
-    }
-    public static Map<String,String> getAllianceWithDraw03(String page, String size, String sort) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("page",page);
-        params.put("size",size);
-        params.put("sort",sort);
-        return params;
-    }
+
     public static Map<String,String> getAllianceWithDraw04() {
         HashMap<String, String> params = new HashMap<>();
-        return params;
-    }
-    public static Map<String,String> getAllianceWithDraw05(String id) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id",id);
         return params;
     }
 
@@ -1338,6 +1321,15 @@ public class ClientDiscoverAPI {
         params.put("stick","0");
         params.put("from_to","1");
         params.put("title","");
+        return params;
+    }
+
+    public static Map<String,String> addSubAccount(String account, String username, String verify_code, String password) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("account",account);
+        params.put("username",username);
+        params.put("verify_code",verify_code);
+        params.put("password",password);
         return params;
     }
 }

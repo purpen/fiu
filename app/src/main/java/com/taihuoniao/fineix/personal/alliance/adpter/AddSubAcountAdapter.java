@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.personal.alliance.bean.TradeRecordBean;
+import com.taihuoniao.fineix.personal.alliance.bean.SubAccountListBean;
 import com.taihuoniao.fineix.utils.StringFormatUtils;
 
 import java.util.List;
@@ -18,11 +18,20 @@ import java.util.List;
  * Email: 895745843@qq.com
  */
 
-public class TradeRecordeAdapter extends BaseAdapter {
+public class AddSubAcountAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
-    private List<TradeRecordBean.RowsEntity> mRows;
 
-    public TradeRecordeAdapter(Context context) {
+    public List<SubAccountListBean.RowsEntity> getmRows() {
+        return mRows;
+    }
+
+    public void setmRows(List<SubAccountListBean.RowsEntity> mRows) {
+        this.mRows = mRows;
+    }
+
+    private List<SubAccountListBean.RowsEntity> mRows;
+
+    public AddSubAcountAdapter(Context context) {
         this.mLayoutInflater = LayoutInflater.from(context);
     }
 
@@ -46,7 +55,7 @@ public class TradeRecordeAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = mLayoutInflater.inflate(R.layout.item_listview_allience_traderecorde, null);
+            convertView = mLayoutInflater.inflate(R.layout.item_listview_add_account, null);
             viewHolder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
             viewHolder.textView2 = (TextView) convertView.findViewById(R.id.textView2);
             viewHolder.textView3 = (TextView) convertView.findViewById(R.id.textView3);
@@ -55,16 +64,16 @@ public class TradeRecordeAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        TradeRecordBean.RowsEntity rowsEntity = mRows.get(position);
+        SubAccountListBean.RowsEntity rowsEntity = mRows.get(position);
         if (rowsEntity != null) {
-            viewHolder.textView1.setText(StringFormatUtils.convert2double(rowsEntity.getTotal_price()));
-            viewHolder.textView2.setText(rowsEntity.getCreated_at());
-            viewHolder.textView3.setText(rowsEntity.getStatus_label());
+            viewHolder.textView1.setText(rowsEntity.getUsername());
+            viewHolder.textView2.setText(rowsEntity.getAccount());
+            viewHolder.textView3.setText(StringFormatUtils.convert2double(rowsEntity.getAmount()));
         }
         return convertView;
     }
 
-    public void setList(List<TradeRecordBean.RowsEntity> rows) {
+    public void setList(List<SubAccountListBean.RowsEntity> rows) {
         if (mRows == null) {
             mRows = rows;
         } else {

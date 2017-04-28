@@ -60,7 +60,7 @@ public class WithDrawRecordAdapter extends BaseAdapter {
         if (rowsEntity != null) {
             viewHolder.textView1.setText(getStatus(Integer.valueOf(rowsEntity.getStatus()), viewHolder.textView1));
             viewHolder.textView2.setText(rowsEntity.getCreated_at());
-            viewHolder.textView3.setText(String.format("- %s", StringFormatUtils.formatMoney(rowsEntity.getAmount())));
+            viewHolder.textView3.setText(String.format("- %s", StringFormatUtils.convert2double(rowsEntity.getAmount())));
         }
         return convertView;
     }

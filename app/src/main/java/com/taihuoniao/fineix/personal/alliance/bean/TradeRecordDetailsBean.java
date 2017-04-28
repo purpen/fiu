@@ -47,7 +47,7 @@ public class TradeRecordDetailsBean implements Parcelable {
     public String order_rid;
     public int product_id;
     public int sku_id;
-    public int sku_price;
+    public String sku_price;
     public int user_id;
     public int quantity;
     public double commision_percent;
@@ -80,7 +80,7 @@ public class TradeRecordDetailsBean implements Parcelable {
         dest.writeString(this.order_rid);
         dest.writeInt(this.product_id);
         dest.writeInt(this.sku_id);
-        dest.writeInt(this.sku_price);
+        dest.writeString(this.sku_price);
         dest.writeInt(this.user_id);
         dest.writeInt(this.quantity);
         dest.writeDouble(this.commision_percent);
@@ -111,7 +111,7 @@ public class TradeRecordDetailsBean implements Parcelable {
         this.order_rid = in.readString();
         this.product_id = in.readInt();
         this.sku_id = in.readInt();
-        this.sku_price = in.readInt();
+        this.sku_price = in.readString();
         this.user_id = in.readInt();
         this.quantity = in.readInt();
         this.commision_percent = in.readDouble();
