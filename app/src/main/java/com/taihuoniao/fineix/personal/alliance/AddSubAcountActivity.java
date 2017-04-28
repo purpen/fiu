@@ -1,10 +1,11 @@
 package com.taihuoniao.fineix.personal.alliance;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -15,12 +16,13 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
-import com.taihuoniao.fineix.personal.AllianceRequstDeal;
+import com.taihuoniao.fineix.personal.alliance.bean.WithDrawSetDefaultAccoutBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,7 +54,10 @@ public class AddSubAcountActivity extends BaseActivity {
     EditText editText4;
     @Bind(R.id.editText5)
     EditText editText5;
+    @Bind(R.id.linearLayout_set_password)
+    LinearLayout linearLayoutSetPassword;
 
+    private boolean isPhoneRegisted;
 
     public AddSubAcountActivity() {
         super(R.layout.activity_alliance_my_sub_account_add);
@@ -90,15 +95,49 @@ public class AddSubAcountActivity extends BaseActivity {
             ToastUtils.showError("请输入手机号");
         } else if (TextUtils.isEmpty(str2)) {
             ToastUtils.showError("请输入验证码");
-        } else if (TextUtils.isEmpty(str3)) {
-            ToastUtils.showError("请输入密码");
-        } else if (TextUtils.isEmpty(str4)) {
-            ToastUtils.showError("请输入确认密码");
-        } else if (phone != null && !TextUtils.equals(str3, phone)) {
+        }else if (!isPhoneRegisted) {
+            if (TextUtils.isEmpty(str3)) {
+                ToastUtils.showError("请输入密码");
+            } else if (TextUtils.isEmpty(str4)) {
+                ToastUtils.showError("请输入确认密码");
+            } else if (!str3.equals(str4)) {
+                ToastUtils.showError("密码不一致，请重新设置密码");
+            }else if (phone != null && !TextUtils.equals(str1, phone)) {
+                ToastUtils.showError("接收验证码手机号与当前手机号不一致");
+            }else {
+                addSubAccount(str1, str, str2, str3);
+            }
+        }  else if (phone != null && !TextUtils.equals(str1, phone)) {
             ToastUtils.showError("接收验证码手机号与当前手机号不一致");
-        } else {
-
+        }else {
+           addSubAccount(str1, str, str2, str3);
         }
+    }
+
+    /**
+     * 添加子账号
+     */
+    private void addSubAccount(String account, String username, String verify_code, String password) {
+        Map<String, String> allianceWithDraw01 = ClientDiscoverAPI.addSubAccount(account, username, verify_code, password);
+        HttpRequest.post(allianceWithDraw01, URL.STORAGE_MANAGE_SAVE, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                HttpResponse<WithDrawSetDefaultAccoutBean> bean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawSetDefaultAccoutBean>>() {});
+                if (bean != null) {
+                    if (bean.isSuccess()) {
+                        setResult(Activity.RESULT_OK);
+                        AddSubAcountActivity.this.finish();
+                    } else {
+                        ToastUtils.showError(bean.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showSuccess("请求失败");
+            }
+        });
     }
 
     /**
@@ -106,7 +145,6 @@ public class AddSubAcountActivity extends BaseActivity {
      */
     private void sendVerificationCode(String phone) {
         Map<String, String> allianceWithDraw01 = ClientDiscoverAPI.getgetVerifyCodeNetRequestParams(phone);
-        allianceWithDraw01.put("type", "5");
         HttpRequest.post(allianceWithDraw01, URL.AUTH_VERIFY_CODE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
@@ -176,9 +214,30 @@ public class AddSubAcountActivity extends BaseActivity {
                     ToastUtils.showInfo("请输入11位手机号");
                 } else {
                     phone = tempPhone;
+                    isPhoneRegisted(phone);
                     sendVerificationCode(this.phone);
                 }
                 break;
         }
+    }
+
+    private void isPhoneRegisted(final String phone) { //true 未被注册
+        HashMap<String, String> defaultParams = ClientDiscoverAPI.getDefaultParams();
+        defaultParams.put("account", phone);
+        HttpRequest.post(defaultParams, URL.GET_REGIST_STATE, new GlobalDataCallBack() {
+            @Override
+            public void onSuccess(String json) {
+                if (json == null) return;
+                if (TextUtils.isEmpty(json)) return;
+                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                isPhoneRegisted = !response.isSuccess();
+                linearLayoutSetPassword.setVisibility(isPhoneRegisted ? View.GONE : View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                ToastUtils.showError(R.string.network_err);
+            }
+        });
     }
 }

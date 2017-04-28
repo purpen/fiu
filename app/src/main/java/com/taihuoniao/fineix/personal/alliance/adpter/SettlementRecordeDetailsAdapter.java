@@ -66,15 +66,15 @@ public class SettlementRecordeDetailsAdapter extends BaseAdapter {
             ((TextView)viewHolder.linearLayout2.getChildAt(0)).setText("名称");
             ((TextView)viewHolder.linearLayout2.getChildAt(1)).setText(rowsEntity.balance.title);
             ((TextView)viewHolder.linearLayout3.getChildAt(0)).setText("单价");
-            ((TextView)viewHolder.linearLayout3.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.balance.sku_price));
+            ((TextView)viewHolder.linearLayout3.getChildAt(1)).setText(StringFormatUtils.convert2double(rowsEntity.balance.sku_price));
             ((TextView)viewHolder.linearLayout4.getChildAt(0)).setText("收益比率");
             ((TextView)viewHolder.linearLayout4.getChildAt(1)).setText(String.valueOf(Double.valueOf(rowsEntity.balance.commision_percent) * 100D) + "%");
             ((TextView)viewHolder.linearLayout5.getChildAt(0)).setText("收益");
-            ((TextView)viewHolder.linearLayout5.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.balance.unit_price));
+            ((TextView)viewHolder.linearLayout5.getChildAt(1)).setText(StringFormatUtils.convert2double(rowsEntity.balance.unit_price));
             ((TextView)viewHolder.linearLayout6.getChildAt(0)).setText("数量");
             ((TextView)viewHolder.linearLayout6.getChildAt(1)).setText(rowsEntity.balance.quantity+"");
             ((TextView)viewHolder.linearLayout7.getChildAt(0)).setText("合计收益");
-            ((TextView)viewHolder.linearLayout7.getChildAt(1)).setText(StringFormatUtils.formatMoney(rowsEntity.balance.total_price));
+            ((TextView)viewHolder.linearLayout7.getChildAt(1)).setText(StringFormatUtils.convert2double(rowsEntity.balance.total_price));
         }
         return convertView;
     }

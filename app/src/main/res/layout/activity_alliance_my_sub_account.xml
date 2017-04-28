@@ -25,6 +25,7 @@
             android:drawableLeft="@mipmap/icon_my_account_sub_account_add"
             android:drawablePadding="5dp"
             android:text="添加子账号"
+            android:textColor="#282928"
             android:textSize="14sp" />
 
         <ImageView
@@ -55,6 +56,7 @@
             android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:text="子账号总收益"
+            android:textColor="#282928"
             android:textSize="14sp" />
 
         <TextView
@@ -63,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:src="@mipmap/icon_alliance_arrow"
-            android:text="181.00"
+            android:text="0.00"
             android:textColor="#BE8914" />
     </LinearLayout>
 

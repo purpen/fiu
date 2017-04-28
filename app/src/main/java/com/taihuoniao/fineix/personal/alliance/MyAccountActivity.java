@@ -56,6 +56,8 @@ public class MyAccountActivity extends BaseActivity {
     @Bind(R.id.linearLayout5)
     LinearLayout linearLayout5;
 
+    private boolean isStorageManage;
+
     public MyAccountActivity() {
         super(R.layout.activity_alliance_my_account);
     }
@@ -64,6 +66,8 @@ public class MyAccountActivity extends BaseActivity {
     protected void initView() {
         customHead.setHeadCenterTxtShow(true, "我的钱包");
         WindowUtils.chenjin(this);
+        isStorageManage = getIntent().getBooleanExtra("isStorageManage", false);
+        linearLayout5.setVisibility(isStorageManage ? View.VISIBLE : View.GONE);
     }
 
 
@@ -131,9 +135,9 @@ public class MyAccountActivity extends BaseActivity {
         if (myAccountBean == null) {
             return;
         }
-        textView1.setText(StringFormatUtils.formatMoney(myAccountBean.getWait_cash_amount()));
-        textView2.setText(StringFormatUtils.formatMoney(myAccountBean.getTotal_balance_amount()));
-        textView3.setText(StringFormatUtils.formatMoney(myAccountBean.getTotal_cash_amount()));
+        textView1.setText(StringFormatUtils.convert2double(myAccountBean.getWait_cash_amount()));
+        textView2.setText(StringFormatUtils.convert2double(myAccountBean.getTotal_balance_amount()));
+        textView3.setText(StringFormatUtils.convert2double(myAccountBean.getTotal_cash_amount()));
         this.myAccountBean = myAccountBean;
     }
 }

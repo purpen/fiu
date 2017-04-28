@@ -211,4 +211,7 @@ public class URL {
 
 
     public static final String BRAND_SCENE_LIST = BASE_URL + "/scene_brands/getlist";  // 品牌列表
+    public static final String STORAGE_MANAGE_LIST = BASE_URL + "/storage_manage/getlist";
+    public static final String STORAGE_MANAGE_SAVE = BASE_URL + "/storage_manage/save";
+    public static final String STORAGE_MANAGE_DELETED = BASE_URL + "/storage_manage/deleted";
 }

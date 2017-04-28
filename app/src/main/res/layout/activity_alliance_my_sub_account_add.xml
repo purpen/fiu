@@ -31,9 +31,9 @@
             android:layout_height="match_parent"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
-            android:maxEms="5"
-            android:inputType="text"
             android:background="@color/color_transparent"
+            android:inputType="text"
+            android:maxEms="5"
             android:src="@mipmap/icon_alliance_arrow"
             android:textSize="14sp" />
     </LinearLayout>
@@ -64,9 +64,9 @@
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:maxLength="11"
-            android:inputType="phone"
             android:background="@color/color_transparent"
+            android:inputType="phone"
+            android:maxLength="11"
             android:src="@mipmap/icon_alliance_arrow"
             android:textSize="14sp" />
 
@@ -107,8 +107,8 @@
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:background="@color/color_transparent"
-            android:maxLength="8"
             android:inputType="number"
+            android:maxLength="8"
             android:src="@mipmap/icon_alliance_arrow"
             android:textSize="14sp" />
     </LinearLayout>
@@ -119,9 +119,11 @@
         android:background="#E4E2DF" />
 
     <LinearLayout
+        android:id="@+id/linearLayout_set_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -144,9 +146,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
+                android:background="@color/color_transparent"
                 android:inputType="textPassword"
                 android:maxLength="16"
-                android:background="@color/color_transparent"
                 android:src="@mipmap/icon_alliance_arrow"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -176,9 +178,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
-                android:maxLength="16"
                 android:background="@color/color_transparent"
                 android:inputType="textPassword"
+                android:maxLength="16"
                 android:src="@mipmap/icon_alliance_arrow"
                 android:textSize="14sp" />
         </LinearLayout>

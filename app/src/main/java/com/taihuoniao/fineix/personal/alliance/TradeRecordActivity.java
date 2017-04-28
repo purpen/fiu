@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.personal.alliance;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,6 +19,7 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.personal.alliance.adpter.TradeRecordeAdapter;
 import com.taihuoniao.fineix.personal.alliance.bean.TradeRecordBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -44,6 +46,7 @@ public class TradeRecordActivity extends BaseActivity {
     TextView returnTextViewEmpty;
 
     private TradeRecordeAdapter adapter;
+    private String cid;
 
     public TradeRecordActivity() {
         super(R.layout.activity_alliance_trade_record);
@@ -53,7 +56,7 @@ public class TradeRecordActivity extends BaseActivity {
     protected void initView() {
         customHead.setHeadCenterTxtShow(true, "交易记录");
         WindowUtils.chenjin(this);
-        
+        cid = getIntent().getStringExtra("user_id");
         initUI();
     }
 
@@ -108,6 +111,9 @@ public class TradeRecordActivity extends BaseActivity {
 
     private void requestDataList(){
         HashMap<String, String> tradeRecordelist = ClientDiscoverAPI.getTradeRecordelist(String.valueOf(curPage), "8", "0");
+        if (!TextUtils.isEmpty(cid)) {
+            tradeRecordelist.put("user_id", cid);
+        }
         HttpRequest.post(tradeRecordelist, URL.ALLIANCE_BALANCE_LIST, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
@@ -127,8 +133,17 @@ public class TradeRecordActivity extends BaseActivity {
     }
 
     private void dealUI(HttpResponse<TradeRecordBean> tradeRecordeBeanHttpResponse){
+        TradeRecordBean data = tradeRecordeBeanHttpResponse.getData();
+        int count = TypeConversionUtils.StringConvertInt(data.getTotal_rows());
+        if (count == 0) {
+            pullToRefreshListViewReturn.setVisibility(View.GONE);
+            returnTextViewEmpty.setVisibility(View.VISIBLE);
+            return;
+        }
         List<TradeRecordBean.RowsEntity> rows = tradeRecordeBeanHttpResponse.getData().getRows();
         adapter.setList(rows);
+        pullToRefreshListViewReturn.setVisibility(View.VISIBLE);
+        returnTextViewEmpty.setVisibility(View.GONE);
     }
 
     private int curPage = 1;

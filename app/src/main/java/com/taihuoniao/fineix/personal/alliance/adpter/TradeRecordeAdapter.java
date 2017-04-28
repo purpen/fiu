@@ -57,7 +57,7 @@ public class TradeRecordeAdapter extends BaseAdapter {
 
         TradeRecordBean.RowsEntity rowsEntity = mRows.get(position);
         if (rowsEntity != null) {
-            viewHolder.textView1.setText(StringFormatUtils.formatMoney(rowsEntity.getTotal_price()));
+            viewHolder.textView1.setText(StringFormatUtils.convert2double(rowsEntity.getTotal_price()));
             viewHolder.textView2.setText(rowsEntity.getCreated_at());
             viewHolder.textView3.setText(rowsEntity.getStatus_label());
         }

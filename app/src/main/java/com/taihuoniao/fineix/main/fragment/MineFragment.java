@@ -137,6 +137,7 @@ public class MineFragment extends MyBaseFragment {
     private PersonalCenterGVAdapter adapter;
     private WaittingDialog dialog;
     private User user;
+    private boolean isStorageManage;
 
     public static void setOnMessageCountChangeListener(OnMessageCountChangeListener listener) {
         MineFragment.listener = listener;
@@ -222,7 +223,7 @@ public class MineFragment extends MyBaseFragment {
                 HttpResponse<MyAccountBean> httpResponse = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<MyAccountBean>>() {
                 });
                 if (httpResponse.isSuccess()) {
-                    tvBonus.setText(StringFormatUtils.formatMoney(httpResponse.getData().getWait_cash_amount()) + "元");
+                    tvBonus.setText(StringFormatUtils.convert2double(httpResponse.getData().getWait_cash_amount()) + "元");
                 }
             }
 
@@ -319,6 +320,7 @@ public class MineFragment extends MyBaseFragment {
         }else {
             rlZone.setVisibility(View.VISIBLE);
         }
+        isStorageManage = "1".equals(user.identify.is_storage_manage);
         tv_lv.setText(String.format("Lv%s", user.rank_id));
         tv_qj.setText(String.valueOf(user.sight_count)); //场景改情景
         tv_focus.setText(String.valueOf(user.follow_count));
@@ -344,7 +346,9 @@ public class MineFragment extends MyBaseFragment {
                 break;
             case R.id.rl_bonus:
                 //我的分成界面
-                startActivity(new Intent(activity, MyAccountActivity.class));
+                Intent intent1 = new Intent(activity, MyAccountActivity.class);
+                intent1.putExtra("isStorageManage", isStorageManage);
+                startActivity(intent1);
                 break;
             case R.id.tv_all_order:
                 startActivity(new Intent(activity, ShopOrderListActivity.class));
