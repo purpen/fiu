@@ -3,31 +3,23 @@ package com.taihuoniao.fineix.main;
 import android.app.Application;
 import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Vibrator;
 import android.support.multidex.MultiDex;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.taihuoniao.fineix.BuildConfig;
-import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TagItem;
-import com.taihuoniao.fineix.network.ConstantCfg;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.personal.AllianceRequstDeal;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.bean.SceneListBean2;
-import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.FileCameraUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PushUtils;
-import com.taihuoniao.fineix.utils.SPUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -82,7 +74,6 @@ public class MainApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());
         MobclickAgent.setDebugMode(BuildConfig.LOG_DEBUG);
         instance = this;
-        UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_load);
         FileCameraUtil.init();
         JsonUtil.init();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
@@ -137,28 +128,6 @@ public class MainApplication extends Application {
             }
         }
         return getCacheDir();
-    }
-
-    public static boolean isloginValid(String json, Class clazz) {
-        if (TextUtils.isEmpty(json)) return false;
-        if (clazz.equals(HttpResponse.class)) {
-            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-            if (TextUtils.equals(ConstantCfg.STATUS_NEED_LOGIN, response.getStatus())) {//需要登录
-                SPUtil.remove(DataConstants.LOGIN_INFO);
-                AllianceRequstDeal.removeAllianceValue();
-                getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
-                return false;
-            }
-        } else {
-            HttpResponse netBean = JsonUtil.fromJson(json, HttpResponse.class);
-            if (TextUtils.equals(ConstantCfg.STATUS_NEED_LOGIN, netBean.getStatus())) {//需要登录
-                SPUtil.remove(DataConstants.LOGIN_INFO);
-                AllianceRequstDeal.removeAllianceValue();
-                getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
-                return false;
-            }
-        }
-        return true;
     }
 
     public void initPush() {

@@ -1,20 +1,13 @@
 package com.taihuoniao.fineix.album;
-
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.widget.GridView;
 import android.widget.ImageView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.utils.GlideUtils;
+
 public class ImageLoaderEngine implements LoadEngine {
     private int img_loading;
     private int img_camera;
-    private DisplayImageOptions displayOptions;
-    private DisplayImageOptions cameraOptions;
     public ImageLoaderEngine() {
         this(0, 0);
     }
@@ -24,9 +17,6 @@ public class ImageLoaderEngine implements LoadEngine {
     }
 
     public ImageLoaderEngine(int img_loading, int img_camera) {
-        if (ImageLoader.getInstance() == null) {
-            throw new ExceptionInInitializerError(INITIALIZE_ENGINE_ERROR);
-        }
         if (img_loading == 0)
             this.img_loading = R.mipmap.default_load;
         else
@@ -39,51 +29,17 @@ public class ImageLoaderEngine implements LoadEngine {
 
     @Override
     public void displayImage(String path, ImageView imageView) {
-        ImageLoader.getInstance().displayImage(path, imageView, getPathImageOptions());
+        GlideUtils.displayImageFadein(path, imageView);
     }
 
     @Override
     public void displayCameraItem(ImageView imageView) {
-        ImageLoader.getInstance().displayImage("drawable://" + img_camera, imageView, getCameraOptions());
+        GlideUtils.displayImageFadein(img_camera, imageView);
     }
 
     @Override
     public void scrolling(GridView view) {
-        view.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), false, true));
-    }
 
-    private DisplayImageOptions getPathImageOptions() {
-
-        if (displayOptions == null)
-            displayOptions = new DisplayImageOptions
-                    .Builder()
-                    .showImageOnLoading(img_loading)
-                    .showImageForEmptyUri(img_loading)
-                    .showImageOnFail(img_loading)
-                    .delayBeforeLoading(0)
-                    .cacheInMemory(true)
-                    .cacheOnDisk(true)
-                    .considerExifParams(true)
-                    .bitmapConfig(Bitmap.Config.RGB_565)
-                    .imageScaleType(ImageScaleType.EXACTLY)
-                    .build();
-
-        return displayOptions;
-    }
-
-    private DisplayImageOptions getCameraOptions() {
-
-        if (cameraOptions == null)
-            cameraOptions = new DisplayImageOptions
-                    .Builder()
-                    .showImageOnLoading(img_camera)
-                    .showImageForEmptyUri(img_camera)
-                    .showImageOnFail(img_camera)
-                    .cacheInMemory(true)
-                    .cacheOnDisk(false)
-                    .considerExifParams(true)
-                    .build();
-        return cameraOptions;
     }
 
     @Override

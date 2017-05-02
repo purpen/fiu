@@ -10,15 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.base.HttpRequest;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
+import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.main.App;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.product.PayWayActivity;

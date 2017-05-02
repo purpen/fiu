@@ -2,9 +2,6 @@ package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
 import android.os.Environment;
-
-import com.nostra13.universalimageloader.utils.StorageUtils;
-
 import java.io.File;
 import java.math.BigDecimal;
 
@@ -18,7 +15,6 @@ public class DataCleanUtil {
         long cacheSize = getFolderSize(context.getCacheDir());
         cacheSize += getFolderSize(context.getFilesDir());
         cacheSize += getFolderSize(FileUtils.getSaveFolder(context.getPackageName()));
-        cacheSize += getFolderSize(StorageUtils.getCacheDirectory(context.getApplicationContext()));
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             cacheSize += getFolderSize(context.getExternalCacheDir());
         }
