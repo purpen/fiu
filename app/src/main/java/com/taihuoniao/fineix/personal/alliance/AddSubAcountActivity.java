@@ -153,11 +153,16 @@ public class AddSubAcountActivity extends BaseActivity {
                 if (httpResponse.isSuccess()) {
                     ToastUtils.showInfo("发送验证码成功");
                     startToTiming();
+                } else {
+                    ToastUtils.showError("发送验证码失败");
+                    resetVerificationStatus();
                 }
             }
 
             @Override
             public void onFailure(String error) {
+                ToastUtils.showSuccess(error);
+                resetVerificationStatus();
             }
         });
     }
@@ -170,7 +175,6 @@ public class AddSubAcountActivity extends BaseActivity {
      * 开始倒计时
      */
     private void startToTiming() {
-        button1.setEnabled(false);
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -215,6 +219,7 @@ public class AddSubAcountActivity extends BaseActivity {
                 } else {
                     phone = tempPhone;
                     isPhoneRegisted(phone);
+                    button1.setEnabled(false);
                     sendVerificationCode(this.phone);
                 }
                 break;
