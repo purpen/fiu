@@ -2,7 +2,9 @@ package com.taihuoniao.fineix.personal.alliance;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,9 +18,11 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.common.GlobalDataCallBack;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
+import com.taihuoniao.fineix.personal.alliance.bean.SubAccountListBean;
 import com.taihuoniao.fineix.personal.alliance.bean.WithDrawSetDefaultAccoutBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
@@ -56,8 +60,13 @@ public class AddSubAcountActivity extends BaseActivity {
     EditText editText5;
     @Bind(R.id.linearLayout_set_password)
     LinearLayout linearLayoutSetPassword;
+    @Bind(R.id.editText6)
+    EditText editText6;
+    @Bind(R.id.linearLayout_alliance_verification_container)
+    LinearLayout linearLayoutAllianceVerificationContainer;
 
     private boolean isPhoneRegisted;
+    private SubAccountListBean.RowsEntity rowsEntity;
 
     public AddSubAcountActivity() {
         super(R.layout.activity_alliance_my_sub_account_add);
@@ -65,21 +74,34 @@ public class AddSubAcountActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        customHead.setHeadCenterTxtShow(true, "添加子账号");
+        customHead.setHeadCenterTxtShow(true, rowsEntity == null ? "添加子账号" : "修改子账号信息");
         customHead.setHeadRightTxtShow(true, "保存");
         customHead.getHeadRightTV().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                commitSubAccountInfomation();
+                if (rowsEntity == null) {
+                    commitSubAccountInfomation();
+                } else {
+                    modifySubAccountInfomation();
+                }
             }
         });
         WindowUtils.chenjin(this);
+
+        if (rowsEntity != null) {
+            linearLayoutAllianceVerificationContainer.setVisibility(View.GONE);
+            button1.setVisibility(View.GONE);
+            editText2.setEnabled(false);
+            editText1.setText(rowsEntity.getUsername());
+            editText2.setText(rowsEntity.getAccount());
+            int i = (int) (TypeConversionUtils.StringConvertDouble(rowsEntity.getAddition()) * 100);
+            editText6.setText(String.valueOf(i));
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 
@@ -89,12 +111,20 @@ public class AddSubAcountActivity extends BaseActivity {
         String str2 = editText3.getText().toString();
         String str3 = editText4.getText().toString();
         String str4 = editText5.getText().toString();
+        String str5 = editText6.getText().toString();
+        double ratio = TypeConversionUtils.StringConvertDouble(str5);
         if (TextUtils.isEmpty(str)) {
             ToastUtils.showError("请输入姓名");
         } else if (TextUtils.isEmpty(str1)) {
             ToastUtils.showError("请输入手机号");
         } else if (TextUtils.isEmpty(str2)) {
             ToastUtils.showError("请输入验证码");
+        } else if (TextUtils.isEmpty(str5)) {
+            ToastUtils.showError("请输入子账号佣金分成");
+        } else if (ratio <= 0) {
+            ToastUtils.showError("分成比例不能小于0");
+        } else if (ratio > 100) {
+            ToastUtils.showError("分成比例不能大于100");
         }else if (!isPhoneRegisted) {
             if (TextUtils.isEmpty(str3)) {
                 ToastUtils.showError("请输入密码");
@@ -102,27 +132,28 @@ public class AddSubAcountActivity extends BaseActivity {
                 ToastUtils.showError("请输入确认密码");
             } else if (!str3.equals(str4)) {
                 ToastUtils.showError("密码不一致，请重新设置密码");
-            }else if (phone != null && !TextUtils.equals(str1, phone)) {
+            } else if (phone != null && !TextUtils.equals(str1, phone)) {
                 ToastUtils.showError("接收验证码手机号与当前手机号不一致");
-            }else {
-                addSubAccount(str1, str, str2, str3);
+            } else {
+                addOrModifySubAccount(null, str1, str, str2, str3, String.valueOf(ratio/100));
             }
-        }  else if (phone != null && !TextUtils.equals(str1, phone)) {
+        } else if (phone != null && !TextUtils.equals(str1, phone)) {
             ToastUtils.showError("接收验证码手机号与当前手机号不一致");
-        }else {
-           addSubAccount(str1, str, str2, str3);
+        } else {
+            addOrModifySubAccount(null, str1, str, str2, str3, String.valueOf(ratio/100));
         }
     }
 
     /**
      * 添加子账号
      */
-    private void addSubAccount(String account, String username, String verify_code, String password) {
-        Map<String, String> allianceWithDraw01 = ClientDiscoverAPI.addSubAccount(account, username, verify_code, password);
+    private void addOrModifySubAccount(String id, String account, String username, String verify_code, String password, String ratio) {
+        Map<String, String> allianceWithDraw01 = ClientDiscoverAPI.addAndModifySubAccount(id, account, username, verify_code, password, ratio);
         HttpRequest.post(allianceWithDraw01, URL.STORAGE_MANAGE_SAVE, new GlobalDataCallBack() {
             @Override
             public void onSuccess(String json) {
-                HttpResponse<WithDrawSetDefaultAccoutBean> bean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawSetDefaultAccoutBean>>() {});
+                HttpResponse<WithDrawSetDefaultAccoutBean> bean = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<WithDrawSetDefaultAccoutBean>>() {
+                });
                 if (bean != null) {
                     if (bean.isSuccess()) {
                         setResult(Activity.RESULT_OK);
@@ -153,11 +184,16 @@ public class AddSubAcountActivity extends BaseActivity {
                 if (httpResponse.isSuccess()) {
                     ToastUtils.showInfo("发送验证码成功");
                     startToTiming();
+                } else {
+                    ToastUtils.showError("发送验证码失败");
+                    resetVerificationStatus();
                 }
             }
 
             @Override
             public void onFailure(String error) {
+                ToastUtils.showSuccess(error);
+                resetVerificationStatus();
             }
         });
     }
@@ -170,7 +206,6 @@ public class AddSubAcountActivity extends BaseActivity {
      * 开始倒计时
      */
     private void startToTiming() {
-        button1.setEnabled(false);
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -215,6 +250,7 @@ public class AddSubAcountActivity extends BaseActivity {
                 } else {
                     phone = tempPhone;
                     isPhoneRegisted(phone);
+                    button1.setEnabled(false);
                     sendVerificationCode(this.phone);
                 }
                 break;
@@ -239,5 +275,29 @@ public class AddSubAcountActivity extends BaseActivity {
                 ToastUtils.showError(R.string.network_err);
             }
         });
+    }
+
+    @Override
+    protected void getIntentData() {
+        rowsEntity = getIntent().getParcelableExtra("modifySubAccountInfo");
+    }
+
+    private void modifySubAccountInfomation() {
+        String str = editText1.getText().toString();
+        String str5 = editText6.getText().toString();
+        double ratio = TypeConversionUtils.StringConvertDouble(str5);
+        if (TextUtils.isEmpty(str)) {
+            ToastUtils.showError("请输入姓名");
+        } else if (TextUtils.isEmpty(str5)) {
+            ToastUtils.showError("请输入子账号佣金分成");
+        }  else if (ratio <= 0) {
+            ToastUtils.showError("分成比例不能小于0");
+        } else if (ratio > 100) {
+            ToastUtils.showError("分成比例不能大于100");
+        }else if (TextUtils.equals(rowsEntity.getUsername(), str) && TextUtils.equals(rowsEntity.getAddition(), String.valueOf(ratio/100))) {
+            ToastUtils.showError("您没有需要修改的信息");
+        } else {
+            addOrModifySubAccount(rowsEntity.get_id(), null, str, null, null, String.valueOf(ratio/100));
+        }
     }
 }

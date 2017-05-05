@@ -18,38 +18,6 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp"
-            android:text="姓名"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="15dp"
-            android:layout_weight="1"
-            android:background="@color/color_transparent"
-            android:inputType="text"
-            android:maxEms="5"
-            android:src="@mipmap/icon_alliance_arrow"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#E4E2DF" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/white"
-        android:gravity="center_vertical">
-
-        <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,6 +55,44 @@
         android:background="#E4E2DF" />
 
     <LinearLayout
+        android:id="@+id/linearLayout_alliance_verification_container"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:text="输入验证码"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:background="@color/color_transparent"
+                android:inputType="number"
+                android:maxLength="8"
+                android:src="@mipmap/icon_alliance_arrow"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#E4E2DF" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="@color/white"
@@ -97,21 +103,76 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:text="输入验证码"
+            android:text="姓名"
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/editText1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:background="@color/color_transparent"
-            android:inputType="number"
-            android:maxLength="8"
+            android:inputType="text"
+            android:maxEms="5"
             android:src="@mipmap/icon_alliance_arrow"
             android:textSize="14sp" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E4E2DF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:text="佣金分成(%)"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:visibility="gone"
+            android:text="(填写佣金所得百分比(%))"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText6"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:background="@color/color_transparent"
+            android:inputType="number"
+            android:maxLength="8"
+            android:layout_weight="1"
+            android:hint="填写佣金所得百分比(%)"
+            android:gravity="start|center_vertical"
+            android:src="@mipmap/icon_alliance_arrow"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:background="#ffffff"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="#F44C4C"
+        android:visibility="gone"
+        android:text="* 填写佣金所得百分比(%)"
+        android:textSize="12sp" />
 
     <View
         android:layout_width="match_parent"

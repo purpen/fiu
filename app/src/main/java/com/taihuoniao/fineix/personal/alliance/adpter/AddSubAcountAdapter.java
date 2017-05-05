@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.personal.alliance.bean.SubAccountListBean;
 import com.taihuoniao.fineix.utils.StringFormatUtils;
+import com.taihuoniao.fineix.utils.TypeConversionUtils;
 
 import java.util.List;
 
@@ -59,6 +60,8 @@ public class AddSubAcountAdapter extends BaseAdapter {
             viewHolder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
             viewHolder.textView2 = (TextView) convertView.findViewById(R.id.textView2);
             viewHolder.textView3 = (TextView) convertView.findViewById(R.id.textView3);
+            viewHolder.textView5 = (TextView) convertView.findViewById(R.id.textView5);
+            viewHolder.textView6 = (TextView) convertView.findViewById(R.id.textView6);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -69,6 +72,9 @@ public class AddSubAcountAdapter extends BaseAdapter {
             viewHolder.textView1.setText(rowsEntity.getUsername());
             viewHolder.textView2.setText(rowsEntity.getAccount());
             viewHolder.textView3.setText(StringFormatUtils.convert2double(rowsEntity.getAmount()));
+            viewHolder.textView5.setText("佣金分成");
+            int i = (int) (TypeConversionUtils.StringConvertDouble(rowsEntity.getAddition()) * 100);
+            viewHolder.textView6.setText(String.valueOf( i + "(%)"));
         }
         return convertView;
     }
@@ -87,5 +93,7 @@ public class AddSubAcountAdapter extends BaseAdapter {
         private TextView textView1;
         private TextView textView2;
         private TextView textView3;
+        private TextView textView5;
+        private TextView textView6;
     }
 }
