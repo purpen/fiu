@@ -1324,12 +1324,14 @@ public class ClientDiscoverAPI {
         return params;
     }
 
-    public static Map<String,String> addSubAccount(String account, String username, String verify_code, String password) {
+    public static Map<String,String> addAndModifySubAccount(String id, String account, String username, String verify_code, String password, String ratio) {
         HashMap<String, String> params = new HashMap<>();
+        params.put("id",id);
         params.put("account",account);
         params.put("username",username);
         params.put("verify_code",verify_code);
         params.put("password",password);
+        params.put("addition",ratio);
         return params;
     }
 }

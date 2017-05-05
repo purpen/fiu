@@ -80,6 +80,8 @@
         android:layout_height="match_parent"
         android:divider="#E4E2DF"
         android:dividerHeight="0.5dp"
+        android:headerDividersEnabled="false"
+        android:footerDividersEnabled="false"
         android:listSelector="@android:color/transparent" />
 
 </LinearLayout>
