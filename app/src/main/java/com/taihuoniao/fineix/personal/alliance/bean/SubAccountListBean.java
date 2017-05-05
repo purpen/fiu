@@ -1,5 +1,8 @@
 package com.taihuoniao.fineix.personal.alliance.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -93,7 +96,7 @@ public class SubAccountListBean {
         this.rows = rows;
     }
 
-    public static class RowsEntity {
+    public static class RowsEntity implements Parcelable {
         /**
          * _id : 590159df5c42ece9700041a9
          * pid : 36
@@ -107,6 +110,7 @@ public class SubAccountListBean {
          * created_on : 1493260767
          * updated_on : 1493260767
          * created_at : 10分钟前
+         * addition : 0.5
          */
 
         private String _id;
@@ -121,6 +125,20 @@ public class SubAccountListBean {
         private String created_on;
         private String updated_on;
         private String created_at;
+
+        public String getAddition() {
+            return addition;
+        }
+
+        public void setAddition(String addition) {
+            this.addition = addition;
+        }
+
+        public static Creator<RowsEntity> getCREATOR() {
+            return CREATOR;
+        }
+
+        private String addition;
 
         public String get_id() {
             return _id;
@@ -217,5 +235,58 @@ public class SubAccountListBean {
         public void setCreated_at(String created_at) {
             this.created_at = created_at;
         }
+
+        public RowsEntity() {
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeString(this.pid);
+            dest.writeString(this.cid);
+            dest.writeString(this.scene_id);
+            dest.writeString(this.username);
+            dest.writeString(this.account);
+            dest.writeString(this.remark);
+            dest.writeString(this.amount);
+            dest.writeString(this.status);
+            dest.writeString(this.created_on);
+            dest.writeString(this.updated_on);
+            dest.writeString(this.created_at);
+            dest.writeString(this.addition);
+        }
+
+        protected RowsEntity(Parcel in) {
+            this._id = in.readString();
+            this.pid = in.readString();
+            this.cid = in.readString();
+            this.scene_id = in.readString();
+            this.username = in.readString();
+            this.account = in.readString();
+            this.remark = in.readString();
+            this.amount = in.readString();
+            this.status = in.readString();
+            this.created_on = in.readString();
+            this.updated_on = in.readString();
+            this.created_at = in.readString();
+            this.addition = in.readString();
+        }
+
+        public static final Creator<RowsEntity> CREATOR = new Creator<RowsEntity>() {
+            @Override
+            public RowsEntity createFromParcel(Parcel source) {
+                return new RowsEntity(source);
+            }
+
+            @Override
+            public RowsEntity[] newArray(int size) {
+                return new RowsEntity[size];
+            }
+        };
     }
 }

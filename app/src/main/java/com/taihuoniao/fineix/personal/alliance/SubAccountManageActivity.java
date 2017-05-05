@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -56,6 +57,8 @@ public class SubAccountManageActivity extends BaseActivity implements AdapterVie
     @Bind(R.id.pullToRefreshSwipeMenuListView1)
     PullToRefreshSwipeMenuListView pullToRefreshSwipeMenuListView1;
 
+    private static final int CODE_REQUEST_MODIFY_SUBACCOUNT_INFO    = 1010;
+    private static final int CODE_REQUEST_ADD_SUBACCOUNT_INFO       = 2020;
     private AddSubAcountAdapter mAddSubAcountAdapter;
 
     public SubAccountManageActivity() {
@@ -81,10 +84,23 @@ public class SubAccountManageActivity extends BaseActivity implements AdapterVie
                 switch (menu.getViewType()) {
                     case 0:
                         createMenu1(menu);
+                        createMenu2(menu);
+                        break;
+                    case 1:
                         break;
                 }
             }
             private void createMenu1(SwipeMenu menu) {
+                SwipeMenuItem item1 = new SwipeMenuItem(SubAccountManageActivity.this);
+                item1.setBackground(R.color.colorModifyBg);
+                item1.setWidth(DPUtil.dip2px(SubAccountManageActivity.this, 80));
+                item1.setTitle("修改");
+                item1.setTitleSize(13);
+                item1.setTitleColor(Color.WHITE);
+//                item1.setIcon(R.drawable.delete_details);
+                menu.addMenuItem(item1);
+            }
+            private void createMenu2(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(SubAccountManageActivity.this);
                 item1.setBackground(R.color.colorDeleteBg);
                 item1.setWidth(DPUtil.dip2px(SubAccountManageActivity.this, 80));
@@ -99,7 +115,15 @@ public class SubAccountManageActivity extends BaseActivity implements AdapterVie
         pullToRefreshSwipeMenuListView1.setOnMenuItemClickListener(new PullToRefreshSwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(int position, SwipeMenu menu, int index) {
-                deleteSubAccount(mAddSubAcountAdapter.getmRows().get(position).get_id());
+                SubAccountListBean.RowsEntity rowsEntity = mAddSubAcountAdapter.getmRows().get(position);
+                switch (index) {
+                    case 0:
+                        modifySubAccount(rowsEntity);
+                        break;
+                    case 1:
+                        deleteSubAccount(rowsEntity.get_id());
+                        break;
+                }
             }
         });
 
@@ -138,7 +162,7 @@ public class SubAccountManageActivity extends BaseActivity implements AdapterVie
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.linearLayout1:
-                startActivityForResult(new Intent(SubAccountManageActivity.this, AddSubAcountActivity.class) , 200);
+                startActivityForResult(new Intent(SubAccountManageActivity.this, AddSubAcountActivity.class) , CODE_REQUEST_ADD_SUBACCOUNT_INFO);
                 break;
             case R.id.linearLayout2:
                 break;
@@ -191,7 +215,11 @@ public class SubAccountManageActivity extends BaseActivity implements AdapterVie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            requestDataList();
+            if (requestCode == CODE_REQUEST_MODIFY_SUBACCOUNT_INFO) {
+                requestDataList();
+            } else if (requestCode == CODE_REQUEST_ADD_SUBACCOUNT_INFO) {
+                requestDataList();
+            }
         }
     }
 
@@ -213,5 +241,14 @@ public class SubAccountManageActivity extends BaseActivity implements AdapterVie
 
             }
         });
+    }
+
+    private void modifySubAccount(SubAccountListBean.RowsEntity rowsEntity){
+        if (rowsEntity == null) {
+            return;
+        }
+        Intent intent = new Intent(SubAccountManageActivity.this, AddSubAcountActivity.class);
+        intent.putExtra("modifySubAccountInfo", rowsEntity);
+        startActivityForResult(intent, CODE_REQUEST_MODIFY_SUBACCOUNT_INFO);
     }
 }
