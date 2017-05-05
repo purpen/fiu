@@ -5,12 +5,12 @@ package com.taihuoniao.fineix.network;
  * 网络请求url封装
  */
 public class URL {
-    public static final String H5_URL="https://m.taihuoniao.com";
 //    public static final String BASE_URL = "https://api.taihuoniao.com/app/api"; //线上
 //    public static final String BASE_URL = "https://m.taihuoniao.com/app/api";//生产环境
     public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     // 公共接口
+    public static final String H5_URL                                       = "https://m.taihuoniao.com";
     public static final String BANNERS_URL                                  = BASE_URL + "/gateway/slide";
     public static final String URLSTRING_PRODUCTSLIST                       = BASE_URL + "/product/getlist";
     public static final String SCENE_SUBJECT_GETLIST                        = BASE_URL + "/scene_subject/getlist";

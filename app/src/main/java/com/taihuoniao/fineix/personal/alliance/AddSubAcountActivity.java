@@ -94,7 +94,8 @@ public class AddSubAcountActivity extends BaseActivity {
             editText2.setEnabled(false);
             editText1.setText(rowsEntity.getUsername());
             editText2.setText(rowsEntity.getAccount());
-            editText6.setText(String.valueOf(TypeConversionUtils.StringConvertDouble(rowsEntity.getAddition()) * 100));
+            int i = (int) (TypeConversionUtils.StringConvertDouble(rowsEntity.getAddition()) * 100);
+            editText6.setText(String.valueOf(i));
         }
     }
 

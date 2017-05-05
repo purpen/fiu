@@ -152,7 +152,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="15dp"
             android:background="@color/color_transparent"
-            android:inputType="numberDecimal"
+            android:inputType="number"
             android:maxLength="8"
             android:layout_weight="1"
             android:hint="填写佣金所得百分比(%)"
