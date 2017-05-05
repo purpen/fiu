@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -71,6 +72,7 @@ public class GoodsOrZoneQrCodeDialog extends DialogFragment implements View.OnCl
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         final View view = inflater.inflate(R.layout.dialog_goods_zone_qrcode, container);
         if (getArguments()!=null){
             shareH5Url = getArguments().getParcelable(getClass().getSimpleName());

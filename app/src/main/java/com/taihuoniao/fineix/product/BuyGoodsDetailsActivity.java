@@ -379,15 +379,11 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 if (buyGoodDetailsBean2.isSuccess()) {
                     buyGoodDetailsBean = buyGoodDetailsBean2.getData();
                     if (fragmentList.size() == 0) {
-//                        titleList.add("好货");
                         buyGoodsDetailsFragment = BuyGoodsDetailsFragment.newInstance(id);
                         fragmentList.add(buyGoodsDetailsFragment);
                         if (buyGoodDetailsBean.getStage() == 9) {
-//                            titleList.add("商品详情");
                             webFragment = WebFragment.newInstance();
-
                             fragmentList.add(webFragment);
-//                            titleList.add("评价");
                             commentFragment = CommentFragment.newInstance(id);
                             fragmentList.add(commentFragment);
                         } else {
@@ -420,12 +416,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     maxNumber = buyGoodDetailsBean.getInventory();
                     quantity.setText(maxNumber + "");
                     addSkuToLinear();
-//                    tabLayout.setVisibility(View.GONE);
-//                    tabLine.setVisibility(View.GONE);
-//                    buyBtn.setVisibility(View.GONE);
-//                    shareLinear.setVisibility(View.GONE);
-//                    addCartBtn.setVisibility(View.GONE);
-//                    ToastUtils.showError(buyGoodDetailsBean.getMessage());
+                }else {
+                    ToastUtils.showError(buyGoodDetailsBean2.getMessage());
                 }
             }
 
