@@ -459,7 +459,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 
     private void generateQRCodeImage(ShareH5Url shareH5Url) {
         try {
-            Bitmap logo = BitmapFactory.decodeResource(App.getContext().getResources(), R.mipmap.share_logo);
+            Bitmap logo = BitmapFactory.decodeResource(App.getContext().getResources(), R.mipmap.ic_launcher);
             mQRCodeBitmap = QrCodeUtils.create2DCode(null, shareH5Url.o_url, DensityUtils.dp2px(this, 60), DensityUtils.dp2px(this, 60));
         } catch (WriterException e) {
             e.printStackTrace();

@@ -114,7 +114,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         }
 
         try {
-            Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.share_logo);
+            Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
             bitmap_2code = QrCodeUtils.create2DCode(logo, String.format(//13为用户类型
                     "http://m.taihuoniao.com/guide/appload?infoType=%s&infoId=%s", 13, LoginInfo.getUserId()), 800, 800);
             iv_bar_code.setImageBitmap(bitmap_2code);

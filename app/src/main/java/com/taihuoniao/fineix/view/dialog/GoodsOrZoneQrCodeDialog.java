@@ -93,7 +93,7 @@ public class GoodsOrZoneQrCodeDialog extends DialogFragment implements View.OnCl
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
-            Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.share_logo);
+            Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
             if (null!=shareH5Url){
                 qrCode = QrCodeUtils.create2DCode(logo,shareH5Url.o_url, 800, 800);
                 ivQrCode.setImageBitmap(qrCode);

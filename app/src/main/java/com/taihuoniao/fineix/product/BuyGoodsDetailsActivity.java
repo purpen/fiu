@@ -56,6 +56,9 @@ import java.util.List;
 import butterknife.Bind;
 import okhttp3.Call;
 
+import static com.taihuoniao.fineix.R.id.bottom_linear;
+
+
 /**
  * Created by taihuoniao on 2016/2/22.
  * 商品详情界面
@@ -77,6 +80,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     LinearLayout shoucangLinear;
     @Bind(R.id.share_linear)
     LinearLayout shareLinear;
+    @Bind(bottom_linear)
+    LinearLayout bottomLinear;
     @Bind(R.id.add_cart_btn)
     Button addCartBtn;
     @Bind(R.id.buy_btn)
@@ -418,6 +423,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     addSkuToLinear();
                 }else {
                     ToastUtils.showError(buyGoodDetailsBean2.getMessage());
+                    bottomLinear.setVisibility(View.GONE);
                 }
             }
 
