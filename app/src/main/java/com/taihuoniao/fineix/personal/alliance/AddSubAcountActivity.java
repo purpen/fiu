@@ -94,7 +94,8 @@ public class AddSubAcountActivity extends BaseActivity {
             editText2.setEnabled(false);
             editText1.setText(rowsEntity.getUsername());
             editText2.setText(rowsEntity.getAccount());
-            editText6.setText(String.valueOf(TypeConversionUtils.StringConvertDouble(rowsEntity.getAddition()) * 100));
+            int i = (int) (TypeConversionUtils.StringConvertDouble(rowsEntity.getAddition()) * 100);
+            editText6.setText(String.valueOf(i));
         }
     }
 
@@ -122,7 +123,7 @@ public class AddSubAcountActivity extends BaseActivity {
             ToastUtils.showError("请输入子账号佣金分成");
         } else if (ratio <= 0) {
             ToastUtils.showError("分成比例不能小于0");
-        } else if (ratio >= 100) {
+        } else if (ratio > 100) {
             ToastUtils.showError("分成比例不能大于100");
         }else if (!isPhoneRegisted) {
             if (TextUtils.isEmpty(str3)) {
@@ -291,7 +292,7 @@ public class AddSubAcountActivity extends BaseActivity {
             ToastUtils.showError("请输入子账号佣金分成");
         }  else if (ratio <= 0) {
             ToastUtils.showError("分成比例不能小于0");
-        } else if (ratio >= 100) {
+        } else if (ratio > 100) {
             ToastUtils.showError("分成比例不能大于100");
         }else if (TextUtils.equals(rowsEntity.getUsername(), str) && TextUtils.equals(rowsEntity.getAddition(), String.valueOf(ratio/100))) {
             ToastUtils.showError("您没有需要修改的信息");
