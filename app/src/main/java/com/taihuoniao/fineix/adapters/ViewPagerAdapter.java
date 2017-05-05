@@ -176,7 +176,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
 
             @Override
             public void onFailure(String error) {
-                ToastUtils.showError("网络异常，请确保网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -201,7 +201,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
 
             @Override
             public void onFailure(String error) {
-                ToastUtils.showError("网络异常，请确保网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -218,9 +218,6 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             @Override
             public void onSuccess(String json) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(json)) {
-                    return;
-                }
                 HttpResponse<IsInviteData> response = JsonUtil.json2Bean(json, new TypeToken<HttpResponse<IsInviteData>>() {
                 });
                 if (response.isSuccess()) {
@@ -247,7 +244,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             @Override
             public void onFailure(String error) {
                 dialog.dismiss();
-                ToastUtils.showError("网络异常，请确保网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }

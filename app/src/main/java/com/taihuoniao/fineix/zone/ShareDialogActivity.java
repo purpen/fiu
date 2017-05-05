@@ -1,9 +1,7 @@
 package com.taihuoniao.fineix.zone;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -21,12 +19,15 @@ import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.dialog.GoodsOrZoneQrCodeDialog;
 import com.taihuoniao.fineix.zone.adapter.ShareDialogAdapter;
 import com.taihuoniao.fineix.zone.bean.ShareH5Url;
 import com.taihuoniao.fineix.zone.bean.ShareItem;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
+import com.yanzhenjie.permission.AndPermission;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,6 +41,8 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
+import static com.taihuoniao.fineix.utils.Constants.REQUEST_PHONE_STATE_CODE;
+
 /**
  * Created by lilin on 2017/02/22.
  */
@@ -49,6 +52,7 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
     RecyclerView recyclerView;
     private ShareH5Url shareH5Url;
     private ZoneDetailBean zoneDetailBean;
+    private GoodsOrZoneQrCodeDialog dialog;
     public ShareDialogActivity() {
         super(R.layout.activity_share_dialog);
     }
@@ -109,8 +113,8 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
 
 
     private void initData() {
-        int[] image = {R.mipmap.share_wechat, R.mipmap.share_moments, R.mipmap.share_weibo, R.mipmap.share_qq,R.mipmap.copy_link};
-        String[] name = {"微信", "朋友圈", "微博", "QQ","复制链接"};
+        int[] image = {R.mipmap.share_wechat, R.mipmap.share_moments, R.mipmap.share_weibo, R.mipmap.share_qq,R.mipmap.share_qrcode};
+        String[] name = {"微信", "朋友圈", "微博", "QQ","二维码"};
         List<ShareItem> shareList = new ArrayList<>();
         ShareItem shareItem;
         for (int i = 0; i < image.length; i++) {
@@ -127,7 +131,7 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
         adapter.setmOnItemClickListener(new ShareDialogAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (shareH5Url==null || zoneDetailBean==null) ToastUtils.showInfo("分享内容失败");
+                if (shareH5Url==null || zoneDetailBean==null) return;
                 Platform.ShareParams params;
                 switch (position) {
                     case 0: //微信
@@ -171,9 +175,11 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
                         qq.share(params);
                         break;
                     case 4:
-                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        cm.setPrimaryClip(ClipData.newPlainText("link",shareH5Url.url));
-                        ToastUtils.showInfo("已复制地盘链接到剪切板");
+                        dialog = new GoodsOrZoneQrCodeDialog();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(GoodsOrZoneQrCodeDialog.class.getSimpleName(),shareH5Url);
+                        dialog.setArguments(bundle);
+                        dialog.show(getFragmentManager(),GoodsOrZoneQrCodeDialog.class.getSimpleName());
                         break;
                     default:
                         break;
@@ -210,6 +216,14 @@ public class ShareDialogActivity extends BaseActivity implements PlatformActionL
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (Arrays.asList(permissions).contains("android.permission.WRITE_EXTERNAL_STORAGE")){
+            if (null == dialog) return;
+            AndPermission.onRequestPermissionsResult(dialog, REQUEST_PHONE_STATE_CODE, permissions, grantResults);
+        }
     }
 
 }

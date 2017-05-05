@@ -124,7 +124,10 @@
     <string name="user_sex">性别</string>
     <string name="user_birthday">生日</string>
     <string name="user_auth">官方认证</string>
-    <string name="user_code">我的二维码</string>
+    <string name="user_code">我的二维码 </string>
+    <string name="sao_yi_sao">扫一扫</string>
+    <string name="save_qrcode">长按保存二维码</string>
+    <string name="copy_link">复制链接</string>
     <string name="user_area">地区</string>
     <string name="title_modify_nickname">修改昵称</string>
     <string name="save">保存</string>
