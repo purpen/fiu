@@ -2,9 +2,6 @@ package com.taihuoniao.fineix.view.dialog;
 
 import android.Manifest;
 import android.app.DialogFragment;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -25,6 +22,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.QrCodeUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.zone.bean.ShareH5Url;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
@@ -147,10 +145,11 @@ public class GoodsOrZoneQrCodeDialog extends DialogFragment implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn: //复制链接
-                if (null==shareH5Url) return;
-                ClipboardManager cm = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                cm.setPrimaryClip(ClipData.newPlainText("link",shareH5Url.url));
-                ToastUtils.showInfo("已复制链接到剪切板");
+                Util.copy2ClipBoard(shareH5Url.url);
+//                if (null==shareH5Url) return;
+//                ClipboardManager cm = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+//                cm.setPrimaryClip(ClipData.newPlainText("link",shareH5Url.url));
+//                ToastUtils.showInfo("已复制链接到剪切板");
                 break;
             case R.id.ibtn_close:
                 dismiss();

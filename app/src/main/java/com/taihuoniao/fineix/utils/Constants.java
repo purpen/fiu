@@ -39,6 +39,7 @@ public class Constants {
     public static final int REQUEST_PERMISSION_CODE = 101; // 权限请求码
     public static final int REQUEST_CODE_SETTING = 300;
 
+
     //从获取相册图片
     public static final int REQUEST_CODE_PICK_IMAGE = 105;
 

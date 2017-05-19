@@ -100,7 +100,6 @@ public class PullToRefreshSwipeMenuListView extends ListView implements OnScroll
         mHeaderViewContent = (RelativeLayout) mHeaderView.findViewById(R.id.xlistview_header_content);
         mHeaderTimeView = (TextView) mHeaderView.findViewById(R.id.xlistview_header_time);
         addHeaderView(mHeaderView);
-
         // init footer view
         mFooterView = new PullToRefreshListFooter(context);
 

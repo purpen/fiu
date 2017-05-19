@@ -229,7 +229,7 @@ public class MineFragment extends MyBaseFragment {
 
             @Override
             public void onFailure(String error) {
-                LogUtil.e(error);
+                ToastUtils.showError(error);
             }
         });
 

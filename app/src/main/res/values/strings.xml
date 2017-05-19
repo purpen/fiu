@@ -488,7 +488,10 @@
     <string name="zone_address">地盘地址</string>
     <string name="title_zone_phone">修改地盘电话</string>
     <string name="zone_phone">地盘电话</string>
-    <string name="zone_auth">地盘认证</string>
+    <string name="zone_goods_manage">商品管理</string>
+    <string name="zone_goods_popularize">推广产品</string>
+    <string name="goods_popularize_link">推广链接</string>
+    <string name="add_new_product">添加商品</string>
     <string name="modify_zone_name">修改地盘名称</string>
     <string name="title_zone_info">基本信息</string>
     <string name="zone_subtitle">地盘副标题</string>

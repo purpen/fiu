@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.utils;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -376,6 +378,17 @@ public class Util {
     public static boolean isExternalStorageStateMounted() {
         String state = Environment.getExternalStorageState();
         return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+    /**
+     * 拷贝内容至剪切板
+     * @param content
+     */
+    public static void copy2ClipBoard(String content){
+        if (TextUtils.isEmpty(content)) return;
+        ClipboardManager cm = (ClipboardManager) MainApplication.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setPrimaryClip(ClipData.newPlainText("link",content));
+        ToastUtils.showInfo("已复制链接到剪切板");
     }
 
 }

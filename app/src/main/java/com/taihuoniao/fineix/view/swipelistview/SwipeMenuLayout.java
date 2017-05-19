@@ -10,8 +10,8 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Interpolator;
-import android.widget.AbsListView;
 import android.widget.FrameLayout;
 
 public class SwipeMenuLayout extends FrameLayout {
@@ -71,7 +71,7 @@ public class SwipeMenuLayout extends FrameLayout {
     }
 
     private void init() {
-        setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         mGestureListener = new SimpleOnGestureListener() {
             @Override
             public boolean onDown(MotionEvent e) {
@@ -102,14 +102,14 @@ public class SwipeMenuLayout extends FrameLayout {
             mOpenScroller = ScrollerCompat.create(getContext());
         }
 
-        LayoutParams contentParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams contentParams = new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         mContentView.setLayoutParams(contentParams);
-        if (mContentView.getId() < 1) {
-            mContentView.setId(CONTENT_VIEW_ID);
-        }
+//        if (mContentView.getId() < 1) {
+//            mContentView.setId(CONTENT_VIEW_ID);
+//        }
 
-        mMenuView.setId(MENU_VIEW_ID);
-        mMenuView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+//        mMenuView.setId(MENU_VIEW_ID);
+        mMenuView.setLayoutParams(new ViewGroup.MarginLayoutParams(0, 0));
 
         addView(mContentView);
         addView(mMenuView);

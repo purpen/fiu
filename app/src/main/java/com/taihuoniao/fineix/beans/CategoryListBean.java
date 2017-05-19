@@ -130,7 +130,6 @@ public class CategoryListBean implements Serializable {
         private String app_cover_s_url;
         private List<String> tags;
         private List<String> sub_categories;
-
         public String get_id() {
             return _id;
         }

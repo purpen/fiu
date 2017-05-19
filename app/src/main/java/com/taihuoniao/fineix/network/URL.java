@@ -214,4 +214,13 @@ public class URL {
     public static final String STORAGE_MANAGE_LIST = BASE_URL + "/storage_manage/getlist";
     public static final String STORAGE_MANAGE_SAVE = BASE_URL + "/storage_manage/save";
     public static final String STORAGE_MANAGE_DELETED = BASE_URL + "/storage_manage/deleted";
+
+    //地盘管理 产品列表
+    public static final String ZONE_MANAGE_PRODUCTS_LIST_URL = BASE_URL + "/scene_scene/product_list";
+
+    //地盘管理产品列表 删除某个产品
+    public static final String ZONE_MANAGE_PRODUCTS_DELETE_ONE = BASE_URL + "/scene_scene/del_product";
+
+    //地盘管理推广列表 添加产品
+    public static final String ZONE_MANAGE_PRODUCTS_ADD_ONE = BASE_URL + "/scene_scene/add_product";
 }

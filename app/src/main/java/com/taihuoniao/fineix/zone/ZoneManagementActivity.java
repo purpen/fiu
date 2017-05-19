@@ -65,8 +65,8 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
     @Bind(R.id.item_light_spot)
     CustomItemLayout itemLightSpot;
 
-    @Bind(R.id.item_zone_auth)
-    CustomItemLayout itemZoneAuth;
+    @Bind(R.id.item_goods_manage)
+    CustomItemLayout itemGoodsManage;
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -100,7 +100,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
         itemZoneBrief.setTVStyle(0, R.string.zone_brief, R.color.color_666);
         itemLightSpot.setTVStyle(0, R.string.zone_light_spot, R.color.color_666);
 
-        itemZoneAuth.setTVStyle(0, R.string.zone_auth, R.color.color_666);
+        itemGoodsManage.setTVStyle(0, R.string.zone_goods_manage, R.color.color_666);
         list = new ArrayList<>();
         adapter = new ZoneEditCoversAdapter(activity, list);
         recyclerView.setHasFixedSize(true);
@@ -353,7 +353,7 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
 
     }
 
-    @OnClick({R.id.item_zone_base_info, R.id.item_zone_brief, R.id.item_zone_auth})
+    @OnClick({R.id.item_zone_base_info, R.id.item_zone_brief, R.id.item_goods_manage})
     void performClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -367,8 +367,10 @@ public class ZoneManagementActivity extends BaseActivity implements View.OnClick
                 intent.putExtra(ZoneEditBriefActivity.class.getSimpleName(), zoneDetailBean);
                 startActivity(intent);
                 break;
-            case R.id.item_zone_auth: //地盘认证
-
+            case R.id.item_goods_manage: //商品管理
+                intent = new Intent(activity, ZoneGoodsManageActivity.class);
+                intent.putExtra(ZoneGoodsManageActivity.class.getSimpleName(), zoneDetailBean);
+                startActivity(intent);
                 break;
             default:
                 break;

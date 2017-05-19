@@ -1334,4 +1334,34 @@ public class ClientDiscoverAPI {
         params.put("addition",ratio);
         return params;
     }
+
+    /**
+     * 获取地盘管理产品列表
+     * @param scene_id
+     * @param page
+     * @return
+     */
+    public static HashMap<String, String> getZoneManageProductsParams(String scene_id,String page) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("scene_id",scene_id);
+        params.put("page", page);
+        params.put("size", Constants.PAGE_SIZE);
+        return params;
+    }
+
+    /**
+     * 根据分类id推广产品
+     * @param page
+     * @param category_id
+     * @param is_commision
+     * @return
+     */
+    public static HashMap<String, String> getPopularizeProductsByCategoryId(String page,String category_id,String is_commision) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("page",page);
+        params.put("size", Constants.PAGE_SIZE);
+        params.put("category_id",category_id);
+        params.put("is_commision", is_commision);
+        return params;
+    }
 }

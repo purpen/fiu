@@ -520,16 +520,18 @@
             android:name=".zone.ZoneBaseInfoActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".zone.ZoneClassifyActivity" />
-        <activity android:name=".zone.ZoneEditSubtitleActivity" />
-        <activity android:name=".zone.ZoneEditBriefActivity" />
-        <activity android:name=".zone.ZoneEditPhoneActivity" />
-        <activity android:name=".zone.ZoneEditTimeActivity" />
-        <activity android:name=".zone.ZoneEditAddressActivity" />
-        <activity android:name=".zone.ZoneMapSelectAddressActivity" />
-        <activity android:name=".zone.ZoneEditTagActivity" />
+        <activity android:name=".zone.ZoneClassifyActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneEditSubtitleActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneEditBriefActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneEditPhoneActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneEditTimeActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneEditAddressActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneMapSelectAddressActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneEditTagActivity" android:screenOrientation="portrait"/>
         <activity android:name=".zone.ZoneEditBrightActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneGoodsManageActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".zone.ZoneGoodsPopularizeActivity" android:screenOrientation="portrait"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.taihuoniao.fineix.fileProvider"

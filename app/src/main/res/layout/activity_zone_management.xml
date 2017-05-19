@@ -38,12 +38,7 @@
 
 
 
-            <com.taihuoniao.fineix.view.CustomItemLayout
-                android:id="@+id/item_zone_auth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:visibility="gone" />
+
 
             <TextView
                 android:id="@+id/tv_pic"
@@ -61,6 +56,13 @@
                 android:background="@android:color/white"
                 android:paddingLeft="@dimen/dp15"
                 android:paddingRight="@dimen/dp15" />
+
+            <com.taihuoniao.fineix.view.CustomItemLayout
+                android:id="@+id/item_goods_manage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
