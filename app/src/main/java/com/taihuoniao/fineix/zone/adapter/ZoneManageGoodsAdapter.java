@@ -160,7 +160,7 @@ public class ZoneManageGoodsAdapter extends CommonBaseAdapter<ZoneManageGoodsBea
             public void onClick(final View v) {
                 switch (v.getId()) {
                     case R.id.btn_popularize:
-                        HttpRequest.post(ClientDiscoverAPI.getH5ShareParams(item._id, "1",item.scene_id), URL.SHARE_H5_URL, new GlobalDataCallBack() {
+                        HttpRequest.post(ClientDiscoverAPI.getH5ShareParams(item.product_id, "1",item.scene_id), URL.SHARE_H5_URL, new GlobalDataCallBack() {
                             @Override
                             public void onStart() {
                                 v.setEnabled(false);

@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.dialog.WaittingDialog;
 import com.taihuoniao.fineix.zone.adapter.ZoneManageGoodsAdapter;
@@ -63,6 +64,7 @@ public class ZoneGoodsManageActivity extends BaseActivity implements View.OnClic
     @Override
     protected void initView() {
         dialog=new WaittingDialog(activity);
+        WindowUtils.chenjin(this);
         customHead.setHeadCenterTxtShow(true,R.string.zone_goods_manage);
         customHead.setHeadRightTxtShow(true,R.string.add_new_product);
     }

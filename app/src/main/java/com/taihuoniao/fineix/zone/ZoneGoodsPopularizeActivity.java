@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zone.adapter.ZonePopularizeViewPageAdapter;
 import com.taihuoniao.fineix.zone.bean.ZoneDetailBean;
@@ -56,6 +57,7 @@ public class ZoneGoodsPopularizeActivity extends BaseActivity implements ViewPag
     @Override
     protected void initView() {
         customHead.setHeadCenterTxtShow(true, R.string.zone_goods_popularize);
+        WindowUtils.chenjin(this);
     }
 
     @Override
