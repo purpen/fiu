@@ -208,37 +208,41 @@ public class ZoneManageGoodsAdapter extends CommonBaseAdapter<ZoneManageGoodsBea
         new DefaultDialog(activity,"删除此商品?",operateText,new IDialogListener(){
             @Override
             public void click(View view, int index) {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("id", id);
-                HttpRequest.post(params, URL.ZONE_MANAGE_PRODUCTS_DELETE_ONE, new GlobalDataCallBack() {
-                    @Override
-                    public void onStart() {
-                        v.setEnabled(false);
-                    }
+                switch (view.getId()){
+                    case R.id.button_dialog_confirm:
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("id", id);
+                        HttpRequest.post(params, URL.ZONE_MANAGE_PRODUCTS_DELETE_ONE, new GlobalDataCallBack() {
+                            @Override
+                            public void onStart() {
+                                v.setEnabled(false);
+                            }
 
-                    @Override
-                    public void onSuccess(String json) {
-                        v.setEnabled(true);
-                        HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-                        if (response.isSuccess()) {
-                            for (ZoneManageGoodsBean.RowsBean item : list) {
-                                if (TextUtils.equals(id, item._id)) {
-                                    list.remove(item);
-                                    notifyDataSetChanged();
-                                    break;
+                            @Override
+                            public void onSuccess(String json) {
+                                v.setEnabled(true);
+                                HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+                                if (response.isSuccess()) {
+                                    for (ZoneManageGoodsBean.RowsBean item : list) {
+                                        if (TextUtils.equals(id, item._id)) {
+                                            list.remove(item);
+                                            notifyDataSetChanged();
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    ToastUtils.showError(response.getMessage());
                                 }
                             }
-                        } else {
-                            ToastUtils.showError(response.getMessage());
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(String error) {
-                        v.setEnabled(true);
-                        ToastUtils.showError(R.string.network_err);
-                    }
-                });
+                            @Override
+                            public void onFailure(String error) {
+                                v.setEnabled(true);
+                                ToastUtils.showError(R.string.network_err);
+                            }
+                        });
+                        break;
+                }
             }
         });
     }
