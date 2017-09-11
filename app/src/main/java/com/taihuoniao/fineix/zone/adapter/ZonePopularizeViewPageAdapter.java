@@ -25,6 +25,8 @@ public class ZonePopularizeViewPageAdapter extends FragmentPagerAdapter {
         return fragments.get(position);
     }
 
+
+
     @Override
     public int getCount() {
         int ret = 0;

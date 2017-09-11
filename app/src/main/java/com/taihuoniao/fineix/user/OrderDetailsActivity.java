@@ -75,6 +75,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     private TextView mCounty;
     private TextView mTown;
     private OrderDetailBean orderDetailBean;
+    private RelativeLayout rlContainer;
 
     private void toShopOrderListActivity() {
         Intent in = new Intent(OrderDetailsActivity.this, ShopOrderListActivity.class);
@@ -245,7 +246,13 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
     }
 
     private void setBottomData() {
+        if (orderDetailBean.delivery_type==2){//自提
+            rlContainer.setVisibility(View.GONE);
+        }else {//线上下单
+            rlContainer.setVisibility(View.VISIBLE);
+        }
         OrderDetailBean.ExpressInfoBean express_info = orderDetailBean.getExpress_info();
+        if (null==express_info) return;
         mDeliverMan.setText(String.format("收货人：%s", express_info.getName()));
         mProvince.setText(express_info.getProvince());
         mCity.setText(express_info.getCity());
@@ -266,6 +273,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
         mLogisticsCompanyLayout = (RelativeLayout) findViewById(R.id.layout_logistics_company);
         mLogisticsNumberLayout = (RelativeLayout) findViewById(R.id.layout_logistics_number);
         mContainerLayout = (LinearLayout) findViewById(R.id.linear_item_order_details);
+        rlContainer = (RelativeLayout) findViewById(R.id.rlContainer);
         mDeliverMan = (TextView) findViewById(R.id.tv_deliver_man_order_details);
         mProvince = (TextView) findViewById(R.id.tv_province_order_details);
         mCity = (TextView) findViewById(R.id.tv_city_order_details);

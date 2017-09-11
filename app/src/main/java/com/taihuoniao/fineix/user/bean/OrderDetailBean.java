@@ -100,6 +100,7 @@ public class OrderDetailBean {
     private int expired_time;
     private int from_site;
     private int status;
+    public int delivery_type;
     private String gift_code;
     private int bird_coin_count;
     private int bird_coin_money;
