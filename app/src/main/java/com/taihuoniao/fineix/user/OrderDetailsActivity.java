@@ -550,7 +550,7 @@ public class OrderDetailsActivity extends Base2Activity implements View.OnClickL
                     @Override
                     public void onClick(View v) {
                         Intent paynowIntent = new Intent(OrderDetailsActivity.this, PayWayActivity.class);
-                        paynowIntent.putExtra("paymoney", paymoney);
+                        paynowIntent.putExtra("paymoney",String.valueOf(paymoney));
                         paynowIntent.putExtra("orderId", rid);
                         startActivity(paynowIntent);
                     }

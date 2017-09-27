@@ -649,7 +649,7 @@ public class ClientDiscoverAPI {
 
 
     @NonNull
-    public static HashMap<String, String> getnowConfirmOrderRequestParams(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
+    public static HashMap<String, String> getnowConfirmOrderRequestParams(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code, String delivery_type) {
         HashMap<String, String> params = new HashMap<>();
         params.put("rrid", rrid);
         params.put("from_site", "8");
@@ -658,6 +658,7 @@ public class ClientDiscoverAPI {
         params.put("summary", summary);
         params.put("transfer_time", transfer_time);
         params.put("bonus_code", bonus_code);
+        params.put("delivery_type", delivery_type);
         return params;
     }
 

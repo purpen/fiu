@@ -42,21 +42,13 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private String mTotalMoney, mRid;
     private String mPayway = ConstantCfg.ALI_PAY;
     private CustomDialogForPay mDialog;
-    private boolean mBack = true;//判断是否让返回键生效
     private String orderId;
     private Handler mHandler = new Handler();
     private PopupWindow popupWindow;
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onBackPressed() {
-        if (mBack) {
-            showPopup();
-        }
+        showPopup();
     }
 
     private void initPop() {
@@ -123,7 +115,6 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         initPop();
     }
 
-
     private void getIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra("orderId")) {
@@ -140,6 +131,12 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         GlobalTitleLayout title = (GlobalTitleLayout) findViewById(R.id.title_payway);
         title.setTitle("订单支付");
         title.setContinueTvVisible(false);
+        title.setBackListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         LinearLayout mLinearAlipay = (LinearLayout) findViewById(R.id.linear_alipay);
         mLinearAlipay.setOnClickListener(this);
         LinearLayout mLinearWechat = (LinearLayout) findViewById(R.id.linear_wechat);
@@ -221,7 +218,6 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
      * 延时三秒再跳转去订单支付详情界面是为给服务器留时间以确保其及时更新数据
      */
     private void delayThreeSeconds() {
-        mBack = false;
         if (!mDialog.isShowing()) {
             mDialog.show();
         }

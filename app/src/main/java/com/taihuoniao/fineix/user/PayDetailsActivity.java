@@ -57,24 +57,6 @@ public class PayDetailsActivity extends BaseActivity {
                 finish();
             }
         });
-
-//        AlertDialog.Builder dialog = new AlertDialog.Builder(PayDetailsActivity.this);
-//        dialog.setTitle("您确定要回到主界面吗？");
-//        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        });
-//        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                startActivity(new Intent(PayDetailsActivity.this, MainActivity.class));
-//                finish();
-//            }
-//        });
-//        dialog.show();
-
     }
 
     @Override
@@ -106,7 +88,7 @@ public class PayDetailsActivity extends BaseActivity {
                 });
                 if (response.isSuccess()){
                     ShoppingDetailBean data = response.getData();
-                    if (data.getStatus() == 10) {  // 10 代表支付成功
+                    if (data.getStatus() == 10 || data.getStatus()==16) {  // 10 代表支付成功，16代表自提支付成功
                         mSuccessOrFailed.setText("您的订单已支付成功");
                         mImage.setImageResource(R.mipmap.success);
                     } else {

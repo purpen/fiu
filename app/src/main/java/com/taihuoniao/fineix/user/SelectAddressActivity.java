@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.URL;
 import com.taihuoniao.fineix.user.fragments.AddressAPIChangeFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -93,6 +94,12 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected void installListener() {
+        custom_head.setGoBackListenr(new CustomHeadView.IgobackLister() {
+            @Override
+            public void goback() {
+                onBackPressed();
+            }
+        });
         addNewAddressTv.setOnClickListener(this);
         pullToRefresh.setPullToRefreshEnabled(false);
         DisplayMetrics dm = new DisplayMetrics();
@@ -156,11 +163,10 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).isSelected) {
                 intent.putExtra("addressBean", list.get(i));
-                setResult(DataConstants.RESULTCODE_ADDRESS, intent);
                 break;
             }
         }
-        setResult(DataConstants.RESULTCODE_ADDRESS, intent);
+        setResult(DataConstants.REQUESTCODE_ADDRESS, intent);
         super.onBackPressed();
     }
 

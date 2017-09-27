@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -75,6 +76,8 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     private LinearLayout linearLayout_privilege;
     private TextView textView_privilege;
     private TextView transferTv;
+    private RadioButton rbkd;
+    private RadioButton rbzt;
     private WaittingDialog dialog;
 
     //商品详情界面传递过来的数据
@@ -85,7 +88,8 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     private String transfer_time = "a"; //收货时间界面选择的返回值
     private String bonus_code;
     private DecimalFormat df = null;
-
+    public static final String DELIVERY_TYPE_KD="1"; //快递发货
+    public static final String DELIVERY_TYPE_ZT="2"; //自提
     //跳转到红包界面
     //rid传递过去的临时订单编号
     //返回数据 money  code
@@ -94,18 +98,26 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     private double privilegeprice;      //节省
     private String freight;     //邮费
     private double sumPrice;
+    private TextView tv_zt_tips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmorder);
         initView();
+        installListener();
         setData();
         if (!dialog.isShowing()) {
             dialog.show();
         }
         getDefaultAddress();
     }
+
+    private void installListener() {
+        rbkd.setOnClickListener(this);
+        rbzt.setOnClickListener(this);
+    }
+
     private Call addressHandler;
 
     @Override
@@ -213,6 +225,9 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     private void initView() {
         mDialog = new CustomDialogForPay(this);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_confirmorder_title);
+        rbkd = (RadioButton) findViewById(R.id.rb_kd);
+        rbzt = (RadioButton) findViewById(R.id.rb_zt);
+        tv_zt_tips = (TextView) findViewById(R.id.tv_zt_tips);
         addressRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_addrelative);
         noAddressTv = (TextView) findViewById(R.id.activity_confirmorder_noaddresstv);
         nameTv = (TextView) findViewById(R.id.activity_confirmorder_name);
@@ -241,6 +256,14 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.rb_kd:
+                addressRelative.setVisibility(View.VISIBLE);
+                tv_zt_tips.setVisibility(View.GONE);
+                break;
+            case R.id.rb_zt:
+                addressRelative.setVisibility(View.GONE);
+                tv_zt_tips.setVisibility(View.VISIBLE);
+                break;
             case R.id.activity_confirmorder_addrelative:
                 //跳转到收货地址界面
                 Intent intent = new Intent(ConfirmOrderActivity.this, SelectAddressActivity.class);
@@ -261,24 +284,34 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                 startActivityForResult(intent2, DataConstants.REQUESTCODE_REDBAG);
                 break;
             case R.id.activity_confirmorder_paybtn:
+//                快递类型
+                String delivery_type;
+                String addbook_id;
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
-                if (addressListItem == null && addressDefaultBean == null) {
-                    dialog.dismiss();
-                    ToastUtils.showError("请选择收货地址!");
-                    return;
+                if (rbkd.isChecked()){
+                    if (addressListItem == null && addressDefaultBean == null) {
+                        dialog.dismiss();
+                        ToastUtils.showError("请选择收货地址!");
+                        return;
+                    }
+                    delivery_type=DELIVERY_TYPE_KD;
+                    addbook_id = addressListItem == null ? addressDefaultBean.get_id() : addressListItem._id;
+                }else {
+                    delivery_type=DELIVERY_TYPE_ZT;
+                    addbook_id="";
                 }
                 if (nowBuyBean != null)
-                    confirmOrder(nowBuyBean.getOrder_info().get_id(), addressListItem == null ? addressDefaultBean.get_id() : addressListItem._id, nowBuyBean.getIs_nowbuy() + "", editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(nowBuyBean.getOrder_info().get_id(), addbook_id, nowBuyBean.getIs_nowbuy() + "", editText.getText().toString(), transfer_time, bonus_code,delivery_type);
                 else if (cartBean != null)
-                    confirmOrder(cartBean.get_id(), addressListItem == null ? addressDefaultBean.get_id() : addressListItem._id, cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(cartBean.get_id(), addbook_id, cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code,delivery_type);
                 break;
         }
     }
     private Call confirmHandler;
-    private void confirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
-        HashMap<String, String> params =ClientDiscoverAPI. getnowConfirmOrderRequestParams(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code);
+    private void confirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code,String delivery_type) {
+        HashMap<String, String> params =ClientDiscoverAPI. getnowConfirmOrderRequestParams(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code,delivery_type);
         confirmHandler = HttpRequest.post(params,  URL.URLSTRING_NOW_CONFIRMORDER, new GlobalDataCallBack(){
             @Override
             public void onSuccess(String json) {
@@ -389,7 +422,7 @@ public class ConfirmOrderActivity extends Base2Activity implements View.OnClickL
                     }
                 }
                 break;
-            case DataConstants.RESULTCODE_ADDRESS:
+            case DataConstants.REQUESTCODE_ADDRESS:
                 addressListItem = (AddressListBean.RowsEntity) data.getSerializableExtra("addressBean");
                 if (addressListItem != null) {
                     curAddressId=addressListItem._id;
